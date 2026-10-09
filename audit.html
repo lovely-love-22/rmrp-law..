@@ -105,6 +105,7 @@
 <section class="section">
   <div class="container">
 
+    <!-- НЕ АВТОРИЗОВАН -->
     <div id="auditAuthWarn" class="audit-auth-warn" hidden>
       <span class="icon">🔒</span>
       <h3>Нужна авторизация</h3>
@@ -112,6 +113,7 @@
       <a href="profile.html">👤 Войти в личный кабинет</a>
     </div>
 
+    <!-- НЕТ ДОСТУПА -->
     <div id="auditNoAccess" class="audit-auth-warn lock" hidden>
       <span class="icon">🚫</span>
       <h3>Доступ ограничен</h3>
@@ -126,6 +128,7 @@
       </div>
     </div>
 
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="auditMain" class="audit-grid-wrap" hidden>
       <div class="audit-card">
         <h3>✍️ Заполни поля</h3>
@@ -275,13 +278,20 @@
     document.body.removeChild(ta);
   }
 
+  /* ============================================================
+     ЗАЩИТА: только Майор+ ИЛИ Инструктор ВК+
+     ============================================================ */
   var cur = RMRPAuth.getCurrent();
+
+  /* 1. Не авторизован */
   if(!cur){
     $('auditAuthWarn').hidden = false;
     $('auditNoAccess').hidden = true;
     $('auditMain').hidden = true;
     return;
   }
+
+  /* 2. Авторизован, но нет доступа */
   if(!RMRPAuth.canUseAudit || !RMRPAuth.canUseAudit(cur)){
     $('auditAuthWarn').hidden = true;
     $('auditNoAccess').hidden = false;
@@ -289,6 +299,7 @@
     return;
   }
 
+  /* 3. Доступ есть — показываем форму */
   $('auditAuthWarn').hidden = true;
   $('auditNoAccess').hidden = true;
   $('auditMain').hidden = false;
@@ -313,7 +324,6 @@
       if(!d.startsWith('@')) d = '@' + d;
       if($('audDiscord') && !$('audDiscord').value) $('audDiscord').value = d;
 
-      /* Слушаем все поля */
       ['audDiscord','audPing','audJoinDate','audJoinReason','audPromoDate','audRank','audExtra'].forEach(function(id){
         var el = $(id);
         if(el){
