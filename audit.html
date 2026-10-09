@@ -14,12 +14,17 @@
 .audit-hero h1 .accent{background:linear-gradient(135deg,#a855f7,#4aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .audit-hero p{color:var(--txt-2);margin-top:10px;font-size:14.5px}
 
-.audit-auth-warn{max-width:520px;margin:0 auto;padding:32px 28px;background:var(--bg-2);border:1px solid var(--line);border-radius:18px;text-align:center}
-.audit-auth-warn .icon{font-size:48px;margin-bottom:16px;opacity:.6}
-.audit-auth-warn h3{color:var(--txt-0);font-size:18px;margin-bottom:10px}
-.audit-auth-warn p{color:var(--txt-2);font-size:14px;line-height:1.6;margin-bottom:18px}
-.audit-auth-warn a{display:inline-block;padding:11px 22px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px;transition:var(--transition)}
-.audit-auth-warn a:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,168,255,.3)}
+.audit-auth-warn{max-width:560px;margin:0 auto;padding:40px 32px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:center}
+.audit-auth-warn.lock{border-color:rgba(255,70,85,.35);background:linear-gradient(135deg,rgba(255,70,85,.06),rgba(168,85,247,.04))}
+.audit-auth-warn .icon{font-size:64px;margin-bottom:20px;display:block}
+.audit-auth-warn h3{color:var(--txt-0);font-size:22px;font-weight:900;margin-bottom:12px}
+.audit-auth-warn p{color:var(--txt-2);font-size:14.5px;line-height:1.7;margin-bottom:22px}
+.audit-auth-warn a{display:inline-block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px}
+.audit-req-box{margin:22px auto 0;padding:16px 20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;max-width:420px;text-align:left}
+.audit-req-box h4{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;color:var(--txt-3);margin-bottom:10px}
+.audit-req-box ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.audit-req-box li{font-size:13px;color:var(--txt-1);padding-left:22px;position:relative;line-height:1.5}
+.audit-req-box li::before{content:"✓";position:absolute;left:0;color:#3ddc84;font-weight:900}
 
 .audit-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
 @media(max-width:900px){.audit-grid-wrap{grid-template-columns:1fr}}
@@ -29,9 +34,11 @@
 
 .audit-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .audit-field label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
-.audit-field input,.audit-field select{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
-.audit-field input:focus,.audit-field select:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.audit-field label .req{color:#ff6b78}
+.audit-field input,.audit-field select,.audit-field textarea{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit;box-sizing:border-box}
+.audit-field input:focus,.audit-field select:focus,.audit-field textarea:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
 .audit-field input[type="date"]{cursor:pointer;color-scheme:dark}
+.audit-field textarea{min-height:90px;resize:vertical;line-height:1.6}
 
 .audit-output{margin-top:18px;padding:18px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--txt-1);font-family:'JetBrains Mono','Courier New',monospace;min-height:200px}
 .audit-copy{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
@@ -41,18 +48,18 @@
 
 .audit-history{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
 .audit-history h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.audit-history-clear{padding:6px 12px;border-radius:8px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:12px;font-weight:600;cursor:pointer;transition:var(--transition)}
+.audit-history-clear{padding:6px 12px;border-radius:8px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:12px;font-weight:600;cursor:pointer}
 .audit-history-clear:hover{background:rgba(255,70,85,.25)}
 .audit-history-list{display:flex;flex-direction:column;gap:10px;max-height:600px;overflow-y:auto;padding-right:4px}
 .audit-history-list::-webkit-scrollbar{width:6px}
 .audit-history-list::-webkit-scrollbar-thumb{background:var(--bg-4);border-radius:3px}
-.audit-history-item{padding:14px 16px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--txt-2);line-height:1.6;position:relative;transition:var(--transition)}
+.audit-history-item{padding:14px 16px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--txt-2);line-height:1.6;position:relative}
 .audit-history-item:hover{border-color:var(--line-2)}
 .audit-history-item .audit-h-date{font-size:11px;color:var(--txt-3);margin-bottom:6px;padding-right:160px}
 .audit-history-item .audit-h-preview{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;color:var(--txt-1);max-height:80px;overflow:hidden;opacity:.85;font-size:11.5px}
-.audit-history-item .audit-h-copy{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:7px;background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3);font-size:11px;font-weight:600;cursor:pointer;transition:var(--transition)}
+.audit-history-item .audit-h-copy{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:7px;background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3);font-size:11px;font-weight:600;cursor:pointer}
 .audit-history-item .audit-h-copy:hover{background:rgba(168,85,247,.25)}
-.audit-history-item .audit-h-del{position:absolute;top:12px;right:100px;padding:5px 10px;border-radius:7px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:11px;font-weight:600;cursor:pointer;transition:var(--transition)}
+.audit-history-item .audit-h-del{position:absolute;top:12px;right:100px;padding:5px 10px;border-radius:7px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:11px;font-weight:600;cursor:pointer}
 .audit-history-item .audit-h-del:hover{background:rgba(255,70,85,.25)}
 .audit-history-empty{padding:30px;text-align:center;color:var(--txt-3);font-size:13px;font-style:italic}
 
@@ -62,8 +69,7 @@
 .fancy-error-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;box-shadow:0 10px 30px rgba(168,85,247,.45)}
 .fancy-error-title{font-size:19px;font-weight:900;color:var(--txt-0);margin-bottom:8px}
 .fancy-error-msg{font-size:14px;color:var(--txt-2);line-height:1.6;margin-bottom:18px}
-.fancy-error-ok{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition)}
-.fancy-error-ok:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.4)}
+.fancy-error-ok{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer}
 </style>
 </head>
 <body>
@@ -82,10 +88,7 @@
       <a href="audit.html" class="nav-link active">📋 Аудит</a>
     </nav>
     <div class="header-actions">
-      <button class="btn-add" id="openEditor">
-        <span class="btn-add-icon">+</span>
-        <span class="btn-add-text">Добавить</span>
-      </button>
+      <button class="btn-add" id="openEditor"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
       <button class="btn-bg" id="openBgPicker"><span>🖼</span></button>
       <button class="burger" id="burger"><span></span><span></span><span></span></button>
     </div>
@@ -102,39 +105,58 @@
 <section class="section">
   <div class="container">
 
-    <!-- ЗАГЛУШКА ЕСЛИ НЕ АВТОРИЗОВАН -->
     <div id="auditAuthWarn" class="audit-auth-warn" hidden>
-      <div class="icon">🔒</div>
+      <span class="icon">🔒</span>
       <h3>Нужна авторизация</h3>
       <p>Чтобы работать с кадровым аудитом, войди в свой аккаунт.</p>
       <a href="profile.html">👤 Войти в личный кабинет</a>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+    <div id="auditNoAccess" class="audit-auth-warn lock" hidden>
+      <span class="icon">🚫</span>
+      <h3>Доступ ограничен</h3>
+      <p>Кадровый аудит доступен только с определённого звания или должности.</p>
+      <div class="audit-req-box">
+        <h4>Требования доступа</h4>
+        <ul>
+          <li>Звание: <b>Майор</b> или выше</li>
+          <li>Должность: <b>Инструктор ВК</b> или выше</li>
+          <li>Или роль: <b>Администратор</b> / <b>Разработчик</b></li>
+        </ul>
+      </div>
+    </div>
+
     <div id="auditMain" class="audit-grid-wrap" hidden>
-      <!-- ЛЕВАЯ: ФОРМА -->
       <div class="audit-card">
         <h3>✍️ Заполни поля</h3>
         <div class="audit-grid">
           <div class="audit-field">
-            <label>Discord (кому) *</label>
-            <input type="text" id="audDiscord" placeholder="@loveyou_love">
+            <label>Discord (кому) <span class="req">*</span></label>
+            <input type="text" id="audDiscord" placeholder="@loveyou_love" autocomplete="off">
           </div>
           <div class="audit-field">
-            <label>Ping (кого упомянуть) *</label>
-            <input type="text" id="audPing" placeholder="@ping">
+            <label>Ping (кого упомянуть) <span class="req">*</span></label>
+            <input type="text" id="audPing" placeholder="@ping" autocomplete="off">
           </div>
           <div class="audit-field">
-            <label>Дата принятия в ВС РФ *</label>
+            <label>Дата принятия в ВС РФ <span class="req">*</span></label>
             <input type="date" id="audJoinDate">
           </div>
           <div class="audit-field">
-            <label>Дата повышения *</label>
+            <label>Принят в ряды ВС РФ согласно <span class="req">*</span></label>
+            <textarea id="audJoinReason" placeholder="Опиши, на основании чего принят в ВС РФ.&#10;&#10;Например:&#10;— Приказ №5 от 09.10.2026&#10;— Прошёл КМБ успешно&#10;— Согласовано с Военным Комиссаром" style="min-height:100px"></textarea>
+          </div>
+          <div class="audit-field">
+            <label>Дата повышения <span class="req">*</span></label>
             <input type="date" id="audPromoDate">
           </div>
           <div class="audit-field">
-            <label>Повышен на звание *</label>
+            <label>Повышен на звание <span class="req">*</span></label>
             <select id="audRank"></select>
+          </div>
+          <div class="audit-field">
+            <label>Дополнительный текст / ссылки</label>
+            <textarea id="audExtra" placeholder="Вставь ссылки на док-ва, скрины, приказы — любую дополнительную информацию.&#10;&#10;Например:&#10;Приказ №5 от 09.10.2026: https://discord.com/...&#10;Скрин-подтверждение: https://imgur.com/..."></textarea>
           </div>
         </div>
 
@@ -146,7 +168,6 @@
         <div class="audit-output" id="audOutput">Заполни поля выше — текст появится здесь автоматически…</div>
       </div>
 
-      <!-- ПРАВАЯ: ИСТОРИЯ -->
       <div class="audit-history">
         <h3>
           <span>🕘 История аудитов</span>
@@ -180,7 +201,6 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалка редактора законов (для совместимости со script.js) -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -220,9 +240,6 @@
 <script src="auth.js"></script>
 <script src="script.js"></script>
 <script>
-/* ============================================================
-   AUDIT — отдельная страница кадрового аудита
-   ============================================================ */
 (function(){
   'use strict';
 
@@ -258,24 +275,30 @@
     document.body.removeChild(ta);
   }
 
-  /* ---------- ПРОВЕРКА АВТОРИЗАЦИИ ---------- */
   var cur = RMRPAuth.getCurrent();
   if(!cur){
     $('auditAuthWarn').hidden = false;
+    $('auditNoAccess').hidden = true;
     $('auditMain').hidden = true;
     return;
   }
+  if(!RMRPAuth.canUseAudit || !RMRPAuth.canUseAudit(cur)){
+    $('auditAuthWarn').hidden = true;
+    $('auditNoAccess').hidden = false;
+    $('auditMain').hidden = true;
+    return;
+  }
+
   $('auditAuthWarn').hidden = true;
+  $('auditNoAccess').hidden = true;
   $('auditMain').hidden = false;
 
-  /* ---------- ЗАПОЛНЕНИЕ СПИСКА ЗВАНИЙ ---------- */
   var audRank = $('audRank');
   if(audRank){
     audRank.innerHTML = '<option value="">— выбери звание —</option>' +
       RMRPAuth.RANKS.map(function(r){ return '<option>' + r + '</option>'; }).join('');
   }
 
-  /* ---------- ОБЪЕКТ AUDIT ---------- */
   var Audit = {
     LS_HISTORY: 'rmrp_audit_history',
     MAX_HISTORY: 30,
@@ -290,7 +313,8 @@
       if(!d.startsWith('@')) d = '@' + d;
       if($('audDiscord') && !$('audDiscord').value) $('audDiscord').value = d;
 
-      ['audDiscord','audPing','audJoinDate','audPromoDate','audRank'].forEach(function(id){
+      /* Слушаем все поля */
+      ['audDiscord','audPing','audJoinDate','audJoinReason','audPromoDate','audRank','audExtra'].forEach(function(id){
         var el = $(id);
         if(el){
           el.addEventListener('input', function(){ self.generate(); });
@@ -310,28 +334,37 @@
     },
 
     generate: function(){
-      var discord = getVal('audDiscord').trim();
-      var ping    = getVal('audPing').trim();
-      var joinD   = this.formatDate(getVal('audJoinDate'));
-      var promoD  = this.formatDate(getVal('audPromoDate'));
-      var rank    = getVal('audRank').trim();
+      var discord      = getVal('audDiscord').trim();
+      var ping         = getVal('audPing').trim();
+      var joinD        = this.formatDate(getVal('audJoinDate'));
+      var joinReason   = getVal('audJoinReason').trim();
+      var promoD       = this.formatDate(getVal('audPromoDate'));
+      var rank         = getVal('audRank').trim();
+      var extra        = getVal('audExtra').trim();
 
-      if(!discord && !ping && !rank){
+      if(!discord && !ping && !rank && !extra && !joinReason){
         $('audOutput').textContent = 'Заполни поля выше — текст появится здесь автоматически…';
         return '';
       }
 
-      var lines = [
-        discord || '@username',
-        ping || '@ping',
-        '',
-        'Был принят в ряды ВС РФ согласно:',
-        joinD,
-        '',
-        'Был повышен на звание:',
-        rank || '—',
-        'Дата: ' + promoD
-      ];
+      var lines = [];
+      lines.push(discord || '@username');
+      lines.push(ping || '@ping');
+      lines.push('');
+      lines.push('Был принят в ряды ВС РФ согласно:');
+      lines.push(joinReason || '—');
+      lines.push('Дата принятия: ' + joinD);
+      lines.push('');
+      lines.push('Был повышен на звание:');
+      lines.push(rank || '—');
+      lines.push('Дата: ' + promoD);
+
+      if(extra){
+        lines.push('');
+        lines.push('Дополнительно:');
+        lines.push(extra);
+      }
+
       var text = lines.join('\n');
       $('audOutput').textContent = text;
       return text;
@@ -340,8 +373,6 @@
     copy: function(){
       var text = this.generate();
       if(!text){ showFancy('Пусто', 'Заполни хотя бы одно поле'); return; }
-      var rank = getVal('audRank').trim();
-      if(!rank && !confirm('Звание не выбрано. Скопировать?')) return;
       copyToClipboard(text);
       this.saveToHistory(text);
       var btn = $('audCopyBtn');
@@ -358,6 +389,8 @@
       if(!confirm('Очистить поля?')) return;
       setVal('audPing', '');
       setVal('audRank', '');
+      setVal('audExtra', '');
+      setVal('audJoinReason', '');
       var today = new Date().toISOString().split('T')[0];
       setVal('audJoinDate', today);
       setVal('audPromoDate', today);
@@ -427,6 +460,12 @@
 
   window.Audit = Audit;
   Audit.init();
+
+  if(RMRPAuth.refreshCurrent){
+    RMRPAuth.refreshCurrent().then(function(res){
+      if(!res) location.reload();
+    });
+  }
 
 })();
 </script>
