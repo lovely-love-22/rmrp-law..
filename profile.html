@@ -436,81 +436,82 @@
     updateAccessButton();
   }
 
-  function renderProfile(){
-    var u = RMRPAuth.getCurrent();
-    if(!u){ showAuth(); return; }
+ function renderProfile(){
+  var u = RMRPAuth.getCurrent();
+  if(!u){ showAuth(); return; }
 
-    setText('pName', u.displayName || u.login);
-    setText('pLogin', '@' + u.login);
+  setText('pName', u.displayName || u.login);
+  setText('pLogin', '@' + u.login);
 
-    var av = document.getElementById('pAvatar');
-    if(av){
-      var letter = (u.displayName || u.login).charAt(0).toUpperCase();
-      if(u.avatar){
-        av.innerHTML = '<img src="' + u.avatar + '" alt="">' +
-          '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
-      } else {
-        av.innerHTML = '<span>' + letter + '</span>' +
-          '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
-      }
+  var av = document.getElementById('pAvatar');
+  if(av){
+    var letter = (u.displayName || u.login).charAt(0).toUpperCase();
+    if(u.avatar){
+      av.innerHTML = '<img src="' + u.avatar + '" alt="">' +
+        '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
+    } else {
+      av.innerHTML = '<span>' + letter + '</span>' +
+        '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
     }
-
-    var banner = document.getElementById('pBanner');
-    if(banner){
-      if(u.banner){
-        banner.style.backgroundImage = 'url("' + u.banner + '")';
-        banner.style.backgroundSize = 'cover';
-        banner.style.backgroundPosition = 'center';
-      } else {
-        banner.style.backgroundImage = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
-      }
-    }
-
-    var rankBanner = document.getElementById('pRankBanner');
-    if(rankBanner){
-      rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
-      if(RMRPAuth.hasGlow(u.rank, u.role)){
-        rankBanner.style.boxShadow = '0 10px 30px rgba(255,70,85,.35), 0 0 60px rgba(255,70,85,.15)';
-      } else {
-        rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
-      }
-    }
-    setText('pRankValue', u.rank || '—');
-
-    var posBanner = document.getElementById('pPosBanner');
-    if(posBanner){
-      posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
-    }
-    setText('pPosValue', u.position || '—');
-
-    var roleBanner = document.getElementById('pRoleBanner');
-    if(roleBanner){
-      roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
-      if(u.role === 'Разработчик'){
-        roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
-        roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
-      } else if(u.role === 'Администратор'){
-        roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
-      }
-    }
-    setText('pRoleValue', u.role || 'Пользователь');
-
-    var days = u.createdAt ? Math.floor((Date.now() - u.createdAt) / 86400000) : 0;
-    setText('pStatsValue', days + ' дн. в системе');
-
-    setText('pDiscord', u.discord || 'не указан');
-    var dLink = document.getElementById('pDiscordLink');
-    if(dLink){
-      if(u.discord){
-        var disc = u.discord.replace('@','');
-        dLink.href = 'https://discord.com/users/' + encodeURIComponent(disc);
-      } else dLink.href = '#';
-    }
-
-    setText('pForum', u.forum || 'не указан');
-    var fLink = document.getElementById('pForumLink');
-    if(fLink) fLink.href = u.forum || '#';
   }
+
+  var banner = document.getElementById('pBanner');
+  if(banner){
+    if(u.banner){
+      banner.style.backgroundImage = 'url("' + u.banner + '")';
+      banner.style.backgroundSize = 'cover';
+      banner.style.backgroundPosition = 'center';
+    } else {
+      /* Тёмный нейтральный баннер, не сливается с званиями */
+      banner.style.backgroundImage = 'linear-gradient(135deg, #1a1c24 0%, #23262f 50%, #1a1c24 100%)';
+    }
+  }
+
+  var rankBanner = document.getElementById('pRankBanner');
+  if(rankBanner){
+    rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
+    if(RMRPAuth.hasGlow(u.rank, u.role)){
+      rankBanner.style.boxShadow = '0 10px 30px rgba(251,191,36,.35), 0 0 60px rgba(251,191,36,.15)';
+    } else {
+      rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
+    }
+  }
+  setText('pRankValue', u.rank || '—');
+
+  var posBanner = document.getElementById('pPosBanner');
+  if(posBanner){
+    posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
+  }
+  setText('pPosValue', u.position || '—');
+
+  var roleBanner = document.getElementById('pRoleBanner');
+  if(roleBanner){
+    roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
+    if(u.role === 'Разработчик'){
+      roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
+      roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
+    } else if(u.role === 'Администратор'){
+      roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
+    }
+  }
+  setText('pRoleValue', u.role || 'Пользователь');
+
+  var days = u.createdAt ? Math.floor((Date.now() - u.createdAt) / 86400000) : 0;
+  setText('pStatsValue', days + ' дн. в системе');
+
+  setText('pDiscord', u.discord || 'не указан');
+  var dLink = document.getElementById('pDiscordLink');
+  if(dLink){
+    if(u.discord){
+      var disc = u.discord.replace('@','');
+      dLink.href = 'https://discord.com/users/' + encodeURIComponent(disc);
+    } else dLink.href = '#';
+  }
+
+  setText('pForum', u.forum || 'не указан');
+  var fLink = document.getElementById('pForumLink');
+  if(fLink) fLink.href = u.forum || '#';
+}
 
   function updateAccessButton(){
     var u = RMRPAuth.getCurrent();
