@@ -9,75 +9,109 @@
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ====== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ВОЕНКОМАТА ====== */
-.vk-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-@media(max-width:900px){.vk-calc-grid{grid-template-columns:1fr}}
-.vk-calc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
-.vk-calc-card h3{color:var(--txt-0);font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-.vk-calc-field{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:10px 14px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;transition:var(--transition);cursor:pointer}
-.vk-calc-field:hover{border-color:var(--line-2)}
-.vk-calc-field.active{border-color:#3ddc84;background:rgba(61,220,132,.05)}
-.vk-calc-field label{flex:1;font-size:13.5px;color:var(--txt-1);cursor:pointer;user-select:none}
-.vk-calc-field .vk-calc-icon{font-size:18px;flex-shrink:0}
-.vk-calc-field input[type="checkbox"]{width:18px;height:18px;accent-color:#3ddc84;cursor:pointer;flex-shrink:0}
-.vk-calc-field input[type="number"]{width:70px;padding:6px 8px;border-radius:7px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-0);font-size:14px;text-align:center;outline:none}
-.vk-calc-field input[type="number"]:focus{border-color:#3ddc84}
-.vk-calc-field input[type="number"]:disabled{opacity:.4;cursor:not-allowed}
-.vk-calc-field .vk-calc-points{font-size:12px;color:#7ee5a1;font-weight:600;white-space:nowrap}
-.vk-calc-total{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:linear-gradient(135deg,rgba(61,220,132,.1),rgba(74,168,255,.08));border:1px solid rgba(61,220,132,.3);border-radius:14px;margin-top:18px}
-.vk-calc-total-label{font-size:15px;font-weight:600;color:var(--txt-1)}
-.vk-calc-total-value{font-size:28px;font-weight:900;color:#3ddc84}
-.vk-calc-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.vk-time-toggle{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.vk-time-btn{padding:8px 16px;border-radius:9px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-2);font-size:13px;font-weight:600;transition:var(--transition);cursor:pointer}
-.vk-time-btn:hover{background:var(--bg-4);color:var(--txt-0)}
-.vk-time-btn.active{background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff;border-color:transparent}
-.vk-time-btn .mult{font-size:11px;opacity:.8;margin-left:4px}
+/* ====== ЛОКАЛЬНЫЕ ПРАВКИ ДЛЯ ШАПКИ (аккуратное отображение) ====== */
+.header-inner{gap:12px;padding:10px 0}
+.logo-text{font-size:17px}
+.logo-sub{font-size:10px;letter-spacing:2px}
+.nav{gap:2px}
+.nav-link{padding:7px 10px;font-size:12.5px}
+.btn-add,.btn-bg,.btn-media{padding:8px 12px;font-size:12.5px;border-radius:9px;white-space:nowrap}
+.btn-media{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:600;text-decoration:none;transition:var(--transition)}
+.btn-media:hover{background:linear-gradient(135deg,#8b46f0,#b96af7);transform:translateY(-1px)}
 
-/* Лекции с слайдами */
-.vk-lecture-slide{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:rgba(74,168,255,.12);border:1px solid rgba(74,168,255,.3);border-radius:8px;color:#4aa8ff;font-size:12.5px;font-weight:600;text-decoration:none;transition:var(--transition)}
-.vk-lecture-slide:hover{background:rgba(74,168,255,.2);transform:translateY(-1px)}
+/* ====== КАЛЬКУЛЯТОР ====== */
+.vk-calc-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
+@media(max-width:1000px){.vk-calc-grid{grid-template-columns:1fr}}
+.vk-calc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
+.vk-calc-card h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.vk-task{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;transition:var(--transition);overflow:hidden}
+.vk-task:hover{border-color:var(--line-2)}
+.vk-task.active{border-color:#3ddc84;background:rgba(61,220,132,.04)}
+.vk-task-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none}
+.vk-task-head input[type="checkbox"]{width:18px;height:18px;accent-color:#3ddc84;cursor:pointer;flex-shrink:0}
+.vk-task-icon{font-size:18px;flex-shrink:0}
+.vk-task-label{flex:1;font-size:13.5px;color:var(--txt-1)}
+.vk-task-points{font-size:12px;color:#7ee5a1;font-weight:600;white-space:nowrap}
+.vk-task-body{display:none;padding:0 14px 14px;border-top:1px dashed var(--line)}
+.vk-task.active .vk-task-body{display:block}
+.vk-time-row{display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:8px 0}
+.vk-time-row + .vk-time-row{border-top:1px solid var(--line)}
+.vk-time-label{font-size:12.5px;color:var(--txt-2);display:flex;align-items:center;gap:6px}
+.vk-time-label .mult{font-size:10.5px;opacity:.7}
+.vk-time-row input[type="number"]{width:100%;padding:6px 8px;border-radius:7px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-0);font-size:13px;text-align:center;outline:none}
+.vk-time-row input[type="number"]:focus{border-color:#3ddc84}
+.vk-time-row input[type="number"]:disabled{opacity:.35;cursor:not-allowed}
+.vk-task-link{padding:8px 0 4px;border-top:1px solid var(--line)}
+.vk-task-link input{width:100%;padding:8px 11px;border-radius:8px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-0);font-size:12.5px;outline:none}
+.vk-task-link input:focus{border-color:#4aa8ff}
 
-/* Карта поставок */
-.vk-map-wrap{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);background:var(--bg-2)}
-.vk-map-wrap img{width:100%;display:block}
-.vk-map-hint{padding:14px 18px;background:var(--bg-2);border-top:1px solid var(--line);font-size:13px;color:var(--txt-3);display:flex;align-items:center;gap:8px}
+.vk-calc-total{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:linear-gradient(135deg,rgba(61,220,132,.1),rgba(74,168,255,.08));border:1px solid rgba(61,220,132,.3);border-radius:14px;margin-top:16px}
+.vk-calc-total-label{font-size:14px;font-weight:600;color:var(--txt-1)}
+.vk-calc-total-value{font-size:26px;font-weight:900;color:#3ddc84}
+.vk-calc-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+
+/* Результат */
+.vk-result-list{max-height:340px;overflow-y:auto;padding-right:4px;margin:0 -4px}
+.vk-result-item{padding:10px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.vk-result-item:last-child{border-bottom:0}
+.vk-result-row{display:flex;justify-content:space-between;gap:10px;color:var(--txt-2)}
+.vk-result-name{flex:1;min-width:0;word-break:break-word}
+.vk-result-time{font-size:11px;color:var(--txt-3)}
+.vk-result-points{color:#7ee5a1;font-weight:600;white-space:nowrap}
+.vk-result-link{display:block;margin-top:5px;font-size:11px;color:#4aa8ff;word-break:break-all;text-decoration:none;opacity:.85}
+.vk-result-link:hover{opacity:1;text-decoration:underline}
+.vk-result-link.empty{color:var(--txt-3);font-style:italic;pointer-events:none}
+
+.vk-result-sum{display:flex;justify-content:space-between;padding:12px 0 0;font-size:13px;color:var(--txt-3);border-top:1px solid var(--line);margin-top:6px}
 
 /* Форма рапорта */
-.vk-report-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vk-report-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:700px){.vk-report-form{grid-template-columns:1fr}}
 .vk-report-form .full{grid-column:1/-1}
-.vk-report-form label{display:block;font-size:13px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
-.vk-report-form input,.vk-report-form textarea,.vk-report-form select{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:14px;outline:none;transition:var(--transition);font-family:inherit}
-.vk-report-form input:focus,.vk-report-form textarea:focus,.vk-report-form select:focus{border-color:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.15)}
+.vk-report-form label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
+.vk-report-form input,.vk-report-form textarea{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
+.vk-report-form input:focus,.vk-report-form textarea:focus{border-color:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.15)}
 .vk-report-form textarea{min-height:320px;resize:vertical;line-height:1.6}
-.vk-report-output{margin-top:20px;padding:20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.7;white-space:pre-wrap;color:var(--txt-1);max-height:400px;overflow-y:auto;font-family:'Inter',monospace}
-.vk-report-copy{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.vk-copy-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px}
+.vk-report-output{margin-top:18px;padding:18px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--txt-1);max-height:400px;overflow-y:auto;font-family:'JetBrains Mono','Courier New',monospace}
+.vk-report-copy{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.vk-copy-btn{padding:11px 20px;border-radius:10px;background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff;font-weight:700;font-size:13.5px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px}
 .vk-copy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(61,220,132,.3)}
 .vk-copy-btn.copied{background:linear-gradient(135deg,#2a9d5c,#3a7bc8)}
-.vk-autofill-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.vk-autofill-btn{padding:11px 20px;border-radius:10px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-weight:700;font-size:13.5px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px;margin-bottom:16px}
 .vk-autofill-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,70,85,.3)}
 
-/* Обновлённая шапка */
-.vk-header-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:30px}
-.vk-header-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;transition:var(--transition)}
+/* Шапка военкомата */
+.vk-header-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:28px}
+.vk-header-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;transition:var(--transition)}
 .vk-header-card:hover{border-color:#3ddc84;transform:translateY(-2px)}
-.vk-header-card .icon{font-size:26px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:rgba(61,220,132,.1);border-radius:12px;flex-shrink:0}
+.vk-header-card .icon{font-size:24px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(61,220,132,.1);border-radius:12px;flex-shrink:0}
 .vk-header-card .info{flex:1;min-width:0}
-.vk-header-card .title{font-size:13.5px;font-weight:700;color:var(--txt-0)}
-.vk-header-card .desc{font-size:12px;color:var(--txt-3);margin-top:2px}
-.vk-header-card a{font-size:12px;color:#4aa8ff;text-decoration:none;font-weight:600}
-.vk-header-card a:hover{text-decoration:underline}
+.vk-header-card .title{font-size:13px;font-weight:700;color:var(--txt-0)}
+.vk-header-card .desc{font-size:11.5px;color:var(--txt-3);margin-top:2px}
+.vk-header-card a{font-size:11.5px;color:#4aa8ff;text-decoration:none;font-weight:600}
 
-/* Табы разделов военкомата */
-.vk-tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;padding:6px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px}
-.vk-tab{padding:10px 18px;border-radius:10px;background:transparent;color:var(--txt-2);font-size:13.5px;font-weight:600;transition:var(--transition);cursor:pointer;border:0;white-space:nowrap}
+/* Лекции */
+.vk-lecture-slide{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:rgba(74,168,255,.12);border:1px solid rgba(74,168,255,.3);border-radius:8px;color:#4aa8ff;font-size:12px;font-weight:600;text-decoration:none;transition:var(--transition)}
+.vk-lecture-slide:hover{background:rgba(74,168,255,.2);transform:translateY(-1px)}
+
+/* Карта */
+.vk-map-wrap{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);background:var(--bg-2)}
+.vk-map-wrap img{width:100%;display:block}
+.vk-map-hint{padding:12px 16px;background:var(--bg-2);border-top:1px solid var(--line);font-size:12.5px;color:var(--txt-3);display:flex;align-items:center;gap:8px}
+
+/* Табы */
+.vk-tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;padding:6px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px}
+.vk-tab{padding:9px 16px;border-radius:10px;background:transparent;color:var(--txt-2);font-size:13px;font-weight:600;transition:var(--transition);cursor:pointer;border:0;white-space:nowrap}
 .vk-tab:hover{background:var(--bg-3);color:var(--txt-0)}
 .vk-tab.active{background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff}
 .vk-panel{display:none}
 .vk-panel.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Тёмный скроллбар */
+.vk-result-list::-webkit-scrollbar,.vk-report-output::-webkit-scrollbar,.nav::-webkit-scrollbar{width:6px;height:6px}
+.vk-result-list::-webkit-scrollbar-thumb,.vk-report-output::-webkit-scrollbar-thumb,.nav::-webkit-scrollbar-thumb{background:var(--bg-4);border-radius:3px}
+.vk-result-list::-webkit-scrollbar-thumb:hover,.vk-report-output::-webkit-scrollbar-thumb:hover,.nav::-webkit-scrollbar-thumb:hover{background:var(--line-2)}
 </style>
 </head>
 <body>
@@ -89,7 +123,7 @@
       <a href="index.html" class="nav-link">Главная</a>
       <a href="constitution.html" class="nav-link">Конституция</a>
       <a href="uk.html" class="nav-link">УК РФ</a>
-      <a href="koap.html" class="nav-link">КоАП РФ</a>
+      <a href="koap.html" class="nav-link">КоАП</a>
       <a href="process.html" class="nav-link">Процессуальный</a>
       <a href="weapons.html" class="nav-link">Оружие</a>
       <a href="property.html" class="nav-link">Госсобственность</a>
@@ -102,6 +136,7 @@
       <a href="military.html" class="nav-link active" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
     </nav>
     <div class="header-actions">
+      <a href="media.html" class="btn-media" title="Медиа-галерея"><span>🎬</span><span class="btn-add-text">Медиа</span></a>
       <button class="btn-add" id="openEditor"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
       <button class="btn-bg" id="openBgPicker"><span>🖼</span></button>
       <button class="burger" id="burger"><span></span><span></span><span></span></button>
@@ -109,7 +144,7 @@
   </div>
 </header>
 
-<!-- ====== ШАПКА ВОЕНКОМАТА ====== -->
+<!-- ШАПКА ВОЕНКОМАТА -->
 <section class="vk-hero">
   <div class="vk-hero-bg"></div>
   <div class="container vk-hero-content">
@@ -121,7 +156,7 @@
         <div class="icon">📊</div>
         <div class="info">
           <div class="title">Калькулятор баллов</div>
-          <div class="desc">Подсчёт с учётом времени</div>
+          <div class="desc">Мультивыбор времени</div>
           <a href="#calc">Перейти →</a>
         </div>
       </div>
@@ -153,8 +188,8 @@
   </div>
 </section>
 
-<!-- ====== НАВИГАЦИЯ ПО РАЗДЕЛАМ ====== -->
-<section class="section" style="padding-top:30px;padding-bottom:30px">
+<!-- ТАБЫ -->
+<section class="section" style="padding-top:26px;padding-bottom:26px">
   <div class="container">
     <div class="vk-tabs">
       <button class="vk-tab active" data-vk-tab="calc">🧮 Калькулятор баллов</button>
@@ -167,23 +202,18 @@
   </div>
 </section>
 
-<!-- ====== КАЛЬКУЛЯТОР БАЛЛОВ ====== -->
+<!-- КАЛЬКУЛЯТОР -->
 <section class="section section-dark vk-panel active" id="calc" data-vk-panel="calc">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Инструмент</span>
       <h2 class="section-title">🧮 Калькулятор баллов</h2>
-      <p class="section-desc">Введите текущие баллы, отметьте выполненные задания, укажите количество и выберите время — калькулятор автоматически посчитает итог.</p>
+      <p class="section-desc">Отметь задание, укажи количество для каждого времени (обычное / пиковое / ночное) и приложи ссылку на скрин. Баллы посчитаются автоматически.</p>
     </div>
 
     <div class="vk-calc-grid">
       <div class="vk-calc-card">
         <h3>📋 Выберите выполненные задания</h3>
-        <div class="vk-time-toggle">
-          <button class="vk-time-btn active" data-mult="1">🕐 Обычное <span class="mult">×1</span></button>
-          <button class="vk-time-btn" data-mult="1.2">⚡ Пиковое (17–21) <span class="mult">×1.2</span></button>
-          <button class="vk-time-btn" data-mult="1.25">🌙 Ночное (22–03) <span class="mult">×1.25</span></button>
-        </div>
         <div id="calcTasks"></div>
         <div class="vk-calc-actions">
           <button class="btn btn-ghost" onclick="VKCalc.reset()">🔄 Сбросить всё</button>
@@ -193,22 +223,26 @@
 
       <div class="vk-calc-card">
         <h3>💰 Итоговый подсчёт</h3>
-        <div class="vk-calc-field" style="margin-bottom:18px;cursor:default">
-          <span class="vk-calc-icon">🎯</span>
-          <label for="currentPoints">Текущие баллы (до отчёта)</label>
-          <input type="number" id="currentPoints" value="0" min="0" style="width:90px" oninput="VKCalc.update()">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;margin-bottom:16px">
+          <span style="font-size:18px">🎯</span>
+          <label for="currentPoints" style="flex:1;font-size:13px;color:var(--txt-1)">Текущие баллы (до отчёта)</label>
+          <input type="number" id="currentPoints" value="0" min="0" style="width:90px;padding:6px 8px;border-radius:7px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-0);font-size:14px;text-align:center;outline:none" oninput="VKCalc.update()">
         </div>
-        <div id="calcResult"></div>
+
+        <div class="vk-result-list" id="calcResult"></div>
+
         <div class="vk-calc-total">
           <span class="vk-calc-total-label">Всего баллов:</span>
           <span class="vk-calc-total-value" id="totalPoints">0</span>
         </div>
-        <div style="margin-top:14px;font-size:12.5px;color:var(--txt-3);line-height:1.6">
-          <div>• Баллы за задания умножаются на коэффициент времени</div>
-          <div>• Итог = текущие баллы + сумма баллов за задания</div>
-          <div>• Замену благодарностью можно отметить вручную</div>
+
+        <div style="margin-top:14px;font-size:12px;color:var(--txt-3);line-height:1.6">
+          <div>• Каждое задание можно отметить в нескольких временах сразу</div>
+          <div>• Итог = текущие баллы + сумма всех коэффициентов</div>
+          <div>• Ссылка на скрин подставится в рапорт автоматически</div>
         </div>
-        <div class="vk-calc-actions" style="margin-top:18px">
+
+        <div class="vk-calc-actions" style="margin-top:16px">
           <button class="btn btn-primary" onclick="VKCalc.copyResult()">📋 Скопировать результат</button>
         </div>
       </div>
@@ -216,33 +250,33 @@
   </div>
 </section>
 
-<!-- ====== ФОРМА РАПОРТА ====== -->
+<!-- ФОРМА РАПОРТА -->
 <section class="section vk-panel" id="report" data-vk-panel="report">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Документ</span>
       <h2 class="section-title">📝 Форма рапорта на повышение</h2>
-      <p class="section-desc">Заполните поля — рапорт сформируется автоматически. Нажмите «Скопировать» и вставьте в Discord.</p>
+      <p class="section-desc">Заполни поля — рапорт сформируется автоматически. Нажми «Скопировать» и вставь в Discord.</p>
     </div>
 
     <div class="vk-calc-card">
       <button class="vk-autofill-btn" onclick="VKReport.autofillFromCalc()">
-        🪄 Заполнить из калькулятора (задания, баллы, дата)
+        🪄 Заполнить из калькулятора (задания, ссылки, баллы, дата)
       </button>
 
       <h3>✍️ Заполните данные</h3>
       <div class="vk-report-form">
         <div>
           <label>Ваше звание</label>
-          <input type="text" id="rpRank" placeholder="Младший Сержант" value="Младший Сержант">
+          <input type="text" id="rpRank" placeholder="Младший Сержант">
         </div>
         <div>
           <label>Ваше ФИО</label>
-          <input type="text" id="rpName" placeholder="Караваев Михаил Арсеньев" value="Караваев Михаил Арсеньев">
+          <input type="text" id="rpName" placeholder="Караваев Михаил Арсеньевич">
         </div>
         <div>
           <label>Звание, на которое повышаетесь</label>
-          <input type="text" id="rpNextRank" placeholder="Сержант" value="Сержант">
+          <input type="text" id="rpNextRank" placeholder="Сержант">
         </div>
         <div>
           <label>Дата</label>
@@ -250,19 +284,19 @@
         </div>
         <div class="full">
           <label>Остаток баллов за предыдущий отчёт (ссылка или «нету»)</label>
-          <input type="text" id="rpPrevPoints" placeholder="нету" value="нету">
+          <input type="text" id="rpPrevPoints" placeholder="нету">
         </div>
         <div class="full">
-          <label>Сколько всего баллов (число и ссылка)</label>
-          <input type="text" id="rpTotalPoints" placeholder="180 баллов https://discord.com/...">
+          <label>Сколько всего баллов</label>
+          <input type="text" id="rpTotalPoints" placeholder="0 баллов">
         </div>
         <div class="full">
-          <label>Проделанная работа (каждая строка — отдельный пункт)</label>
-          <textarea id="rpWork" placeholder="Нажмите «Заполнить из калькулятора» — задания подставятся автоматически&#10;или впишите вручную"></textarea>
+          <label>Проделанная работа (заполняется автоматически из калькулятора)</label>
+          <textarea id="rpWork" placeholder="Нажми «Заполнить из калькулятора» — задания, количество и ссылки подставятся сами"></textarea>
         </div>
         <div>
           <label>Подпись</label>
-          <input type="text" id="rpSign" placeholder="Караваев.М" value="Караваев.М">
+          <input type="text" id="rpSign" placeholder="Караваев.М">
         </div>
       </div>
 
@@ -277,13 +311,13 @@
   </div>
 </section>
 
-<!-- ====== ЛЕКЦИИ ====== -->
+<!-- ЛЕКЦИИ -->
 <section class="section section-dark vk-panel" id="lectures" data-vk-panel="lectures">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Материалы</span>
       <h2 class="section-title">📚 Лекции и презентации</h2>
-      <p class="section-desc">Нажмите на лекцию, чтобы открыть нужный слайд презентации.</p>
+      <p class="section-desc">Нажми на лекцию, чтобы открыть нужный слайд презентации.</p>
     </div>
 
     <a href="https://docs.google.com/presentation/d/1Y1PbhD1dYxxtEeVMYyUq7h41SjSyONAh/edit?usp=drivesdk&ouid=117628916521679339329&rtpof=true&sd=true" target="_blank" class="vk-lecture-card">
@@ -299,108 +333,10 @@
       </div>
       <div class="vk-lecture-arrow">→</div>
     </a>
-
-    <div class="accordion" style="margin-top:24px">
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🎤</span><span class="acc-num">Лекция 1</span><span class="acc-title">Вступительная лекция для новобранцев</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <p><strong>Цель лекции:</strong> познакомить новобранца с проектом, военной службой, структурой ВС РФ, правами и обязанностями военнослужащего.</p>
-          <h3>1. Что такое RMRP и зачем нужны ВС РФ</h3>
-          <p>RMRP — это ролевой проект, где каждая фракция выполняет свою роль. Вооружённые Силы РФ — это структура, обеспечивающая защиту государства, поддержание порядка, участие в поставках, охрану стратегических объектов. Служба в ВС РФ — это не только право, но и большая ответственность.</p>
-          <h3>2. Структура ВС РФ</h3>
-          <p>Вооружённые Силы состоят из командования, подразделений (ССО «Штурм», ССО «Бастион», Военная полиция, Военный комиссариат, Отдел по связям с общественностью, Медицинская рота). Каждое подразделение выполняет свою задачу.</p>
-          <h3>3. Права военнослужащего</h3>
-          <p>Каждый военнослужащий имеет право: на уважение чести и достоинства, на денежное довольствие, на отдых, на вещевое и продовольственное обеспечение, на защиту и обжалование, на обучение и повышение квалификации.</p>
-          <h3>4. Обязанности военнослужащего</h3>
-          <p>Военнослужащий обязан: соблюдать Конституцию и законы РФ, беспрекословно выполнять приказы, соблюдать субординацию, беречь военное имущество, соблюдать форму одежды, соблюдать пропускной режим.</p>
-          <h3>5. Что такое КМБ и УКМБ</h3>
-          <p>КМБ (курс молодого бойца) — обязательный курс для новобранцев, длится не менее 5 суток. УКМБ (ускоренный курс) — сокращённая программа для сотрудников силовых структур. По окончании курса проводится аттестация.</p>
-          <h3>6. Итог</h3>
-          <p>Служба в ВС РФ — это честь. Соблюдай уставы, слушай командиров, помогай товарищам — и ты станешь настоящим военнослужащим.</p>
-          <div style="margin-top:14px">
-            <a href="https://docs.google.com/presentation/d/1Y1PbhD1dYxxtEeVMYyUq7h41SjSyONAh/edit?usp=drivesdk&ouid=117628916521679339329&rtpof=true&sd=true#slide=id.p1" target="_blank" class="vk-lecture-slide">📊 Открыть слайд 1</a>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🥾</span><span class="acc-num">Лекция 2</span><span class="acc-title">Субординация и воинское приветствие</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <h3>1. Что такое субординация</h3>
-          <p>Субординация — это система служебных отношений, при которой младший по званию или должности подчиняется старшему. Она распространяется и на службу, и на внеслужебное общение, если военнослужащие в форме.</p>
-          <h3>2. Обращение к старшему</h3>
-          <p>Перед обращением: «Товарищ (звание), разрешите обратиться». Ответ на приказ: «Есть!» Подтверждение: «Так точно». Отрицание: «Никак нет». Незнание: «Не могу знать!». Признание вины: «Виноват, исправлюсь».</p>
-          <h3>3. Воинское приветствие</h3>
-          <p>На месте вне строя: за 3–4 шага до начальника повернуться в его сторону, принять строевую стойку, смотреть в лицо. В движении: одновременно с постановкой ноги прекратить движение руками, повернуть голову. При головном уборе — приложить правую руку к нему.</p>
-          <h3>4. Запреты</h3>
-          <p>Запрещено: панибратство, обращение на «ты» в служебное время, нецензурная брань, оскорбления, публичное унижение чести и достоинства, «дедовщина».</p>
-        </div></div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🚶</span><span class="acc-num">Лекция 3</span><span class="acc-title">Строевая подготовка</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <h3>1. Строевая стойка</h3>
-          <p>По команде «СТАНОВИСЬ» или «СМИРНО»: встать прямо, каблуки вместе, носки на ширину ступни, руки вдоль тела, пальцы полусогнуты и касаются бедра, смотреть прямо перед собой.</p>
-          <h3>2. Повороты на месте</h3>
-          <p>«Напра-ВО», «Нале-ВО», «Кру-ГОМ». Поворот выполняется в два приёма: сначала поворот корпуса на каблуке и носке, затем приставление другой ноги.</p>
-          <h3>3. Движение</h3>
-          <p>Строевой шаг: по команде «Строевым шагом — МАРШ». Нога выносится с оттянутым носком на высоту 15–20 см, ставится твёрдо на всю ступню. Руки двигаются от плеча, сгибаясь в локтях. Походный шаг: по команде «Шагом — МАРШ».</p>
-          <h3>4. Воинское приветствие в строю</h3>
-          <p>За 40–50 шагов до начальника командир подаёт команду: «Отделение, СМИРНО, равнение на-ПРАВО (на-ЛЕВО)». Военнослужащие поворачивают голову в сторону начальника.</p>
-        </div></div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🛡️</span><span class="acc-num">Лекция 4</span><span class="acc-title">Патрульно-постовая служба (ППС)</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <h3>1. Что такое ППС</h3>
-          <p>Патрульно-постовая служба — это служба, направленная на охрану общественного порядка, охрану объектов, патрулирование территории части и прилегающих районов.</p>
-          <h3>2. Пост и патруль</h3>
-          <p>Пост — место, порученное часовому. Патруль — подвижная группа, контролирующая территорию. Часовой обязан: бдительно охранять пост, проверять документы, пропуска, осматривать транспорт, докладывать о нарушениях.</p>
-          <h3>3. Действия часового</h3>
-          <p>При приближении лиц, имеющих особые полномочия (Губернатор, судьи, прокуроры, следователи), — немедленно пропустить без пропуска, отдать воинское приветствие и доложить начальнику караула. При отказе лица от проверки — не допускать на территорию.</p>
-          <h3>4. Применение оружия</h3>
-          <p>Без предупреждения — при явном нападении. При пресечении побега — предупредительный окрик и выстрел вверх, затем на поражение.</p>
-        </div></div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🚚</span><span class="acc-num">Лекция 5</span><span class="acc-title">Правила проведения поставок</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <h3>1. Что такое поставка</h3>
-          <p>Поставка — серверное событие, в ходе которого государственные структуры сопровождают груз (материалы) к месту назначения. Задача — обеспечить сохранность груза и доставить его в целости.</p>
-          <h3>2. Роли в поставке</h3>
-          <p>Водители, сопровождающие, грузчики, силовое прикрытие. Водители матовозок обязаны вести видеозапись передвижения колонны. Атакующая сторона обязана иметь минимум две записи при перекрытии.</p>
-          <h3>3. Поведение во время поставки</h3>
-          <p>Запрещены посторонние разговоры, отвлечение на личные дела, пользование личными средствами связи. Оружие применяет только назначенное силовое прикрытие.</p>
-          <h3>4. Действия при нападении</h3>
-          <p>Водители и невооружённые сопровождающие укрываются и не создают помех. Силовое прикрытие открывает ответный огонь. О происшествии старший колонны докладывает дежурному по части.</p>
-          <h3>5. Перекрытия</h3>
-          <p>Для перехвата поставки необходимо перекрытие из 4+ автомобилей. Колонна обязана остановиться и первой начать перестрелку. Запрещено объезжать перекрытие, таранить колонну, передвигаться на авто в момент перестрелки.</p>
-        </div></div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-header"><span class="acc-emoji">🚨</span><span class="acc-num">Лекция 6</span><span class="acc-title">Итоговая лекция: уставы ВС РФ</span><span class="acc-arrow">▾</span></button>
-        <div class="acc-body"><div class="acc-text">
-          <h3>1. Внутренний устав</h3>
-          <p>Регламентирует правовой статус военнослужащих, их права, обязанности, правила внутреннего распорядка, режим службы и отдыха.</p>
-          <h3>2. Строевой устав</h3>
-          <p>Определяет строевые приёмы, движение без оружия и с оружием, строи подразделений и воинских частей, порядок выполнения воинского приветствия.</p>
-          <h3>3. Дисциплинарный устав</h3>
-          <p>Определяет сущность воинской дисциплины, виды поощрений и дисциплинарных взысканий, порядок их применения и обжалования.</p>
-          <h3>4. Устав гарнизонной и караульной служб</h3>
-          <p>Определяет порядок организации и несения гарнизонной и караульной служб, права и обязанности должностных лиц караула, пропускной режим.</p>
-          <h3>5. Итог</h3>
-          <p>Знание уставов — обязательно для каждого военнослужащего. Незнание не освобождает от ответственности. На итоговом экзамене проверяются знания всех четырёх уставов.</p>
-        </div></div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ====== КАРТА ПОСТАВОК ====== -->
+<!-- КАРТА -->
 <section class="section vk-panel" id="map" data-vk-panel="map">
   <div class="container">
     <div class="section-head">
@@ -410,15 +346,12 @@
     </div>
     <div class="vk-map-wrap">
       <img src="https://media.discordapp.net/attachments/1125526074667831386/1557374268474400768/image.png?backend=b2&ex=6aca3450&is=6ac8e2d0&hm=32b22b1af369a28c480fc6e0e54b864a3551f598488d7c8e0156c0be3ebb2703&=&format=webp&quality=lossless" alt="Карта поставок RMRP" loading="lazy">
-      <div class="vk-map-hint">
-        <span>💡</span>
-        <span>Карта актуальна на текущий сезон. При наведении можно рассмотреть детали маршрутов.</span>
-      </div>
+      <div class="vk-map-hint"><span>💡</span><span>Карта актуальна на текущий сезон.</span></div>
     </div>
   </div>
 </section>
 
-<!-- ====== СИСТЕМА ПОВЫШЕНИЯ ====== -->
+<!-- ПОВЫШЕНИЕ -->
 <section class="section section-dark vk-panel" id="progress" data-vk-panel="progress">
   <div class="container">
     <div class="section-head">
@@ -432,42 +365,22 @@
       <div class="vk-progress-step"><div class="vk-step-num">3</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по субординации</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
       <div class="vk-progress-step"><div class="vk-step-num">4</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по строевой подготовке</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
       <div class="vk-progress-step"><div class="vk-step-num">5</div><div class="vk-step-body"><div class="vk-step-title">Принять присягу</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">6</div><div class="vk-step-body"><div class="vk-step-title">Занести документы в личные дела</div><div class="vk-step-role">📂 Личные дела</div></div></div>
       <div class="vk-rank-up"><span class="vk-rank-from">@| Ефрейтор</span><span class="vk-rank-arrow">→</span><span class="vk-rank-to">@|| Младший сержант</span></div>
-      <div class="vk-progress-step"><div class="vk-step-num">7</div><div class="vk-step-body"><div class="vk-step-title">Лекция по ППС + практический экзамен</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Строевая подготовка + практический экзамен</div><div class="vk-step-role">🚨 Военная полиция · ★ Майор</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">9</div><div class="vk-step-body"><div class="vk-step-title">Правила проведения поставок + практический экзамен</div><div class="vk-step-role">⚔️ ССО · 🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">10</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ (внутренний, строевой, дисциплинарный, караульный)</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
-    </div>
-
-    <div class="section-head" style="margin-top:50px">
-      <span class="section-tag">Ускоренный курс</span>
-      <h2 class="section-title">⚡ Система повышения УКМБ</h2>
-      <p class="section-desc">Ускоренная программа для сотрудников силовых структур.</p>
-    </div>
-    <div class="vk-progress">
-      <div class="vk-rank-up"><span class="vk-rank-from">@ Рядовой</span><span class="vk-rank-arrow">→</span><span class="vk-rank-to">@| Ефрейтор</span></div>
-      <div class="vk-progress-step"><div class="vk-step-num">1</div><div class="vk-step-body"><div class="vk-step-title">Прослушать вступительную лекцию</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">2</div><div class="vk-step-body"><div class="vk-step-title">Пройти экскурсию по территории ВЧ</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">3</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по субординации</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">4</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по строевой подготовке</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">5</div><div class="vk-step-body"><div class="vk-step-title">Принять присягу</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">6</div><div class="vk-step-body"><div class="vk-step-title">Занести документы в личные дела</div><div class="vk-step-role">📂 Личные дела</div></div></div>
-      <div class="vk-rank-up"><span class="vk-rank-from">@| Ефрейтор</span><span class="vk-rank-arrow">→</span><span class="vk-rank-to">@|| Младший сержант</span></div>
-      <div class="vk-progress-step"><div class="vk-step-num">7</div><div class="vk-step-body"><div class="vk-step-title">Лекция по ППС + практический экзамен</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Строевая подготовка + практический экзамен</div><div class="vk-step-role">🚨 Военная полиция · ★ Майор</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">9</div><div class="vk-step-body"><div class="vk-step-title">Правила проведения поставок + практический экзамен</div><div class="vk-step-role">⚔️ ССО · 🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">6</div><div class="vk-step-body"><div class="vk-step-title">Лекция по ППС + практический экзамен</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">7</div><div class="vk-step-body"><div class="vk-step-title">Строевая подготовка + практический экзамен</div><div class="vk-step-role">🚨 Военная полиция · ★ Майор</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Правила проведения поставок + практический экзамен</div><div class="vk-step-role">⚔️ ССО · 🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">9</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ====== БАЛЛЫ ====== -->
+<!-- БАЛЛЫ -->
 <section class="section vk-panel" id="points" data-vk-panel="points">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Баллы</span>
       <h2 class="section-title">🏛️ Балльная система Военкомата</h2>
-      <p class="section-desc">Баллы начисляются за качественное выполнение задач. Система баллов — основа карьерного роста.</p>
+      <p class="section-desc">Баллы начисляются за качественное выполнение задач.</p>
     </div>
     <div class="vk-points-grid">
       <div class="vk-points-card"><div class="vk-points-icon">📋</div><div class="vk-points-name">Провести призыв</div><div class="vk-points-value">85 баллов</div></div>
@@ -482,9 +395,9 @@
       <div class="vk-points-card"><div class="vk-points-icon">🪖</div><div class="vk-points-name">Участие в КрАЗ</div><div class="vk-points-value">20 баллов</div></div>
     </div>
     <div class="vk-notes">
-      <div class="vk-note"><div class="vk-note-icon">⏱️</div><div class="vk-note-body"><div class="vk-note-title">Пиковое время (17:00–21:00)</div><div class="vk-note-desc">Баллы по пунктам умножаются на <b>1,2</b></div></div></div>
-      <div class="vk-note"><div class="vk-note-icon">🌙</div><div class="vk-note-body"><div class="vk-note-title">Ночное время (22:00–03:00)</div><div class="vk-note-desc">Баллы по пунктам умножаются на <b>1,25</b></div></div></div>
-      <div class="vk-note"><div class="vk-note-icon">🎗️</div><div class="vk-note-body"><div class="vk-note-title">Замена благодарностью</div><div class="vk-note-desc">Любой пункт повышения можно заменить благодарностью <b>🎗️⌠благодарность-руководства⌡</b></div></div></div>
+      <div class="vk-note"><div class="vk-note-icon">⏱️</div><div class="vk-note-body"><div class="vk-note-title">Пиковое время (17:00–21:00)</div><div class="vk-note-desc">Баллы умножаются на <b>1,2</b></div></div></div>
+      <div class="vk-note"><div class="vk-note-icon">🌙</div><div class="vk-note-body"><div class="vk-note-title">Ночное время (22:00–03:00)</div><div class="vk-note-desc">Баллы умножаются на <b>1,25</b></div></div></div>
+      <div class="vk-note"><div class="vk-note-icon">🎗️</div><div class="vk-note-body"><div class="vk-note-title">Замена благодарностью</div><div class="vk-note-desc">Любой пункт можно заменить благодарностью <b>🎗️⌠благодарность-руководства⌡</b></div></div></div>
       <div class="vk-note vk-note-warn"><div class="vk-note-icon">⚠️</div><div class="vk-note-body"><div class="vk-note-title">Исключения</div><div class="vk-note-desc">Посты поставки, лекции и экзамены <b>замене не подлежат</b>!</div></div></div>
     </div>
   </div>
@@ -511,7 +424,7 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалка редактора законов -->
+<!-- Модалка редактора -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -574,12 +487,14 @@
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   ВОЕНКОМАТ — калькулятор, рапорт, табы, автозаполнение
+   ВОЕНКОМАТ — калькулятор с мультивыбором времени + ссылки
    ============================================================ */
 (function(){
   'use strict';
 
-  /* ---------- ТАБЫ РАЗДЕЛОВ ВОЕНКОМАТА ---------- */
+  var LS_CALC = 'rmrp_vk_calc_v2';
+
+  /* ---------- ТАБЫ ---------- */
   var tabs = document.querySelectorAll('.vk-tab');
   var panels = document.querySelectorAll('.vk-panel');
   tabs.forEach(function(tab){
@@ -592,7 +507,7 @@
     });
   });
 
-  /* ---------- ДАННЫЕ ЗАДАНИЙ ---------- */
+  /* ---------- ДАННЫЕ ---------- */
   var TASKS = [
     { id:'prizyv_full', icon:'📋', label:'Провести призыв', points:85, reportName:'Провёл призывов' },
     { id:'prizyv_part', icon:'👥', label:'Участие в призыве', points:45, reportName:'Участвовал в призывах' },
@@ -606,239 +521,319 @@
     { id:'kraz', icon:'🪖', label:'Участие в КрАЗ', points:20, reportName:'Участвовал в КрАЗ' }
   ];
 
+  var TIMES = [
+    { key:'normal', label:'🕐 Обычное',   mult:1    },
+    { key:'peak',   label:'⚡ Пиковое',   mult:1.2  },
+    { key:'night',  label:'🌙 Ночное',    mult:1.25 }
+  ];
+
+  /* ---------- СОСТОЯНИЕ ---------- */
   var state = {
-    mult: 1,
-    selected: {},
+    selected: {},   /* id -> { qty:{normal,peak,night}, link:'', checked:true/false } */
     currentPoints: 0
   };
 
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(LS_CALC);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object'){
+          state.selected = parsed.selected || {};
+          state.currentPoints = parsed.currentPoints || 0;
+        }
+      }
+    }catch(e){}
+  }
+  function saveState(){
+    try{
+      localStorage.setItem(LS_CALC, JSON.stringify({
+        selected: state.selected,
+        currentPoints: state.currentPoints
+      }));
+    }catch(e){}
+  }
+
+  loadState();
+
+  /* ---------- РЕНДЕР ЗАДАНИЙ ---------- */
   var tasksContainer = document.getElementById('calcTasks');
+
+  function getSel(id){
+    if(!state.selected[id]){
+      state.selected[id] = {
+        checked: false,
+        qty: { normal:0, peak:0, night:0 },
+        link: ''
+      };
+    }
+    /* миграция со старого формата */
+    if(typeof state.selected[id].qty === 'number'){
+      state.selected[id].qty = { normal:state.selected[id].qty, peak:0, night:0 };
+    }
+    if(!state.selected[id].qty) state.selected[id].qty = { normal:0, peak:0, night:0 };
+    if(typeof state.selected[id].link !== 'string') state.selected[id].link = '';
+    return state.selected[id];
+  }
 
   function renderTasks(){
     if(!tasksContainer) return;
     tasksContainer.innerHTML = TASKS.map(function(t){
-      var sel = state.selected[t.id] || {checked:false, qty:1};
-      return '<div class="vk-calc-field' + (sel.checked ? ' active' : '') + '" data-task="' + t.id + '">' +
-        '<input type="checkbox" ' + (sel.checked ? 'checked' : '') +
-          ' onchange="VKCalc.toggle(\'' + t.id + '\', this.checked)">' +
-        '<span class="vk-calc-icon">' + t.icon + '</span>' +
-        '<label>' + t.label + '</label>' +
-        '<input type="number" min="1" max="99" value="' + sel.qty + '"' +
-          (sel.checked ? '' : ' disabled') +
-          ' onchange="VKCalc.setQty(\'' + t.id + '\', this.value)">' +
-        '<span class="vk-calc-points">' + t.points + ' б.</span>' +
+      var sel = getSel(t.id);
+      var active = sel.checked;
+      return '<div class="vk-task' + (active ? ' active' : '') + '" data-task="' + t.id + '">' +
+        '<div class="vk-task-head" onclick="VKCalc.toggleTask(event, \'' + t.id + '\')">' +
+          '<input type="checkbox" ' + (active ? 'checked' : '') + ' onclick="event.stopPropagation(); VKCalc.toggleTask(event, \'' + t.id + '\')">' +
+          '<span class="vk-task-icon">' + t.icon + '</span>' +
+          '<span class="vk-task-label">' + t.label + '</span>' +
+          '<span class="vk-task-points">' + t.points + ' б.</span>' +
+        '</div>' +
+        '<div class="vk-task-body">' +
+          TIMES.map(function(tm){
+            var q = sel.qty[tm.key] || 0;
+            return '<div class="vk-time-row">' +
+              '<label class="vk-time-label">' + tm.label + ' <span class="mult">×' + tm.mult + '</span></label>' +
+              '<input type="number" min="0" max="99" value="' + q + '" ' + (active ? '' : 'disabled') +
+                ' onchange="VKCalc.setQty(\'' + t.id + '\', \'' + tm.key + '\', this.value)">' +
+            '</div>';
+          }).join('') +
+          '<div class="vk-task-link">' +
+            '<input type="text" placeholder="🔗 Ссылка на скрин (Discord)" value="' + escapeAttr(sel.link) + '" ' + (active ? '' : 'disabled') +
+              ' onchange="VKCalc.setLink(\'' + t.id + '\', this.value)">' +
+          '</div>' +
+        '</div>' +
       '</div>';
     }).join('');
-
-    tasksContainer.querySelectorAll('.vk-calc-field').forEach(function(row){
-      row.addEventListener('click', function(e){
-        if(e.target.tagName === 'INPUT') return;
-        var id = row.getAttribute('data-task');
-        var sel = state.selected[id] || {checked:false, qty:1};
-        VKCalc.toggle(id, !sel.checked);
-      });
-    });
   }
 
+  function escapeAttr(s){
+    return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  /* ---------- ПОДСЧЁТ ---------- */
   function calcSum(){
-    var sum = 0;
+    var total = 0;
     var details = [];
+
     TASKS.forEach(function(t){
       var sel = state.selected[t.id];
-      if(sel && sel.checked){
-        var p = t.points * sel.qty * state.mult;
-        sum += p;
-        details.push({ id:t.id, label:t.label, reportName:t.reportName, qty:sel.qty, total:Math.round(p) });
-      }
+      if(!sel || !sel.checked) return;
+
+      TIMES.forEach(function(tm){
+        var q = sel.qty[tm.key] || 0;
+        if(q > 0){
+          var pts = Math.round(t.points * q * tm.mult);
+          total += pts;
+          details.push({
+            id: t.id,
+            name: t.label,
+            time: tm.label,
+            qty: q,
+            points: pts,
+            link: sel.link || ''
+          });
+        }
+      });
     });
-    return { sum: Math.round(sum), details: details };
+
+    return { total: total, details: details };
   }
 
+  /* ---------- РЕНДЕР РЕЗУЛЬТАТА ---------- */
   function renderResult(){
     var res = calcSum();
     var resultEl = document.getElementById('calcResult');
-    var totalEl = document.getElementById('totalPoints');
+    var totalEl  = document.getElementById('totalPoints');
     if(!resultEl) return;
 
     if(res.details.length === 0){
-      resultEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--txt-3);font-size:13.5px">' +
-        'Отметьте выполненные задания слева</div>';
+      resultEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--txt-3);font-size:13px">Отметь задания слева</div>';
     } else {
       resultEl.innerHTML = res.details.map(function(d){
-        return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px">' +
-          '<span style="color:var(--txt-2)">' + d.label + ' × ' + d.qty + '</span>' +
-          '<span style="color:#7ee5a1;font-weight:600">+' + d.total + '</span>' +
+        var linkHtml = d.link
+          ? '<a class="vk-result-link" href="' + d.link + '" target="_blank">🔗 ' + d.link + '</a>'
+          : '<span class="vk-result-link empty">🔗 ссылка не указана</span>';
+        return '<div class="vk-result-item">' +
+          '<div class="vk-result-row">' +
+            '<span class="vk-result-name">' + d.name + ' <span class="vk-result-time">' + d.time + ' × ' + d.qty + '</span></span>' +
+            '<span class="vk-result-points">+' + d.points + '</span>' +
+          '</div>' +
+          linkHtml +
         '</div>';
       }).join('') +
-      '<div style="display:flex;justify-content:space-between;padding:10px 0;font-size:13px;color:var(--txt-3)">' +
-        '<span>Сумма за задания</span><span style="color:#7ee5a1;font-weight:700">+' + res.sum + '</span>' +
-      '</div>';
+      '<div class="vk-result-sum"><span>Сумма за задания</span><span style="color:#7ee5a1;font-weight:700">+' + res.total + '</span></div>';
     }
 
     var current = parseInt(document.getElementById('currentPoints').value) || 0;
     state.currentPoints = current;
-    if(totalEl) totalEl.textContent = current + res.sum;
+    if(totalEl) totalEl.textContent = current + res.total;
+
+    saveState();
   }
 
+  /* ---------- API ---------- */
   window.VKCalc = {
-    toggle: function(id, checked){
-      if(!state.selected[id]) state.selected[id] = {checked:false, qty:1};
-      state.selected[id].checked = checked;
+    toggleTask: function(ev, id){
+      if(ev && ev.target && ev.target.tagName === 'INPUT') ev.stopPropagation();
+      var sel = getSel(id);
+      sel.checked = !sel.checked;
+      /* если включили — ставим 1 в Обычное, если все нули */
+      if(sel.checked){
+        var any = (sel.qty.normal || 0) + (sel.qty.peak || 0) + (sel.qty.night || 0);
+        if(any === 0) sel.qty.normal = 1;
+      }
       renderTasks();
       renderResult();
     },
-    setQty: function(id, val){
-      if(!state.selected[id]) state.selected[id] = {checked:true, qty:1};
-      state.selected[id].qty = Math.max(1, parseInt(val) || 1);
+    setQty: function(id, timeKey, val){
+      var sel = getSel(id);
+      sel.qty[timeKey] = Math.max(0, parseInt(val) || 0);
       renderResult();
     },
-    setMult: function(m){ state.mult = m; renderResult(); },
+    setLink: function(id, val){
+      var sel = getSel(id);
+      sel.link = val.trim();
+      renderResult();
+    },
     update: function(){ renderResult(); },
     reset: function(){
       state.selected = {};
-      state.mult = 1;
+      state.currentPoints = 0;
       var cp = document.getElementById('currentPoints');
       if(cp) cp.value = 0;
-      document.querySelectorAll('.vk-time-btn').forEach(function(b){
-        b.classList.toggle('active', b.getAttribute('data-mult') === '1');
-      });
       renderTasks();
       renderResult();
     },
     selectAll: function(){
-      TASKS.forEach(function(t){ state.selected[t.id] = {checked:true, qty:1}; });
+      TASKS.forEach(function(t){
+        var sel = getSel(t.id);
+        sel.checked = true;
+        if((sel.qty.normal||0) + (sel.qty.peak||0) + (sel.qty.night||0) === 0) sel.qty.normal = 1;
+      });
       renderTasks();
       renderResult();
     },
-    copyResult: function(){
+    getData: function(){
       var res = calcSum();
-      var current = state.currentPoints;
+      return {
+        details: res.details,
+        sum: res.total,
+        currentPoints: state.currentPoints,
+        total: state.currentPoints + res.total
+      };
+    },
+    copyResult: function(){
+      var data = VKCalc.getData();
       var lines = ['=== Подсчёт баллов RMRP ===', ''];
-      lines.push('Текущие баллы: ' + current);
-      lines.push('Коэффициент времени: ×' + state.mult);
+      lines.push('Текущие баллы: ' + data.currentPoints);
       lines.push('');
-      if(res.details.length){
+      if(data.details.length){
         lines.push('Выполненные задания:');
-        res.details.forEach(function(d){
-          lines.push('  • ' + d.label + ' × ' + d.qty + ' = +' + d.total);
+        data.details.forEach(function(d){
+          lines.push('  • ' + d.name + ' [' + d.time + ' × ' + d.qty + '] = +' + d.points);
+          if(d.link) lines.push('    🔗 ' + d.link);
         });
         lines.push('');
-        lines.push('Сумма за задания: +' + res.sum);
+        lines.push('Сумма за задания: +' + data.sum);
       } else {
         lines.push('Задания не отмечены');
       }
       lines.push('');
-      lines.push('ИТОГО БАЛЛОВ: ' + (current + res.sum));
+      lines.push('ИТОГО БАЛЛОВ: ' + data.total);
       copyToClipboard(lines.join('\n'));
       alert('Результат скопирован в буфер обмена!');
-    },
-    /* Для автозаполнения рапорта */
-    getData: function(){
-      return {
-        mult: state.mult,
-        currentPoints: state.currentPoints,
-        details: calcSum().details,
-        sum: calcSum().sum,
-        total: state.currentPoints + calcSum().sum
-      };
     }
   };
 
-  document.querySelectorAll('.vk-time-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('.vk-time-btn').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-      VKCalc.setMult(parseFloat(btn.getAttribute('data-mult')) || 1);
-    });
-  });
-
   var cpInput = document.getElementById('currentPoints');
-  if(cpInput) cpInput.addEventListener('input', renderResult);
+  if(cpInput){
+    cpInput.value = state.currentPoints || 0;
+    cpInput.addEventListener('input', renderResult);
+  }
 
   renderTasks();
   renderResult();
 
   /* ============================================================
-     ФОРМА РАПОРТА + АВТОЗАПОЛНЕНИЕ
+     ФОРМА РАПОРТА
      ============================================================ */
   function getVal(id){ var el = document.getElementById(id); return el ? el.value : ''; }
-  function setVal(id, val){ var el = document.getElementById(id); if(el) el.value = val; }
-
+  function setVal(id, v){ var el = document.getElementById(id); if(el) el.value = v; }
   function todayStr(){
     var d = new Date();
-    var dd = ('0' + d.getDate()).slice(-2);
-    var mm = ('0' + (d.getMonth()+1)).slice(-2);
-    return dd + '.' + mm + '.' + d.getFullYear();
+    return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' + d.getFullYear();
   }
 
   window.VKReport = {
-    /* Автозаполнение из калькулятора */
     autofillFromCalc: function(){
       var data = VKCalc.getData();
-
       if(data.details.length === 0){
         if(!confirm('В калькуляторе не отмечено ни одного задания. Заполнить только баллы и дату?')) return;
       }
 
-      /* Формируем блок «Проделанная работа» */
-      var workLines = [];
+      /* Группируем по заданию, чтобы ссылка шла один раз */
+      var grouped = {};
       data.details.forEach(function(d){
-        workLines.push(d.reportName + ': Число ' + d.qty);
-        workLines.push('ссылка'); /* место под ссылку */
+        if(!grouped[d.id]){
+          grouped[d.id] = { name:d.name, items:[], link:d.link };
+        }
+        grouped[d.id].items.push({ time:d.time, qty:d.qty });
+        if(d.link) grouped[d.id].link = d.link;
+      });
+
+      var workLines = [];
+      Object.keys(grouped).forEach(function(id){
+        var g = grouped[id];
+        var parts = g.items.map(function(it){ return it.time + ' × ' + it.qty; }).join(', ');
+        var totalQty = g.items.reduce(function(s,it){ return s + it.qty; }, 0);
+        workLines.push(g.name + ': Число ' + totalQty + ' (' + parts + ')');
+        workLines.push(g.link ? g.link : 'ссылка');
         workLines.push('');
       });
 
-      if(workLines.length === 0){
-        workLines.push('Укажите проделанную работу вручную');
-      }
+      if(workLines.length === 0) workLines.push('Укажи проделанную работу вручную');
 
       setVal('rpWork', workLines.join('\n'));
       setVal('rpDate', todayStr());
-
-      /* «Сколько всего баллов» — общий итог */
       setVal('rpTotalPoints', data.total + ' баллов');
-
-      /* Если пользователь оставил пустое поле «Остаток» — ставим нету */
       if(!getVal('rpPrevPoints')) setVal('rpPrevPoints', 'нету');
 
-      /* Обновляем предпросмотр */
       VKReport.generate();
 
-      /* Небольшое уведомление */
       var btn = event.target;
       var old = btn.innerHTML;
-      btn.innerHTML = '✅ Заполнено! Дополните ссылки в блоке работы';
+      btn.innerHTML = '✅ Заполнено! Дополни ссылки, если нужно';
       setTimeout(function(){ btn.innerHTML = old; }, 2500);
     },
 
     generate: function(){
-      var rank = getVal('rpRank') || 'Звание';
-      var name = getVal('rpName') || 'ФИО';
-      var nextRank = getVal('rpNextRank') || 'Следующее звание';
-      var date = getVal('rpDate') || 'Дата';
-      var prevPoints = getVal('rpPrevPoints') || 'нету';
-      var totalPoints = getVal('rpTotalPoints') || '0';
-      var work = getVal('rpWork') || '';
-      var sign = getVal('rpSign') || 'Подпись';
+      var rank      = getVal('rpRank') || 'Звание';
+      var name      = getVal('rpName') || 'ФИО';
+      var nextRank  = getVal('rpNextRank') || 'Следующее звание';
+      var date      = getVal('rpDate') || 'Дата';
+      var prevPoints= getVal('rpPrevPoints') || 'нету';
+      var totalPts  = getVal('rpTotalPoints') || '0';
+      var work      = getVal('rpWork') || '';
+      var sign      = getVal('rpSign') || 'Подпись';
 
-      var lines = [];
-      lines.push('Военному Комиссару Максиму Кузьмичу');
-      lines.push('');
-      lines.push('От ' + rank + ' ' + name);
-      lines.push('');
-      lines.push('Рапорт на повышение');
-      lines.push('(' + rank + ' -> ' + nextRank + ')');
-      lines.push('');
-      lines.push('Проделанная работа ↴');
-      lines.push('');
-      lines.push(work);
-      lines.push('');
-      lines.push('Остаток баллов за предыдущий отчёт - ' + prevPoints);
-      lines.push('Сколько всего баллов - ' + totalPoints);
-      lines.push('');
-      lines.push('Дата: ' + date);
-      lines.push('Подпись: ' + sign);
-
+      var lines = [
+        'Военному Комиссару Максиму Кузьмичу',
+        '',
+        'От ' + rank + ' ' + name,
+        '',
+        'Рапорт на повышение',
+        '(' + rank + ' -> ' + nextRank + ')',
+        '',
+        'Проделанная работа ↴',
+        '',
+        work,
+        '',
+        'Остаток баллов за предыдущий отчёт - ' + prevPoints,
+        'Сколько всего баллов - ' + totalPts,
+        '',
+        'Дата: ' + date,
+        'Подпись: ' + sign
+      ];
       var text = lines.join('\n');
       var out = document.getElementById('rpOutput');
       if(out) out.textContent = text;
@@ -872,7 +867,6 @@
     if(el) el.addEventListener('input', VKReport.generate);
   });
 
-  /* Ставим дату по умолчанию и генерируем превью */
   setVal('rpDate', todayStr());
   VKReport.generate();
 
