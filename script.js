@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v3, финальный)
+   RMRP LAW — script.js (v4, с калькулятором ВК)
    ============================================================ */
 
 (function () {
@@ -33,6 +33,7 @@
     try { initEditor(); } catch(e){ console.warn('editor', e); }
     try { initBgActions(); } catch(e){ console.warn('bgActions', e); }
     try { initExport(); } catch(e){ console.warn('export', e); }
+    try { initVkCalc(); } catch(e){ console.warn('vkCalc', e); }
     try { restoreLaws(); } catch(e){ console.warn('restoreLaws', e); }
     try { restoreBg(); } catch(e){ console.warn('restoreBg', e); }
 
@@ -303,6 +304,84 @@
         reader.readAsText(file);
       }
     };
+  }
+
+  /* ============================================================
+     КАЛЬКУЛЯТОР БАЛЛОВ ВК
+     ============================================================ */
+  var VK_REQUIRED = {
+    '0_1': 60,    // Младший сержант → Сержант
+    '1_2': 130,   // Сержант → Старший сержант
+    '2_3': 250,   // Старший сержант → Старшина
+    '3_4': 350,   // Старшина → Прапорщик
+    '4_5': 500,   // Прапорщик → Старший прапорщик
+    '5_6': 650,   // Старший прапорщик → Младший лейтенант
+    '6_7': 750,   // Младший лейтенант → Лейтенант
+    '7_8': 850,   // Лейтенант → Старший лейтенант
+    '8_9': 1000   // Старший лейтенант → Капитан
+  };
+
+  function initVkCalc() {
+    var curSelect = $('#calcCurrentRank');
+    var tgtSelect = $('#calcTargetRank');
+    var pointsInput = $('#calcPoints');
+    var resultBox = $('#calcResult');
+    var neededEl = $('#calcNeeded');
+    var statusEl = $('#calcStatus');
+    var barEl = $('#calcBarFill');
+    var haveEl = $('#calcHave');
+    var remainEl = $('#calcRemain');
+
+    if (!curSelect || !tgtSelect || !pointsInput || !resultBox) return;
+
+    function update() {
+      var cur = parseInt(curSelect.value, 10);
+      var tgt = parseInt(tgtSelect.value, 10);
+      var have = parseInt(pointsInput.value, 10) || 0;
+
+      // Автокоррекция: цель не может быть <= текущего
+      if (tgt <= cur) {
+        tgt = cur + 1;
+        tgtSelect.value = Math.min(tgt, 9);
+        tgt = parseInt(tgtSelect.value, 10);
+      }
+
+      var key = cur + '_' + tgt;
+      var required = VK_REQUIRED[key];
+
+      if (!required) {
+        required = 0;
+        for (var i = cur; i < tgt; i++) {
+          var k = i + '_' + (i + 1);
+          required += (VK_REQUIRED[k] || 0);
+        }
+      }
+
+      neededEl.textContent = required;
+      haveEl.textContent = have;
+
+      var remain = Math.max(0, required - have);
+      remainEl.textContent = remain;
+
+      var percent = required > 0 ? Math.min(100, (have / required) * 100) : 0;
+      barEl.style.width = percent + '%';
+
+      if (have >= required && required > 0) {
+        resultBox.classList.add('status-ok');
+        resultBox.classList.remove('status-low');
+        statusEl.textContent = '✓ Готов к повышению!';
+      } else {
+        resultBox.classList.add('status-low');
+        resultBox.classList.remove('status-ok');
+        statusEl.textContent = '✗ Недостаточно баллов';
+      }
+    }
+
+    curSelect.addEventListener('change', update);
+    tgtSelect.addEventListener('change', update);
+    pointsInput.addEventListener('input', update);
+
+    update();
   }
 
 })();
