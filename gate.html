@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0e12">
+<title>RMRP | Доступ закрыт</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:radial-gradient(800px 600px at 50% 0%,rgba(255,70,85,.1),transparent 70%),var(--bg-1)}
+.gate-wrap{width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:40px 32px;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:gateIn .4s ease}
+@keyframes gateIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.gate-icon{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#ff4655,#ff6b78);display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 22px;box-shadow:0 10px 30px rgba(255,70,85,.35)}
+.gate-title{font-size:24px;font-weight:900;color:var(--txt-0);text-align:center;letter-spacing:-.5px;margin-bottom:8px}
+.gate-sub{font-size:14px;color:var(--txt-2);text-align:center;margin-bottom:30px;line-height:1.6}
+.gate-field{margin-bottom:16px}
+.gate-field label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.gate-input{width:100%;padding:14px 16px;border-radius:12px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:15px;font-weight:600;outline:none;transition:.25s;font-family:monospace;letter-spacing:2px;text-align:center}
+.gate-input:focus{border-color:#ff4655;box-shadow:0 0 0 4px rgba(255,70,85,.15)}
+.gate-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-weight:800;font-size:15px;border:0;cursor:pointer;transition:.25s;margin-top:8px;letter-spacing:.5px}
+.gate-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,70,85,.35)}
+.gate-error{padding:12px 16px;border-radius:10px;background:rgba(255,70,85,.1);border:1px solid rgba(255,70,85,.3);color:#ff6b78;font-size:13px;text-align:center;margin-bottom:16px;display:none}
+.gate-error.show{display:block;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.gate-hint{margin-top:22px;padding:14px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--txt-3);text-align:center;line-height:1.6}
+.gate-hint code{background:var(--bg-3);padding:2px 8px;border-radius:6px;color:#ff6b78;font-weight:700;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<div class="gate-wrap">
+  <div class="gate-icon">🔒</div>
+  <div class="gate-title">Доступ закрыт</div>
+  <div class="gate-sub">Введите код доступа, чтобы продолжить.<br>Код выдаётся администрацией проекта.</div>
+
+  <div class="gate-error" id="gateError">Неверный код. Попробуйте снова.</div>
+
+  <div class="gate-field">
+    <label>Код доступа</label>
+    <input type="password" class="gate-input" id="gateCode" placeholder="••••••••" autofocus onkeydown="if(event.key==='Enter')Gate.submit()">
+  </div>
+
+  <button class="gate-btn" onclick="Gate.submit()">🔓 Открыть доступ</button>
+
+  <div class="gate-hint">
+    💡 Код по умолчанию: <code>RMRP2025</code><br>
+    (меняется в файле <code>auth.js</code>)
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+(function(){
+  function getNext(){
+    var params = new URLSearchParams(location.search);
+    var next = params.get('next');
+    if(!next || next.indexOf('gate.html') !== -1) next = 'index.html';
+    return next;
+  }
+
+  window.Gate = {
+    submit: function(){
+      var code = document.getElementById('gateCode').value;
+      if(RMRPAuth.passGate(code)){
+        location.replace(getNext());
+      } else {
+        var err = document.getElementById('gateError');
+        err.classList.add('show');
+        document.getElementById('gateCode').value = '';
+        setTimeout(function(){ err.classList.remove('show'); }, 3000);
+      }
+    }
+  };
+
+  /* Если уже проходил — сразу редирект */
+  if(RMRPAuth.checkGate()) location.replace(getNext());
+
+  /* Автофокус */
+  setTimeout(function(){
+    var inp = document.getElementById('gateCode');
+    if(inp) inp.focus();
+  }, 100);
+})();
+</script>
+</body>
+</html>
