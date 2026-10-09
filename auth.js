@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v12: система заявок на повышение)
+   RMRP — auth.js (v13: запрет смены звания/должности + заявки)
    ============================================================ */
 (function(){
   'use strict';
@@ -35,7 +35,6 @@
     'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
   };
 
-  /* Максимум при регистрации */
   var REG_MAX_RANK = 'Капитан';
   var REG_MAX_POS  = 'Инструктор ВК';
 
@@ -57,6 +56,15 @@
     if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
     var posIdx = POS_IDX[user.position];
     if(posIdx !== undefined && posIdx >= POS_IDX['Инструктор ВК']) return true;
+    return false;
+  }
+
+  /* Может ли юзер сам менять себе звание/должность */
+  function canSelfPromote(user){
+    if(!user) return false;
+    if(isAdmin(user)) return true;
+    var rankIdx = RANK_IDX[user.rank];
+    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
     return false;
   }
 
@@ -158,9 +166,7 @@
     });
   }
 
-  /* ============================================================
-     SVG-ПОГОНЫ
-     ============================================================ */
+  /* SVG-погоны */
   function buildEpaulette(rank){
     var gold = '#fbbf24';
     var line = '#3a3d47';
@@ -273,9 +279,7 @@
       });
     },
 
-    /* ============================================================
-       ЗАЯВКИ
-       ============================================================ */
+    /* ЗАЯВКИ */
     createRequest: function(data){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -360,9 +364,7 @@
       });
     },
 
-    /* ============================================================
-       ПОЛЬЗОВАТЕЛИ
-       ============================================================ */
+    /* ПОЛЬЗОВАТЕЛИ */
     getUsers: function(){
       return fbGet('users').then(function(data){
         var users = data || {};
@@ -396,7 +398,6 @@
         var isFirst = Object.keys(users).length === 0;
         var isDevUser = (login === DEV_LOGIN);
 
-        /* Проверка: не выше допустимого при регистрации */
         var regRank = data.rank || RANKS[0];
         var regPos = data.position || POSITIONS[0];
         if(RANK_IDX[regRank] > RANK_IDX[REG_MAX_RANK]) regRank = REG_MAX_RANK;
@@ -443,15 +444,53 @@
       });
     },
 
+    /* ============================================================
+       UPDATE с защитой от самоповышения
+       ============================================================ */
     update: function(patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
 
       var cleanPatch = {};
+      var blocked = null;
+
       Object.keys(patch).forEach(function(k){
-        if(k === 'password' && patch[k]) cleanPatch.password = hashPass(patch[k]);
-        else if(k !== 'login' && k !== 'password' && k !== 'role') cleanPatch[k] = patch[k];
+        if(k === 'password' && patch[k]){
+          cleanPatch.password = hashPass(patch[k]);
+        } else if(k === 'rank' || k === 'position'){
+          /* Звание/должность — только если может сам менять */
+          if(!canSelfPromote(cur)){
+            blocked = blocked || ('Смена звания/должности доступна только от Майора и выше');
+            return;
+          }
+          /* Не-админ не может поднять выше себя */
+          if(!isAdmin(cur)){
+            if(k === 'rank'){
+              var newIdx = RANK_IDX[patch[k]];
+              var curIdx = RANK_IDX[cur.rank];
+              if(newIdx > curIdx){
+                blocked = 'Нельзя повысить себя выше текущего звания';
+                return;
+              }
+            }
+            if(k === 'position'){
+              var newP = POS_IDX[patch[k]];
+              var curP = POS_IDX[cur.position];
+              if(newP > curP){
+                blocked = 'Нельзя повысить себя выше текущей должности';
+                return;
+              }
+            }
+          }
+          cleanPatch[k] = patch[k];
+        } else if(k !== 'login' && k !== 'password' && k !== 'role'){
+          cleanPatch[k] = patch[k];
+        }
       });
+
+      if(blocked){
+        return Promise.resolve({ ok:false, error: blocked });
+      }
 
       return fbPatch('users/' + cur.login, cleanPatch).then(function(){
         Object.keys(cleanPatch).forEach(function(k){ cur[k] = cleanPatch[k]; });
@@ -524,6 +563,7 @@
     canGiveAccess: canGiveAccess,
     canChangeRole: canChangeRole,
     canUseAudit: canUseAudit,
+    canSelfPromote: canSelfPromote,
     isAdmin: isAdmin,
     isDev: isDev,
     maxRankByRole: maxRankByRole,
