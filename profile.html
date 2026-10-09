@@ -13,7 +13,6 @@
 .profile-hero h1{font-size:clamp(26px,4.5vw,42px);font-weight:900;color:var(--txt-0);letter-spacing:-1.2px}
 .profile-hero h1 .accent{background:linear-gradient(135deg,#4aa8ff,#3ddc84);-webkit-background-clip:text;background-clip:text;color:transparent}
 .profile-hero p{color:var(--txt-2);margin-top:10px;font-size:14.5px}
-
 .auth-wrap{max-width:440px;margin:0 auto;padding:24px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg)}
 .auth-tabs{display:flex;gap:6px;margin-bottom:22px;padding:6px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px}
 .auth-tab{flex:1;padding:10px;border-radius:8px;background:transparent;color:var(--txt-2);font-size:13.5px;font-weight:600;border:0;cursor:pointer;transition:var(--transition)}
@@ -29,32 +28,31 @@
 .auth-btn:disabled{opacity:.6;cursor:wait}
 .auth-error{padding:10px 14px;border-radius:8px;background:rgba(255,70,85,.1);border:1px solid rgba(255,70,85,.3);color:#ff6b78;font-size:13px;margin-bottom:14px;display:none}
 .auth-error.show{display:block}
-
 .profile-wrap{max-width:1100px;margin:0 auto}
 .profile-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#7c3aed,#4aa8ff);position:relative;overflow:hidden}
 .profile-banner-edit{position:absolute;bottom:14px;right:14px;padding:9px 16px;border-radius:10px;background:rgba(0,0,0,.65);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;border:0;backdrop-filter:blur(8px);transition:var(--transition)}
 .profile-banner-edit:hover{background:rgba(0,0,0,.9)}
-
 .profile-info{padding:0 30px 30px;background:var(--bg-2);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-top:-90px;position:relative;z-index:1}
 .profile-avatar{width:170px;height:170px;border-radius:50%;background:linear-gradient(135deg,#4aa8ff,#3ddc84);display:flex;align-items:center;justify-content:center;font-size:68px;color:#fff;font-weight:900;border:6px solid var(--bg-2);overflow:hidden;position:relative;margin-top:-40px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
 .profile-avatar-edit{position:absolute;bottom:8px;right:8px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;border:3px solid var(--bg-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .profile-avatar-edit:hover{transform:scale(1.1)}
-
 .profile-meta{margin-top:18px}
 .profile-name{font-size:28px;font-weight:900;color:var(--txt-0);margin-bottom:6px;letter-spacing:-.6px}
 .profile-login{font-size:14px;color:var(--txt-3);margin-bottom:14px}
-
 .profile-banners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:700px){.profile-banners{grid-template-columns:1fr}}
 .banner-card{padding:18px 22px;border-radius:16px;color:#fff;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.35);transition:var(--transition)}
-.banner-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.banner-card:hover{transform:translateY(-3px)}
 .banner-card::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.12),rgba(255,255,255,0) 60%);pointer-events:none}
 .banner-card::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
 .banner-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:800;opacity:.85;margin-bottom:6px}
 .banner-value{font-size:20px;font-weight:900;letter-spacing:-.4px;position:relative;z-index:1}
 .banner-icon{position:absolute;right:20px;bottom:14px;font-size:42px;opacity:.35;pointer-events:none}
-
+@keyframes devGlow{
+  0%,100%{box-shadow:0 10px 30px rgba(168,85,247,.4),0 0 60px rgba(236,72,153,.2)}
+  50%{box-shadow:0 10px 40px rgba(168,85,247,.6),0 0 90px rgba(236,72,153,.35)}
+}
 .profile-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px}
 .profile-link{padding:14px 16px;border-radius:12px;background:var(--bg-1);border:1px solid var(--line);transition:var(--transition);display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
 .profile-link:hover{border-color:#4aa8ff;transform:translateY(-2px);background:var(--bg-3)}
@@ -62,7 +60,6 @@
 .profile-link-body{flex:1;min-width:0}
 .profile-link-label{font-size:11px;color:var(--txt-3);text-transform:uppercase;letter-spacing:1px;font-weight:700}
 .profile-link-value{font-size:13.5px;color:var(--txt-0);font-weight:600;word-break:break-all;margin-top:2px}
-
 .profile-actions{display:flex;gap:10px;flex-wrap:wrap}
 .profile-btn{padding:10px 18px;border-radius:10px;font-size:13.5px;font-weight:600;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
 .profile-btn.primary{background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff}
@@ -76,7 +73,6 @@
 .profile-btn.audit{background:linear-gradient(135deg,#a855f7,#4aa8ff);color:#fff}
 .profile-btn.audit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
 .profile-btn:disabled{opacity:.5;cursor:wait}
-
 .edit-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;padding:20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px}
 @media(max-width:640px){.edit-form{grid-template-columns:1fr}}
 .edit-form .full{grid-column:1/-1}
@@ -84,7 +80,6 @@
 .edit-form input,.edit-form select,.edit-form textarea{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
 .edit-form input:focus,.edit-form select:focus,.edit-form textarea:focus{border-color:#4aa8ff}
 .edit-form textarea{min-height:80px;resize:vertical}
-
 .users-table{width:100%;border-collapse:collapse;margin-top:20px}
 .users-table th,.users-table td{padding:12px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px}
 .users-table th{color:var(--txt-3);font-size:11.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
@@ -102,7 +97,6 @@
 .user-act-btn.del:hover{background:rgba(255,70,85,.25)}
 .user-act-btn:disabled{opacity:.35;cursor:not-allowed}
 .users-loading{padding:24px;text-align:center;color:var(--txt-3);font-size:13px}
-
 .modal-overlay-soft{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay-soft.active{display:flex}
 .modal-soft{background:var(--bg-2);border:1px solid var(--line-2);border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
@@ -116,7 +110,6 @@
 .modal-soft-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 .role-lock-hint{font-size:11.5px;color:var(--txt-3);margin-top:4px;font-style:italic;display:none}
 .role-lock-hint.show{display:block}
-
 .fancy-error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:10000;background:var(--bg-2);border:2px solid #ff4655;border-radius:18px;padding:26px 30px;max-width:420px;width:90%;text-align:center;box-shadow:0 30px 90px rgba(255,70,85,.4);opacity:0;pointer-events:none;transition:.3s}
 .fancy-error.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;animation:errIn .4s}
 @keyframes errIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}60%{transform:translate(-50%,-50%) scale(1.03)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
@@ -143,10 +136,7 @@
       <a href="audit.html" class="nav-link">📋 Аудит</a>
     </nav>
     <div class="header-actions">
-      <button class="btn-add" id="openEditor">
-        <span class="btn-add-icon">+</span>
-        <span class="btn-add-text">Добавить</span>
-      </button>
+      <button class="btn-add" id="openEditor"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
       <button class="btn-bg" id="openBgPicker"><span>🖼</span></button>
       <button class="burger" id="burger"><span></span><span></span><span></span></button>
     </div>
@@ -163,7 +153,6 @@
 <section class="section">
   <div class="container">
 
-    <!-- АВТОРИЗАЦИЯ -->
     <div id="authScreen" class="auth-wrap" hidden>
       <div class="auth-tabs">
         <button class="auth-tab active" data-auth-tab="login">🔑 Вход</button>
@@ -189,7 +178,6 @@
       </div>
     </div>
 
-    <!-- ПРОФИЛЬ -->
     <div id="profileScreen" class="profile-wrap" hidden>
       <div class="profile-banner" id="pBanner">
         <button class="profile-banner-edit" onclick="Profile.editBanner()">🖼 Сменить баннер</button>
@@ -312,7 +300,6 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалка редактирования юзера -->
 <div class="modal-overlay-soft" id="editUserModal">
   <div class="modal-soft">
     <h3>👤 Редактирование пользователя</h3>
@@ -340,7 +327,6 @@
   </div>
 </div>
 
-<!-- Красивая ошибка -->
 <div class="fancy-error" id="fancyError">
   <div class="fancy-error-icon">⚠️</div>
   <div class="fancy-error-title" id="fancyErrorTitle">Ошибка</div>
@@ -348,7 +334,6 @@
   <button class="fancy-error-ok" onclick="Profile.hideError()">Понятно</button>
 </div>
 
-<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -381,9 +366,6 @@
 <script src="auth.js"></script>
 <script src="script.js"></script>
 <script>
-/* ============================================================
-   PROFILE — без аудита, с публичными профилями
-   ============================================================ */
 (function(){
   'use strict';
 
@@ -480,20 +462,37 @@
         banner.style.backgroundSize = 'cover';
         banner.style.backgroundPosition = 'center';
       } else {
-        banner.style.backgroundImage = 'linear-gradient(135deg,#7c3aed,#4aa8ff)';
+        banner.style.backgroundImage = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
       }
     }
 
     var rankBanner = document.getElementById('pRankBanner');
-    if(rankBanner) rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
+    if(rankBanner){
+      rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
+      if(RMRPAuth.hasGlow(u.rank, u.role)){
+        rankBanner.style.boxShadow = '0 10px 30px rgba(255,70,85,.35), 0 0 60px rgba(255,70,85,.15)';
+      } else {
+        rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
+      }
+    }
     setText('pRankValue', u.rank || '—');
 
     var posBanner = document.getElementById('pPosBanner');
-    if(posBanner) posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
+    if(posBanner){
+      posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
+    }
     setText('pPosValue', u.position || '—');
 
     var roleBanner = document.getElementById('pRoleBanner');
-    if(roleBanner) roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
+    if(roleBanner){
+      roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
+      if(u.role === 'Разработчик'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
+        roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
+      } else if(u.role === 'Администратор'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
+      }
+    }
     setText('pRoleValue', u.role || 'Пользователь');
 
     var days = u.createdAt ? Math.floor((Date.now() - u.createdAt) / 86400000) : 0;
@@ -685,7 +684,7 @@
               ? '<button class="user-act-btn edit" ' + (canEdit ? '' : 'disabled') +
                 ' onclick="Profile.openUserModal(\'' + u.login + '\')">✏️</button>'
               : '') +
-            (cur && cur.role === 'Администратор' && cur.login !== u.login
+            (cur && (cur.role === 'Администратор' || cur.role === 'Разработчик') && cur.login !== u.login
               ? '<button class="user-act-btn del" onclick="Profile.deleteUser(\'' + u.login + '\')">🗑</button>'
               : '') +
           '</div></td>' +
@@ -716,14 +715,14 @@
       if(rankSel){
         var maxRank = RMRPAuth.maxRankByRole(cur);
         Array.from(rankSel.options).forEach(function(opt, idx){
-          opt.disabled = (cur.role !== 'Администратор' && idx > maxRank);
+          opt.disabled = (!RMRPAuth.isAdmin(cur) && idx > maxRank);
         });
       }
       var posSel = document.getElementById('euPos');
       if(posSel){
         var maxPos = RMRPAuth.maxPositionByRole(cur);
         Array.from(posSel.options).forEach(function(opt, idx){
-          opt.disabled = (cur.role !== 'Администратор' && idx > maxPos);
+          opt.disabled = (!RMRPAuth.isAdmin(cur) && idx > maxPos);
         });
       }
 
@@ -732,13 +731,28 @@
       var canChangeRole = RMRPAuth.canChangeRole(cur, u);
       if(roleSel){
         roleSel.disabled = !canChangeRole;
+        /* Только Разработчик может выдать Разработчика */
+        if(RMRPAuth.isDev(cur)){
+          Array.from(roleSel.options).forEach(function(opt){
+            opt.disabled = false;
+          });
+        } else if(RMRPAuth.isAdmin(cur)){
+          Array.from(roleSel.options).forEach(function(opt){
+            if(opt.value === 'Разработчик') opt.disabled = true;
+          });
+        }
         if(hint){
           if(!canChangeRole){
-            hint.textContent = cur.role !== 'Администратор'
-              ? '🔒 Менять роль может только Администратор'
+            hint.textContent = (!RMRPAuth.isAdmin(cur))
+              ? '🔒 Менять роль может только Администратор или Разработчик'
               : '🔒 Нельзя менять роль себе';
             hint.classList.add('show');
-          } else hint.classList.remove('show');
+          } else if(!RMRPAuth.isDev(cur)){
+            hint.textContent = '🔒 Только Разработчик может выдать роль Разработчик';
+            hint.classList.add('show');
+          } else {
+            hint.classList.remove('show');
+          }
         }
       }
 
@@ -761,7 +775,7 @@
       rank: getVal('euRank'),
       position: getVal('euPos')
     };
-    if(cur.role === 'Администратор' && cur.login !== login){
+    if(RMRPAuth.isAdmin(cur) && cur.login !== login){
       patch.role = getVal('euRole');
     }
     if(getVal('euPass')) patch.password = getVal('euPass');
