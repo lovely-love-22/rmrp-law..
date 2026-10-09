@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v8)
+   RMRP LAW — script.js (v9: чистая шапка)
    ============================================================ */
 
 (function () {
@@ -22,7 +22,6 @@
 
   onReady(function () {
     console.log('[RMRP] script.js loaded');
-
     try { initHeaderButtons(); } catch(e){ console.warn('headerButtons', e); }
     try { initModals(); }        catch(e){ console.warn('modals', e); }
     try { initAccordion(); }     catch(e){ console.warn('accordion', e); }
@@ -36,7 +35,6 @@
     try { initExport(); }        catch(e){ console.warn('export', e); }
     try { restoreLaws(); }       catch(e){ console.warn('restoreLaws', e); }
     try { restoreBg(); }         catch(e){ console.warn('restoreBg', e); }
-
     console.log('[RMRP] init done');
   });
 
@@ -48,54 +46,10 @@
     if (!actions) return;
 
     var path = location.pathname;
-    var isMediaPage   = /media\.html?$/i.test(path);
-    var isProfilePage = /profile\.html?$/i.test(path);
-    var isGatePage    = /gate\.html?$/i.test(path);
-
+    var isGatePage = /gate\.html?$/i.test(path);
     if (isGatePage) return;
 
-    actions.querySelectorAll('.btn-profile').forEach(function(el, idx){ if(idx > 0) el.remove(); });
-    actions.querySelectorAll('.btn-media:not(.btn-profile)').forEach(function(el, idx){ if(idx > 0) el.remove(); });
-
-    var existingProfile = actions.querySelector('.btn-profile');
-    if (existingProfile) existingProfile.remove();
-
-    var p = document.createElement('a');
-    p.href = 'profile.html';
-    p.className = 'btn-media btn-profile' + (isProfilePage ? ' is-active' : '');
-    p.title = isProfilePage ? 'Вы в личном кабинете' : 'Личный кабинет';
-
-    if (isProfilePage) {
-      p.style.cssText = 'background:rgba(74,168,255,.15);color:#4aa8ff;box-shadow:inset 0 -2px 0 #4aa8ff';
-    } else {
-      p.style.cssText = 'background:linear-gradient(135deg,#4aa8ff,#3ddc84)';
-    }
-    p.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
-
-    var addBtn = actions.querySelector('.btn-add');
-    if (addBtn) actions.insertBefore(p, addBtn);
-    else actions.appendChild(p);
-
-    var existingMedia = actions.querySelector('.btn-media:not(.btn-profile)');
-    if (existingMedia) existingMedia.remove();
-
-    var a = document.createElement('a');
-    a.href = isMediaPage ? 'index.html' : 'media.html';
-    a.className = 'btn-media' + (isMediaPage ? ' is-active' : '');
-
-    if (isMediaPage) {
-      a.title = 'Вы в медиа-галерее';
-      a.style.cssText = 'background:rgba(168,85,247,.15);color:#a855f7;box-shadow:inset 0 -2px 0 #a855f7';
-      a.innerHTML = '<span>🎬</span><span class="btn-add-text">Медиа</span>';
-    } else {
-      a.title = 'Медиа-галерея';
-      a.innerHTML = '<span>🎬</span><span class="btn-add-text">Медиа</span>';
-    }
-
-    var addBtn2 = actions.querySelector('.btn-add');
-    if (addBtn2) actions.insertBefore(a, addBtn2);
-    else actions.appendChild(a);
-
+    /* Кнопка «Выйти» */
     if (window.RMRPAuth) {
       var user = RMRPAuth.getCurrent();
       if (user && !actions.querySelector('.btn-logout')) {
@@ -109,7 +63,7 @@
         btn.onclick = function(){
           if(!confirm('Выйти из аккаунта?')) return;
           RMRPAuth.logout();
-          location.reload();
+          location.href = 'index.html';
         };
         actions.appendChild(btn);
       }
@@ -120,14 +74,11 @@
      МОДАЛКИ
      ============================================================ */
   function openModal(m) { if (m) m.hidden = false; }
-  function closeAllModals() {
-    $$('.modal-overlay').forEach(function (m) { m.hidden = true; });
-  }
+  function closeAllModals() { $$('.modal-overlay').forEach(function (m) { m.hidden = true; }); }
 
   function initModals() {
     var openEditor = $('#openEditor');
     var openBg = $('#openBgPicker');
-
     if (openEditor) openEditor.addEventListener('click', function () { openModal($('#editorModal')); });
     if (openBg) openBg.addEventListener('click', function () { openModal($('#bgModal')); });
 
@@ -137,10 +88,7 @@
       if (t.closest('#cancelEditor, #removeBg, #closeEditor, #closeBgPicker')) { closeAllModals(); return; }
       if (t.classList.contains('modal-overlay')) { t.hidden = true; return; }
     });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeAllModals();
-    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAllModals(); });
   }
 
   /* ============================================================
@@ -148,7 +96,6 @@
      ============================================================ */
   function initAccordion() {
     var headers = $$('.acc-header');
-    console.log('[RMRP] acc-headers:', headers.length);
     headers.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -312,10 +259,8 @@
       applyBtn.addEventListener('click', function () {
         var activeTabEl = $('.bg-tab.active');
         var activeTab = activeTabEl ? activeTabEl.getAttribute('data-bg-tab') : 'url';
-        var overlayEl = $('#bgOverlay');
-        var blurEl = $('#bgBlur');
-        var overlay = (overlayEl ? overlayEl.value : 60) / 100;
-        var blur = blurEl ? blurEl.value : 0;
+        var overlay = ($('#bgOverlay') ? $('#bgOverlay').value : 60) / 100;
+        var blur = $('#bgBlur') ? $('#bgBlur').value : 0;
 
         if (activeTab === 'url') {
           var url = $('#bgUrlInput').value.trim();
@@ -361,7 +306,6 @@
           media: JSON.parse(localStorage.getItem('rmrp_media_gallery') || '[]'),
           albums: JSON.parse(localStorage.getItem('rmrp_media_albums') || '[]'),
           vkCalc: JSON.parse(localStorage.getItem('rmrp_vk_calc_v2') || 'null'),
-          users: JSON.parse(localStorage.getItem('rmrp_users') || '{}'),
           auditHistory: JSON.parse(localStorage.getItem('rmrp_audit_history') || '[]')
         };
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -376,12 +320,11 @@
         reader.onload = function (e) {
           try {
             var data = JSON.parse(e.target.result);
-            if (data.laws)    localStorage.setItem(LS.laws, JSON.stringify(data.laws));
-            if (data.bg)      localStorage.setItem(LS.bg, data.bg);
-            if (data.media)   localStorage.setItem('rmrp_media_gallery', JSON.stringify(data.media));
-            if (data.albums)  localStorage.setItem('rmrp_media_albums', JSON.stringify(data.albums));
-            if (data.vkCalc)  localStorage.setItem('rmrp_vk_calc_v2', JSON.stringify(data.vkCalc));
-            if (data.users)   localStorage.setItem('rmrp_users', JSON.stringify(data.users));
+            if (data.laws)   localStorage.setItem(LS.laws, JSON.stringify(data.laws));
+            if (data.bg)     localStorage.setItem(LS.bg, data.bg);
+            if (data.media)  localStorage.setItem('rmrp_media_gallery', JSON.stringify(data.media));
+            if (data.albums) localStorage.setItem('rmrp_media_albums', JSON.stringify(data.albums));
+            if (data.vkCalc) localStorage.setItem('rmrp_vk_calc_v2', JSON.stringify(data.vkCalc));
             if (data.auditHistory) localStorage.setItem('rmrp_audit_history', JSON.stringify(data.auditHistory));
             alert('Импорт выполнен.');
             location.reload();
