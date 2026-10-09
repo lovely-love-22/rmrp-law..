@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v7)
+   RMRP LAW — script.js (v8)
    ============================================================ */
 
 (function () {
@@ -54,11 +54,9 @@
 
     if (isGatePage) return;
 
-    /* Чистим дубликаты */
     actions.querySelectorAll('.btn-profile').forEach(function(el, idx){ if(idx > 0) el.remove(); });
     actions.querySelectorAll('.btn-media:not(.btn-profile)').forEach(function(el, idx){ if(idx > 0) el.remove(); });
 
-    /* --- ПРОФИЛЬ --- */
     var existingProfile = actions.querySelector('.btn-profile');
     if (existingProfile) existingProfile.remove();
 
@@ -78,7 +76,6 @@
     if (addBtn) actions.insertBefore(p, addBtn);
     else actions.appendChild(p);
 
-    /* --- МЕДИА --- */
     var existingMedia = actions.querySelector('.btn-media:not(.btn-profile)');
     if (existingMedia) existingMedia.remove();
 
@@ -99,7 +96,6 @@
     if (addBtn2) actions.insertBefore(a, addBtn2);
     else actions.appendChild(a);
 
-    /* --- ВЫЙТИ --- */
     if (window.RMRPAuth) {
       var user = RMRPAuth.getCurrent();
       if (user && !actions.querySelector('.btn-logout')) {
