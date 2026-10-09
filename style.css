@@ -318,3 +318,282 @@ input,select,textarea{font-family:inherit}
 .vk-note-icon{font-size:28px;flex-shrink:0}
 .vk-note-title{font-weight:700;color:var(--txt-0);font-size:14.5px;margin-bottom:4px}
 .vk-note-desc{font-size:13px;color:var(--txt-2)}
+/* ============================================================
+   КАЛЬКУЛЯТОР БАЛЛОВ ВК
+   ============================================================ */
+.vk-calc{
+  max-width:900px;
+  background:linear-gradient(135deg,rgba(61,220,132,.06),rgba(74,168,255,.04));
+  border:1px solid rgba(61,220,132,.3);
+  border-radius:var(--radius-lg);
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+}
+.vk-calc::before{
+  content:"";
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#3ddc84,#4aa8ff,#3ddc84);
+  background-size:200% 100%;
+  animation:vkSlide 3s linear infinite;
+}
+@keyframes vkSlide{
+  from{background-position:0% 0;}
+  to{background-position:200% 0;}
+}
+
+.vk-calc-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:18px;
+}
+.vk-calc-row{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.vk-calc-row label{
+  font-size:12.5px;
+  font-weight:700;
+  color:#7ee5a1;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+.vk-calc-row select,
+.vk-calc-row input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  color:var(--txt-0);
+  font-size:14px;
+  outline:none;
+  transition:var(--transition);
+}
+.vk-calc-row select:focus,
+.vk-calc-row input:focus{
+  border-color:#3ddc84;
+  box-shadow:0 0 0 3px rgba(61,220,132,.25);
+}
+
+.vk-calc-result{
+  margin-top:20px;
+  padding:20px;
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  transition:var(--transition);
+}
+.vk-calc-result.status-ok{
+  background:linear-gradient(135deg,rgba(61,220,132,.15),rgba(61,220,132,.05));
+  border-color:#3ddc84;
+  box-shadow:0 0 30px rgba(61,220,132,.25);
+  animation:vkPulse 1.2s ease-in-out infinite alternate;
+}
+.vk-calc-result.status-low{
+  background:linear-gradient(135deg,rgba(255,70,85,.08),rgba(255,70,85,.02));
+  border-color:rgba(255,70,85,.4);
+}
+@keyframes vkPulse{
+  from{box-shadow:0 0 20px rgba(61,220,132,.15);}
+  to{box-shadow:0 0 45px rgba(61,220,132,.4);}
+}
+
+.vk-calc-bar{
+  height:14px;
+  background:var(--bg-3);
+  border-radius:999px;
+  overflow:hidden;
+  margin:14px 0 10px;
+  position:relative;
+}
+.vk-calc-bar-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff4655,#ffb020);
+  border-radius:999px;
+  transition:width .5s cubic-bezier(.4,0,.2,1), background .3s;
+}
+.vk-calc-result.status-ok .vk-calc-bar-fill{
+  background:linear-gradient(90deg,#3ddc84,#4aa8ff);
+}
+
+.vk-calc-info{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:8px;
+}
+.vk-calc-needed{
+  font-size:14px;
+  color:var(--txt-2);
+}
+.vk-calc-needed b{
+  color:var(--txt-0);
+  font-size:18px;
+  font-weight:800;
+}
+.vk-calc-status{
+  font-size:15px;
+  font-weight:800;
+  padding:8px 16px;
+  border-radius:10px;
+  background:var(--bg-3);
+  color:var(--txt-2);
+  transition:var(--transition);
+}
+.vk-calc-result.status-ok .vk-calc-status{
+  background:rgba(61,220,132,.2);
+  color:#7ee5a1;
+}
+.vk-calc-result.status-low .vk-calc-status{
+  background:rgba(255,70,85,.15);
+  color:var(--accent-2);
+}
+
+.vk-calc-hint{
+  font-size:12.5px;
+  color:var(--txt-3);
+  margin-top:10px;
+  line-height:1.6;
+}
+
+@media (max-width:640px){
+  .vk-calc{padding:20px}
+  .vk-calc-grid{grid-template-columns:1fr}
+}
+
+/* ============================================================
+   КРАСИВОЕ ПЕРЕЛИВАНИЕ ПРИ НАВЕДЕНИИ
+   ============================================================ */
+
+/* Быстрые карточки на главной + карточки-ссылки */
+.quick-card{
+  position:relative;
+  overflow:hidden;
+}
+.quick-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius);
+  padding:1px;
+  background:linear-gradient(120deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(255,70,85,.5) 45%,
+    rgba(74,168,255,.6) 55%,
+    transparent 70%,
+    transparent 100%);
+  background-size:250% 250%;
+  background-position:100% 0;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+  opacity:0;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+.quick-card:hover::after{
+  opacity:1;
+  animation:shine 1.6s linear infinite;
+}
+@keyframes shine{
+  0%{background-position:100% 0;}
+  100%{background-position:-100% 0;}
+}
+.quick-card:hover{
+  background:linear-gradient(135deg,
+    rgba(255,70,85,.08),
+    rgba(74,168,255,.08));
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.4),
+    0 0 30px rgba(255,70,85,.15);
+}
+
+/* Заголовки секций (темы) на главной и внутри документов */
+.section-title{
+  background:linear-gradient(90deg,
+    var(--txt-0) 0%,
+    var(--txt-0) 40%,
+    var(--accent) 50%,
+    var(--accent-2) 60%,
+    var(--txt-0) 70%,
+    var(--txt-0) 100%);
+  background-size:220% 100%;
+  background-position:0% 0;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  transition:background-position .9s cubic-bezier(.4,0,.2,1);
+  cursor:default;
+}
+.section-title:hover{
+  background-position:100% 0;
+}
+
+/* Заголовки аккордеона (главы документов) */
+.acc-title{
+  transition:color .3s, letter-spacing .3s;
+}
+.acc-item:hover .acc-title{
+  color:var(--accent-2);
+  letter-spacing:.3px;
+}
+
+/* Ссылки в навигации */
+.nav-link{
+  position:relative;
+  overflow:hidden;
+}
+.nav-link::before{
+  content:"";
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,
+    var(--accent),
+    var(--accent-2),
+    var(--accent));
+  background-size:200% 100%;
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .3s ease;
+}
+.nav-link:hover::before{
+  transform:scaleX(1);
+  animation:navShine 1.5s linear infinite;
+}
+@keyframes navShine{
+  0%{background-position:0% 0;}
+  100%{background-position:200% 0;}
+}
+
+/* Карточки рангов ВК при наведении — лёгкое свечение */
+.vk-rank-card:hover{
+  background:linear-gradient(135deg,
+    rgba(61,220,132,.06),
+    rgba(74,168,255,.06));
+}
+
+/* Карточки баллов ВК при наведении */
+.vk-points-card:hover{
+  background:linear-gradient(135deg,
+    rgba(74,168,255,.1),
+    rgba(61,220,132,.08));
+}
+
+/* Карточка лекции при наведении */
+.vk-lecture-card:hover{
+  background:linear-gradient(135deg,
+    rgba(61,220,132,.15),
+    rgba(74,168,255,.1));
+}
