@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0b0f">
+<title>RMRP | Комфорт-зона</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#0a0b0f;color:#fff}
+
+/* ============================================================
+   ФОН — ВИДЕО/КАРТИНКА С АРМЕЙСКОЙ ТЕМАТИКОЙ
+   ============================================================ */
+.cz-bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(10,11,15,.55),rgba(10,11,15,.85)),
+    radial-gradient(1200px 800px at 50% 50%, rgba(255,70,85,.08), transparent 70%),
+    url('https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1920&q=80') center/cover no-repeat;
+  filter:saturate(.7) contrast(1.05);
+  transition:filter 3s ease;
+}
+.cz-bg::after{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%);
+}
+
+/* ============================================================
+   ВЕРХНЯЯ ПАНЕЛЬ
+   ============================================================ */
+.cz-topbar{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  padding:20px 30px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(180deg, rgba(10,11,15,.85), transparent);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.cz-logo{
+  display:flex;align-items:center;gap:12px;
+  font-size:18px;font-weight:900;letter-spacing:-.5px;
+}
+.cz-logo-icon{
+  font-size:26px;
+  filter:drop-shadow(0 0 12px rgba(255,70,85,.6));
+}
+.cz-logo-text .accent{color:#ff4655}
+
+.cz-exit{
+  padding:10px 20px;border-radius:99px;
+  background:rgba(255,70,85,.12);color:#ff6b78;
+  border:1px solid rgba(255,70,85,.3);
+  font-size:13px;font-weight:700;
+  cursor:pointer;text-decoration:none;
+  transition:.3s;
+}
+.cz-exit:hover{background:rgba(255,70,85,.25);transform:translateY(-2px)}
+
+/* ============================================================
+   ЦЕНТРАЛЬНЫЙ КОНТЕНТ
+   ============================================================ */
+.cz-content{
+  position:relative;z-index:5;
+  height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:20px;
+}
+
+.cz-tag{
+  display:inline-block;padding:8px 20px;border-radius:99px;
+  background:linear-gradient(135deg, rgba(255,70,85,.15), rgba(168,85,247,.1));
+  border:1px solid rgba(255,70,85,.3);
+  color:#ff6b78;font-size:12px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:30px;
+  animation:tagIn 1.2s ease;
+}
+@keyframes tagIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.cz-title{
+  font-size:clamp(40px, 8vw, 96px);
+  font-weight:900;letter-spacing:-3px;line-height:1;
+  margin-bottom:20px;
+  background:linear-gradient(135deg, #fff 0%, #ff6b78 50%, #a855f7 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:titleIn 1.5s ease;
+  text-shadow:0 0 80px rgba(255,70,85,.4);
+}
+@keyframes titleIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
+
+.cz-subtitle{
+  font-size:clamp(15px, 2vw, 20px);
+  color:#a8adbd;max-width:640px;line-height:1.6;
+  margin-bottom:50px;
+  animation:subIn 2s ease;
+}
+@keyframes subIn{from{opacity:0}to{opacity:1}}
+
+/* ============================================================
+   ВИЗУАЛИЗАТОР МУЗЫКИ
+   ============================================================ */
+.cz-visualizer{
+  display:flex;align-items:flex-end;gap:6px;
+  height:80px;margin-bottom:40px;
+}
+.cz-bar{
+  width:6px;background:linear-gradient(180deg, #ff4655, #a855f7, #4aa8ff);
+  border-radius:99px;
+  animation:barPulse 1.2s ease-in-out infinite;
+  box-shadow:0 0 12px rgba(255,70,85,.5);
+}
+.cz-bar:nth-child(1){animation-delay:0s;height:30%}
+.cz-bar:nth-child(2){animation-delay:.15s;height:60%}
+.cz-bar:nth-child(3){animation-delay:.3s;height:90%}
+.cz-bar:nth-child(4){animation-delay:.45s;height:70%}
+.cz-bar:nth-child(5){animation-delay:.6s;height:100%}
+.cz-bar:nth-child(6){animation-delay:.75s;height:80%}
+.cz-bar:nth-child(7){animation-delay:.9s;height:50%}
+.cz-bar:nth-child(8){animation-delay:1.05s;height:65%}
+.cz-bar:nth-child(9){animation-delay:1.2s;height:40%}
+@keyframes barPulse{
+  0%,100%{transform:scaleY(.5);opacity:.6}
+  50%{transform:scaleY(1.1);opacity:1}
+}
+
+/* ============================================================
+   ПЛЕЕР
+   ============================================================ */
+.cz-player{
+  display:flex;align-items:center;gap:20px;
+  padding:18px 30px;border-radius:99px;
+  background:rgba(19,20,26,.75);
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:playerIn 2.5s ease;
+  max-width:90vw;
+}
+@keyframes playerIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+.cz-play{
+  width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(135deg, #ff4655, #a855f7);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#fff;
+  transition:.3s;
+  box-shadow:0 8px 24px rgba(255,70,85,.4);
+}
+.cz-play:hover{transform:scale(1.08);box-shadow:0 12px 32px rgba(255,70,85,.6)}
+.cz-play:disabled{opacity:.5;cursor:wait}
+
+.cz-track-info{text-align:left;min-width:0}
+.cz-track-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+.cz-track-artist{font-size:12px;color:#6e7385}
+
+.cz-volume{
+  display:flex;align-items:center;gap:10px;
+}
+.cz-volume-icon{font-size:16px;color:#a8adbd}
+.cz-volume-slider{
+  width:100px;height:4px;border-radius:99px;
+  background:rgba(255,255,255,.1);
+  -webkit-appearance:none;appearance:none;
+  outline:none;cursor:pointer;
+}
+.cz-volume-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:14px;height:14px;border-radius:50%;
+  background:linear-gradient(135deg,#ff4655,#a855f7);
+  cursor:pointer;box-shadow:0 0 8px rgba(255,70,85,.6);
+}
+.cz-volume-slider::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;border:0;
+  background:linear-gradient(135deg,#ff4655,#a855f7);
+  cursor:pointer;
+}
+
+/* ============================================================
+   НИЖНЯЯ ПАНЕЛЬ — ФРАЗЫ
+   ============================================================ */
+.cz-quote{
+  position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
+  z-index:5;text-align:center;
+  font-size:14px;color:#6e7385;font-style:italic;
+  max-width:600px;padding:0 20px;
+  animation:quoteFade 15s ease-in-out infinite;
+}
+.cz-quote::before{content:"« "}
+.cz-quote::after{content:" »"}
+@keyframes quoteFade{
+  0%,100%{opacity:.4}
+  50%{opacity:.9}
+}
+
+/* ============================================================
+   АДАПТИВ
+   ============================================================ */
+@media(max-width:700px){
+  .cz-topbar{padding:14px 18px}
+  .cz-logo{font-size:15px}
+  .cz-exit{padding:8px 14px;font-size:12px}
+  .cz-visualizer{height:50px;gap:4px;margin-bottom:30px}
+  .cz-bar{width:4px}
+  .cz-player{padding:14px 20px;gap:12px;flex-wrap:wrap;justify-content:center}
+  .cz-play{width:50px;height:50px;font-size:20px}
+  .cz-track-title{font-size:13px;max-width:200px}
+  .cz-track-artist{font-size:11px}
+  .cz-volume-slider{width:70px}
+  .cz-quote{font-size:12px;bottom:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ФОН -->
+<div class="cz-bg"></div>
+
+<!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+<div class="cz-topbar">
+  <div class="cz-logo">
+    <span class="cz-logo-icon">⚖️</span>
+    <span class="cz-logo-text">RM<span class="accent">RP</span> · Комфорт-зона</span>
+  </div>
+  <a href="gate.html" class="cz-exit">← Назад к входу</a>
+</div>
+
+<!-- КОНТЕНТ -->
+<div class="cz-content">
+  <div class="cz-tag">🎖️ Атмосфера службы</div>
+
+  <h1 class="cz-title">Комфорт-зона</h1>
+
+  <p class="cz-subtitle">
+    Тихое место для отдыха. Включи музыку, сделай вдох — и снова в бой.
+  </p>
+
+  <!-- Визуализатор -->
+  <div class="cz-visualizer">
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+    <div class="cz-bar"></div>
+  </div>
+
+  <!-- Плеер -->
+  <div class="cz-player">
+    <button class="cz-play" id="czPlay" onclick="CZ.toggle()">▶</button>
+    <div class="cz-track-info">
+      <div class="cz-track-title" id="czTitle">Armed Forces Ambient</div>
+      <div class="cz-track-artist">RMRP · Комфорт-зона</div>
+    </div>
+    <div class="cz-volume">
+      <span class="cz-volume-icon">🔊</span>
+      <input type="range" class="cz-volume-slider" id="czVolume" min="0" max="100" value="40" oninput="CZ.setVolume(this.value)">
+    </div>
+  </div>
+</div>
+
+<!-- ЦИТАТА -->
+<div class="cz-quote" id="czQuote">
+  Дисциплина — мать победы
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* Плейлист с музыкой для комфорт-зоны (замени ссылки при желании) */
+  var PLAYLIST = [
+    {
+      title: 'Armed Forces Ambient',
+      artist: 'RMRP · Комфорт-зона',
+      src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=military-drum-112481.mp3'
+    },
+    {
+      title: 'Epic Battle Music',
+      artist: 'RMRP · Комфорт-зона',
+      src: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=cinematic-documentary-115669.mp3'
+    },
+    {
+      title: 'Calm Before the Storm',
+      artist: 'RMRP · Комфорт-зона',
+      src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=ambient-piano-logo-114118.mp3'
+    }
+  ];
+
+  /* Цитаты */
+  var QUOTES = [
+    'Дисциплина — мать победы',
+    'Служить Отечеству — великая честь',
+    'Солдат, который не мечтает стать генералом, плох',
+    'Тяжело в учении — легко в бою',
+    'Один в поле не воин',
+    'Воля и труд дивные всходы дают',
+    'Родина — это не только земля, но и память',
+    'Смелость города берёт'
+  ];
+
+  var audio = null;
+  var currentIndex = 0;
+  var isPlaying = false;
+
+  window.CZ = {
+    init: function(){
+      var self = this;
+      audio = new Audio();
+      audio.volume = 0.4;
+      audio.addEventListener('ended', function(){
+        self.next();
+      });
+      self.loadTrack(0);
+      self.rotateQuote();
+
+      /* Автовоспроизведение после первого клика */
+      document.addEventListener('click', function unlock(){
+        if(!isPlaying){
+          audio.play().then(function(){
+            isPlaying = true;
+            document.getElementById('czPlay').textContent = '⏸';
+          }).catch(function(){});
+        }
+        document.removeEventListener('click', unlock);
+      }, { once:true });
+    },
+
+    loadTrack: function(idx){
+      currentIndex = (idx + PLAYLIST.length) % PLAYLIST.length;
+      var track = PLAYLIST[currentIndex];
+      audio.src = track.src;
+      document.getElementById('czTitle').textContent = track.title;
+    },
+
+    toggle: function(){
+      var btn = document.getElementById('czPlay');
+      if(isPlaying){
+        audio.pause();
+        isPlaying = false;
+        btn.textContent = '▶';
+      } else {
+        audio.play().then(function(){
+          isPlaying = true;
+          btn.textContent = '⏸';
+        }).catch(function(err){
+          alert('Не удалось воспроизвести: ' + err.message);
+        });
+      }
+    },
+
+    next: function(){
+      this.loadTrack(currentIndex + 1);
+      if(isPlaying){
+        audio.play().catch(function(){});
+      }
+    },
+
+    setVolume: function(val){
+      audio.volume = Math.max(0, Math.min(1, val / 100));
+    },
+
+    rotateQuote: function(){
+      var el = document.getElementById('czQuote');
+      var idx = 0;
+      setInterval(function(){
+        idx = (idx + 1) % QUOTES.length;
+        el.style.opacity = '0';
+        setTimeout(function(){
+          el.textContent = QUOTES[idx];
+          el.style.opacity = '';
+        }, 500);
+      }, 8000);
+    }
+  };
+
+  CZ.init();
+
+})();
+</script>
+</body>
+</html>
