@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v10)
+   RMRP LAW — script.js (v16: комфорт-зона + блокировка военкомата)
    ============================================================ */
 
 (function () {
@@ -24,6 +24,8 @@
     console.log('[RMRP] script.js loaded');
 
     try { initHeaderButtons(); } catch(e){ console.warn('headerButtons', e); }
+    try { initComfortButton(); } catch(e){ console.warn('comfortButton', e); }
+    try { initDocAccess(); }     catch(e){ console.warn('docAccess', e); }
     try { initModals(); }        catch(e){ console.warn('modals', e); }
     try { initAccordion(); }     catch(e){ console.warn('accordion', e); }
     try { initBurger(); }        catch(e){ console.warn('burger', e); }
@@ -69,6 +71,127 @@
         };
         actions.appendChild(btn);
       }
+    }
+  }
+
+  /* ============================================================
+     КНОПКА «КОМФОРТ-ЗОНА» НА ВСЕХ СТРАНИЦАХ
+     ============================================================ */
+  function initComfortButton(){
+    /* Не показываем на gate и в самой comfort зоне */
+    var path = location.pathname;
+    if(/gate\.html?$/i.test(path)) return;
+    if(/comfort\.html?$/i.test(path)) return;
+
+    /* Не дублируем */
+    if(document.querySelector('.comfort-float-btn')) return;
+
+    var btn = document.createElement('a');
+    btn.href = 'comfort.html';
+    btn.className = 'comfort-float-btn';
+    btn.title = 'Комфорт-зона — музыка и отдых';
+    btn.innerHTML = '<span class="cfb-icon">🎧</span><span class="cfb-text">Комфорт-зона</span>';
+
+    document.body.appendChild(btn);
+
+    /* Стили вставляем один раз */
+    if(!document.getElementById('comfort-btn-styles')){
+      var st = document.createElement('style');
+      st.id = 'comfort-btn-styles';
+      st.textContent =
+        '.comfort-float-btn{' +
+          'position:fixed;bottom:22px;right:22px;z-index:999;' +
+          'padding:14px 22px;border-radius:99px;' +
+          'background:linear-gradient(135deg,#0e7490,#0891b2,#0284c7,#a855f7);' +
+          'background-size:200% 200%;' +
+          'animation:cfbGradient 6s ease infinite;' +
+          'color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.4px;' +
+          'text-decoration:none;' +
+          'box-shadow:0 10px 30px rgba(8,145,178,.4), 0 0 60px rgba(168,85,247,.25);' +
+          'display:flex;align-items:center;gap:10px;' +
+          'transition:.3s;' +
+        '}' +
+        '.comfort-float-btn:hover{' +
+          'transform:translateY(-3px) scale(1.03);' +
+          'box-shadow:0 14px 40px rgba(8,145,178,.6), 0 0 80px rgba(168,85,247,.35);' +
+        '}' +
+        '.comfort-float-btn .cfb-icon{font-size:18px}' +
+        '@keyframes cfbGradient{' +
+          '0%,100%{background-position:0% 50%}' +
+          '50%{background-position:100% 50%}' +
+        '}' +
+        '@media(max-width:600px){' +
+          '.comfort-float-btn{padding:11px 14px;font-size:12px}' +
+          '.comfort-float-btn .cfb-text{display:none}' +
+        '}';
+      document.head.appendChild(st);
+    }
+  }
+
+  /* ============================================================
+     БЛОКИРОВКА — только Военкомат для тех, кто ниже Мл.Сержанта
+     ============================================================ */
+  function initDocAccess(){
+    var LOCKED_PAGES = ['military.html'];
+    var SKIP_PAGES = ['index.html','gate.html','profile.html','user.html','media.html',
+                      'comfort.html','audit.html'];
+
+    var path = location.pathname.split('/').pop() || 'index.html';
+    if(SKIP_PAGES.indexOf(path) !== -1) return;
+    if(LOCKED_PAGES.indexOf(path) === -1) return;
+
+    if(!window.RMRPAuth) return;
+    var user = RMRPAuth.getCurrent();
+
+    if(user && RMRPAuth.canReadDocs && RMRPAuth.canReadDocs(user)) return;
+
+    /* Не авторизован */
+    if(!user){
+      var container0 = document.querySelector('.container');
+      if(container0){
+        container0.innerHTML =
+          '<div style="max-width:520px;margin:80px auto;padding:44px 32px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:center">' +
+            '<div style="font-size:64px;margin-bottom:20px">🎓</div>' +
+            '<h3 style="color:var(--txt-0);font-size:22px;font-weight:900;margin-bottom:12px">Требуется авторизация</h3>' +
+            '<p style="color:var(--txt-2);font-size:14.5px;line-height:1.7;margin-bottom:22px">Военкомат доступен только военнослужащим.<br>Войди в аккаунт, чтобы продолжить.</p>' +
+            '<a href="profile.html" style="display:inline-block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px">👤 Войти</a>' +
+          '</div>';
+      }
+      return;
+    }
+
+    /* Авторизован, но нет доступа */
+    var container = document.querySelector('.container');
+    if(!container) return;
+
+    document.querySelectorAll('.section, .vk-hero, .section-dark').forEach(function(el){
+      el.style.display = 'none';
+    });
+
+    var lock = document.createElement('div');
+    lock.style.cssText = 'max-width:560px;margin:60px auto;padding:48px 36px;background:linear-gradient(135deg,rgba(61,220,132,.06),rgba(74,168,255,.04));border:1px solid rgba(61,220,132,.3);border-radius:20px;text-align:center';
+    lock.innerHTML =
+      '<div style="font-size:72px;margin-bottom:20px;filter:drop-shadow(0 10px 30px rgba(61,220,132,.4))">🎓</div>' +
+      '<h3 style="color:var(--txt-0);font-size:24px;font-weight:900;margin-bottom:12px;letter-spacing:-.5px">Доступ ограничен</h3>' +
+      '<p style="color:var(--txt-2);font-size:15px;line-height:1.7;margin-bottom:20px">Военный комиссариат доступен только военнослужащим <b style="color:#3ddc84">от Младшего Сержанта</b> и выше.</p>' +
+      '<div style="padding:18px 22px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;max-width:400px;margin:0 auto 22px;text-align:left">' +
+        '<div style="font-size:11.5px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;color:var(--txt-3);margin-bottom:10px">Требования</div>' +
+        '<div style="font-size:13.5px;color:var(--txt-1);line-height:1.8">' +
+          '🎖️ Звание: <b>Мл.Сержант</b> и выше<br>' +
+          '🛠️ Должность: <b>Ст. ВК</b> и выше<br>' +
+          '🔐 Или роль: <b>Администратор / Разработчик</b>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">' +
+        '<a href="index.html" style="padding:11px 22px;border-radius:10px;background:var(--bg-3);color:var(--txt-1);text-decoration:none;font-weight:600;font-size:13.5px;border:1px solid var(--line)">← На главную</a>' +
+        '<a href="profile.html" style="padding:11px 22px;border-radius:10px;background:linear-gradient(135deg,#fbbf24,#d97706);color:#fff;text-decoration:none;font-weight:700;font-size:13.5px">📤 Подать заявку</a>' +
+      '</div>';
+
+    var firstSection = document.querySelector('.vk-hero') || document.querySelector('.section');
+    if(firstSection && firstSection.parentNode){
+      firstSection.parentNode.insertBefore(lock, firstSection);
+    } else {
+      container.appendChild(lock);
     }
   }
 
