@@ -23,6 +23,7 @@
 .auth-field label{display:block;font-size:13px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
 .auth-field input,.auth-field select{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:14px;outline:none;transition:var(--transition);font-family:inherit}
 .auth-field input:focus,.auth-field select:focus{border-color:#4aa8ff;box-shadow:0 0 0 3px rgba(74,168,255,.15)}
+.auth-hint{font-size:11.5px;color:var(--txt-3);margin-top:4px;font-style:italic}
 .auth-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);margin-top:6px}
 .auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,168,255,.3)}
 .auth-btn:disabled{opacity:.6;cursor:wait}
@@ -74,6 +75,8 @@
 .profile-btn.access:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
 .profile-btn.audit{background:linear-gradient(135deg,#a855f7,#4aa8ff);color:#fff}
 .profile-btn.audit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
+.profile-btn.request{background:linear-gradient(135deg,#fbbf24,#d97706);color:#fff}
+.profile-btn.request:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,191,36,.3)}
 .profile-btn:disabled{opacity:.5;cursor:wait}
 .edit-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;padding:20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px}
 @media(max-width:640px){.edit-form{grid-template-columns:1fr}}
@@ -99,6 +102,46 @@
 .user-act-btn.del:hover{background:rgba(255,70,85,.25)}
 .user-act-btn:disabled{opacity:.35;cursor:not-allowed}
 .users-loading{padding:24px;text-align:center;color:var(--txt-3);font-size:13px}
+
+/* ЗАЯВКИ */
+.requests-panel{margin-top:40px;padding:24px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg)}
+.requests-panel h3{font-size:17px;color:var(--txt-0);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.requests-count{padding:3px 10px;border-radius:999px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-size:12px;font-weight:800}
+.request-item{padding:16px 18px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;transition:var(--transition)}
+.request-item:hover{border-color:var(--line-2)}
+.request-item.pending{border-left:3px solid #fbbf24}
+.request-item.approved{border-left:3px solid #3ddc84;opacity:.75}
+.request-item.rejected{border-left:3px solid #ff4655;opacity:.75}
+.request-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.request-user{font-size:15px;font-weight:700;color:var(--txt-0)}
+.request-login{font-size:12px;color:var(--txt-3)}
+.request-date{font-size:11.5px;color:var(--txt-3)}
+.request-changes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;padding:10px 14px;background:var(--bg-2);border-radius:8px}
+@media(max-width:600px){.request-changes{grid-template-columns:1fr}}
+.request-change-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--txt-3);margin-bottom:3px}
+.request-change-val{font-size:13.5px;color:var(--txt-0);font-weight:600}
+.request-change-val .old{color:var(--txt-3);text-decoration:line-through;margin-right:6px;font-weight:400}
+.request-reason{font-size:13px;color:var(--txt-2);padding:8px 12px;background:var(--bg-2);border-radius:8px;margin-bottom:12px;line-height:1.5}
+.request-reason b{color:var(--txt-1)}
+.request-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.request-btn{padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:700;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+.request-btn.approve{background:linear-gradient(135deg,#3ddc84,#2a9d5c);color:#fff}
+.request-btn.approve:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(61,220,132,.3)}
+.request-btn.reject{background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3)}
+.request-btn.reject:hover{background:rgba(255,70,85,.25)}
+.request-btn.delete{background:var(--bg-3);color:var(--txt-2);border:1px solid var(--line)}
+.request-btn.delete:hover{background:var(--bg-4);color:var(--txt-0)}
+.requests-empty{padding:30px;text-align:center;color:var(--txt-3);font-size:13.5px;font-style:italic}
+.requests-filter{display:flex;gap:6px;flex-wrap:wrap}
+.requests-filter-btn{padding:6px 14px;border-radius:8px;background:var(--bg-3);color:var(--txt-2);font-size:12px;font-weight:600;border:1px solid var(--line);cursor:pointer;transition:var(--transition)}
+.requests-filter-btn:hover{background:var(--bg-4);color:var(--txt-0)}
+.requests-filter-btn.active{background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;border-color:transparent}
+.request-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:640px){.request-form-grid{grid-template-columns:1fr}}
+.request-form-grid label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
+.request-form-grid select{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;font-family:inherit}
+.request-form-grid select:focus{border-color:#fbbf24}
+
 .modal-overlay-soft{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay-soft.active{display:flex}
 .modal-soft{background:var(--bg-2);border:1px solid var(--line-2);border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
@@ -148,13 +191,14 @@
 <section class="profile-hero">
   <div class="container">
     <h1>👤 Личный <span class="accent">кабинет</span></h1>
-    <p>Профиль сотрудника, статистика, ссылки и управление</p>
+    <p>Профиль сотрудника, заявки на повышение, статистика и управление</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
 
+    <!-- АВТОРИЗАЦИЯ -->
     <div id="authScreen" class="auth-wrap" hidden>
       <div class="auth-tabs">
         <button class="auth-tab active" data-auth-tab="login">🔑 Вход</button>
@@ -172,14 +216,23 @@
         <div class="auth-field"><label>Логин</label><input type="text" id="regLogin" placeholder="my_login"></div>
         <div class="auth-field"><label>Отображаемое имя</label><input type="text" id="regName" placeholder="Караваев Михаил"></div>
         <div class="auth-field"><label>Пароль</label><input type="password" id="regPass" placeholder="минимум 4 символа"></div>
-        <div class="auth-field"><label>Звание</label><select id="regRank"></select></div>
-        <div class="auth-field"><label>Должность ВК</label><select id="regPos"></select></div>
+        <div class="auth-field">
+          <label>Звание (до Капитана)</label>
+          <select id="regRank"></select>
+          <div class="auth-hint">Выше — только через заявку администрации</div>
+        </div>
+        <div class="auth-field">
+          <label>Должность ВК (до Инструктора)</label>
+          <select id="regPos"></select>
+          <div class="auth-hint">Выше — только через заявку администрации</div>
+        </div>
         <div class="auth-field"><label>Discord</label><input type="text" id="regDiscord" placeholder="@username"></div>
         <div class="auth-field"><label>Форум</label><input type="text" id="regForum" placeholder="https://forum.rmrp.ru/members/..."></div>
         <button class="auth-btn" id="btnRegister" onclick="Profile.doRegister()">✨ Создать аккаунт</button>
       </div>
     </div>
 
+    <!-- ПРОФИЛЬ -->
     <div id="profileScreen" class="profile-wrap" hidden>
       <div class="profile-banner" id="pBanner">
         <button class="profile-banner-edit" onclick="Profile.editBanner()">🖼 Сменить баннер</button>
@@ -257,6 +310,44 @@
           </div>
         </div>
 
+        <!-- ПОДАТЬ ЗАЯВКУ -->
+        <div class="requests-panel" id="requestFormPanel" hidden>
+          <h3>📤 Подать заявку на повышение</h3>
+          <p style="font-size:13px;color:var(--txt-3);margin-bottom:16px;line-height:1.5">
+            Заявка уйдёт администрации. Одобрят — звание/должность обновится автоматически.
+          </p>
+          <div class="request-form-grid">
+            <div>
+              <label>Желаемое звание (от Майора и выше)</label>
+              <select id="reqRank"><option value="">— не менять —</option></select>
+            </div>
+            <div>
+              <label>Желаемая должность (от Зам. ВК)</label>
+              <select id="reqPos"><option value="">— не менять —</option></select>
+            </div>
+          </div>
+          <label style="display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px">Причина / обоснование *</label>
+          <textarea id="reqReason" style="width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;min-height:80px;resize:vertical;font-family:inherit" placeholder="Опиши, почему ты достоин повышения"></textarea>
+          <div style="margin-top:14px">
+            <button class="profile-btn request" id="btnSubmitRequest" onclick="Profile.submitRequest()">📤 Отправить заявку</button>
+          </div>
+        </div>
+
+        <!-- АДМИН-ПАНЕЛЬ ЗАЯВОК -->
+        <div class="requests-panel" id="requestsPanel" hidden>
+          <h3>
+            <span>📥 Заявки на повышение <span class="requests-count" id="requestsCount" style="display:none">0</span></span>
+            <div class="requests-filter">
+              <button class="requests-filter-btn active" data-req-filter="pending" onclick="Profile.filterRequests('pending')">Ожидают</button>
+              <button class="requests-filter-btn" data-req-filter="approved" onclick="Profile.filterRequests('approved')">Одобрено</button>
+              <button class="requests-filter-btn" data-req-filter="rejected" onclick="Profile.filterRequests('rejected')">Отклонено</button>
+              <button class="requests-filter-btn" data-req-filter="all" onclick="Profile.filterRequests('all')">Все</button>
+            </div>
+          </h3>
+          <div id="requestsList"></div>
+        </div>
+
+        <!-- СПИСОК ЮЗЕРОВ -->
         <div id="usersWrap" hidden>
           <h3 style="margin-top:30px;font-size:17px;color:var(--txt-0)">👥 Зарегистрированные пользователи</h3>
           <div id="usersLoading" class="users-loading">⏳ Загрузка списка пользователей…</div>
@@ -391,16 +482,36 @@
   function fillSelects(){
     var ranks = RMRPAuth.RANKS;
     var positions = RMRPAuth.POSITIONS;
-    ['regRank','editRank','euRank'].forEach(function(id){
+
+    /* При регистрации — только до Капитана / Инструктора ВК */
+    var regRankLimit = RMRPAuth.RANK_IDX[RMRPAuth.REG_MAX_RANK];
+    var regPosLimit = RMRPAuth.POS_IDX[RMRPAuth.REG_MAX_POS];
+
+    var regRankSel = document.getElementById('regRank');
+    if(regRankSel){
+      regRankSel.innerHTML = ranks
+        .filter(function(r){ return RMRPAuth.RANK_IDX[r] <= regRankLimit; })
+        .map(function(r){ return '<option>' + r + '</option>'; }).join('');
+    }
+    var regPosSel = document.getElementById('regPos');
+    if(regPosSel){
+      regPosSel.innerHTML = positions
+        .filter(function(p){ return RMRPAuth.POS_IDX[p] <= regPosLimit; })
+        .map(function(p){ return '<option>' + p + '</option>'; }).join('');
+    }
+
+    /* Полные списки для редактирования */
+    ['editRank','euRank'].forEach(function(id){
       var s = document.getElementById(id);
       if(!s) return;
       s.innerHTML = ranks.map(function(r){ return '<option>' + r + '</option>'; }).join('');
     });
-    ['regPos','editPos','euPos'].forEach(function(id){
+    ['editPos','euPos'].forEach(function(id){
       var s = document.getElementById(id);
       if(!s) return;
       s.innerHTML = positions.map(function(p){ return '<option>' + p + '</option>'; }).join('');
     });
+
     var euRole = document.getElementById('euRole');
     if(euRole){
       euRole.innerHTML = RMRPAuth.ROLES.map(function(r){ return '<option>' + r + '</option>'; }).join('');
@@ -436,6 +547,7 @@
     document.getElementById('profileScreen').hidden = false;
     renderProfile();
     updateAccessButton();
+    updateRequestButton();
   }
 
   function renderProfile(){
@@ -647,6 +759,184 @@
     }
   }
 
+  /* ============================================================
+     ЗАЯВКИ
+     ============================================================ */
+  var requestsFilter = 'pending';
+
+  function updateRequestButton(){
+    var u = RMRPAuth.getCurrent();
+    var formPanel = document.getElementById('requestFormPanel');
+    var adminPanel = document.getElementById('requestsPanel');
+    if(!formPanel || !adminPanel) return;
+
+    formPanel.hidden = !u;
+    adminPanel.hidden = !RMRPAuth.isAdmin(u);
+
+    if(u){
+      var reqRank = document.getElementById('reqRank');
+      var reqPos = document.getElementById('reqPos');
+      if(reqRank && reqRank.options.length <= 1){
+        RMRPAuth.RANKS.forEach(function(r){
+          if(RMRPAuth.RANK_IDX[r] > RMRPAuth.RANK_IDX['Капитан']){
+            var o = document.createElement('option');
+            o.value = r; o.textContent = r;
+            reqRank.appendChild(o);
+          }
+        });
+      }
+      if(reqPos && reqPos.options.length <= 1){
+        RMRPAuth.POSITIONS.forEach(function(p){
+          if(RMRPAuth.POS_IDX[p] > RMRPAuth.POS_IDX['Инструктор ВК']){
+            var o = document.createElement('option');
+            o.value = p; o.textContent = p;
+            reqPos.appendChild(o);
+          }
+        });
+      }
+    }
+
+    if(RMRPAuth.isAdmin(u)) renderRequestsList();
+  }
+
+  function renderRequestsList(){
+    var list = document.getElementById('requestsList');
+    var countEl = document.getElementById('requestsCount');
+    if(!list) return;
+
+    RMRPAuth.getRequests().then(function(reqs){
+      var arr = Object.keys(reqs).map(function(k){ return reqs[k]; })
+        .sort(function(a,b){ return b.createdAt - a.createdAt; });
+
+      var pendingCount = arr.filter(function(r){ return r.status === 'pending'; }).length;
+      if(countEl){
+        countEl.textContent = pendingCount;
+        countEl.style.display = pendingCount > 0 ? '' : 'none';
+      }
+
+      var filtered = arr;
+      if(requestsFilter !== 'all'){
+        filtered = arr.filter(function(r){ return r.status === requestsFilter; });
+      }
+
+      if(filtered.length === 0){
+        list.innerHTML = '<div class="requests-empty">Нет заявок с этим статусом</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(function(r){
+        var statusIcon = r.status === 'pending' ? '⏳' :
+                        r.status === 'approved' ? '✅' : '❌';
+        var dateStr = new Date(r.createdAt).toLocaleString('ru-RU');
+
+        var changes = '';
+        if(r.wantRank){
+          changes += '<div><div class="request-change-label">Звание</div>' +
+            '<div class="request-change-val"><span class="old">' + escapeHtml(r.currentRank) + '</span>→ ' + escapeHtml(r.wantRank) + '</div></div>';
+        }
+        if(r.wantPosition){
+          changes += '<div><div class="request-change-label">Должность</div>' +
+            '<div class="request-change-val"><span class="old">' + escapeHtml(r.currentPosition) + '</span>→ ' + escapeHtml(r.wantPosition) + '</div></div>';
+        }
+
+        var reason = r.reason ? '<div class="request-reason"><b>Причина:</b> ' + escapeHtml(r.reason) + '</div>' : '';
+
+        var actions = '';
+        if(r.status === 'pending'){
+          actions =
+            '<button class="request-btn approve" onclick="Profile.approveRequest(\'' + r.id + '\')">✅ Одобрить</button>' +
+            '<button class="request-btn reject" onclick="Profile.rejectRequest(\'' + r.id + '\')">❌ Отклонить</button>';
+        } else {
+          var resolvedInfo = r.resolvedBy ? ' (' + r.resolvedBy + ')' : '';
+          actions =
+            '<button class="request-btn delete" onclick="Profile.deleteRequest(\'' + r.id + '\')">🗑 Удалить</button>' +
+            '<span style="font-size:12px;color:var(--txt-3);align-self:center">' + statusIcon + ' Обработано' + resolvedInfo + '</span>';
+        }
+
+        return '<div class="request-item ' + r.status + '">' +
+          '<div class="request-head">' +
+            '<div>' +
+              '<div class="request-user">' + escapeHtml(r.displayName || r.login) + '</div>' +
+              '<div class="request-login">@' + escapeHtml(r.login) + '</div>' +
+            '</div>' +
+            '<div class="request-date">' + dateStr + '</div>' +
+          '</div>' +
+          (changes ? '<div class="request-changes">' + changes + '</div>' : '') +
+          reason +
+          '<div class="request-actions">' + actions + '</div>' +
+        '</div>';
+      }).join('');
+    });
+  }
+
+  function filterRequests(filter){
+    requestsFilter = filter;
+    document.querySelectorAll('.requests-filter-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-req-filter') === filter);
+    });
+    renderRequestsList();
+  }
+
+  function submitRequest(){
+    var btn = document.getElementById('btnSubmitRequest');
+    var wantRank = document.getElementById('reqRank').value;
+    var wantPos  = document.getElementById('reqPos').value;
+    var reason   = document.getElementById('reqReason').value.trim();
+
+    if(!wantRank && !wantPos){
+      showFancy('Ошибка', 'Выбери хотя бы одно — звание или должность');
+      return;
+    }
+    if(!reason){
+      showFancy('Ошибка', 'Опиши причину — без неё заявку не примут');
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = '⏳ Отправка…';
+    RMRPAuth.createRequest({
+      wantRank: wantRank,
+      wantPosition: wantPos,
+      reason: reason
+    }).then(function(res){
+      btn.disabled = false; btn.textContent = '📤 Отправить заявку';
+      if(!res.ok){ showFancy('Ошибка', res.error); return; }
+      document.getElementById('reqRank').value = '';
+      document.getElementById('reqPos').value = '';
+      document.getElementById('reqReason').value = '';
+      showFancy('✅ Отправлено', 'Заявка отправлена администрации');
+    });
+  }
+
+  function approveRequest(id){
+    if(!confirm('Одобрить заявку? Пользователь получит указанные звание/должность.')) return;
+    RMRPAuth.approveRequest(id).then(function(res){
+      if(!res.ok){ showFancy('Ошибка', res.error); return; }
+      renderRequestsList();
+      showFancy('✅ Одобрено', 'Заявка одобрена');
+    });
+  }
+
+  function rejectRequest(id){
+    var reason = prompt('Причина отказа (необязательно):', '');
+    if(reason === null) return;
+    RMRPAuth.rejectRequest(id, reason).then(function(res){
+      if(!res.ok){ showFancy('Ошибка', res.error); return; }
+      renderRequestsList();
+      showFancy('❌ Отклонено', 'Заявка отклонена');
+    });
+  }
+
+  function deleteRequest(id){
+    if(!confirm('Удалить заявку из истории?')) return;
+    RMRPAuth.deleteRequest(id).then(function(res){
+      if(!res.ok){ showFancy('Ошибка', res.error); return; }
+      renderRequestsList();
+    });
+  }
+
+  /* ============================================================
+     СПИСОК ЮЗЕРОВ
+     ============================================================ */
   function showUsers(){
     var wrap = document.getElementById('usersWrap');
     if(!wrap) return;
@@ -840,12 +1130,27 @@
     saveUser: saveUser,
     deleteUser: deleteUser,
     openUserProfile: openUserProfile,
-    hideError: hideError
+    hideError: hideError,
+    filterRequests: filterRequests,
+    submitRequest: submitRequest,
+    approveRequest: approveRequest,
+    rejectRequest: rejectRequest,
+    deleteRequest: deleteRequest
   };
 
   fillSelects();
   if(RMRPAuth.getCurrent()) showProfile();
   else showAuth();
+
+  /* Автосинхронизация */
+  if(RMRPAuth.getCurrent() && RMRPAuth.refreshCurrent){
+    RMRPAuth.refreshCurrent().then(function(res){
+      if(res && res.changed) renderProfile();
+    });
+  }
+
+  updateRequestButton();
+  setInterval(updateRequestButton, 15000);
 
 })();
 </script>
