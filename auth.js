@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v8: роль Разработчик + DEV_LOGIN kiryushaz)
+   RMRP — auth.js (v9: SVG-погоны + градиенты + DEV_LOGIN kiryushaz)
    ============================================================ */
 (function(){
   'use strict';
@@ -35,12 +35,8 @@
     'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
   };
 
-  function isDev(user){
-    return user && user.role === 'Разработчик';
-  }
-  function isAdmin(user){
-    return user && (user.role === 'Администратор' || user.role === 'Разработчик');
-  }
+  function isDev(user){ return user && user.role === 'Разработчик'; }
+  function isAdmin(user){ return user && (user.role === 'Администратор' || user.role === 'Разработчик'); }
 
   function canGiveAccess(user){
     if(!user) return false;
@@ -158,6 +154,94 @@
     });
   }
 
+  /* ============================================================
+     SVG-ПОГОНЫ
+     ============================================================ */
+  function buildEpaulette(rank){
+    var gold = '#fbbf24';
+    var line = '#3a3d47';
+    var bg = '#23262f';
+
+    var base = '<rect x="2" y="2" width="16" height="40" rx="2" fill="' + bg + '" stroke="' + line + '" stroke-width="1"/>';
+    var strip = '<line x1="10" y1="4" x2="10" y2="40" stroke="' + line + '" stroke-width="0.5" stroke-dasharray="2,2"/>';
+
+    function lychka(y){
+      return '<rect x="5" y="' + y + '" width="10" height="2.5" fill="' + gold + '" rx="0.5"/>';
+    }
+    function starSmall(cx, cy){
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="2.2" fill="' + gold + '"/>';
+    }
+    function starBig(cx, cy){
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="3.2" fill="' + gold + '"/>';
+    }
+
+    var content = '';
+
+    switch(rank){
+      case 'Младший Сержант':
+        content = lychka(12) + lychka(20);
+        break;
+      case 'Сержант':
+        content = lychka(10) + lychka(17) + lychka(24);
+        break;
+      case 'Старший Сержант':
+        content = lychka(8) + lychka(15) + lychka(22) + lychka(29);
+        break;
+      case 'Старшина':
+        content = '<rect x="9.5" y="4" width="1" height="36" fill="' + gold + '"/>' +
+                  lychka(10) + lychka(18) + lychka(26);
+        break;
+      case 'Прапорщик':
+        content = starSmall(10, 12) + starSmall(10, 22) + starSmall(10, 32);
+        break;
+      case 'Ст. Прапорщик':
+        content = starSmall(6, 12) + starSmall(14, 12) +
+                  starSmall(6, 22) + starSmall(14, 22) +
+                  starSmall(6, 32) + starSmall(14, 32);
+        break;
+      case 'Младший лейтенант':
+        content = starSmall(6, 10) + starSmall(14, 10) + starSmall(10, 22);
+        break;
+      case 'Лейтенант':
+        content = starSmall(6, 10) + starSmall(14, 10) +
+                  starSmall(6, 22) + starSmall(14, 22);
+        break;
+      case 'Ст. Лейтенант':
+        content = starSmall(6, 8) + starSmall(14, 8) +
+                  starSmall(6, 18) + starSmall(14, 18) +
+                  starSmall(10, 30);
+        break;
+      case 'Капитан':
+        content = starSmall(6, 6) + starSmall(14, 6) +
+                  starSmall(6, 18) + starSmall(14, 18) +
+                  starSmall(6, 30) + starSmall(14, 30);
+        break;
+      case 'Майор':
+        content = starBig(10, 14) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
+        break;
+      case 'Подполковник':
+        content = starBig(10, 12) + starBig(10, 26) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
+        break;
+      case 'Полковник':
+        content = starBig(6, 12) + starBig(14, 12) + starBig(10, 28) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
+        break;
+      case 'Генерал-Майор':
+        content = '<circle cx="10" cy="20" r="6" fill="none" stroke="' + gold + '" stroke-width="0.6" opacity="0.6"/>' +
+                  starBig(10, 20) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="1"/>';
+        break;
+      default:
+        content = lychka(18);
+    }
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 44" width="22" height="44" style="display:block">' +
+      base + strip + content +
+    '</svg>';
+  }
+
   var Auth = {
     RANKS: RANKS,
     POSITIONS: POSITIONS,
@@ -191,9 +275,13 @@
     getUsers: function(){
       return fbGet('users').then(function(data){
         var users = data || {};
-        if(users[DEV_LOGIN] && users[DEV_LOGIN].role !== 'Разработчик'){
-          users[DEV_LOGIN].role = 'Разработчик';
-          fbPatch('users/' + DEV_LOGIN, { role: 'Разработчик' });
+        if(users[DEV_LOGIN]){
+          var patch = {};
+          if(users[DEV_LOGIN].role !== 'Разработчик'){
+            users[DEV_LOGIN].role = 'Разработчик';
+            patch.role = 'Разработчик';
+          }
+          if(Object.keys(patch).length) fbPatch('users/' + DEV_LOGIN, patch);
         }
         lsSet(LS_USERS_CACHE, users);
         return users;
@@ -344,25 +432,28 @@
     maxRankByRole: maxRankByRole,
     maxPositionByRole: maxPositionByRole,
 
-   rankColor: function(rank){
-  var map = {
-    'Младший Сержант':   '#374151,#4b5563,#6b7280',
-    'Сержант':           '#14532d,#15803d,#22c55e',
-    'Старший Сержант':   '#166534,#16a34a,#4ade80',
-    'Старшина':          '#155e75,#0891b2,#22d3ee',
-    'Прапорщик':         '#0c4a6e,#0369a1,#38bdf8',
-    'Ст. Прапорщик':     '#075985,#0e7490,#0284c7',
-    'Младший лейтенант': '#3730a3,#4f46e5,#818cf8',
-    'Лейтенант':         '#4338ca,#6366f1,#a5b4fc',
-    'Ст. Лейтенант':     '#5b21b6,#7c3aed,#a855f7',
-    'Капитан':           '#3b0764,#5b21b6,#7c3aed',
-    'Майор':             '#78350f,#d97706,#fbbf24,#fcd34d',
-    'Подполковник':      '#7c2d12,#c2410c,#ea580c,#fb923c',
-    'Полковник':         '#713f12,#a16207,#eab308,#facc15',
-    'Генерал-Майор':     '#1e293b,#475569,#cbd5e1,#f1f5f9'
-  };
-  return map[rank] || '#4b5563,#6b7280,#9ca3af';
-},
+    /* Погон SVG */
+    rankEpaulette: function(rank){ return buildEpaulette(rank); },
+
+    rankColor: function(rank){
+      var map = {
+        'Младший Сержант':   '#374151,#4b5563,#6b7280',
+        'Сержант':           '#14532d,#15803d,#22c55e',
+        'Старший Сержант':   '#166534,#16a34a,#4ade80',
+        'Старшина':          '#155e75,#0891b2,#22d3ee',
+        'Прапорщик':         '#0c4a6e,#0369a1,#38bdf8',
+        'Ст. Прапорщик':     '#075985,#0e7490,#0284c7',
+        'Младший лейтенант': '#3730a3,#4f46e5,#818cf8',
+        'Лейтенант':         '#4338ca,#6366f1,#a5b4fc',
+        'Ст. Лейтенант':     '#5b21b6,#7c3aed,#a855f7',
+        'Капитан':           '#3b0764,#5b21b6,#7c3aed',
+        'Майор':             '#78350f,#d97706,#fbbf24,#fcd34d',
+        'Подполковник':      '#7c2d12,#c2410c,#ea580c,#fb923c',
+        'Полковник':         '#713f12,#a16207,#eab308,#facc15',
+        'Генерал-Майор':     '#1e293b,#475569,#cbd5e1,#f1f5f9'
+      };
+      return map[rank] || '#4b5563,#6b7280,#9ca3af';
+    },
 
     positionColor: function(pos){
       var map = {
