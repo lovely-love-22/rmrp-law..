@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v9: чистая шапка)
+   RMRP LAW — script.js (v10)
    ============================================================ */
 
 (function () {
@@ -22,6 +22,7 @@
 
   onReady(function () {
     console.log('[RMRP] script.js loaded');
+
     try { initHeaderButtons(); } catch(e){ console.warn('headerButtons', e); }
     try { initModals(); }        catch(e){ console.warn('modals', e); }
     try { initAccordion(); }     catch(e){ console.warn('accordion', e); }
@@ -35,6 +36,7 @@
     try { initExport(); }        catch(e){ console.warn('export', e); }
     try { restoreLaws(); }       catch(e){ console.warn('restoreLaws', e); }
     try { restoreBg(); }         catch(e){ console.warn('restoreBg', e); }
+
     console.log('[RMRP] init done');
   });
 
