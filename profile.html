@@ -89,10 +89,13 @@
 .users-table th,.users-table td{padding:12px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px}
 .users-table th{color:var(--txt-3);font-size:11.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
 .users-table td{color:var(--txt-1)}
-.users-table tr:hover td{background:var(--bg-2)}
+.users-table tr{cursor:pointer;transition:var(--transition)}
+.users-table tr:hover td{background:var(--bg-3)}
 .user-actions{display:flex;gap:6px;flex-wrap:wrap}
-.user-act-btn{padding:6px 10px;border-radius:7px;background:var(--bg-3);color:var(--txt-1);font-size:11.5px;font-weight:600;border:1px solid var(--line);cursor:pointer;transition:var(--transition)}
+.user-act-btn{padding:6px 10px;border-radius:7px;background:var(--bg-3);color:var(--txt-1);font-size:11.5px;font-weight:600;border:1px solid var(--line);cursor:pointer;transition:var(--transition);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 .user-act-btn:hover{background:var(--bg-4)}
+.user-act-btn.view{background:rgba(61,220,132,.12);color:#3ddc84;border-color:rgba(61,220,132,.3)}
+.user-act-btn.view:hover{background:rgba(61,220,132,.25)}
 .user-act-btn.edit{background:rgba(74,168,255,.12);color:#4aa8ff;border-color:rgba(74,168,255,.3)}
 .user-act-btn.edit:hover{background:rgba(74,168,255,.25)}
 .user-act-btn.del{background:rgba(255,70,85,.12);color:#ff6b78;border-color:rgba(255,70,85,.3)}
@@ -137,6 +140,7 @@
       <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
       <a href="media.html" class="nav-link">🎬 Медиа</a>
       <a href="profile.html" class="nav-link active">👤 Профиль</a>
+      <a href="audit.html" class="nav-link">📋 Аудит</a>
     </nav>
     <div class="header-actions">
       <button class="btn-add" id="openEditor">
@@ -344,7 +348,7 @@
   <button class="fancy-error-ok" onclick="Profile.hideError()">Понятно</button>
 </div>
 
-<!-- Модалка редактора законов -->
+<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -357,7 +361,6 @@
   </div>
 </div>
 
-<!-- Модалка фона -->
 <div class="modal-overlay" id="bgModal" hidden>
   <div class="modal modal-sm">
     <div class="modal-head"><h3 class="modal-title">🖼 Фон</h3><button class="modal-close" id="closeBgPicker">✕</button></div>
@@ -379,7 +382,7 @@
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   PROFILE — без аудита
+   PROFILE — без аудита, с публичными профилями
    ============================================================ */
 (function(){
   'use strict';
@@ -670,13 +673,14 @@
       tbody.innerHTML = logins.map(function(login){
         var u = users[login];
         var canEdit = RMRPAuth.canEdit(cur, u);
-        return '<tr>' +
+        return '<tr onclick="Profile.openUserProfile(\'' + u.login + '\')">' +
           '<td>' + escapeHtml(u.displayName || u.login) + '</td>' +
           '<td>@' + escapeHtml(u.login) + '</td>' +
           '<td>' + escapeHtml(u.rank || '—') + '</td>' +
           '<td>' + escapeHtml(u.position || '—') + '</td>' +
           '<td>' + escapeHtml(u.role || 'Пользователь') + '</td>' +
-          '<td><div class="user-actions">' +
+          '<td onclick="event.stopPropagation()"><div class="user-actions">' +
+            '<a class="user-act-btn view" href="user.html?u=' + encodeURIComponent(u.login) + '" title="Открыть профиль">👁</a>' +
             (canGive
               ? '<button class="user-act-btn edit" ' + (canEdit ? '' : 'disabled') +
                 ' onclick="Profile.openUserModal(\'' + u.login + '\')">✏️</button>'
@@ -787,6 +791,10 @@
     });
   }
 
+  function openUserProfile(login){
+    location.href = 'user.html?u=' + encodeURIComponent(login);
+  }
+
   function escapeHtml(s){
     return String(s||'').replace(/[&<>"']/g, function(c){
       return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
@@ -801,10 +809,20 @@
   });
 
   window.Profile = {
-    doLogin, doRegister, doLogout,
-    toggleEdit, saveEdit, editAvatar, editBanner,
-    showUsers, openUserModal, closeUserModal, saveUser, deleteUser,
-    hideError
+    doLogin: doLogin,
+    doRegister: doRegister,
+    doLogout: doLogout,
+    toggleEdit: toggleEdit,
+    saveEdit: saveEdit,
+    editAvatar: editAvatar,
+    editBanner: editBanner,
+    showUsers: showUsers,
+    openUserModal: openUserModal,
+    closeUserModal: closeUserModal,
+    saveUser: saveUser,
+    deleteUser: deleteUser,
+    openUserProfile: openUserProfile,
+    hideError: hideError
   };
 
   fillSelects();
