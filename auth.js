@@ -1,464 +1,737 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0d0e12">
-<title>RMRP | Кадровый аудит</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-.audit-hero{padding:50px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05))}
-.audit-hero h1{font-size:clamp(26px,4.5vw,42px);font-weight:900;color:var(--txt-0);letter-spacing:-1.2px}
-.audit-hero h1 .accent{background:linear-gradient(135deg,#a855f7,#4aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.audit-hero p{color:var(--txt-2);margin-top:10px;font-size:14.5px}
-
-.audit-auth-warn{max-width:560px;margin:0 auto;padding:40px 32px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:center}
-.audit-auth-warn.lock{border-color:rgba(255,70,85,.35);background:linear-gradient(135deg,rgba(255,70,85,.06),rgba(168,85,247,.04))}
-.audit-auth-warn .icon{font-size:64px;margin-bottom:20px;display:block}
-.audit-auth-warn h3{color:var(--txt-0);font-size:22px;font-weight:900;margin-bottom:12px}
-.audit-auth-warn p{color:var(--txt-2);font-size:14.5px;line-height:1.7;margin-bottom:22px}
-.audit-auth-warn a{display:inline-block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px}
-.audit-req-box{margin:22px auto 0;padding:16px 20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;max-width:420px;text-align:left}
-.audit-req-box h4{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;color:var(--txt-3);margin-bottom:10px}
-.audit-req-box ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-.audit-req-box li{font-size:13px;color:var(--txt-1);padding-left:22px;position:relative;line-height:1.5}
-.audit-req-box li::before{content:"✓";position:absolute;left:0;color:#3ddc84;font-weight:900}
-
-.audit-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-@media(max-width:900px){.audit-grid-wrap{grid-template-columns:1fr}}
-
-.audit-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
-.audit-card h3{color:var(--txt-0);font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-
-.audit-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.audit-field label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
-.audit-field input,.audit-field select,.audit-field textarea{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
-.audit-field input:focus,.audit-field select:focus,.audit-field textarea:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
-.audit-field input[type="date"]{cursor:pointer;color-scheme:dark}
-.audit-field textarea{min-height:100px;resize:vertical;line-height:1.6}
-
-.audit-output{margin-top:18px;padding:18px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--txt-1);font-family:'JetBrains Mono','Courier New',monospace;min-height:200px}
-.audit-copy{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.audit-copy-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
-.audit-copy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
-.audit-copy-btn.copied{background:linear-gradient(135deg,#2a9d5c,#3a7bc8)}
-
-.audit-history{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
-.audit-history h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.audit-history-clear{padding:6px 12px;border-radius:8px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:12px;font-weight:600;cursor:pointer}
-.audit-history-clear:hover{background:rgba(255,70,85,.25)}
-.audit-history-list{display:flex;flex-direction:column;gap:10px;max-height:600px;overflow-y:auto;padding-right:4px}
-.audit-history-list::-webkit-scrollbar{width:6px}
-.audit-history-list::-webkit-scrollbar-thumb{background:var(--bg-4);border-radius:3px}
-.audit-history-item{padding:14px 16px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--txt-2);line-height:1.6;position:relative}
-.audit-history-item:hover{border-color:var(--line-2)}
-.audit-history-item .audit-h-date{font-size:11px;color:var(--txt-3);margin-bottom:6px;padding-right:160px}
-.audit-history-item .audit-h-preview{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;color:var(--txt-1);max-height:80px;overflow:hidden;opacity:.85;font-size:11.5px}
-.audit-history-item .audit-h-copy{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:7px;background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3);font-size:11px;font-weight:600;cursor:pointer}
-.audit-history-item .audit-h-copy:hover{background:rgba(168,85,247,.25)}
-.audit-history-item .audit-h-del{position:absolute;top:12px;right:100px;padding:5px 10px;border-radius:7px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:11px;font-weight:600;cursor:pointer}
-.audit-history-item .audit-h-del:hover{background:rgba(255,70,85,.25)}
-.audit-history-empty{padding:30px;text-align:center;color:var(--txt-3);font-size:13px;font-style:italic}
-
-.fancy-error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:10000;background:var(--bg-2);border:2px solid #a855f7;border-radius:18px;padding:26px 30px;max-width:420px;width:90%;text-align:center;box-shadow:0 30px 90px rgba(168,85,247,.4);opacity:0;pointer-events:none;transition:.3s}
-.fancy-error.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;animation:errIn .4s}
-@keyframes errIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}60%{transform:translate(-50%,-50%) scale(1.03)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
-.fancy-error-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;box-shadow:0 10px 30px rgba(168,85,247,.45)}
-.fancy-error-title{font-size:19px;font-weight:900;color:var(--txt-0);margin-bottom:8px}
-.fancy-error-msg{font-size:14px;color:var(--txt-2);line-height:1.6;margin-bottom:18px}
-.fancy-error-ok{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer}
-</style>
-</head>
-<body>
-
-<header class="header">
-  <div class="container header-inner">
-    <a href="index.html" class="logo">
-      <span class="logo-icon">⚖️</span>
-      <span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">LAW</span></span>
-    </a>
-    <nav class="nav" id="nav">
-      <a href="index.html" class="nav-link">🏠 Главная</a>
-      <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
-      <a href="media.html" class="nav-link">🎬 Медиа</a>
-      <a href="profile.html" class="nav-link">👤 Профиль</a>
-      <a href="audit.html" class="nav-link active">📋 Аудит</a>
-    </nav>
-    <div class="header-actions">
-      <button class="btn-add" id="openEditor"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
-      <button class="btn-bg" id="openBgPicker"><span>🖼</span></button>
-      <button class="burger" id="burger"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</header>
-
-<section class="audit-hero">
-  <div class="container">
-    <h1>📋 Кадровый <span class="accent">аудит</span></h1>
-    <p>Оформление приёма и повышения сотрудников ВС РФ. Скопируй готовый текст в Discord.</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-
-    <div id="auditAuthWarn" class="audit-auth-warn" hidden>
-      <span class="icon">🔒</span>
-      <h3>Нужна авторизация</h3>
-      <p>Чтобы работать с кадровым аудитом, войди в свой аккаунт.</p>
-      <a href="profile.html">👤 Войти в личный кабинет</a>
-    </div>
-
-    <div id="auditNoAccess" class="audit-auth-warn lock" hidden>
-      <span class="icon">🚫</span>
-      <h3>Доступ ограничен</h3>
-      <p>Кадровый аудит доступен только с определённого звания или должности.</p>
-      <div class="audit-req-box">
-        <h4>Требования доступа</h4>
-        <ul>
-          <li>Звание: <b>Майор</b> или выше</li>
-          <li>Должность: <b>Инструктор ВК</b> или выше</li>
-          <li>Или роль: <b>Администратор</b> / <b>Разработчик</b></li>
-        </ul>
-      </div>
-    </div>
-
-    <div id="auditMain" class="audit-grid-wrap" hidden>
-      <div class="audit-card">
-        <h3>✍️ Заполни поля</h3>
-        <div class="audit-grid">
-          <div class="audit-field">
-            <label>Discord (кому) *</label>
-            <input type="text" id="audDiscord" placeholder="@loveyou_love">
-          </div>
-          <div class="audit-field">
-            <label>Ping (кого упомянуть) *</label>
-            <input type="text" id="audPing" placeholder="@ping">
-          </div>
-          <div class="audit-field">
-            <label>Дата принятия в ВС РФ *</label>
-            <input type="date" id="audJoinDate">
-          </div>
-          <div class="audit-field">
-            <label>Дата повышения *</label>
-            <input type="date" id="audPromoDate">
-          </div>
-          <div class="audit-field">
-            <label>Повышен на звание *</label>
-            <select id="audRank"></select>
-          </div>
-          <div class="audit-field">
-            <label>Дополнительный текст / ссылки</label>
-            <textarea id="audExtra" placeholder="Вставь ссылки на док-ва, скрины, приказы — любую дополнительную информацию.&#10;&#10;Например:&#10;Приказ №5 от 09.10.2026: https://discord.com/...&#10;Скрин-подтверждение: https://imgur.com/..."></textarea>
-          </div>
-        </div>
-
-        <div class="audit-copy">
-          <button class="audit-copy-btn" id="audCopyBtn" onclick="Audit.copy()">📋 Скопировать в буфер</button>
-          <button class="btn btn-ghost" onclick="Audit.reset()">🔄 Очистить</button>
-        </div>
-
-        <div class="audit-output" id="audOutput">Заполни поля выше — текст появится здесь автоматически…</div>
-      </div>
-
-      <div class="audit-history">
-        <h3>
-          <span>🕘 История аудитов</span>
-          <button class="audit-history-clear" onclick="Audit.clearHistory()">🗑 Очистить</button>
-        </h3>
-        <div class="audit-history-list" id="audHistoryList"></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-col">
-      <div class="logo"><span class="logo-icon">⚖️</span><span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">LAW</span></span></div>
-      <p>Официальный информационный портал законодательной базы проекта RMRP.</p>
-    </div>
-    <div class="footer-col"><h4>Документы</h4><a href="constitution.html">Конституция РФ</a><a href="uk.html">Уголовный кодекс</a><a href="koap.html">КоАП РФ</a><a href="process.html">Процессуальный кодекс</a></div>
-    <div class="footer-col"><h4>Законы</h4><a href="weapons.html">Об оружии</a><a href="property.html">Госсобственность</a><a href="raids.html">Ограбления и поставки</a><a href="vzk.html">Война за КрАЗ</a></div>
-    <div class="footer-col"><h4>Уставы</h4><a href="discipline.html">Дисциплинарный устав</a><a href="garrison.html">Гарнизонная служба</a><a href="internal.html">Внутренняя служба</a><a href="drill.html">Строевой устав</a></div>
-    <div class="footer-col"><h4>Сервисы</h4><a href="military.html">Военкомат</a><a href="audit.html">Кадровый аудит</a><a href="media.html">Медиа-галерея</a><a href="profile.html">Профиль</a></div>
-    <div class="footer-col">
-      <h4>Резерв</h4>
-      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RMRP.export()">💾 Экспорт JSON</button>
-      <label class="btn btn-ghost" style="width:100%;display:block;text-align:center;cursor:pointer;">📥 Импорт JSON<input type="file" accept=".json" style="display:none;" onchange="RMRP.import(this.files[0])"></label>
-    </div>
-  </div>
-  <div class="footer-bottom"><p>© 2025 RMRP LAW. Все права защищены.</p></div>
-</footer>
-
-<button class="to-top" id="toTop">↑</button>
-
-<div class="modal-overlay" id="editorModal" hidden>
-  <div class="modal">
-    <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label for="lawTitle">Заголовок *</label><input type="text" id="lawTitle" class="form-control"></div>
-      <label>Текст *</label>
-      <div class="editor-area" id="editorArea" contenteditable="true" data-placeholder="Введите текст…"></div>
-    </div>
-    <div class="modal-foot"><button class="btn btn-ghost" id="cancelEditor">Отмена</button><button class="btn btn-primary" id="saveEditor">💾 Сохранить</button></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="bgModal" hidden>
-  <div class="modal modal-sm">
-    <div class="modal-head"><h3 class="modal-title">🖼 Фон</h3><button class="modal-close" id="closeBgPicker">✕</button></div>
-    <div class="modal-body">
-      <div class="bg-tabs">
-        <button class="bg-tab active" data-bg-tab="url">🔗 Ссылка</button>
-        <button class="bg-tab" data-bg-tab="file">📁 Файл</button>
-      </div>
-      <div class="bg-panel active" data-bg-panel="url"><label class="form-group"><span>Ссылка</span><input type="url" id="bgUrlInput" class="form-control"></label></div>
-      <div class="bg-panel" data-bg-panel="file"><label class="form-group"><span>Файл</span><input type="file" id="bgFileInput" class="form-control" accept="image/*"></label></div>
-      <div class="form-group"><label><span>Затемнение: <b id="bgOverlayValue">60%</b></span><input type="range" id="bgOverlay" class="form-range" min="0" max="95" value="60"></label></div>
-      <div class="form-group"><label><span>Размытие: <b id="bgBlurValue">0px</b></span><input type="range" id="bgBlur" class="form-range" min="0" max="20" value="0"></label></div>
-    </div>
-    <div class="modal-foot"><button class="btn btn-ghost" id="removeBg">Убрать фон</button><button class="btn btn-primary" id="applyBg">Применить</button></div>
-  </div>
-</div>
-
-<div class="fancy-error" id="fancyError">
-  <div class="fancy-error-icon">✨</div>
-  <div class="fancy-error-title" id="fancyErrorTitle">Готово</div>
-  <div class="fancy-error-msg" id="fancyErrorMsg"></div>
-  <button class="fancy-error-ok" onclick="Audit.hideError()">Понятно</button>
-</div>
-
-<script src="auth.js"></script>
-<script src="script.js"></script>
-<script>
+/* ============================================================
+   RMRP — auth.js (v14: альбомы и медиа через Firebase)
+   ============================================================ */
 (function(){
   'use strict';
 
-  function $(id){ return document.getElementById(id); }
-  function setVal(id,v){ var el = $(id); if(el) el.value = v; }
-  function getVal(id){ var el = $(id); return el ? el.value : ''; }
+  var FIREBASE_URL = 'https://rmrp-4b406-default-rtdb.firebaseio.com';
+  var LS_CURRENT   = 'rmrp_current_user';
+  var LS_GATE      = 'rmrp_gate_pass';
+  var LS_USERS_CACHE = 'rmrp_users_cache';
 
-  function showFancy(title, msg){
-    $('fancyErrorTitle').textContent = title;
-    $('fancyErrorMsg').textContent = msg;
-    $('fancyError').classList.add('show');
-    setTimeout(function(){ $('fancyError').classList.remove('show'); }, 4000);
+  var DEV_LOGIN = 'kiryushaz';
+
+  var RANKS = [
+    'Младший Сержант','Сержант','Старший Сержант','Старшина','Прапорщик',
+    'Ст. Прапорщик','Младший лейтенант','Лейтенант','Ст. Лейтенант','Капитан',
+    'Майор','Подполковник','Полковник','Генерал-Майор'
+  ];
+
+  var POSITIONS = [
+    'Стажер ВК','Сотрудник ВК','Инструктор ВК',
+    'Заместитель военного комиссара','Военный Комиссар'
+  ];
+
+  var ROLES = ['Пользователь', 'Сотрудник', 'Администратор', 'Разработчик'];
+
+  var RANK_IDX = {
+    'Младший Сержант': 0, 'Сержант': 1, 'Старший Сержант': 2, 'Старшина': 3,
+    'Прапорщик': 4, 'Ст. Прапорщик': 5, 'Младший лейтенант': 6, 'Лейтенант': 7,
+    'Ст. Лейтенант': 8, 'Капитан': 9, 'Майор': 10, 'Подполковник': 11,
+    'Полковник': 12, 'Генерал-Майор': 13
+  };
+  var POS_IDX = {
+    'Стажер ВК': 0, 'Сотрудник ВК': 1, 'Инструктор ВК': 2,
+    'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
+  };
+
+  var REG_MAX_RANK = 'Капитан';
+  var REG_MAX_POS  = 'Инструктор ВК';
+
+  function isDev(user){ return user && user.role === 'Разработчик'; }
+  function isAdmin(user){ return user && (user.role === 'Администратор' || user.role === 'Разработчик'); }
+
+  function canGiveAccess(user){
+    if(!user) return false;
+    if(isAdmin(user)) return true;
+    var posIdx = POS_IDX[user.position];
+    if(posIdx === undefined) return false;
+    return posIdx >= POS_IDX['Инструктор ВК'];
   }
 
-  function escapeHtml(s){
-    return String(s||'').replace(/[&<>"']/g, function(c){
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+  function canUseAudit(user){
+    if(!user) return false;
+    if(isAdmin(user)) return true;
+    var rankIdx = RANK_IDX[user.rank];
+    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
+    var posIdx = POS_IDX[user.position];
+    if(posIdx !== undefined && posIdx >= POS_IDX['Инструктор ВК']) return true;
+    return false;
+  }
+
+  function canSelfPromote(user){
+    if(!user) return false;
+    if(isAdmin(user)) return true;
+    var rankIdx = RANK_IDX[user.rank];
+    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
+    return false;
+  }
+
+  function maxRankByRole(user){
+    if(!user) return -1;
+    if(isAdmin(user)) return RANKS.length - 1;
+    var myRankIdx = RANK_IDX[user.rank];
+    if(myRankIdx === undefined) return -1;
+    if(myRankIdx >= RANK_IDX['Генерал-Майор']) return RANKS.length - 1;
+    if(myRankIdx >= RANK_IDX['Майор']) return myRankIdx;
+    if(myRankIdx >= RANK_IDX['Младший Сержант'] && myRankIdx <= RANK_IDX['Капитан']){
+      return RANK_IDX['Капитан'];
+    }
+    return -1;
+  }
+
+  function maxPositionByRole(user){
+    if(!user) return -1;
+    if(isAdmin(user)) return POSITIONS.length - 1;
+    var myPosIdx = POS_IDX[user.position];
+    if(myPosIdx === undefined) return -1;
+    if(myPosIdx >= POS_IDX['Заместитель военного комиссара']) return myPosIdx;
+    if(myPosIdx >= POS_IDX['Инструктор ВК']) return POS_IDX['Инструктор ВК'];
+    return -1;
+  }
+
+  function canEdit(current, target){
+    if(!current || !target) return false;
+    if(isAdmin(current)) return true;
+    if(current.login === target.login) return true;
+    var tRankIdx = RANK_IDX[target.rank];
+    var maxRank = maxRankByRole(current);
+    if(tRankIdx > maxRank) return false;
+    var tPosIdx = POS_IDX[target.position];
+    var maxPos = maxPositionByRole(current);
+    if(tPosIdx > maxPos) return false;
+    return true;
+  }
+
+  function canChangeRole(current, target){
+    if(!current) return false;
+    if(!isAdmin(current)) return false;
+    if(target && current.login === target.login) return false;
+    return true;
+  }
+
+  var GATE_CODE = 'RMRP2025';
+  var GATE_DAYS = 30;
+
+  function lsGet(key, def){
+    try{ var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
+    catch(e){ return def; }
+  }
+  function lsSet(key, val){
+    try{ localStorage.setItem(key, JSON.stringify(val)); return true; }
+    catch(e){ return false; }
+  }
+
+  function hashPass(s){
+    var h = 0;
+    for(var i=0;i<s.length;i++){
+      h = ((h<<5) - h) + s.charCodeAt(i);
+      h |= 0;
+    }
+    return 'h' + Math.abs(h).toString(36) + '_' + s.length;
+  }
+
+  function fbUrl(path){ return FIREBASE_URL + '/' + path + '.json'; }
+  function fbGet(path){
+    return fetch(fbUrl(path)).then(function(r){
+      if(!r.ok) throw new Error('Firebase read error: ' + r.status);
+      return r.json();
     });
   }
-  function copyToClipboard(text){
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
-    } else fallbackCopy(text);
+  function fbPut(path, data){
+    return fetch(fbUrl(path), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('Firebase write error: ' + r.status);
+      return r.json();
+    });
   }
-  function fallbackCopy(text){
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); } catch(e){}
-    document.body.removeChild(ta);
+  function fbPatch(path, data){
+    return fetch(fbUrl(path), {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('Firebase patch error: ' + r.status);
+      return r.json();
+    });
   }
-
-  var cur = RMRPAuth.getCurrent();
-  if(!cur){
-    $('auditAuthWarn').hidden = false;
-    $('auditNoAccess').hidden = true;
-    $('auditMain').hidden = true;
-    return;
-  }
-  if(!RMRPAuth.canUseAudit || !RMRPAuth.canUseAudit(cur)){
-    $('auditAuthWarn').hidden = true;
-    $('auditNoAccess').hidden = false;
-    $('auditMain').hidden = true;
-    return;
+  function fbDelete(path){
+    return fetch(fbUrl(path), { method: 'DELETE' }).then(function(r){
+      if(!r.ok) throw new Error('Firebase delete error: ' + r.status);
+      return r.json();
+    });
   }
 
-  $('auditAuthWarn').hidden = true;
-  $('auditNoAccess').hidden = true;
-  $('auditMain').hidden = false;
+  /* ============================================================
+     SVG-ПОГОНЫ
+     ============================================================ */
+  function buildEpaulette(rank){
+    var gold = '#fbbf24';
+    var line = '#3a3d47';
+    var bg = '#23262f';
 
-  var audRank = $('audRank');
-  if(audRank){
-    audRank.innerHTML = '<option value="">— выбери звание —</option>' +
-      RMRPAuth.RANKS.map(function(r){ return '<option>' + r + '</option>'; }).join('');
+    var base = '<rect x="2" y="2" width="16" height="40" rx="2" fill="' + bg + '" stroke="' + line + '" stroke-width="1"/>';
+    var strip = '<line x1="10" y1="4" x2="10" y2="40" stroke="' + line + '" stroke-width="0.5" stroke-dasharray="2,2"/>';
+
+    function lychka(y){
+      return '<rect x="5" y="' + y + '" width="10" height="2.5" fill="' + gold + '" rx="0.5"/>';
+    }
+    function starSmall(cx, cy){
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="2.2" fill="' + gold + '"/>';
+    }
+    function starBig(cx, cy){
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="3.2" fill="' + gold + '"/>';
+    }
+
+    var content = '';
+    switch(rank){
+      case 'Младший Сержант': content = lychka(12) + lychka(20); break;
+      case 'Сержант': content = lychka(10) + lychka(17) + lychka(24); break;
+      case 'Старший Сержант': content = lychka(8) + lychka(15) + lychka(22) + lychka(29); break;
+      case 'Старшина':
+        content = '<rect x="9.5" y="4" width="1" height="36" fill="' + gold + '"/>' +
+                  lychka(10) + lychka(18) + lychka(26); break;
+      case 'Прапорщик': content = starSmall(10, 12) + starSmall(10, 22) + starSmall(10, 32); break;
+      case 'Ст. Прапорщик':
+        content = starSmall(6, 12) + starSmall(14, 12) +
+                  starSmall(6, 22) + starSmall(14, 22) +
+                  starSmall(6, 32) + starSmall(14, 32); break;
+      case 'Младший лейтенант': content = starSmall(6, 10) + starSmall(14, 10) + starSmall(10, 22); break;
+      case 'Лейтенант':
+        content = starSmall(6, 10) + starSmall(14, 10) +
+                  starSmall(6, 22) + starSmall(14, 22); break;
+      case 'Ст. Лейтенант':
+        content = starSmall(6, 8) + starSmall(14, 8) +
+                  starSmall(6, 18) + starSmall(14, 18) +
+                  starSmall(10, 30); break;
+      case 'Капитан':
+        content = starSmall(6, 6) + starSmall(14, 6) +
+                  starSmall(6, 18) + starSmall(14, 18) +
+                  starSmall(6, 30) + starSmall(14, 30); break;
+      case 'Майор':
+        content = starBig(10, 14) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
+      case 'Подполковник':
+        content = starBig(10, 12) + starBig(10, 26) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
+      case 'Полковник':
+        content = starBig(6, 12) + starBig(14, 12) + starBig(10, 28) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
+      case 'Генерал-Майор':
+        content = '<circle cx="10" cy="20" r="6" fill="none" stroke="' + gold + '" stroke-width="0.6" opacity="0.6"/>' +
+                  starBig(10, 20) +
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="1"/>'; break;
+      default: content = lychka(18);
+    }
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 44" width="22" height="44" style="display:block">' +
+      base + strip + content + '</svg>';
   }
 
-  var Audit = {
-    LS_HISTORY: 'rmrp_audit_history',
-    MAX_HISTORY: 30,
+  var Auth = {
+    RANKS: RANKS,
+    POSITIONS: POSITIONS,
+    ROLES: ROLES,
+    RANK_IDX: RANK_IDX,
+    POS_IDX: POS_IDX,
+    DEV_LOGIN: DEV_LOGIN,
+    REG_MAX_RANK: REG_MAX_RANK,
+    REG_MAX_POS: REG_MAX_POS,
 
-    init: function(){
-      var self = this;
-      var today = new Date().toISOString().split('T')[0];
-      if($('audJoinDate') && !$('audJoinDate').value) $('audJoinDate').value = today;
-      if($('audPromoDate') && !$('audPromoDate').value) $('audPromoDate').value = today;
+    checkGate: function(){
+      try{
+        var g = JSON.parse(localStorage.getItem(LS_GATE) || 'null');
+        if(!g) return false;
+        if(Date.now() - g.ts > GATE_DAYS * 24 * 60 * 60 * 1000){
+          localStorage.removeItem(LS_GATE);
+          return false;
+        }
+        return true;
+      }catch(e){ return false; }
+    },
+    passGate: function(code){
+      if((code || '').trim() !== GATE_CODE) return false;
+      lsSet(LS_GATE, { ts: Date.now() });
+      return true;
+    },
+    lockGate: function(){ localStorage.removeItem(LS_GATE); },
 
-      var d = cur.discord || ('@' + cur.login);
-      if(!d.startsWith('@')) d = '@' + d;
-      if($('audDiscord') && !$('audDiscord').value) $('audDiscord').value = d;
+    getCurrent: function(){ return lsGet(LS_CURRENT, null); },
+    setCurrent: function(u){ lsSet(LS_CURRENT, u); },
+    logout: function(){ localStorage.removeItem(LS_CURRENT); },
 
-      ['audDiscord','audPing','audJoinDate','audPromoDate','audRank','audExtra'].forEach(function(id){
-        var el = $(id);
-        if(el){
-          el.addEventListener('input', function(){ self.generate(); });
-          el.addEventListener('change', function(){ self.generate(); });
+    refreshCurrent: function(){
+      var cached = lsGet(LS_CURRENT, null);
+      if(!cached || !cached.login) return Promise.resolve(null);
+
+      return fbGet('users/' + cached.login).then(function(fresh){
+        if(!fresh){
+          localStorage.removeItem(LS_CURRENT);
+          return null;
+        }
+        lsSet(LS_CURRENT, fresh);
+        return { user: fresh, changed: true };
+      }).catch(function(err){
+        console.warn('[RMRP] Не удалось обновить профиль:', err.message);
+        return { user: cached, changed: false };
+      });
+    },
+
+    /* ЗАЯВКИ */
+    createRequest: function(data){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+
+      var req = {
+        id: Date.now() + '_' + cur.login,
+        login: cur.login,
+        displayName: cur.displayName || cur.login,
+        currentRank: cur.rank || '—',
+        currentPosition: cur.position || '—',
+        wantRank: data.wantRank || '',
+        wantPosition: data.wantPosition || '',
+        reason: data.reason || '',
+        status: 'pending',
+        createdAt: Date.now()
+      };
+
+      return fbPut('requests/' + req.id, req).then(function(){
+        return { ok:true, request: req };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    getRequests: function(){
+      return fbGet('requests').then(function(data){
+        return data || {};
+      }).catch(function(){
+        return {};
+      });
+    },
+
+    approveRequest: function(reqId){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+
+      return fbGet('requests/' + reqId).then(function(req){
+        if(!req) throw new Error('Заявка не найдена');
+        if(req.status !== 'pending') throw new Error('Заявка уже обработана');
+
+        var patch = {};
+        if(req.wantRank) patch.rank = req.wantRank;
+        if(req.wantPosition) patch.position = req.wantPosition;
+
+        return fbPatch('users/' + req.login, patch).then(function(){
+          return fbPatch('requests/' + reqId, {
+            status: 'approved',
+            resolvedAt: Date.now(),
+            resolvedBy: cur.login
+          });
+        }).then(function(){
+          return { ok:true };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    rejectRequest: function(reqId, reason){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+
+      return fbPatch('requests/' + reqId, {
+        status: 'rejected',
+        resolvedAt: Date.now(),
+        resolvedBy: cur.login,
+        rejectReason: reason || ''
+      }).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    deleteRequest: function(reqId){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+      return fbDelete('requests/' + reqId).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    /* ПОЛЬЗОВАТЕЛИ */
+    getUsers: function(){
+      return fbGet('users').then(function(data){
+        var users = data || {};
+        if(users[DEV_LOGIN]){
+          var patch = {};
+          if(users[DEV_LOGIN].role !== 'Разработчик'){
+            users[DEV_LOGIN].role = 'Разработчик';
+            patch.role = 'Разработчик';
+          }
+          if(Object.keys(patch).length) fbPatch('users/' + DEV_LOGIN, patch);
+        }
+        lsSet(LS_USERS_CACHE, users);
+        return users;
+      }).catch(function(err){
+        console.warn('[RMRP] Firebase недоступен, кэш:', err.message);
+        return lsGet(LS_USERS_CACHE, {});
+      });
+    },
+
+    getUsersSync: function(){ return lsGet(LS_USERS_CACHE, {}); },
+
+    register: function(data){
+      var login = (data.login || '').trim().toLowerCase();
+      if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
+      if(login.length < 3) return Promise.resolve({ ok:false, error:'Логин слишком короткий' });
+      if(!data.password || data.password.length < 4) return Promise.resolve({ ok:false, error:'Пароль минимум 4 символа' });
+
+      return Auth.getUsers().then(function(users){
+        if(users[login]) throw new Error('Такой логин уже занят');
+
+        var isFirst = Object.keys(users).length === 0;
+        var isDevUser = (login === DEV_LOGIN);
+
+        var regRank = data.rank || RANKS[0];
+        var regPos = data.position || POSITIONS[0];
+        if(RANK_IDX[regRank] > RANK_IDX[REG_MAX_RANK]) regRank = REG_MAX_RANK;
+        if(POS_IDX[regPos] > POS_IDX[REG_MAX_POS]) regPos = REG_MAX_POS;
+
+        var user = {
+          login: login,
+          displayName: data.displayName || data.login,
+          password: hashPass(data.password),
+          rank: regRank,
+          position: regPos,
+          role: isDevUser ? 'Разработчик' : (isFirst ? 'Администратор' : 'Пользователь'),
+          discord: data.discord || '',
+          forum: data.forum || '',
+          avatar: data.avatar || '',
+          banner: data.banner || '',
+          bio: data.bio || '',
+          createdAt: Date.now()
+        };
+
+        return fbPut('users/' + login, user).then(function(){
+          return { ok:true, user: user };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    login: function(login, password){
+      login = (login || '').trim().toLowerCase();
+      if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
+
+      return fbGet('users/' + login).then(function(user){
+        if(!user) throw new Error('Пользователь не найден');
+        if(user.password !== hashPass(password)) throw new Error('Неверный пароль');
+        if(login === DEV_LOGIN && user.role !== 'Разработчик'){
+          user.role = 'Разработчик';
+          fbPatch('users/' + login, { role: 'Разработчик' });
+        }
+        Auth.setCurrent(user);
+        return { ok:true, user: user };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    update: function(patch){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+
+      var cleanPatch = {};
+      var blocked = null;
+
+      Object.keys(patch).forEach(function(k){
+        if(k === 'password' && patch[k]){
+          cleanPatch.password = hashPass(patch[k]);
+        } else if(k === 'rank' || k === 'position'){
+          if(!canSelfPromote(cur)){
+            blocked = blocked || ('Смена звания/должности доступна только от Майора и выше');
+            return;
+          }
+          if(!isAdmin(cur)){
+            if(k === 'rank'){
+              var newIdx = RANK_IDX[patch[k]];
+              var curIdx = RANK_IDX[cur.rank];
+              if(newIdx > curIdx){
+                blocked = 'Нельзя повысить себя выше текущего звания';
+                return;
+              }
+            }
+            if(k === 'position'){
+              var newP = POS_IDX[patch[k]];
+              var curP = POS_IDX[cur.position];
+              if(newP > curP){
+                blocked = 'Нельзя повысить себя выше текущей должности';
+                return;
+              }
+            }
+          }
+          cleanPatch[k] = patch[k];
+        } else if(k !== 'login' && k !== 'password' && k !== 'role'){
+          cleanPatch[k] = patch[k];
         }
       });
 
-      self.generate();
-      self.renderHistory();
-    },
-
-    formatDate: function(isoDate){
-      if(!isoDate) return '—';
-      var p = isoDate.split('-');
-      if(p.length !== 3) return isoDate;
-      return p[2] + '.' + p[1] + '.' + p[0];
-    },
-
-    generate: function(){
-      var discord = getVal('audDiscord').trim();
-      var ping    = getVal('audPing').trim();
-      var joinD   = this.formatDate(getVal('audJoinDate'));
-      var promoD  = this.formatDate(getVal('audPromoDate'));
-      var rank    = getVal('audRank').trim();
-      var extra   = getVal('audExtra').trim();
-
-      if(!discord && !ping && !rank && !extra){
-        $('audOutput').textContent = 'Заполни поля выше — текст появится здесь автоматически…';
-        return '';
+      if(blocked){
+        return Promise.resolve({ ok:false, error: blocked });
       }
 
-      var lines = [];
-      lines.push(discord || '@username');
-      lines.push(ping || '@ping');
-      lines.push('');
-      lines.push('Был принят в ряды ВС РФ согласно:');
-      lines.push(joinD);
-      lines.push('');
-      lines.push('Был повышен на звание:');
-      lines.push(rank || '—');
-      lines.push('Дата: ' + promoD);
+      return fbPatch('users/' + cur.login, cleanPatch).then(function(){
+        Object.keys(cleanPatch).forEach(function(k){ cur[k] = cleanPatch[k]; });
+        Auth.setCurrent(cur);
+        return { ok:true, user: cur };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
 
-      if(extra){
-        lines.push('');
-        lines.push('Дополнительно:');
-        lines.push(extra);
+    updateOther: function(login, patch){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+
+      return fbGet('users/' + login).then(function(target){
+        if(!target) throw new Error('Пользователь не найден');
+        if(!canEdit(cur, target)) throw new Error('Недостаточно прав: цель выше вас по званию или должности');
+
+        if(patch.role !== undefined){
+          if(!canChangeRole(cur, target)){
+            throw new Error('Только Администратор или Разработчик может менять роли');
+          }
+          if(patch.role === 'Разработчик' && !isDev(cur)){
+            throw new Error('Только Разработчик может выдавать роль Разработчик');
+          }
+        }
+
+        if(patch.rank && !isAdmin(cur)){
+          var tIdx = RANK_IDX[patch.rank];
+          var maxIdx = maxRankByRole(cur);
+          if(tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
+        }
+
+        if(patch.position && !isAdmin(cur)){
+          var pIdx = POS_IDX[patch.position];
+          var maxP = maxPositionByRole(cur);
+          if(pIdx > maxP) throw new Error('Нельзя выдать должность выше своей');
+        }
+
+        var cleanPatch = {};
+        Object.keys(patch).forEach(function(k){
+          if(k === 'password' && patch[k]) cleanPatch.password = hashPass(patch[k]);
+          else if(k !== 'login') cleanPatch[k] = patch[k];
+        });
+
+        return fbPatch('users/' + login, cleanPatch).then(function(){
+          return { ok:true, user: Object.assign({}, target, cleanPatch) };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    deleteUser: function(login){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)){
+        return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
       }
-
-      var text = lines.join('\n');
-      $('audOutput').textContent = text;
-      return text;
-    },
-
-    copy: function(){
-      var text = this.generate();
-      if(!text){ showFancy('Пусто', 'Заполни хотя бы одно поле'); return; }
-      copyToClipboard(text);
-      this.saveToHistory(text);
-      var btn = $('audCopyBtn');
-      if(btn){
-        btn.classList.add('copied');
-        var old = btn.innerHTML;
-        btn.innerHTML = '✅ Скопировано!';
-        setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = old; }, 2000);
+      if(login === cur.login){
+        return Promise.resolve({ ok:false, error:'Нельзя удалить себя' });
       }
-      showFancy('✅ Скопировано', 'Аудит отправлен в буфер обмена');
+      return fbDelete('users/' + login).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
     },
 
-    reset: function(){
-      if(!confirm('Очистить поля?')) return;
-      setVal('audPing', '');
-      setVal('audRank', '');
-      setVal('audExtra', '');
-      var today = new Date().toISOString().split('T')[0];
-      setVal('audJoinDate', today);
-      setVal('audPromoDate', today);
-      var d = cur.discord || ('@' + cur.login);
-      if(!d.startsWith('@')) d = '@' + d;
-      setVal('audDiscord', d);
-      this.generate();
+    /* ============================================================
+       АЛЬБОМЫ
+       ============================================================ */
+    getAlbums: function(){
+      return fbGet('albums').then(function(data){
+        return data || {};
+      }).catch(function(){
+        return {};
+      });
     },
 
-    saveToHistory: function(text){
-      var hist = this.getHistory();
-      hist.unshift({ id: Date.now(), text: text, date: new Date().toLocaleString('ru-RU') });
-      if(hist.length > this.MAX_HISTORY) hist = hist.slice(0, this.MAX_HISTORY);
-      try{ localStorage.setItem(this.LS_HISTORY, JSON.stringify(hist)); }catch(e){}
-      this.renderHistory();
+    getAlbum: function(id){
+      return fbGet('albums/' + id).then(function(data){
+        return data || null;
+      }).catch(function(){ return null; });
     },
 
-    getHistory: function(){
-      try{
-        var raw = localStorage.getItem(this.LS_HISTORY);
-        var h = raw ? JSON.parse(raw) : [];
-        return Array.isArray(h) ? h : [];
-      }catch(e){ return []; }
+    createAlbum: function(data){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      var album = {
+        id: 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+        title: data.title || 'Без названия',
+        desc: data.desc || '',
+        author: cur.login,
+        authorName: cur.displayName || cur.login,
+        cover: '',
+        createdAt: Date.now()
+      };
+      return fbPut('albums/' + album.id, album).then(function(){
+        return { ok:true, album: album };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
     },
 
-    clearHistory: function(){
-      if(!confirm('Очистить всю историю?')) return;
-      localStorage.removeItem(this.LS_HISTORY);
-      this.renderHistory();
+    updateAlbum: function(id, patch){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      return fbPatch('albums/' + id, patch).then(function(){
+        return { ok:true };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
     },
 
-    deleteOne: function(id){
-      if(!confirm('Удалить эту запись?')) return;
-      var hist = this.getHistory().filter(function(x){ return x.id !== id; });
-      try{ localStorage.setItem(this.LS_HISTORY, JSON.stringify(hist)); }catch(e){}
-      this.renderHistory();
+    deleteAlbum: function(id){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      return fbGet('albums/' + id).then(function(album){
+        if(!album) throw new Error('Альбом не найден');
+        if(album.author !== cur.login && !isAdmin(cur)){
+          throw new Error('Можно удалять только свои альбомы');
+        }
+        return fbDelete('albums/' + id);
+      }).then(function(){
+        return { ok:true };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
     },
 
-    renderHistory: function(){
-      var list = $('audHistoryList');
-      if(!list) return;
-      var hist = this.getHistory();
-      if(hist.length === 0){
-        list.innerHTML = '<div class="audit-history-empty">Пока нет сохранённых аудитов</div>';
-        return;
-      }
-      list.innerHTML = hist.map(function(item){
-        var preview = item.text.length > 260 ? item.text.slice(0, 260) + '…' : item.text;
-        return '<div class="audit-history-item">' +
-          '<button class="audit-h-copy" onclick="Audit.copyFromHistory(' + item.id + ')">📋 Копировать</button>' +
-          '<button class="audit-h-del" onclick="Audit.deleteOne(' + item.id + ')">🗑</button>' +
-          '<div class="audit-h-date">' + item.date + '</div>' +
-          '<div class="audit-h-preview">' + escapeHtml(preview) + '</div>' +
-        '</div>';
-      }).join('');
+    /* ============================================================
+       МЕДИА
+       ============================================================ */
+    getMedia: function(){
+      return fbGet('media').then(function(data){
+        return data || {};
+      }).catch(function(){
+        return {};
+      });
     },
 
-    copyFromHistory: function(id){
-      var item = this.getHistory().find(function(x){ return x.id === id; });
-      if(!item) return;
-      copyToClipboard(item.text);
-      showFancy('✅ Скопировано', 'Аудит отправлен в буфер обмена');
+    addMedia: function(data){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      var m = {
+        id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+        type: data.type || 'link',
+        src: data.src || '',
+        title: data.title || 'Без названия',
+        desc: data.desc || '',
+        albumId: data.albumId || null,
+        author: cur.login,
+        authorName: cur.displayName || cur.login,
+        createdAt: Date.now()
+      };
+      return fbPut('media/' + m.id, m).then(function(){
+        return { ok:true, media: m };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
     },
 
-    hideError: function(){ $('fancyError').classList.remove('show'); }
+    updateMedia: function(id, patch){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      return fbPatch('media/' + id, patch).then(function(){
+        return { ok:true };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
+    },
+
+    deleteMedia: function(id){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+      return fbGet('media/' + id).then(function(m){
+        if(!m) throw new Error('Медиа не найдено');
+        if(m.author !== cur.login && !isAdmin(cur)){
+          throw new Error('Можно удалять только свои файлы');
+        }
+        return fbDelete('media/' + id);
+      }).then(function(){
+        return { ok:true };
+      }).catch(function(err){ return { ok:false, error: err.message }; });
+    },
+
+    canEdit: canEdit,
+    canGiveAccess: canGiveAccess,
+    canChangeRole: canChangeRole,
+    canUseAudit: canUseAudit,
+    canSelfPromote: canSelfPromote,
+    isAdmin: isAdmin,
+    isDev: isDev,
+    maxRankByRole: maxRankByRole,
+    maxPositionByRole: maxPositionByRole,
+
+    rankEpaulette: function(rank){ return buildEpaulette(rank); },
+
+    rankColor: function(rank){
+      var map = {
+        'Младший Сержант':   '#374151,#4b5563,#6b7280',
+        'Сержант':           '#14532d,#15803d,#22c55e',
+        'Старший Сержант':   '#166534,#16a34a,#4ade80',
+        'Старшина':          '#155e75,#0891b2,#22d3ee',
+        'Прапорщик':         '#0c4a6e,#0369a1,#38bdf8',
+        'Ст. Прапорщик':     '#075985,#0e7490,#0284c7',
+        'Младший лейтенант': '#3730a3,#4f46e5,#818cf8',
+        'Лейтенант':         '#4338ca,#6366f1,#a5b4fc',
+        'Ст. Лейтенант':     '#5b21b6,#7c3aed,#a855f7',
+        'Капитан':           '#3b0764,#5b21b6,#7c3aed',
+        'Майор':             '#78350f,#d97706,#fbbf24,#fcd34d',
+        'Подполковник':      '#7c2d12,#c2410c,#ea580c,#fb923c',
+        'Полковник':         '#713f12,#a16207,#eab308,#facc15',
+        'Генерал-Майор':     '#1e293b,#475569,#cbd5e1,#f1f5f9'
+      };
+      return map[rank] || '#4b5563,#6b7280,#9ca3af';
+    },
+
+    positionColor: function(pos){
+      var map = {
+        'Стажер ВК':                       '#374151,#4b5563,#6b7280',
+        'Сотрудник ВК':                    '#1e3a8a,#1d4ed8,#3b82f6,#60a5fa',
+        'Инструктор ВК':                   '#064e3b,#047857,#10b981,#34d399',
+        'Заместитель военного комиссара':  '#4c1d95,#6d28d9,#a855f7,#c084fc',
+        'Военный Комиссар':                '#7f1d1d,#991b1b,#ff4655,#ff6b78'
+      };
+      return map[pos] || '#4b5563,#6b7280,#9ca3af';
+    },
+
+    roleColor: function(role){
+      var map = {
+        'Пользователь': '#374151,#4b5563,#6b7280',
+        'Сотрудник':    '#1e3a8a,#1d4ed8,#3b82f6',
+        'Администратор':'#450a0a,#7f1d1d,#dc2626,#ff4655',
+        'Разработчик':  '#4c1d95,#7c3aed,#a855f7,#ec4899,#f472b6'
+      };
+      return map[role] || '#4b5563,#6b7280,#9ca3af';
+    },
+
+    hasGlow: function(rank, role){
+      var glowRanks = ['Майор','Подполковник','Полковник','Генерал-Майор'];
+      return glowRanks.indexOf(rank) !== -1 || role === 'Разработчик' || role === 'Администратор';
+    }
   };
 
-  window.Audit = Audit;
-  Audit.init();
+  window.RMRPAuth = Auth;
 
-  if(RMRPAuth.refreshCurrent){
-    RMRPAuth.refreshCurrent().then(function(res){
-      if(!res) location.reload();
-    });
-  }
+  (function(){
+    if(Auth.checkGate()) return;
+    if(/gate\.html?$/i.test(window.location.pathname)) return;
+    document.documentElement.style.visibility = 'hidden';
+    var redirect = encodeURIComponent(location.pathname + location.search);
+    setTimeout(function(){
+      location.replace('gate.html?next=' + redirect);
+    }, 50);
+  })();
 
 })();
-</script>
-</body>
-</html>
