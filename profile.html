@@ -13,7 +13,6 @@
 .profile-hero h1{font-size:clamp(26px,4.5vw,42px);font-weight:900;color:var(--txt-0);letter-spacing:-1.2px}
 .profile-hero h1 .accent{background:linear-gradient(135deg,#4aa8ff,#3ddc84);-webkit-background-clip:text;background-clip:text;color:transparent}
 .profile-hero p{color:var(--txt-2);margin-top:10px;font-size:14.5px}
-
 .auth-wrap{max-width:440px;margin:0 auto;padding:24px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg)}
 .auth-tabs{display:flex;gap:6px;margin-bottom:22px;padding:6px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px}
 .auth-tab{flex:1;padding:10px;border-radius:8px;background:transparent;color:var(--txt-2);font-size:13.5px;font-weight:600;border:0;cursor:pointer;transition:var(--transition)}
@@ -26,25 +25,21 @@
 .auth-field input:focus,.auth-field select:focus{border-color:#4aa8ff;box-shadow:0 0 0 3px rgba(74,168,255,.15)}
 .auth-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);margin-top:6px}
 .auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,168,255,.3)}
+.auth-btn:disabled{opacity:.6;cursor:wait}
 .auth-error{padding:10px 14px;border-radius:8px;background:rgba(255,70,85,.1);border:1px solid rgba(255,70,85,.3);color:#ff6b78;font-size:13px;margin-bottom:14px;display:none}
 .auth-error.show{display:block}
-
 .profile-wrap{max-width:1100px;margin:0 auto}
 .profile-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#7c3aed,#4aa8ff);position:relative;overflow:hidden}
-.profile-banner img{width:100%;height:100%;object-fit:cover}
 .profile-banner-edit{position:absolute;bottom:14px;right:14px;padding:9px 16px;border-radius:10px;background:rgba(0,0,0,.65);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;border:0;backdrop-filter:blur(8px);transition:var(--transition)}
 .profile-banner-edit:hover{background:rgba(0,0,0,.9)}
-
 .profile-info{padding:0 30px 30px;background:var(--bg-2);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-top:-90px;position:relative;z-index:1}
 .profile-avatar{width:170px;height:170px;border-radius:50%;background:linear-gradient(135deg,#4aa8ff,#3ddc84);display:flex;align-items:center;justify-content:center;font-size:68px;color:#fff;font-weight:900;border:6px solid var(--bg-2);overflow:hidden;position:relative;margin-top:-40px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
 .profile-avatar-edit{position:absolute;bottom:8px;right:8px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;border:3px solid var(--bg-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .profile-avatar-edit:hover{transform:scale(1.1)}
-
 .profile-meta{margin-top:18px}
 .profile-name{font-size:28px;font-weight:900;color:var(--txt-0);margin-bottom:6px;letter-spacing:-.6px}
 .profile-login{font-size:14px;color:var(--txt-3);margin-bottom:14px}
-
 .profile-banners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:700px){.profile-banners{grid-template-columns:1fr}}
 .banner-card{padding:18px 22px;border-radius:16px;color:#fff;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.35);transition:var(--transition)}
@@ -54,7 +49,6 @@
 .banner-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:800;opacity:.85;margin-bottom:6px}
 .banner-value{font-size:20px;font-weight:900;letter-spacing:-.4px;position:relative;z-index:1}
 .banner-icon{position:absolute;right:20px;bottom:14px;font-size:42px;opacity:.35;pointer-events:none}
-
 .profile-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px}
 .profile-link{padding:14px 16px;border-radius:12px;background:var(--bg-1);border:1px solid var(--line);transition:var(--transition);display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
 .profile-link:hover{border-color:#4aa8ff;transform:translateY(-2px);background:var(--bg-3)}
@@ -62,7 +56,6 @@
 .profile-link-body{flex:1;min-width:0}
 .profile-link-label{font-size:11px;color:var(--txt-3);text-transform:uppercase;letter-spacing:1px;font-weight:700}
 .profile-link-value{font-size:13.5px;color:var(--txt-0);font-weight:600;word-break:break-all;margin-top:2px}
-
 .profile-actions{display:flex;gap:10px;flex-wrap:wrap}
 .profile-btn{padding:10px 18px;border-radius:10px;font-size:13.5px;font-weight:600;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
 .profile-btn.primary{background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff}
@@ -73,7 +66,7 @@
 .profile-btn.danger:hover{background:rgba(255,70,85,.2)}
 .profile-btn.access{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff}
 .profile-btn.access:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
-
+.profile-btn:disabled{opacity:.5;cursor:wait}
 .edit-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;padding:20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px}
 @media(max-width:640px){.edit-form{grid-template-columns:1fr}}
 .edit-form .full{grid-column:1/-1}
@@ -81,7 +74,6 @@
 .edit-form input,.edit-form select,.edit-form textarea{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
 .edit-form input:focus,.edit-form select:focus,.edit-form textarea:focus{border-color:#4aa8ff}
 .edit-form textarea{min-height:80px;resize:vertical}
-
 .users-table{width:100%;border-collapse:collapse;margin-top:20px}
 .users-table th,.users-table td{padding:12px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px}
 .users-table th{color:var(--txt-3);font-size:11.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
@@ -95,7 +87,7 @@
 .user-act-btn.del{background:rgba(255,70,85,.12);color:#ff6b78;border-color:rgba(255,70,85,.3)}
 .user-act-btn.del:hover{background:rgba(255,70,85,.25)}
 .user-act-btn:disabled{opacity:.35;cursor:not-allowed}
-
+.users-loading{padding:24px;text-align:center;color:var(--txt-3);font-size:13px}
 .modal-overlay-soft{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay-soft.active{display:flex}
 .modal-soft{background:var(--bg-2);border:1px solid var(--line-2);border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
@@ -109,7 +101,6 @@
 .modal-soft-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 .role-lock-hint{font-size:11.5px;color:var(--txt-3);margin-top:4px;font-style:italic;display:none}
 .role-lock-hint.show{display:block}
-
 .fancy-error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:10000;background:var(--bg-2);border:2px solid #ff4655;border-radius:18px;padding:26px 30px;max-width:420px;width:90%;text-align:center;box-shadow:0 30px 90px rgba(255,70,85,.4);opacity:0;pointer-events:none;transition:.3s}
 .fancy-error.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;animation:errIn .4s}
 @keyframes errIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}60%{transform:translate(-50%,-50%) scale(1.03)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
@@ -118,7 +109,6 @@
 .fancy-error-msg{font-size:14px;color:var(--txt-2);line-height:1.6;margin-bottom:18px}
 .fancy-error-ok{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition)}
 .fancy-error-ok:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,70,85,.4)}
-
 .audit-wrap{margin-top:40px}
 .audit-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
 .audit-card h3{color:var(--txt-0);font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
@@ -185,6 +175,7 @@
 <section class="section">
   <div class="container">
 
+    <!-- АВТОРИЗАЦИЯ -->
     <div id="authScreen" class="auth-wrap" hidden>
       <div class="auth-tabs">
         <button class="auth-tab active" data-auth-tab="login">🔑 Вход</button>
@@ -195,7 +186,7 @@
       <div class="auth-panel active" data-auth-panel="login">
         <div class="auth-field"><label>Логин</label><input type="text" id="loginLogin" placeholder="my_login" autocomplete="username"></div>
         <div class="auth-field"><label>Пароль</label><input type="password" id="loginPass" placeholder="••••••" autocomplete="current-password"></div>
-        <button class="auth-btn" onclick="Profile.doLogin()">🔑 Войти</button>
+        <button class="auth-btn" id="btnLogin" onclick="Profile.doLogin()">🔑 Войти</button>
       </div>
 
       <div class="auth-panel" data-auth-panel="register">
@@ -206,10 +197,11 @@
         <div class="auth-field"><label>Должность ВК</label><select id="regPos"></select></div>
         <div class="auth-field"><label>Discord</label><input type="text" id="regDiscord" placeholder="@username"></div>
         <div class="auth-field"><label>Форум</label><input type="text" id="regForum" placeholder="https://forum.rmrp.ru/members/..."></div>
-        <button class="auth-btn" onclick="Profile.doRegister()">✨ Создать аккаунт</button>
+        <button class="auth-btn" id="btnRegister" onclick="Profile.doRegister()">✨ Создать аккаунт</button>
       </div>
     </div>
 
+    <!-- ПРОФИЛЬ -->
     <div id="profileScreen" class="profile-wrap" hidden>
       <div class="profile-banner" id="pBanner">
         <button class="profile-banner-edit" onclick="Profile.editBanner()">🖼 Сменить баннер</button>
@@ -281,14 +273,15 @@
           <div><label>Discord</label><input type="text" id="editDiscord"></div>
           <div><label>Форум</label><input type="text" id="editForum"></div>
           <div class="full" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-            <button class="profile-btn primary" onclick="Profile.saveEdit()">💾 Сохранить</button>
+            <button class="profile-btn primary" id="btnSaveEdit" onclick="Profile.saveEdit()">💾 Сохранить</button>
             <button class="profile-btn ghost" onclick="Profile.toggleEdit()">Отмена</button>
           </div>
         </div>
 
         <div id="usersWrap" hidden>
           <h3 style="margin-top:30px;font-size:17px;color:var(--txt-0)">👥 Зарегистрированные пользователи</h3>
-          <table class="users-table">
+          <div id="usersLoading" class="users-loading">⏳ Загрузка списка пользователей…</div>
+          <table class="users-table" id="usersTableWrap" style="display:none">
             <thead>
               <tr>
                 <th>Имя</th>
@@ -306,41 +299,22 @@
         <div class="audit-wrap" id="auditSection">
           <div class="audit-card">
             <h3>📋 Кадровый аудит</h3>
-
             <div class="audit-grid">
-              <div class="audit-field">
-                <label>Discord (кому) *</label>
-                <input type="text" id="audDiscord" placeholder="@loveyou_love">
-              </div>
-              <div class="audit-field">
-                <label>Ping (кого упомянуть) *</label>
-                <input type="text" id="audPing" placeholder="@ping">
-              </div>
-              <div class="audit-field">
-                <label>Дата принятия в ВС РФ *</label>
-                <input type="date" id="audJoinDate">
-              </div>
-              <div class="audit-field">
-                <label>Дата повышения *</label>
-                <input type="date" id="audPromoDate">
-              </div>
-              <div class="audit-field full">
-                <label>Повышен на звание *</label>
-                <select id="audRank"></select>
-              </div>
+              <div class="audit-field"><label>Discord (кому) *</label><input type="text" id="audDiscord" placeholder="@loveyou_love"></div>
+              <div class="audit-field"><label>Ping (кого упомянуть) *</label><input type="text" id="audPing" placeholder="@ping"></div>
+              <div class="audit-field"><label>Дата принятия в ВС РФ *</label><input type="date" id="audJoinDate"></div>
+              <div class="audit-field"><label>Дата повышения *</label><input type="date" id="audPromoDate"></div>
+              <div class="audit-field full"><label>Повышен на звание *</label><select id="audRank"></select></div>
             </div>
-
             <div class="audit-copy">
               <button class="audit-copy-btn" id="audCopyBtn" onclick="Audit.copy()">📋 Скопировать в буфер</button>
               <button class="profile-btn ghost" onclick="Audit.reset()">🔄 Очистить</button>
             </div>
-
             <div class="audit-output" id="audOutput">Заполни поля выше — текст появится здесь автоматически…</div>
           </div>
 
           <div class="audit-history">
-            <h3>
-              <span>🕘 История аудитов</span>
+            <h3><span>🕘 История аудитов</span>
               <button class="audit-history-clear" onclick="Audit.clearHistory()">🗑 Очистить историю</button>
             </h3>
             <div class="audit-history-list" id="audHistoryList"></div>
@@ -374,6 +348,7 @@
 
 <button class="to-top" id="toTop">↑</button>
 
+<!-- Модалка редактирования юзера -->
 <div class="modal-overlay-soft" id="editUserModal">
   <div class="modal-soft">
     <h3>👤 Редактирование пользователя</h3>
@@ -396,11 +371,12 @@
     </div>
     <div class="modal-soft-foot">
       <button class="profile-btn ghost" onclick="Profile.closeUserModal()">Отмена</button>
-      <button class="profile-btn primary" onclick="Profile.saveUser()">💾 Сохранить</button>
+      <button class="profile-btn primary" id="btnSaveUser" onclick="Profile.saveUser()">💾 Сохранить</button>
     </div>
   </div>
 </div>
 
+<!-- Красивая ошибка -->
 <div class="fancy-error" id="fancyError">
   <div class="fancy-error-icon">⚠️</div>
   <div class="fancy-error-title" id="fancyErrorTitle">Ошибка доступа</div>
@@ -408,6 +384,7 @@
   <button class="fancy-error-ok" onclick="Profile.hideError()">Понятно</button>
 </div>
 
+<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -441,12 +418,13 @@
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   PROFILE — личный кабинет + аудит + доступы
+   PROFILE — Firebase async версия
    ============================================================ */
 (function(){
   'use strict';
 
   function $(s,c){ return (c||document).querySelector(s); }
+  function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
   function setText(id,v){ var el = document.getElementById(id); if(el) el.textContent = v; }
   function setVal(id,v){ var el = document.getElementById(id); if(el) el.value = v; }
   function getVal(id){ var el = document.getElementById(id); return el ? el.value : ''; }
@@ -461,7 +439,6 @@
       hideAuthError();
     });
   });
-  function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
 
   function fillSelects(){
     var ranks = RMRPAuth.RANKS;
@@ -498,7 +475,6 @@
     var el = document.getElementById('authError');
     if(el) el.classList.remove('show');
   }
-
   function showFancyError(title, msg){
     var el = document.getElementById('fancyError');
     document.getElementById('fancyErrorTitle').textContent = title || 'Ошибка';
@@ -586,13 +562,22 @@
     btn.style.display = RMRPAuth.canGiveAccess(u) ? '' : 'none';
   }
 
+  /* ---------- ВХОД ---------- */
   function doLogin(){
-    var res = RMRPAuth.login(getVal('loginLogin'), getVal('loginPass'));
-    if(!res.ok){ showAuthError(res.error); return; }
-    showProfile();
+    var btn = document.getElementById('btnLogin');
+    btn.disabled = true; btn.textContent = '⏳ Вход…';
+    RMRPAuth.login(getVal('loginLogin'), getVal('loginPass')).then(function(res){
+      btn.disabled = false; btn.textContent = '🔑 Войти';
+      if(!res.ok){ showAuthError(res.error); return; }
+      showProfile();
+    });
   }
+
+  /* ---------- РЕГИСТРАЦИЯ ---------- */
   function doRegister(){
-    var res = RMRPAuth.register({
+    var btn = document.getElementById('btnRegister');
+    btn.disabled = true; btn.textContent = '⏳ Создание…';
+    RMRPAuth.register({
       login: getVal('regLogin'),
       displayName: getVal('regName'),
       password: getVal('regPass'),
@@ -600,17 +585,21 @@
       position: getVal('regPos'),
       discord: getVal('regDiscord'),
       forum: getVal('regForum')
+    }).then(function(res){
+      btn.disabled = false; btn.textContent = '✨ Создать аккаунт';
+      if(!res.ok){ showAuthError(res.error); return; }
+      RMRPAuth.setCurrent(res.user);
+      showProfile();
     });
-    if(!res.ok){ showAuthError(res.error); return; }
-    RMRPAuth.setCurrent(res.user);
-    showProfile();
   }
+
   function doLogout(){
     if(!confirm('Выйти из аккаунта?')) return;
     RMRPAuth.logout();
     showAuth();
   }
 
+  /* ---------- РЕДАКТИРОВАНИЕ СЕБЯ ---------- */
   function toggleEdit(){
     var form = document.getElementById('editForm');
     if(!form) return;
@@ -627,19 +616,24 @@
     } else form.hidden = true;
   }
   function saveEdit(){
-    var res = RMRPAuth.update({
+    var btn = document.getElementById('btnSaveEdit');
+    btn.disabled = true; btn.textContent = '⏳ Сохранение…';
+    RMRPAuth.update({
       displayName: getVal('editName'),
       bio: getVal('editBio'),
       discord: getVal('editDiscord'),
       forum: getVal('editForum'),
       rank: getVal('editRank'),
       position: getVal('editPos')
+    }).then(function(res){
+      btn.disabled = false; btn.textContent = '💾 Сохранить';
+      if(!res.ok){ showFancyError('Ошибка', res.error); return; }
+      document.getElementById('editForm').hidden = true;
+      renderProfile();
     });
-    if(!res.ok){ showFancyError('Ошибка', res.error); return; }
-    document.getElementById('editForm').hidden = true;
-    renderProfile();
   }
 
+  /* ---------- АВАТАР / БАННЕР ---------- */
   function pickImage(cb){
     var input = document.createElement('input');
     input.type = 'file';
@@ -657,41 +651,78 @@
   function editAvatar(){
     var choice = prompt('Вставь ссылку или OK с пустым полем — выбрать файл', '');
     if(choice === null) return;
-    if(choice.trim()){ RMRPAuth.update({ avatar: choice.trim() }); renderProfile(); }
-    else pickImage(function(dataUrl){ RMRPAuth.update({ avatar: dataUrl }); renderProfile(); });
+    if(choice.trim()){
+      RMRPAuth.update({ avatar: choice.trim() }).then(function(res){
+        if(res.ok) renderProfile();
+        else showFancyError('Ошибка', res.error);
+      });
+    } else {
+      pickImage(function(dataUrl){
+        RMRPAuth.update({ avatar: dataUrl }).then(function(res){
+          if(res.ok) renderProfile();
+          else showFancyError('Ошибка', res.error);
+        });
+      });
+    }
   }
   function editBanner(){
     var choice = prompt('Вставь ссылку или OK с пустым полем — выбрать файл', '');
     if(choice === null) return;
-    if(choice.trim()){ RMRPAuth.update({ banner: choice.trim() }); renderProfile(); }
-    else pickImage(function(dataUrl){ RMRPAuth.update({ banner: dataUrl }); renderProfile(); });
+    if(choice.trim()){
+      RMRPAuth.update({ banner: choice.trim() }).then(function(res){
+        if(res.ok) renderProfile();
+        else showFancyError('Ошибка', res.error);
+      });
+    } else {
+      pickImage(function(dataUrl){
+        RMRPAuth.update({ banner: dataUrl }).then(function(res){
+          if(res.ok) renderProfile();
+          else showFancyError('Ошибка', res.error);
+        });
+      });
+    }
   }
 
+  /* ---------- СПИСОК ЮЗЕРОВ ---------- */
   function showUsers(){
     var wrap = document.getElementById('usersWrap');
     if(!wrap) return;
-    if(wrap.hidden){ renderUsersTable(); wrap.hidden = false; }
-    else wrap.hidden = true;
+    if(wrap.hidden){
+      wrap.hidden = false;
+      renderUsersTable();
+    } else wrap.hidden = true;
   }
 
   function renderUsersTable(){
+    var loading = document.getElementById('usersLoading');
+    var tableWrap = document.getElementById('usersTableWrap');
     var tbody = document.getElementById('usersTable');
-    if(!tbody) return;
-    var users = RMRPAuth.getUsers();
-    var cur = RMRPAuth.getCurrent();
-    var canGive = RMRPAuth.canGiveAccess(cur);
+    if(loading) loading.style.display = 'block';
+    if(tableWrap) tableWrap.style.display = 'none';
 
-    var rows = Object.keys(users).map(function(login){
-      var u = users[login];
-      var canEdit = RMRPAuth.canEdit(cur, u);
-      return '<tr>' +
-        '<td>' + escapeHtml(u.displayName || u.login) + '</td>' +
-        '<td>@' + escapeHtml(u.login) + '</td>' +
-        '<td>' + escapeHtml(u.rank || '—') + '</td>' +
-        '<td>' + escapeHtml(u.position || '—') + '</td>' +
-        '<td>' + escapeHtml(u.role || 'Пользователь') + '</td>' +
-        '<td>' +
-          '<div class="user-actions">' +
+    RMRPAuth.getUsers().then(function(users){
+      var cur = RMRPAuth.getCurrent();
+      var canGive = RMRPAuth.canGiveAccess(cur);
+      var logins = Object.keys(users);
+
+      if(loading) loading.style.display = 'none';
+      if(tableWrap) tableWrap.style.display = 'table';
+
+      if(logins.length === 0){
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--txt-3)">Пока никого нет</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = logins.map(function(login){
+        var u = users[login];
+        var canEdit = RMRPAuth.canEdit(cur, u);
+        return '<tr>' +
+          '<td>' + escapeHtml(u.displayName || u.login) + '</td>' +
+          '<td>@' + escapeHtml(u.login) + '</td>' +
+          '<td>' + escapeHtml(u.rank || '—') + '</td>' +
+          '<td>' + escapeHtml(u.position || '—') + '</td>' +
+          '<td>' + escapeHtml(u.role || 'Пользователь') + '</td>' +
+          '<td><div class="user-actions">' +
             (canGive
               ? '<button class="user-act-btn edit" ' + (canEdit ? '' : 'disabled') +
                 ' onclick="Profile.openUserModal(\'' + u.login + '\')">✏️</button>'
@@ -699,67 +730,62 @@
             (cur && cur.role === 'Администратор' && cur.login !== u.login
               ? '<button class="user-act-btn del" onclick="Profile.deleteUser(\'' + u.login + '\')">🗑</button>'
               : '') +
-          '</div>' +
-        '</td>' +
-      '</tr>';
-    }).join('');
-
-    tbody.innerHTML = rows || '<tr><td colspan="6" style="text-align:center;color:var(--txt-3)">Пока никого нет</td></tr>';
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    });
   }
 
   function openUserModal(login){
-    var users = RMRPAuth.getUsers();
-    var u = users[login];
-    var cur = RMRPAuth.getCurrent();
-    if(!u || !cur) return;
+    RMRPAuth.getUsers().then(function(users){
+      var u = users[login];
+      var cur = RMRPAuth.getCurrent();
+      if(!u || !cur) return;
+      if(!RMRPAuth.canEdit(cur, u)){
+        showFancyError('Недостаточно прав', 'Этот пользователь выше вас по званию или должности.');
+        return;
+      }
 
-    if(!RMRPAuth.canEdit(cur, u)){
-      showFancyError('Недостаточно прав', 'Этот пользователь выше вас по званию или должности.');
-      return;
-    }
+      setVal('euLogin', u.login);
+      setVal('euName', u.displayName || u.login);
+      setVal('euDiscord', u.discord || '');
+      setVal('euRank', u.rank || RMRPAuth.RANKS[0]);
+      setVal('euPos', u.position || RMRPAuth.POSITIONS[0]);
+      setVal('euRole', u.role || 'Пользователь');
+      setVal('euPass', '');
 
-    setVal('euLogin', u.login);
-    setVal('euName', u.displayName || u.login);
-    setVal('euDiscord', u.discord || '');
-    setVal('euRank', u.rank || RMRPAuth.RANKS[0]);
-    setVal('euPos', u.position || RMRPAuth.POSITIONS[0]);
-    setVal('euRole', u.role || 'Пользователь');
-    setVal('euPass', '');
+      var rankSel = document.getElementById('euRank');
+      if(rankSel){
+        var maxRank = RMRPAuth.maxRankByRole(cur);
+        Array.from(rankSel.options).forEach(function(opt, idx){
+          opt.disabled = (cur.role !== 'Администратор' && idx > maxRank);
+        });
+      }
+      var posSel = document.getElementById('euPos');
+      if(posSel){
+        var maxPos = RMRPAuth.maxPositionByRole(cur);
+        Array.from(posSel.options).forEach(function(opt, idx){
+          opt.disabled = (cur.role !== 'Администратор' && idx > maxPos);
+        });
+      }
 
-    var rankSel = document.getElementById('euRank');
-    if(rankSel){
-      var maxRank = RMRPAuth.maxRankByRole(cur);
-      Array.from(rankSel.options).forEach(function(opt, idx){
-        opt.disabled = (cur.role !== 'Администратор' && idx > maxRank);
-      });
-    }
-    var posSel = document.getElementById('euPos');
-    if(posSel){
-      var maxPos = RMRPAuth.maxPositionByRole(cur);
-      Array.from(posSel.options).forEach(function(opt, idx){
-        opt.disabled = (cur.role !== 'Администратор' && idx > maxPos);
-      });
-    }
-
-    /* Роль — только для Админа */
-    var roleSel = document.getElementById('euRole');
-    var hint = document.getElementById('roleLockHint');
-    var canChangeRole = RMRPAuth.canChangeRole(cur, u);
-    if(roleSel){
-      roleSel.disabled = !canChangeRole;
-      if(hint){
-        if(!canChangeRole){
-          hint.textContent = cur.role !== 'Администратор'
-            ? '🔒 Менять роль может только Администратор'
-            : '🔒 Нельзя менять роль себе';
-          hint.classList.add('show');
-        } else {
-          hint.classList.remove('show');
+      var roleSel = document.getElementById('euRole');
+      var hint = document.getElementById('roleLockHint');
+      var canChangeRole = RMRPAuth.canChangeRole(cur, u);
+      if(roleSel){
+        roleSel.disabled = !canChangeRole;
+        if(hint){
+          if(!canChangeRole){
+            hint.textContent = cur.role !== 'Администратор'
+              ? '🔒 Менять роль может только Администратор'
+              : '🔒 Нельзя менять роль себе';
+            hint.classList.add('show');
+          } else hint.classList.remove('show');
         }
       }
-    }
 
-    document.getElementById('editUserModal').classList.add('active');
+      document.getElementById('editUserModal').classList.add('active');
+    });
   }
 
   function closeUserModal(){
@@ -777,33 +803,37 @@
       rank: getVal('euRank'),
       position: getVal('euPos')
     };
-
-    /* Роль — только Админ, и только не себе */
     if(cur.role === 'Администратор' && cur.login !== login){
       patch.role = getVal('euRole');
     }
-
     if(getVal('euPass')) patch.password = getVal('euPass');
 
-    var res = RMRPAuth.updateOther(login, patch);
-    if(!res.ok){
-      showFancyError('Ошибка выдачи', res.error);
-      return;
-    }
-    closeUserModal();
-    renderUsersTable();
-    renderProfile();
-    showFancyError('✅ Успешно', 'Пользователь @' + login + ' обновлён.');
+    var btn = document.getElementById('btnSaveUser');
+    btn.disabled = true; btn.textContent = '⏳ Сохранение…';
+
+    RMRPAuth.updateOther(login, patch).then(function(res){
+      btn.disabled = false; btn.textContent = '💾 Сохранить';
+      if(!res.ok){
+        showFancyError('Ошибка выдачи', res.error);
+        return;
+      }
+      closeUserModal();
+      renderUsersTable();
+      renderProfile();
+    });
   }
 
   function deleteUser(login){
     if(!confirm('Удалить пользователя @' + login + '?')) return;
-    var res = RMRPAuth.deleteUser(login);
-    if(!res.ok){ showFancyError('Ошибка', res.error); return; }
-    renderUsersTable();
-    showFancyError('✅ Удалено', 'Пользователь @' + login + ' удалён.');
+    RMRPAuth.deleteUser(login).then(function(res){
+      if(!res.ok){ showFancyError('Ошибка', res.error); return; }
+      renderUsersTable();
+    });
   }
 
+  /* ============================================================
+     АУДИТ (локальный, в localStorage)
+     ============================================================ */
   var Audit = {
     LS_HISTORY: 'rmrp_audit_history',
     MAX_HISTORY: 20,
@@ -856,17 +886,17 @@
         return '';
       }
 
-      var lines = [];
-      lines.push(discord || '@username');
-      lines.push(ping || '@ping');
-      lines.push('');
-      lines.push('Был принят в ряды ВС РФ согласно:');
-      lines.push(joinD);
-      lines.push('');
-      lines.push('Был повышен на звание:');
-      lines.push(rank || '—');
-      lines.push('Дата: ' + promoD);
-
+      var lines = [
+        discord || '@username',
+        ping || '@ping',
+        '',
+        'Был принят в ряды ВС РФ согласно:',
+        joinD,
+        '',
+        'Был повышен на звание:',
+        rank || '—',
+        'Дата: ' + promoD
+      ];
       var text = lines.join('\n');
       var outEl = document.getElementById('audOutput');
       if(outEl) outEl.textContent = text;
