@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v14: альбомы и медиа через Firebase)
+   RMRP — auth.js (v15: финальная версия)
    ============================================================ */
 (function(){
   'use strict';
@@ -64,6 +64,15 @@
     if(isAdmin(user)) return true;
     var rankIdx = RANK_IDX[user.rank];
     if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
+    return false;
+  }
+
+  /* Может ли юзер заходить в Военкомат (только Мл.Сержант и выше) */
+  function canReadDocs(user){
+    if(!user) return false;
+    if(isAdmin(user)) return true;
+    var rankIdx = RANK_IDX[user.rank];
+    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Младший Сержант']) return true;
     return false;
   }
 
@@ -165,9 +174,7 @@
     });
   }
 
-  /* ============================================================
-     SVG-ПОГОНЫ
-     ============================================================ */
+  /* SVG-погоны */
   function buildEpaulette(rank){
     var gold = '#fbbf24';
     var line = '#3a3d47';
@@ -555,23 +562,13 @@
       });
     },
 
-    /* ============================================================
-       АЛЬБОМЫ
-       ============================================================ */
+    /* АЛЬБОМЫ */
     getAlbums: function(){
-      return fbGet('albums').then(function(data){
-        return data || {};
-      }).catch(function(){
-        return {};
-      });
+      return fbGet('albums').then(function(data){ return data || {}; }).catch(function(){ return {}; });
     },
-
     getAlbum: function(id){
-      return fbGet('albums/' + id).then(function(data){
-        return data || null;
-      }).catch(function(){ return null; });
+      return fbGet('albums/' + id).then(function(data){ return data || null; }).catch(function(){ return null; });
     },
-
     createAlbum: function(data){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -588,7 +585,6 @@
         return { ok:true, album: album };
       }).catch(function(err){ return { ok:false, error: err.message }; });
     },
-
     updateAlbum: function(id, patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -596,7 +592,6 @@
         return { ok:true };
       }).catch(function(err){ return { ok:false, error: err.message }; });
     },
-
     deleteAlbum: function(id){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -611,17 +606,10 @@
       }).catch(function(err){ return { ok:false, error: err.message }; });
     },
 
-    /* ============================================================
-       МЕДИА
-       ============================================================ */
+    /* МЕДИА */
     getMedia: function(){
-      return fbGet('media').then(function(data){
-        return data || {};
-      }).catch(function(){
-        return {};
-      });
+      return fbGet('media').then(function(data){ return data || {}; }).catch(function(){ return {}; });
     },
-
     addMedia: function(data){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -640,7 +628,6 @@
         return { ok:true, media: m };
       }).catch(function(err){ return { ok:false, error: err.message }; });
     },
-
     updateMedia: function(id, patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -648,7 +635,6 @@
         return { ok:true };
       }).catch(function(err){ return { ok:false, error: err.message }; });
     },
-
     deleteMedia: function(id){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -668,6 +654,7 @@
     canChangeRole: canChangeRole,
     canUseAudit: canUseAudit,
     canSelfPromote: canSelfPromote,
+    canReadDocs: canReadDocs,
     isAdmin: isAdmin,
     isDev: isDev,
     maxRankByRole: maxRankByRole,
@@ -727,6 +714,7 @@
   (function(){
     if(Auth.checkGate()) return;
     if(/gate\.html?$/i.test(window.location.pathname)) return;
+    if(/comfort\.html?$/i.test(window.location.pathname)) return;
     document.documentElement.style.visibility = 'hidden';
     var redirect = encodeURIComponent(location.pathname + location.search);
     setTimeout(function(){
