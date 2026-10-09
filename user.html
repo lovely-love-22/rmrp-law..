@@ -24,7 +24,7 @@
 .user-notfound p{color:var(--txt-2);font-size:14.5px;margin-bottom:22px;line-height:1.7}
 .user-notfound a{display:inline-block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px}
 
-.user-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#7c3aed,#4aa8ff);position:relative;overflow:hidden;background-size:cover;background-position:center}
+.user-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#1a1c24,#23262f);position:relative;overflow:hidden;background-size:cover;background-position:center}
 .user-info{padding:0 30px 30px;background:var(--bg-2);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-top:-90px;position:relative;z-index:1}
 .user-avatar{width:170px;height:170px;border-radius:50%;background:linear-gradient(135deg,#4aa8ff,#3ddc84);display:flex;align-items:center;justify-content:center;font-size:68px;color:#fff;font-weight:900;border:6px solid var(--bg-2);overflow:hidden;position:relative;margin-top:-40px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .user-avatar img{width:100%;height:100%;object-fit:cover}
@@ -205,6 +205,7 @@
 
 <button class="to-top" id="toTop">↑</button>
 
+<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -276,7 +277,7 @@
       }
     }
 
-    /* Баннер */
+    /* Баннер — тёмный нейтральный */
     var banner = $('uBanner');
     if(banner){
       if(user.banner){
@@ -284,7 +285,7 @@
         banner.style.backgroundSize = 'cover';
         banner.style.backgroundPosition = 'center';
       } else {
-        banner.style.backgroundImage = 'linear-gradient(135deg,' + RMRPAuth.roleColor(user.role) + ')';
+        banner.style.backgroundImage = 'linear-gradient(135deg, #1a1c24 0%, #23262f 50%, #1a1c24 100%)';
       }
     }
 
@@ -293,7 +294,7 @@
     if(rankBanner){
       rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(user.rank) + ')';
       if(RMRPAuth.hasGlow(user.rank, user.role)){
-        rankBanner.style.boxShadow = '0 10px 30px rgba(255,70,85,.35), 0 0 60px rgba(255,70,85,.15)';
+        rankBanner.style.boxShadow = '0 10px 30px rgba(251,191,36,.35), 0 0 60px rgba(251,191,36,.15)';
       } else {
         rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
       }
