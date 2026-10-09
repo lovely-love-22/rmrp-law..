@@ -1,12 +1,13 @@
 /* ============================================================
-   RMRP — auth.js (v4: только админ выдаёт админку)
+   RMRP — auth.js (v5: Firebase Realtime Database)
    ============================================================ */
 (function(){
   'use strict';
 
-  var LS_USERS    = 'rmrp_users';
-  var LS_CURRENT  = 'rmrp_current_user';
-  var LS_GATE     = 'rmrp_gate_pass';
+  var FIREBASE_URL = 'https://rmrp-4b406-default-rtdb.firebaseio.com';
+  var LS_CURRENT   = 'rmrp_current_user';
+  var LS_GATE      = 'rmrp_gate_pass';
+  var LS_USERS_CACHE = 'rmrp_users_cache';
 
   var RANKS = [
     'Младший Сержант','Сержант','Старший Сержант','Старшина','Прапорщик',
@@ -76,12 +77,9 @@
     return true;
   }
 
-  /* МОЖЕТ ЛИ текущий выдавать роль */
   function canChangeRole(current, target){
     if(!current) return false;
-    /* Только Администратор */
     if(current.role !== 'Администратор') return false;
-    /* Нельзя менять роль себе */
     if(target && current.login === target.login) return false;
     return true;
   }
@@ -107,6 +105,52 @@
     return 'h' + Math.abs(h).toString(36) + '_' + s.length;
   }
 
+  /* ============================================================
+     FIREBASE — HTTP REST API
+     ============================================================ */
+  function fbUrl(path){
+    return FIREBASE_URL + '/' + path + '.json';
+  }
+
+  function fbGet(path){
+    return fetch(fbUrl(path)).then(function(r){
+      if(!r.ok) throw new Error('Firebase read error: ' + r.status);
+      return r.json();
+    });
+  }
+
+  function fbPut(path, data){
+    return fetch(fbUrl(path), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('Firebase write error: ' + r.status);
+      return r.json();
+    });
+  }
+
+  function fbPatch(path, data){
+    return fetch(fbUrl(path), {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('Firebase patch error: ' + r.status);
+      return r.json();
+    });
+  }
+
+  function fbDelete(path){
+    return fetch(fbUrl(path), { method: 'DELETE' }).then(function(r){
+      if(!r.ok) throw new Error('Firebase delete error: ' + r.status);
+      return r.json();
+    });
+  }
+
+  /* ============================================================
+     API — асинхронное (Promise)
+     ============================================================ */
   var Auth = {
     RANKS: RANKS,
     POSITIONS: POSITIONS,
@@ -114,6 +158,7 @@
     RANK_IDX: RANK_IDX,
     POS_IDX: POS_IDX,
 
+    /* ---------- Gate ---------- */
     checkGate: function(){
       try{
         var g = JSON.parse(localStorage.getItem(LS_GATE) || 'null');
@@ -132,115 +177,153 @@
     },
     lockGate: function(){ localStorage.removeItem(LS_GATE); },
 
-    getUsers: function(){ return lsGet(LS_USERS, {}); },
-    saveUsers: function(u){ return lsSet(LS_USERS, u); },
-
+    /* ---------- Текущий юзер (локально) ---------- */
     getCurrent: function(){ return lsGet(LS_CURRENT, null); },
     setCurrent: function(u){ lsSet(LS_CURRENT, u); },
-
-    register: function(data){
-      var users = Auth.getUsers();
-      var login = (data.login || '').trim().toLowerCase();
-      if(!login) return { ok:false, error:'Введите логин' };
-      if(login.length < 3) return { ok:false, error:'Логин слишком короткий' };
-      if(users[login]) return { ok:false, error:'Такой логин уже занят' };
-      if(!data.password || data.password.length < 4) return { ok:false, error:'Пароль минимум 4 символа' };
-
-      var isFirst = Object.keys(users).length === 0;
-
-      users[login] = {
-        login: login,
-        displayName: data.displayName || data.login,
-        password: hashPass(data.password),
-        rank: data.rank || RANKS[0],
-        position: data.position || POSITIONS[0],
-        role: isFirst ? 'Администратор' : 'Пользователь',
-        discord: data.discord || '',
-        forum: data.forum || '',
-        avatar: data.avatar || '',
-        banner: data.banner || '',
-        bio: data.bio || '',
-        createdAt: Date.now()
-      };
-      Auth.saveUsers(users);
-      return { ok:true, user: users[login] };
-    },
-
-    login: function(login, password){
-      var users = Auth.getUsers();
-      login = (login || '').trim().toLowerCase();
-      if(!users[login]) return { ok:false, error:'Пользователь не найден' };
-      if(users[login].password !== hashPass(password)) return { ok:false, error:'Неверный пароль' };
-      Auth.setCurrent(users[login]);
-      return { ok:true, user: users[login] };
-    },
-
     logout: function(){ localStorage.removeItem(LS_CURRENT); },
 
+    /* ---------- Пользователи (Firebase) ---------- */
+    getUsers: function(){
+      return fbGet('users').then(function(data){
+        var users = data || {};
+        lsSet(LS_USERS_CACHE, users);
+        return users;
+      }).catch(function(err){
+        console.warn('[RMRP] Firebase недоступен, используется кэш:', err.message);
+        return lsGet(LS_USERS_CACHE, {});
+      });
+    },
+
+    getUsersSync: function(){
+      return lsGet(LS_USERS_CACHE, {});
+    },
+
+    /* ---------- Регистрация ---------- */
+    register: function(data){
+      var login = (data.login || '').trim().toLowerCase();
+      if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
+      if(login.length < 3) return Promise.resolve({ ok:false, error:'Логин слишком короткий' });
+      if(!data.password || data.password.length < 4) return Promise.resolve({ ok:false, error:'Пароль минимум 4 символа' });
+
+      return Auth.getUsers().then(function(users){
+        if(users[login]) throw new Error('Такой логин уже занят');
+
+        var isFirst = Object.keys(users).length === 0;
+
+        var user = {
+          login: login,
+          displayName: data.displayName || data.login,
+          password: hashPass(data.password),
+          rank: data.rank || RANKS[0],
+          position: data.position || POSITIONS[0],
+          role: isFirst ? 'Администратор' : 'Пользователь',
+          discord: data.discord || '',
+          forum: data.forum || '',
+          avatar: data.avatar || '',
+          banner: data.banner || '',
+          bio: data.bio || '',
+          createdAt: Date.now()
+        };
+
+        return fbPut('users/' + login, user).then(function(){
+          return { ok:true, user: user };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    /* ---------- Вход ---------- */
+    login: function(login, password){
+      login = (login || '').trim().toLowerCase();
+      if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
+
+      return fbGet('users/' + login).then(function(user){
+        if(!user) throw new Error('Пользователь не найден');
+        if(user.password !== hashPass(password)) throw new Error('Неверный пароль');
+        Auth.setCurrent(user);
+        return { ok:true, user: user };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    /* ---------- Обновление себя ---------- */
     update: function(patch){
       var cur = Auth.getCurrent();
-      if(!cur) return { ok:false, error:'Не авторизован' };
-      var users = Auth.getUsers();
-      var login = cur.login;
-      if(!users[login]) return { ok:false, error:'Пользователь не найден' };
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
 
+      var cleanPatch = {};
       Object.keys(patch).forEach(function(k){
         if(k === 'password' && patch[k]){
-          users[login].password = hashPass(patch[k]);
+          cleanPatch.password = hashPass(patch[k]);
         } else if(k !== 'login' && k !== 'password' && k !== 'role'){
-          users[login][k] = patch[k];
+          cleanPatch[k] = patch[k];
         }
       });
-      Auth.saveUsers(users);
-      Auth.setCurrent(users[login]);
-      return { ok:true, user: users[login] };
+
+      return fbPatch('users/' + cur.login, cleanPatch).then(function(){
+        Object.keys(cleanPatch).forEach(function(k){ cur[k] = cleanPatch[k]; });
+        Auth.setCurrent(cur);
+        return { ok:true, user: cur };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
     },
 
+    /* ---------- Обновление чужого юзера ---------- */
     updateOther: function(login, patch){
       var cur = Auth.getCurrent();
-      if(!cur) return { ok:false, error:'Не авторизован' };
-      var users = Auth.getUsers();
-      var target = users[login];
-      if(!target) return { ok:false, error:'Пользователь не найден' };
-      if(!canEdit(cur, target)) return { ok:false, error:'Недостаточно прав: цель выше вас по званию или должности' };
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
 
-      /* РОЛЬ — только Администратор */
-      if(patch.role !== undefined){
-        if(!canChangeRole(cur, target)){
-          return { ok:false, error:'Только Администратор может менять роли доступа' };
+      return fbGet('users/' + login).then(function(target){
+        if(!target) throw new Error('Пользователь не найден');
+        if(!canEdit(cur, target)) throw new Error('Недостаточно прав: цель выше вас по званию или должности');
+
+        if(patch.role !== undefined && !canChangeRole(cur, target)){
+          throw new Error('Только Администратор может менять роли доступа');
         }
-      }
 
-      if(patch.rank && cur.role !== 'Администратор'){
-        var tIdx = RANK_IDX[patch.rank];
-        var maxIdx = maxRankByRole(cur);
-        if(tIdx > maxIdx) return { ok:false, error:'Нельзя выдать звание выше своего' };
-      }
+        if(patch.rank && cur.role !== 'Администратор'){
+          var tIdx = RANK_IDX[patch.rank];
+          var maxIdx = maxRankByRole(cur);
+          if(tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
+        }
 
-      if(patch.position && cur.role !== 'Администратор'){
-        var pIdx = POS_IDX[patch.position];
-        var maxP = maxPositionByRole(cur);
-        if(pIdx > maxP) return { ok:false, error:'Нельзя выдать должность выше своей' };
-      }
+        if(patch.position && cur.role !== 'Администратор'){
+          var pIdx = POS_IDX[patch.position];
+          var maxP = maxPositionByRole(cur);
+          if(pIdx > maxP) throw new Error('Нельзя выдать должность выше своей');
+        }
 
-      Object.keys(patch).forEach(function(k){
-        if(k === 'password' && patch[k]) target.password = hashPass(patch[k]);
-        else if(k !== 'login') target[k] = patch[k];
+        var cleanPatch = {};
+        Object.keys(patch).forEach(function(k){
+          if(k === 'password' && patch[k]) cleanPatch.password = hashPass(patch[k]);
+          else if(k !== 'login') cleanPatch[k] = patch[k];
+        });
+
+        return fbPatch('users/' + login, cleanPatch).then(function(){
+          return { ok:true, user: Object.assign({}, target, cleanPatch) };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
       });
-
-      Auth.saveUsers(users);
-      return { ok:true, user: target };
     },
 
+    /* ---------- Удаление ---------- */
     deleteUser: function(login){
       var cur = Auth.getCurrent();
-      if(!cur || cur.role !== 'Администратор') return { ok:false, error:'Только администратор' };
-      var users = Auth.getUsers();
-      if(!users[login]) return { ok:false, error:'Не найден' };
-      if(login === cur.login) return { ok:false, error:'Нельзя удалить себя' };
-      delete users[login];
-      Auth.saveUsers(users);
-      return { ok:true };
+      if(!cur || cur.role !== 'Администратор'){
+        return Promise.resolve({ ok:false, error:'Только администратор' });
+      }
+      if(login === cur.login){
+        return Promise.resolve({ ok:false, error:'Нельзя удалить себя' });
+      }
+      return fbDelete('users/' + login).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
     },
 
     canEdit: canEdit,
@@ -251,37 +334,27 @@
 
     rankColor: function(rank){
       var map = {
-        'Младший Сержант':'#6b7280,#9ca3af',
-        'Сержант':'#16a34a,#22c55e',
-        'Старший Сержант':'#15803d,#16a34a',
-        'Старшина':'#0e7490,#0891b2',
-        'Прапорщик':'#0369a1,#0284c7',
-        'Ст. Прапорщик':'#075985,#0c4a6e',
-        'Младший лейтенант':'#7c3aed,#a855f7',
-        'Лейтенант':'#6d28d9,#8b5cf6',
-        'Ст. Лейтенант':'#5b21b6,#7c3aed',
-        'Капитан':'#4c1d95,#6d28d9',
-        'Майор':'#dc2626,#ef4444',
-        'Подполковник':'#b91c1c,#dc2626',
-        'Полковник':'#991b1b,#b91c1c',
-        'Генерал-Майор':'#ff4655,#ff6b78'
+        'Младший Сержант':'#6b7280,#9ca3af','Сержант':'#16a34a,#22c55e',
+        'Старший Сержант':'#15803d,#16a34a','Старшина':'#0e7490,#0891b2',
+        'Прапорщик':'#0369a1,#0284c7','Ст. Прапорщик':'#075985,#0c4a6e',
+        'Младший лейтенант':'#7c3aed,#a855f7','Лейтенант':'#6d28d9,#8b5cf6',
+        'Ст. Лейтенант':'#5b21b6,#7c3aed','Капитан':'#4c1d95,#6d28d9',
+        'Майор':'#dc2626,#ef4444','Подполковник':'#b91c1c,#dc2626',
+        'Полковник':'#991b1b,#b91c1c','Генерал-Майор':'#ff4655,#ff6b78'
       };
       return map[rank] || '#6b7280,#9ca3af';
     },
     positionColor: function(pos){
       var map = {
-        'Стажер ВК':'#4b5563,#6b7280',
-        'Сотрудник ВК':'#1d4ed8,#3b82f6',
-        'Инструктор ВК':'#047857,#10b981',
-        'Заместитель военного комиссара':'#6d28d9,#a855f7',
+        'Стажер ВК':'#4b5563,#6b7280','Сотрудник ВК':'#1d4ed8,#3b82f6',
+        'Инструктор ВК':'#047857,#10b981','Заместитель военного комиссара':'#6d28d9,#a855f7',
         'Военный Комиссар':'#991b1b,#ff4655'
       };
       return map[pos] || '#4b5563,#6b7280';
     },
     roleColor: function(role){
       var map = {
-        'Пользователь':'#4b5563,#6b7280',
-        'Сотрудник':'#1d4ed8,#3b82f6',
+        'Пользователь':'#4b5563,#6b7280','Сотрудник':'#1d4ed8,#3b82f6',
         'Администратор':'#991b1b,#ff4655'
       };
       return map[role] || '#4b5563,#6b7280';
