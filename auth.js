@@ -105,12 +105,7 @@
     return 'h' + Math.abs(h).toString(36) + '_' + s.length;
   }
 
-  /* ============================================================
-     FIREBASE — HTTP REST API
-     ============================================================ */
-  function fbUrl(path){
-    return FIREBASE_URL + '/' + path + '.json';
-  }
+  function fbUrl(path){ return FIREBASE_URL + '/' + path + '.json'; }
 
   function fbGet(path){
     return fetch(fbUrl(path)).then(function(r){
@@ -118,7 +113,6 @@
       return r.json();
     });
   }
-
   function fbPut(path, data){
     return fetch(fbUrl(path), {
       method: 'PUT',
@@ -129,7 +123,6 @@
       return r.json();
     });
   }
-
   function fbPatch(path, data){
     return fetch(fbUrl(path), {
       method: 'PATCH',
@@ -140,7 +133,6 @@
       return r.json();
     });
   }
-
   function fbDelete(path){
     return fetch(fbUrl(path), { method: 'DELETE' }).then(function(r){
       if(!r.ok) throw new Error('Firebase delete error: ' + r.status);
@@ -148,17 +140,10 @@
     });
   }
 
-  /* ============================================================
-     API — асинхронное (Promise)
-     ============================================================ */
   var Auth = {
-    RANKS: RANKS,
-    POSITIONS: POSITIONS,
-    ROLES: ROLES,
-    RANK_IDX: RANK_IDX,
-    POS_IDX: POS_IDX,
+    RANKS: RANKS, POSITIONS: POSITIONS, ROLES: ROLES,
+    RANK_IDX: RANK_IDX, POS_IDX: POS_IDX,
 
-    /* ---------- Gate ---------- */
     checkGate: function(){
       try{
         var g = JSON.parse(localStorage.getItem(LS_GATE) || 'null');
@@ -177,12 +162,10 @@
     },
     lockGate: function(){ localStorage.removeItem(LS_GATE); },
 
-    /* ---------- Текущий юзер (локально) ---------- */
     getCurrent: function(){ return lsGet(LS_CURRENT, null); },
     setCurrent: function(u){ lsSet(LS_CURRENT, u); },
     logout: function(){ localStorage.removeItem(LS_CURRENT); },
 
-    /* ---------- Пользователи (Firebase) ---------- */
     getUsers: function(){
       return fbGet('users').then(function(data){
         var users = data || {};
@@ -194,11 +177,8 @@
       });
     },
 
-    getUsersSync: function(){
-      return lsGet(LS_USERS_CACHE, {});
-    },
+    getUsersSync: function(){ return lsGet(LS_USERS_CACHE, {}); },
 
-    /* ---------- Регистрация ---------- */
     register: function(data){
       var login = (data.login || '').trim().toLowerCase();
       if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
@@ -207,7 +187,6 @@
 
       return Auth.getUsers().then(function(users){
         if(users[login]) throw new Error('Такой логин уже занят');
-
         var isFirst = Object.keys(users).length === 0;
 
         var user = {
@@ -233,7 +212,6 @@
       });
     },
 
-    /* ---------- Вход ---------- */
     login: function(login, password){
       login = (login || '').trim().toLowerCase();
       if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
@@ -248,18 +226,14 @@
       });
     },
 
-    /* ---------- Обновление себя ---------- */
     update: function(patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
 
       var cleanPatch = {};
       Object.keys(patch).forEach(function(k){
-        if(k === 'password' && patch[k]){
-          cleanPatch.password = hashPass(patch[k]);
-        } else if(k !== 'login' && k !== 'password' && k !== 'role'){
-          cleanPatch[k] = patch[k];
-        }
+        if(k === 'password' && patch[k]) cleanPatch.password = hashPass(patch[k]);
+        else if(k !== 'login' && k !== 'password' && k !== 'role') cleanPatch[k] = patch[k];
       });
 
       return fbPatch('users/' + cur.login, cleanPatch).then(function(){
@@ -271,7 +245,6 @@
       });
     },
 
-    /* ---------- Обновление чужого юзера ---------- */
     updateOther: function(login, patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -279,17 +252,14 @@
       return fbGet('users/' + login).then(function(target){
         if(!target) throw new Error('Пользователь не найден');
         if(!canEdit(cur, target)) throw new Error('Недостаточно прав: цель выше вас по званию или должности');
-
         if(patch.role !== undefined && !canChangeRole(cur, target)){
           throw new Error('Только Администратор может менять роли доступа');
         }
-
         if(patch.rank && cur.role !== 'Администратор'){
           var tIdx = RANK_IDX[patch.rank];
           var maxIdx = maxRankByRole(cur);
           if(tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
         }
-
         if(patch.position && cur.role !== 'Администратор'){
           var pIdx = POS_IDX[patch.position];
           var maxP = maxPositionByRole(cur);
@@ -310,7 +280,6 @@
       });
     },
 
-    /* ---------- Удаление ---------- */
     deleteUser: function(login){
       var cur = Auth.getCurrent();
       if(!cur || cur.role !== 'Администратор'){
