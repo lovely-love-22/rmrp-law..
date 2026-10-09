@@ -18,20 +18,10 @@
       <span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">LAW</span></span>
     </a>
     <nav class="nav" id="nav">
-      <a href="index.html" class="nav-link active">Главная</a>
-      <a href="constitution.html" class="nav-link">Конституция</a>
-      <a href="uk.html" class="nav-link">УК РФ</a>
-      <a href="koap.html" class="nav-link">КоАП РФ</a>
-      <a href="process.html" class="nav-link">Процессуальный</a>
-      <a href="weapons.html" class="nav-link">Оружие</a>
-      <a href="property.html" class="nav-link">Госсобственность</a>
-      <a href="raids.html" class="nav-link">Ограбления</a>
-      <a href="vzk.html" class="nav-link">ВЗК</a>
-      <a href="discipline.html" class="nav-link">Дисциплинарный</a>
-      <a href="garrison.html" class="nav-link">Гарнизонный</a>
-      <a href="internal.html" class="nav-link">Внутренний</a>
-      <a href="drill.html" class="nav-link">Строевой</a>
+      <a href="index.html" class="nav-link active">🏠 Главная</a>
       <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
+      <a href="media.html" class="nav-link">🎬 Медиа</a>
+      <a href="profile.html" class="nav-link">👤 Профиль</a>
     </nav>
     <div class="header-actions">
       <button class="btn-add" id="openEditor">
@@ -43,6 +33,13 @@
     </div>
   </div>
 </header>
+
+<!-- БЛОК ПРОФИЛЯ НА ГЛАВНОЙ (если авторизован) -->
+<section class="section" id="homeProfileSection" hidden style="padding:30px 0">
+  <div class="container">
+    <div id="homeProfileWrap"></div>
+  </div>
+</section>
 
 <section class="hero">
   <div class="hero-bg"></div>
@@ -75,6 +72,8 @@
       <a href="internal.html" class="quick-card"><span class="quick-emoji">📋</span><span class="quick-title">Устав внутренней службы</span><span class="quick-desc">Права · Обязанности</span></a>
       <a href="drill.html" class="quick-card"><span class="quick-emoji">🥾</span><span class="quick-title">Строевой устав</span><span class="quick-desc">Строи · Приёмы</span></a>
       <a href="military.html" class="quick-card" style="background:linear-gradient(135deg,rgba(61,220,132,.08),rgba(74,168,255,.05));border-color:rgba(61,220,132,.3)"><span class="quick-emoji">🎓</span><span class="quick-title">Военный комиссариат</span><span class="quick-desc">КМБ · УКМБ · Баллы</span></a>
+      <a href="media.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)"><span class="quick-emoji">🎬</span><span class="quick-title">Медиа-галерея</span><span class="quick-desc">Скрины · Видео · Ссылки</span></a>
+      <a href="audit.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)"><span class="quick-emoji">📋</span><span class="quick-title">Кадровый аудит</span><span class="quick-desc">Приём · Повышение</span></a>
     </div>
   </div>
 </section>
@@ -84,13 +83,55 @@
     <div class="section-head">
       <span class="section-tag">О проекте</span>
       <h2 class="section-title">📖 Добро пожаловать</h2>
-      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам — выбирай нужный из меню сверху или из карточек.</p>
+      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам — выбирай нужный из карточек ниже.</p>
     </div>
-    <div style="max-width:900px;color:var(--txt-2);font-size:15px;line-height:1.8">
-      <p style="margin-bottom:14px">📌 <strong style="color:var(--txt-0)">Всего документов:</strong> 13 (Конституция, УК РФ, КоАП РФ, Процессуальный кодекс, ФЗ об оружии, ФЗ о госсобственности, Правила ограблений, Правила ВЗК, 4 устава ВС РФ и Военный комиссариат).</p>
-      <p style="margin-bottom:14px">🔍 <strong style="color:var(--txt-0)">Поиск:</strong> на каждой странице документа есть свой поиск. На этой странице — глобального поиска нет (ищи на страницах документов).</p>
-      <p style="margin-bottom:14px">✏️ <strong style="color:var(--txt-0)">Редактор:</strong> кнопка «+ Добавить» в шапке позволяет добавлять свои статьи в любой из разделов — они сохраняются в вашем браузере (localStorage).</p>
-      <p>💾 <strong style="color:var(--txt-0)">Экспорт:</strong> в футере кнопки «Экспорт/Импорт JSON» — сохраняют все ваши добавленные законы в файл.</p>
+  </div>
+</section>
+
+<!-- ============ ПОЛНЫЙ СПИСОК ДОКУМЕНТОВ ВНИЗУ ============ -->
+<section class="section section-dark" id="allDocs">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Все документы</span>
+      <h2 class="section-title">📚 Полный список законов</h2>
+      <p class="section-desc">Ниже — все документы законодательной базы RMRP.</p>
+    </div>
+
+    <div class="footer-categories">
+      <div class="footer-cat">
+        <h4>📕 Документы</h4>
+        <a href="constitution.html">🏛️ Конституция РФ</a>
+        <a href="uk.html">⚔️ Уголовный кодекс</a>
+        <a href="koap.html">📋 КоАП РФ</a>
+        <a href="process.html">🛡️ Процессуальный кодекс</a>
+      </div>
+      <div class="footer-cat">
+        <h4>📜 Законы</h4>
+        <a href="weapons.html">🔫 Об оружии</a>
+        <a href="property.html">🏢 Госсобственность</a>
+        <a href="raids.html">🚚 Ограбления и поставки</a>
+        <a href="vzk.html">🪖 Война за КрАЗ</a>
+      </div>
+      <div class="footer-cat">
+        <h4>🎖️ Уставы</h4>
+        <a href="discipline.html">Дисциплинарный устав</a>
+        <a href="garrison.html">Гарнизонная служба</a>
+        <a href="internal.html">Внутренняя служба</a>
+        <a href="drill.html">Строевой устав</a>
+      </div>
+      <div class="footer-cat">
+        <h4>🎓 Военкомат</h4>
+        <a href="military.html">КМБ</a>
+        <a href="military.html#ukmb">УКМБ</a>
+        <a href="military.html#vk-ranks">Повышение</a>
+        <a href="military.html#vk-points">Баллы</a>
+      </div>
+      <div class="footer-cat">
+        <h4>🛠️ Сервисы</h4>
+        <a href="audit.html">📋 Кадровый аудит</a>
+        <a href="media.html">🎬 Медиа-галерея</a>
+        <a href="profile.html">👤 Личный кабинет</a>
+      </div>
     </div>
   </div>
 </section>
@@ -104,7 +145,7 @@
     <div class="footer-col"><h4>Документы</h4><a href="constitution.html">Конституция РФ</a><a href="uk.html">Уголовный кодекс</a><a href="koap.html">КоАП РФ</a><a href="process.html">Процессуальный кодекс</a></div>
     <div class="footer-col"><h4>Законы</h4><a href="weapons.html">Об оружии</a><a href="property.html">Госсобственность</a><a href="raids.html">Ограбления и поставки</a><a href="vzk.html">Война за КрАЗ</a></div>
     <div class="footer-col"><h4>Уставы</h4><a href="discipline.html">Дисциплинарный устав</a><a href="garrison.html">Гарнизонная служба</a><a href="internal.html">Внутренняя служба</a><a href="drill.html">Строевой устав</a></div>
-    <div class="footer-col"><h4>Военкомат</h4><a href="military.html">КМБ</a><a href="military.html#ukmb">УКМБ</a><a href="military.html#vk-ranks">Повышение</a><a href="military.html#vk-points">Баллы</a></div>
+    <div class="footer-col"><h4>Сервисы</h4><a href="military.html">Военкомат</a><a href="audit.html">Кадровый аудит</a><a href="media.html">Медиа-галерея</a><a href="profile.html">Профиль</a></div>
     <div class="footer-col">
       <h4>Резерв</h4>
       <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RMRP.export()">💾 Экспорт JSON</button>
@@ -154,7 +195,6 @@
   </div>
 </div>
 
-<!-- Модалка фона -->
 <div class="modal-overlay" id="bgModal" hidden>
   <div class="modal modal-sm">
     <div class="modal-head"><h3 class="modal-title">🖼 Настройка фона</h3><button class="modal-close" id="closeBgPicker">✕</button></div>
@@ -176,6 +216,58 @@
   </div>
 </div>
 
+<script src="auth.js"></script>
 <script src="script.js"></script>
+<script>
+/* Блок профиля на главной */
+(function(){
+  function initHomeProfile(){
+    var cur = RMRPAuth.getCurrent();
+    if(!cur) return;
+    var section = document.getElementById('homeProfileSection');
+    var wrap = document.getElementById('homeProfileWrap');
+    if(!section || !wrap) return;
+
+    var rankColor = RMRPAuth.rankColor(cur.rank || '');
+    var posColor  = RMRPAuth.positionColor(cur.position || '');
+    var roleColor = RMRPAuth.roleColor(cur.role || 'Пользователь');
+    var letter = (cur.displayName || cur.login).charAt(0).toUpperCase();
+    var avatarHtml = cur.avatar
+      ? '<img src="' + cur.avatar + '" alt="">'
+      : '<span>' + letter + '</span>';
+
+    wrap.innerHTML =
+      '<div class="home-profile-card">' +
+        '<div class="home-profile-banner" style="background:linear-gradient(135deg,' + rankColor + ')">' +
+          '<div class="home-profile-avatar">' + avatarHtml + '</div>' +
+          '<div class="home-profile-info">' +
+            '<div class="home-profile-name">' + (cur.displayName || cur.login) + '</div>' +
+            '<div class="home-profile-login">@' + cur.login + '</div>' +
+          '</div>' +
+          '<a href="profile.html" class="home-profile-btn">Открыть профиль →</a>' +
+        '</div>' +
+        '<div class="home-profile-badges">' +
+          '<div class="home-badge" style="background:linear-gradient(135deg,' + rankColor + ')">' +
+            '<div class="home-badge-label">Звание</div>' +
+            '<div class="home-badge-value">' + (cur.rank || '—') + '</div>' +
+          '</div>' +
+          '<div class="home-badge" style="background:linear-gradient(135deg,' + posColor + ')">' +
+            '<div class="home-badge-label">Должность</div>' +
+            '<div class="home-badge-value">' + (cur.position || '—') + '</div>' +
+          '</div>' +
+          '<div class="home-badge" style="background:linear-gradient(135deg,' + roleColor + ')">' +
+            '<div class="home-badge-label">Роль</div>' +
+            '<div class="home-badge-value">' + (cur.role || 'Пользователь') + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    section.hidden = false;
+  }
+
+  if(window.RMRPAuth) initHomeProfile();
+  else document.addEventListener('DOMContentLoaded', initHomeProfile);
+})();
+</script>
 </body>
 </html>
