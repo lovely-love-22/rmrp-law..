@@ -36,12 +36,17 @@
 .user-banners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:700px){.user-banners{grid-template-columns:1fr}}
 .user-badge{padding:18px 22px;border-radius:16px;color:#fff;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.35);transition:var(--transition)}
-.user-badge:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.user-badge:hover{transform:translateY(-3px)}
 .user-badge::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.12),rgba(255,255,255,0) 60%);pointer-events:none}
 .user-badge::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
 .user-badge-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:800;opacity:.85;margin-bottom:6px}
 .user-badge-value{font-size:20px;font-weight:900;letter-spacing:-.4px;position:relative;z-index:1}
 .user-badge-icon{position:absolute;right:20px;bottom:14px;font-size:42px;opacity:.35;pointer-events:none}
+
+@keyframes devGlow{
+  0%,100%{box-shadow:0 10px 30px rgba(168,85,247,.4),0 0 60px rgba(236,72,153,.2)}
+  50%{box-shadow:0 10px 40px rgba(168,85,247,.6),0 0 90px rgba(236,72,153,.35)}
+}
 
 .user-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px}
 .user-link{padding:14px 16px;border-radius:12px;background:var(--bg-1);border:1px solid var(--line);transition:var(--transition);display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
@@ -99,13 +104,11 @@
 <section class="section">
   <div class="container">
 
-    <!-- ЗАГРУЗКА -->
     <div id="userLoading" class="user-loading">
       <div class="spin"></div>
       <div>Загрузка профиля…</div>
     </div>
 
-    <!-- НЕ НАЙДЕНО -->
     <div id="userNotFound" class="user-notfound" hidden>
       <span class="icon">🔍</span>
       <h3>Профиль не найден</h3>
@@ -113,7 +116,6 @@
       <a href="profile.html">← Вернуться к своему профилю</a>
     </div>
 
-    <!-- ПРОФИЛЬ -->
     <div id="userProfile" class="user-wrap" hidden>
       <div class="user-banner" id="uBanner"></div>
 
@@ -203,7 +205,6 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -261,7 +262,6 @@
     $('userNotFound').hidden = true;
     $('userProfile').hidden = false;
 
-    /* Имя и логин */
     setText('uName', user.displayName || user.login);
     setText('uLogin', '@' + user.login);
 
@@ -284,23 +284,40 @@
         banner.style.backgroundSize = 'cover';
         banner.style.backgroundPosition = 'center';
       } else {
-        banner.style.backgroundImage = 'linear-gradient(135deg,#7c3aed,#4aa8ff)';
+        banner.style.backgroundImage = 'linear-gradient(135deg,' + RMRPAuth.roleColor(user.role) + ')';
       }
     }
 
     /* Звание */
     var rankBanner = $('uRankBanner');
-    if(rankBanner) rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(user.rank) + ')';
+    if(rankBanner){
+      rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(user.rank) + ')';
+      if(RMRPAuth.hasGlow(user.rank, user.role)){
+        rankBanner.style.boxShadow = '0 10px 30px rgba(255,70,85,.35), 0 0 60px rgba(255,70,85,.15)';
+      } else {
+        rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
+      }
+    }
     setText('uRankValue', user.rank || '—');
 
     /* Должность */
     var posBanner = $('uPosBanner');
-    if(posBanner) posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(user.position) + ')';
+    if(posBanner){
+      posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(user.position) + ')';
+    }
     setText('uPosValue', user.position || '—');
 
     /* Роль */
     var roleBanner = $('uRoleBanner');
-    if(roleBanner) roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(user.role) + ')';
+    if(roleBanner){
+      roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(user.role) + ')';
+      if(user.role === 'Разработчик'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
+        roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
+      } else if(user.role === 'Администратор'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
+      }
+    }
     setText('uRoleValue', user.role || 'Пользователь');
 
     /* Статистика */
@@ -341,12 +358,6 @@
         fLink.classList.add('disabled');
       }
     }
-  }
-
-  function escapeHtml(s){
-    return String(s||'').replace(/[&<>"']/g, function(c){
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
-    });
   }
 
   function copyToClipboard(text){
