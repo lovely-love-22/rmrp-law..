@@ -407,3 +407,47 @@ input,select,textarea{font-family:inherit}
   .footer-inner{grid-template-columns:1fr}
   .hero-title{letter-spacing:-1px}
 }
+
+/* ============================================================
+   HOME PROFILE CARD — блок профиля на главной
+   ============================================================ */
+.home-profile-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+.home-profile-banner{padding:24px 28px;display:flex;align-items:center;gap:20px;color:#fff;position:relative;overflow:hidden}
+.home-profile-banner::after{content:"";position:absolute;right:-30px;top:-30px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.home-profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,.3)}
+.home-profile-avatar img{width:100%;height:100%;object-fit:cover}
+.home-profile-info{flex:1;min-width:0;position:relative;z-index:1}
+.home-profile-name{font-size:22px;font-weight:900;letter-spacing:-.4px;margin-bottom:4px}
+.home-profile-login{font-size:13.5px;opacity:.85}
+.home-profile-btn{position:relative;z-index:1;padding:10px 18px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;text-decoration:none;font-weight:700;font-size:13px;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);transition:var(--transition);white-space:nowrap}
+.home-profile-btn:hover{background:rgba(255,255,255,.3);transform:translateX(3px)}
+.home-profile-badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line)}
+.home-badge{padding:16px 20px;background:var(--bg-2);color:#fff;position:relative;overflow:hidden}
+.home-badge::after{content:"";position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.home-badge-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1.8px;font-weight:800;opacity:.8;margin-bottom:4px}
+.home-badge-value{font-size:16px;font-weight:900;letter-spacing:-.3px;position:relative;z-index:1}
+
+/* ============================================================
+   FOOTER CATEGORIES — полный список документов внизу
+   ============================================================ */
+.footer-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.footer-cat{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:20px}
+.footer-cat h4{font-size:14px;font-weight:800;color:var(--txt-0);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);letter-spacing:.3px}
+.footer-cat a{display:block;padding:8px 10px;border-radius:8px;color:var(--txt-2);font-size:13.5px;transition:var(--transition);text-decoration:none;margin-bottom:4px}
+.footer-cat a:hover{background:var(--bg-3);color:var(--accent-2);padding-left:14px}
+
+/* ============================================================
+   ЧИСТАЯ ШАПКА — компактная
+   ============================================================ */
+.header-inner{display:flex;align-items:center;gap:14px;padding:12px 0;min-height:64px}
+.logo-text{font-size:17px}
+.logo-sub{font-size:10px;letter-spacing:2px}
+.nav{gap:3px}
+.nav-link{padding:8px 14px;font-size:13px;font-weight:600;white-space:nowrap}
+.header-actions{gap:6px}
+.btn-add,.btn-bg,.btn-media{padding:8px 12px;font-size:12.5px}
+
+@media(max-width:900px){
+  .home-profile-banner{flex-direction:column;text-align:center;padding:20px}
+  .home-profile-btn{width:100%;text-align:center}
+}
