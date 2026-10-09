@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v9: SVG-погоны + градиенты + DEV_LOGIN kiryushaz)
+   RMRP — auth.js (v12: система заявок на повышение)
    ============================================================ */
 (function(){
   'use strict';
@@ -34,6 +34,10 @@
     'Стажер ВК': 0, 'Сотрудник ВК': 1, 'Инструктор ВК': 2,
     'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
   };
+
+  /* Максимум при регистрации */
+  var REG_MAX_RANK = 'Капитан';
+  var REG_MAX_POS  = 'Инструктор ВК';
 
   function isDev(user){ return user && user.role === 'Разработчик'; }
   function isAdmin(user){ return user && (user.role === 'Администратор' || user.role === 'Разработчик'); }
@@ -176,70 +180,48 @@
     }
 
     var content = '';
-
     switch(rank){
-      case 'Младший Сержант':
-        content = lychka(12) + lychka(20);
-        break;
-      case 'Сержант':
-        content = lychka(10) + lychka(17) + lychka(24);
-        break;
-      case 'Старший Сержант':
-        content = lychka(8) + lychka(15) + lychka(22) + lychka(29);
-        break;
+      case 'Младший Сержант': content = lychka(12) + lychka(20); break;
+      case 'Сержант': content = lychka(10) + lychka(17) + lychka(24); break;
+      case 'Старший Сержант': content = lychka(8) + lychka(15) + lychka(22) + lychka(29); break;
       case 'Старшина':
         content = '<rect x="9.5" y="4" width="1" height="36" fill="' + gold + '"/>' +
-                  lychka(10) + lychka(18) + lychka(26);
-        break;
-      case 'Прапорщик':
-        content = starSmall(10, 12) + starSmall(10, 22) + starSmall(10, 32);
-        break;
+                  lychka(10) + lychka(18) + lychka(26); break;
+      case 'Прапорщик': content = starSmall(10, 12) + starSmall(10, 22) + starSmall(10, 32); break;
       case 'Ст. Прапорщик':
         content = starSmall(6, 12) + starSmall(14, 12) +
                   starSmall(6, 22) + starSmall(14, 22) +
-                  starSmall(6, 32) + starSmall(14, 32);
-        break;
-      case 'Младший лейтенант':
-        content = starSmall(6, 10) + starSmall(14, 10) + starSmall(10, 22);
-        break;
+                  starSmall(6, 32) + starSmall(14, 32); break;
+      case 'Младший лейтенант': content = starSmall(6, 10) + starSmall(14, 10) + starSmall(10, 22); break;
       case 'Лейтенант':
         content = starSmall(6, 10) + starSmall(14, 10) +
-                  starSmall(6, 22) + starSmall(14, 22);
-        break;
+                  starSmall(6, 22) + starSmall(14, 22); break;
       case 'Ст. Лейтенант':
         content = starSmall(6, 8) + starSmall(14, 8) +
                   starSmall(6, 18) + starSmall(14, 18) +
-                  starSmall(10, 30);
-        break;
+                  starSmall(10, 30); break;
       case 'Капитан':
         content = starSmall(6, 6) + starSmall(14, 6) +
                   starSmall(6, 18) + starSmall(14, 18) +
-                  starSmall(6, 30) + starSmall(14, 30);
-        break;
+                  starSmall(6, 30) + starSmall(14, 30); break;
       case 'Майор':
         content = starBig(10, 14) +
-                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
-        break;
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
       case 'Подполковник':
         content = starBig(10, 12) + starBig(10, 26) +
-                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
-        break;
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
       case 'Полковник':
         content = starBig(6, 12) + starBig(14, 12) + starBig(10, 28) +
-                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>';
-        break;
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="0.8"/>'; break;
       case 'Генерал-Майор':
         content = '<circle cx="10" cy="20" r="6" fill="none" stroke="' + gold + '" stroke-width="0.6" opacity="0.6"/>' +
                   starBig(10, 20) +
-                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="1"/>';
-        break;
-      default:
-        content = lychka(18);
+                  '<line x1="4" y1="36" x2="16" y2="36" stroke="' + gold + '" stroke-width="1"/>'; break;
+      default: content = lychka(18);
     }
 
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 44" width="22" height="44" style="display:block">' +
-      base + strip + content +
-    '</svg>';
+      base + strip + content + '</svg>';
   }
 
   var Auth = {
@@ -249,6 +231,8 @@
     RANK_IDX: RANK_IDX,
     POS_IDX: POS_IDX,
     DEV_LOGIN: DEV_LOGIN,
+    REG_MAX_RANK: REG_MAX_RANK,
+    REG_MAX_POS: REG_MAX_POS,
 
     checkGate: function(){
       try{
@@ -272,6 +256,113 @@
     setCurrent: function(u){ lsSet(LS_CURRENT, u); },
     logout: function(){ localStorage.removeItem(LS_CURRENT); },
 
+    refreshCurrent: function(){
+      var cached = lsGet(LS_CURRENT, null);
+      if(!cached || !cached.login) return Promise.resolve(null);
+
+      return fbGet('users/' + cached.login).then(function(fresh){
+        if(!fresh){
+          localStorage.removeItem(LS_CURRENT);
+          return null;
+        }
+        lsSet(LS_CURRENT, fresh);
+        return { user: fresh, changed: true };
+      }).catch(function(err){
+        console.warn('[RMRP] Не удалось обновить профиль:', err.message);
+        return { user: cached, changed: false };
+      });
+    },
+
+    /* ============================================================
+       ЗАЯВКИ
+       ============================================================ */
+    createRequest: function(data){
+      var cur = Auth.getCurrent();
+      if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
+
+      var req = {
+        id: Date.now() + '_' + cur.login,
+        login: cur.login,
+        displayName: cur.displayName || cur.login,
+        currentRank: cur.rank || '—',
+        currentPosition: cur.position || '—',
+        wantRank: data.wantRank || '',
+        wantPosition: data.wantPosition || '',
+        reason: data.reason || '',
+        status: 'pending',
+        createdAt: Date.now()
+      };
+
+      return fbPut('requests/' + req.id, req).then(function(){
+        return { ok:true, request: req };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    getRequests: function(){
+      return fbGet('requests').then(function(data){
+        return data || {};
+      }).catch(function(){
+        return {};
+      });
+    },
+
+    approveRequest: function(reqId){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+
+      return fbGet('requests/' + reqId).then(function(req){
+        if(!req) throw new Error('Заявка не найдена');
+        if(req.status !== 'pending') throw new Error('Заявка уже обработана');
+
+        var patch = {};
+        if(req.wantRank) patch.rank = req.wantRank;
+        if(req.wantPosition) patch.position = req.wantPosition;
+
+        return fbPatch('users/' + req.login, patch).then(function(){
+          return fbPatch('requests/' + reqId, {
+            status: 'approved',
+            resolvedAt: Date.now(),
+            resolvedBy: cur.login
+          });
+        }).then(function(){
+          return { ok:true };
+        });
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    rejectRequest: function(reqId, reason){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+
+      return fbPatch('requests/' + reqId, {
+        status: 'rejected',
+        resolvedAt: Date.now(),
+        resolvedBy: cur.login,
+        rejectReason: reason || ''
+      }).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    deleteRequest: function(reqId){
+      var cur = Auth.getCurrent();
+      if(!isAdmin(cur)) return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
+      return fbDelete('requests/' + reqId).then(function(){
+        return { ok:true };
+      }).catch(function(err){
+        return { ok:false, error: err.message };
+      });
+    },
+
+    /* ============================================================
+       ПОЛЬЗОВАТЕЛИ
+       ============================================================ */
     getUsers: function(){
       return fbGet('users').then(function(data){
         var users = data || {};
@@ -303,15 +394,21 @@
         if(users[login]) throw new Error('Такой логин уже занят');
 
         var isFirst = Object.keys(users).length === 0;
-        var isDev = (login === DEV_LOGIN);
+        var isDevUser = (login === DEV_LOGIN);
+
+        /* Проверка: не выше допустимого при регистрации */
+        var regRank = data.rank || RANKS[0];
+        var regPos = data.position || POSITIONS[0];
+        if(RANK_IDX[regRank] > RANK_IDX[REG_MAX_RANK]) regRank = REG_MAX_RANK;
+        if(POS_IDX[regPos] > POS_IDX[REG_MAX_POS]) regPos = REG_MAX_POS;
 
         var user = {
           login: login,
           displayName: data.displayName || data.login,
           password: hashPass(data.password),
-          rank: data.rank || RANKS[0],
-          position: data.position || POSITIONS[0],
-          role: isDev ? 'Разработчик' : (isFirst ? 'Администратор' : 'Пользователь'),
+          rank: regRank,
+          position: regPos,
+          role: isDevUser ? 'Разработчик' : (isFirst ? 'Администратор' : 'Пользователь'),
           discord: data.discord || '',
           forum: data.forum || '',
           avatar: data.avatar || '',
@@ -432,7 +529,6 @@
     maxRankByRole: maxRankByRole,
     maxPositionByRole: maxPositionByRole,
 
-    /* Погон SVG */
     rankEpaulette: function(rank){ return buildEpaulette(rank); },
 
     rankColor: function(rank){
@@ -486,7 +582,7 @@
 
   (function(){
     if(Auth.checkGate()) return;
-    if(/gate\.html?$/i.test(location.pathname)) return;
+    if(/gate\.html?$/i.test(window.location.pathname)) return;
     document.documentElement.style.visibility = 'hidden';
     var redirect = encodeURIComponent(location.pathname + location.search);
     setTimeout(function(){
