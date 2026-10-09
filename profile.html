@@ -29,7 +29,7 @@
 .auth-error{padding:10px 14px;border-radius:8px;background:rgba(255,70,85,.1);border:1px solid rgba(255,70,85,.3);color:#ff6b78;font-size:13px;margin-bottom:14px;display:none}
 .auth-error.show{display:block}
 .profile-wrap{max-width:1100px;margin:0 auto}
-.profile-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#7c3aed,#4aa8ff);position:relative;overflow:hidden}
+.profile-banner{height:220px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,#1a1c24,#23262f);position:relative;overflow:hidden}
 .profile-banner-edit{position:absolute;bottom:14px;right:14px;padding:9px 16px;border-radius:10px;background:rgba(0,0,0,.65);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;border:0;backdrop-filter:blur(8px);transition:var(--transition)}
 .profile-banner-edit:hover{background:rgba(0,0,0,.9)}
 .profile-info{padding:0 30px 30px;background:var(--bg-2);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-top:-90px;position:relative;z-index:1}
@@ -47,8 +47,10 @@
 .banner-card::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.12),rgba(255,255,255,0) 60%);pointer-events:none}
 .banner-card::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
 .banner-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:800;opacity:.85;margin-bottom:6px}
-.banner-value{font-size:20px;font-weight:900;letter-spacing:-.4px;position:relative;z-index:1}
+.banner-value{font-size:20px;font-weight:900;letter-spacing:-.4px;position:relative;z-index:1;display:flex;align-items:center;gap:10px;min-height:44px}
 .banner-icon{position:absolute;right:20px;bottom:14px;font-size:42px;opacity:.35;pointer-events:none}
+.banner-epaulette{display:inline-flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);border-radius:6px;padding:3px 6px;flex-shrink:0}
+.banner-epaulette svg{display:block}
 @keyframes devGlow{
   0%,100%{box-shadow:0 10px 30px rgba(168,85,247,.4),0 0 60px rgba(236,72,153,.2)}
   50%{box-shadow:0 10px 40px rgba(168,85,247,.6),0 0 90px rgba(236,72,153,.35)}
@@ -436,82 +438,86 @@
     updateAccessButton();
   }
 
- function renderProfile(){
-  var u = RMRPAuth.getCurrent();
-  if(!u){ showAuth(); return; }
+  function renderProfile(){
+    var u = RMRPAuth.getCurrent();
+    if(!u){ showAuth(); return; }
 
-  setText('pName', u.displayName || u.login);
-  setText('pLogin', '@' + u.login);
+    setText('pName', u.displayName || u.login);
+    setText('pLogin', '@' + u.login);
 
-  var av = document.getElementById('pAvatar');
-  if(av){
-    var letter = (u.displayName || u.login).charAt(0).toUpperCase();
-    if(u.avatar){
-      av.innerHTML = '<img src="' + u.avatar + '" alt="">' +
-        '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
-    } else {
-      av.innerHTML = '<span>' + letter + '</span>' +
-        '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
+    var av = document.getElementById('pAvatar');
+    if(av){
+      var letter = (u.displayName || u.login).charAt(0).toUpperCase();
+      if(u.avatar){
+        av.innerHTML = '<img src="' + u.avatar + '" alt="">' +
+          '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
+      } else {
+        av.innerHTML = '<span>' + letter + '</span>' +
+          '<button class="profile-avatar-edit" onclick="Profile.editAvatar()" title="Сменить">✏️</button>';
+      }
     }
-  }
 
-  var banner = document.getElementById('pBanner');
-  if(banner){
-    if(u.banner){
-      banner.style.backgroundImage = 'url("' + u.banner + '")';
-      banner.style.backgroundSize = 'cover';
-      banner.style.backgroundPosition = 'center';
-    } else {
-      /* Тёмный нейтральный баннер, не сливается с званиями */
-      banner.style.backgroundImage = 'linear-gradient(135deg, #1a1c24 0%, #23262f 50%, #1a1c24 100%)';
+    var banner = document.getElementById('pBanner');
+    if(banner){
+      if(u.banner){
+        banner.style.backgroundImage = 'url("' + u.banner + '")';
+        banner.style.backgroundSize = 'cover';
+        banner.style.backgroundPosition = 'center';
+      } else {
+        banner.style.backgroundImage = 'linear-gradient(135deg, #1a1c24 0%, #23262f 50%, #1a1c24 100%)';
+      }
     }
-  }
 
-  var rankBanner = document.getElementById('pRankBanner');
-  if(rankBanner){
-    rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
-    if(RMRPAuth.hasGlow(u.rank, u.role)){
-      rankBanner.style.boxShadow = '0 10px 30px rgba(251,191,36,.35), 0 0 60px rgba(251,191,36,.15)';
-    } else {
-      rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
+    /* Звание + погон */
+    var rankBanner = document.getElementById('pRankBanner');
+    if(rankBanner){
+      rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
+      if(RMRPAuth.hasGlow(u.rank, u.role)){
+        rankBanner.style.boxShadow = '0 10px 30px rgba(251,191,36,.35), 0 0 60px rgba(251,191,36,.15)';
+      } else {
+        rankBanner.style.boxShadow = '0 10px 26px rgba(0,0,0,.35)';
+      }
+      var rankValueEl = document.getElementById('pRankValue');
+      if(rankValueEl){
+        rankValueEl.innerHTML = '<span class="banner-epaulette">' + RMRPAuth.rankEpaulette(u.rank) + '</span>' +
+          '<span>' + (u.rank || '—') + '</span>';
+      }
     }
-  }
-  setText('pRankValue', u.rank || '—');
 
-  var posBanner = document.getElementById('pPosBanner');
-  if(posBanner){
-    posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
-  }
-  setText('pPosValue', u.position || '—');
-
-  var roleBanner = document.getElementById('pRoleBanner');
-  if(roleBanner){
-    roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
-    if(u.role === 'Разработчик'){
-      roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
-      roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
-    } else if(u.role === 'Администратор'){
-      roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
+    var posBanner = document.getElementById('pPosBanner');
+    if(posBanner){
+      posBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.positionColor(u.position) + ')';
     }
+    setText('pPosValue', u.position || '—');
+
+    var roleBanner = document.getElementById('pRoleBanner');
+    if(roleBanner){
+      roleBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.roleColor(u.role) + ')';
+      if(u.role === 'Разработчик'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(168,85,247,.4), 0 0 60px rgba(236,72,153,.2)';
+        roleBanner.style.animation = 'devGlow 3s ease-in-out infinite';
+      } else if(u.role === 'Администратор'){
+        roleBanner.style.boxShadow = '0 10px 30px rgba(220,38,38,.35)';
+      }
+    }
+    setText('pRoleValue', u.role || 'Пользователь');
+
+    var days = u.createdAt ? Math.floor((Date.now() - u.createdAt) / 86400000) : 0;
+    setText('pStatsValue', days + ' дн. в системе');
+
+    setText('pDiscord', u.discord || 'не указан');
+    var dLink = document.getElementById('pDiscordLink');
+    if(dLink){
+      if(u.discord){
+        var disc = u.discord.replace('@','');
+        dLink.href = 'https://discord.com/users/' + encodeURIComponent(disc);
+      } else dLink.href = '#';
+    }
+
+    setText('pForum', u.forum || 'не указан');
+    var fLink = document.getElementById('pForumLink');
+    if(fLink) fLink.href = u.forum || '#';
   }
-  setText('pRoleValue', u.role || 'Пользователь');
-
-  var days = u.createdAt ? Math.floor((Date.now() - u.createdAt) / 86400000) : 0;
-  setText('pStatsValue', days + ' дн. в системе');
-
-  setText('pDiscord', u.discord || 'не указан');
-  var dLink = document.getElementById('pDiscordLink');
-  if(dLink){
-    if(u.discord){
-      var disc = u.discord.replace('@','');
-      dLink.href = 'https://discord.com/users/' + encodeURIComponent(disc);
-    } else dLink.href = '#';
-  }
-
-  setText('pForum', u.forum || 'не указан');
-  var fLink = document.getElementById('pForumLink');
-  if(fLink) fLink.href = u.forum || '#';
-}
 
   function updateAccessButton(){
     var u = RMRPAuth.getCurrent();
@@ -732,11 +738,8 @@
       var canChangeRole = RMRPAuth.canChangeRole(cur, u);
       if(roleSel){
         roleSel.disabled = !canChangeRole;
-        /* Только Разработчик может выдать Разработчика */
         if(RMRPAuth.isDev(cur)){
-          Array.from(roleSel.options).forEach(function(opt){
-            opt.disabled = false;
-          });
+          Array.from(roleSel.options).forEach(function(opt){ opt.disabled = false; });
         } else if(RMRPAuth.isAdmin(cur)){
           Array.from(roleSel.options).forEach(function(opt){
             if(opt.value === 'Разработчик') opt.disabled = true;
