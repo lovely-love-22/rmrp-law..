@@ -85,6 +85,7 @@
 .edit-form input,.edit-form select,.edit-form textarea{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit}
 .edit-form input:focus,.edit-form select:focus,.edit-form textarea:focus{border-color:#4aa8ff}
 .edit-form textarea{min-height:80px;resize:vertical}
+.edit-form select:disabled{opacity:.55;cursor:not-allowed;background:var(--bg-1);color:var(--txt-3)}
 .users-table{width:100%;border-collapse:collapse;margin-top:20px}
 .users-table th,.users-table td{padding:12px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px}
 .users-table th{color:var(--txt-3);font-size:11.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
@@ -102,8 +103,6 @@
 .user-act-btn.del:hover{background:rgba(255,70,85,.25)}
 .user-act-btn:disabled{opacity:.35;cursor:not-allowed}
 .users-loading{padding:24px;text-align:center;color:var(--txt-3);font-size:13px}
-
-/* ЗАЯВКИ */
 .requests-panel{margin-top:40px;padding:24px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg)}
 .requests-panel h3{font-size:17px;color:var(--txt-0);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .requests-count{padding:3px 10px;border-radius:999px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-size:12px;font-weight:800}
@@ -141,7 +140,6 @@
 .request-form-grid label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
 .request-form-grid select{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;font-family:inherit}
 .request-form-grid select:focus{border-color:#fbbf24}
-
 .modal-overlay-soft{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay-soft.active{display:flex}
 .modal-soft{background:var(--bg-2);border:1px solid var(--line-2);border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
@@ -198,7 +196,6 @@
 <section class="section">
   <div class="container">
 
-    <!-- АВТОРИЗАЦИЯ -->
     <div id="authScreen" class="auth-wrap" hidden>
       <div class="auth-tabs">
         <button class="auth-tab active" data-auth-tab="login">🔑 Вход</button>
@@ -232,7 +229,6 @@
       </div>
     </div>
 
-    <!-- ПРОФИЛЬ -->
     <div id="profileScreen" class="profile-wrap" hidden>
       <div class="profile-banner" id="pBanner">
         <button class="profile-banner-edit" onclick="Profile.editBanner()">🖼 Сменить баннер</button>
@@ -300,8 +296,15 @@
         <div class="edit-form" id="editForm" hidden>
           <div class="full"><label>Отображаемое имя</label><input type="text" id="editName"></div>
           <div class="full"><label>О себе</label><textarea id="editBio"></textarea></div>
-          <div><label>Звание</label><select id="editRank"></select></div>
-          <div><label>Должность</label><select id="editPos"></select></div>
+          <div>
+            <label>Звание</label>
+            <select id="editRank"></select>
+            <div id="editRankHint" style="font-size:11.5px;margin-top:5px;font-style:italic;display:none"></div>
+          </div>
+          <div>
+            <label>Должность</label>
+            <select id="editPos"></select>
+          </div>
           <div><label>Discord</label><input type="text" id="editDiscord"></div>
           <div><label>Форум</label><input type="text" id="editForum"></div>
           <div class="full" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
@@ -310,7 +313,6 @@
           </div>
         </div>
 
-        <!-- ПОДАТЬ ЗАЯВКУ -->
         <div class="requests-panel" id="requestFormPanel" hidden>
           <h3>📤 Подать заявку на повышение</h3>
           <p style="font-size:13px;color:var(--txt-3);margin-bottom:16px;line-height:1.5">
@@ -333,7 +335,6 @@
           </div>
         </div>
 
-        <!-- АДМИН-ПАНЕЛЬ ЗАЯВОК -->
         <div class="requests-panel" id="requestsPanel" hidden>
           <h3>
             <span>📥 Заявки на повышение <span class="requests-count" id="requestsCount" style="display:none">0</span></span>
@@ -347,7 +348,6 @@
           <div id="requestsList"></div>
         </div>
 
-        <!-- СПИСОК ЮЗЕРОВ -->
         <div id="usersWrap" hidden>
           <h3 style="margin-top:30px;font-size:17px;color:var(--txt-0)">👥 Зарегистрированные пользователи</h3>
           <div id="usersLoading" class="users-loading">⏳ Загрузка списка пользователей…</div>
@@ -483,7 +483,6 @@
     var ranks = RMRPAuth.RANKS;
     var positions = RMRPAuth.POSITIONS;
 
-    /* При регистрации — только до Капитана / Инструктора ВК */
     var regRankLimit = RMRPAuth.RANK_IDX[RMRPAuth.REG_MAX_RANK];
     var regPosLimit = RMRPAuth.POS_IDX[RMRPAuth.REG_MAX_POS];
 
@@ -500,7 +499,6 @@
         .map(function(p){ return '<option>' + p + '</option>'; }).join('');
     }
 
-    /* Полные списки для редактирования */
     ['editRank','euRank'].forEach(function(id){
       var s = document.getElementById(id);
       if(!s) return;
@@ -580,7 +578,6 @@
       }
     }
 
-    /* Звание + погон */
     var rankBanner = document.getElementById('pRankBanner');
     if(rankBanner){
       rankBanner.style.background = 'linear-gradient(135deg,' + RMRPAuth.rankColor(u.rank) + ')';
@@ -673,6 +670,9 @@
     location.href = 'index.html';
   }
 
+  /* ============================================================
+     РЕДАКТИРОВАНИЕ ПРОФИЛЯ — с блокировкой звания/должности
+     ============================================================ */
   function toggleEdit(){
     var form = document.getElementById('editForm');
     if(!form) return;
@@ -683,23 +683,90 @@
       setVal('editBio', u.bio || '');
       setVal('editDiscord', u.discord || '');
       setVal('editForum', u.forum || '');
-      if(u.rank) setVal('editRank', u.rank);
-      if(u.position) setVal('editPos', u.position);
+
+      var canSelf = RMRPAuth.canSelfPromote(u);
+      var rankSel = document.getElementById('editRank');
+      var posSel  = document.getElementById('editPos');
+
+      if(canSelf){
+        rankSel.disabled = false;
+        posSel.disabled = false;
+        if(u.rank) setVal('editRank', u.rank);
+        if(u.position) setVal('editPos', u.position);
+        if(!RMRPAuth.isAdmin(u)){
+          var maxRank = RMRPAuth.RANK_IDX[u.rank];
+          Array.from(rankSel.options).forEach(function(opt){
+            opt.disabled = RMRPAuth.RANK_IDX[opt.value] > maxRank;
+          });
+          var maxPos = RMRPAuth.POS_IDX[u.position];
+          Array.from(posSel.options).forEach(function(opt){
+            opt.disabled = RMRPAuth.POS_IDX[opt.value] > maxPos;
+          });
+        }
+      } else {
+        rankSel.disabled = true;
+        posSel.disabled = true;
+        if(u.rank) setVal('editRank', u.rank);
+        if(u.position) setVal('editPos', u.position);
+      }
+
+      var hint = document.getElementById('editRankHint');
+      if(hint){
+        if(!canSelf){
+          hint.textContent = '🔒 Звание и должность назначает только администрация (от Майора и выше)';
+          hint.style.color = '#ff6b78';
+          hint.style.display = 'block';
+        } else if(!RMRPAuth.isAdmin(u)){
+          hint.textContent = 'ℹ️ Можно менять только до ' + u.rank + ' / ' + u.position + '. Выше — через заявку';
+          hint.style.color = '#fbbf24';
+          hint.style.display = 'block';
+        } else {
+          hint.style.display = 'none';
+        }
+      }
+
       form.hidden = false;
-    } else form.hidden = true;
+    } else {
+      form.hidden = true;
+    }
   }
 
   function saveEdit(){
+    var u = RMRPAuth.getCurrent();
+    if(!u) return;
+
     var btn = document.getElementById('btnSaveEdit');
     btn.disabled = true; btn.textContent = '⏳ Сохранение…';
-    RMRPAuth.update({
+
+    var patch = {
       displayName: getVal('editName'),
       bio: getVal('editBio'),
       discord: getVal('editDiscord'),
-      forum: getVal('editForum'),
-      rank: getVal('editRank'),
-      position: getVal('editPos')
-    }).then(function(res){
+      forum: getVal('editForum')
+    };
+
+    if(RMRPAuth.canSelfPromote(u)){
+      var newRank = getVal('editRank');
+      var newPos  = getVal('editPos');
+
+      if(!RMRPAuth.isAdmin(u)){
+        if(RMRPAuth.RANK_IDX[newRank] > RMRPAuth.RANK_IDX[u.rank]){
+          btn.disabled = false; btn.textContent = '💾 Сохранить';
+          showFancy('Нельзя выше своего', 'Максимум что можно — ' + u.rank);
+          return;
+        }
+        if(RMRPAuth.POS_IDX[newPos] > RMRPAuth.POS_IDX[u.position]){
+          btn.disabled = false; btn.textContent = '💾 Сохранить';
+          showFancy('Нельзя выше своего', 'Максимум что можно — ' + u.position);
+          return;
+        }
+      }
+
+      patch.rank = newRank;
+      patch.position = newPos;
+    }
+
+    RMRPAuth.update(patch).then(function(res){
       btn.disabled = false; btn.textContent = '💾 Сохранить';
       if(!res.ok){ showFancy('Ошибка', res.error); return; }
       document.getElementById('editForm').hidden = true;
@@ -1142,7 +1209,6 @@
   if(RMRPAuth.getCurrent()) showProfile();
   else showAuth();
 
-  /* Автосинхронизация */
   if(RMRPAuth.getCurrent() && RMRPAuth.refreshCurrent){
     RMRPAuth.refreshCurrent().then(function(res){
       if(res && res.changed) renderProfile();
