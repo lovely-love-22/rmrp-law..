@@ -9,166 +9,322 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#0a0b0f;color:#fff}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#000;color:#fff}
 
 /* ============================================================
-   ФОН — ВИДЕО/КАРТИНКА С АРМЕЙСКОЙ ТЕМАТИКОЙ
+   ФОНОВЫЕ СЦЕНЫ (несколько анимаций)
    ============================================================ */
-.cz-bg{
+.cz-scene{
   position:fixed;inset:0;z-index:0;
-  background:
-    linear-gradient(rgba(10,11,15,.55),rgba(10,11,15,.85)),
-    radial-gradient(1200px 800px at 50% 50%, rgba(255,70,85,.08), transparent 70%),
-    url('https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1920&q=80') center/cover no-repeat;
-  filter:saturate(.7) contrast(1.05);
-  transition:filter 3s ease;
+  opacity:0;transition:opacity 2s ease;
+  background-size:cover;background-position:center;
 }
-.cz-bg::after{
+.cz-scene.active{opacity:1}
+
+/* Сцена 1: Пляж и море */
+.scene-beach{
+  background:
+    linear-gradient(180deg,
+      #1a3a5c 0%,
+      #2d5f8e 20%,
+      #e8a87c 45%,
+      #d97b3d 55%,
+      #2d5f8e 55.5%,
+      #1a3a5c 75%,
+      #0a1a2e 100%);
+}
+.scene-beach::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.15), transparent 30%),
+    radial-gradient(circle at 60% 15%, rgba(255,255,255,.08), transparent 20%);
+  animation:sunGlow 8s ease-in-out infinite;
+}
+.scene-beach::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, transparent 55%, rgba(255,255,255,.03) 55.5%, transparent 56%),
+    linear-gradient(180deg, transparent 58%, rgba(255,255,255,.03) 58.5%, transparent 59%),
+    linear-gradient(180deg, transparent 61%, rgba(255,255,255,.03) 61.5%, transparent 62%),
+    linear-gradient(180deg, transparent 64%, rgba(255,255,255,.03) 64.5%, transparent 65%),
+    linear-gradient(180deg, transparent 67%, rgba(255,255,255,.03) 67.5%, transparent 68%);
+  animation:waves 6s ease-in-out infinite;
+}
+@keyframes sunGlow{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes waves{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* Сцена 2: Закат / море */
+.scene-sunset{
+  background:
+    linear-gradient(180deg,
+      #2d1b4e 0%,
+      #6b2e5f 25%,
+      #c94a70 45%,
+      #ffa45b 55%,
+      #ff6b35 60%,
+      #1a1a3e 60.5%,
+      #0a0a1a 100%);
+}
+.scene-sunset::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 55%, rgba(255,180,80,.4), transparent 40%);
+  animation:sunPulse 6s ease-in-out infinite;
+}
+.scene-sunset::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, transparent 62%, rgba(255,180,80,.08) 62.5%, transparent 63%),
+    linear-gradient(180deg, transparent 66%, rgba(255,180,80,.06) 66.5%, transparent 67%),
+    linear-gradient(180deg, transparent 70%, rgba(255,180,80,.04) 70.5%, transparent 71%);
+  animation:waves 5s ease-in-out infinite;
+}
+@keyframes sunPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.1);opacity:1}}
+
+/* Сцена 3: Ночь / звёзды */
+.scene-night{
+  background:
+    linear-gradient(180deg,
+      #000814 0%,
+      #001d3d 30%,
+      #003566 55%,
+      #001d3d 70%,
+      #000814 100%);
+}
+.scene-night::before{
   content:"";position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%);
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 15%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 45%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 75% 25%, #fff, transparent),
+    radial-gradient(1px 1px at 85% 55%, #fff, transparent),
+    radial-gradient(1px 1px at 15% 60%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 50% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 90% 35%, #fff, transparent),
+    radial-gradient(1px 1px at 10% 45%, #fff, transparent);
+  animation:twinkle 4s ease-in-out infinite;
 }
+.scene-night::after{
+  content:"";position:absolute;top:10%;right:15%;width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle, #fff 0%, rgba(255,255,255,.6) 20%, transparent 60%);
+  box-shadow:0 0 60px rgba(255,255,255,.4);
+  animation:moonGlow 6s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes moonGlow{0%,100%{box-shadow:0 0 60px rgba(255,255,255,.4)}50%{box-shadow:0 0 90px rgba(255,255,255,.7)}}
+
+/* Сцена 4: Лес / туман */
+.scene-forest{
+  background:
+    linear-gradient(180deg,
+      #0d2818 0%,
+      #1a3d2a 30%,
+      #2d5a3f 55%,
+      #1a3d2a 75%,
+      #0d2818 100%);
+}
+.scene-forest::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(100,200,120,.15), transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(100,200,120,.08), transparent 50%),
+    radial-gradient(ellipse at 80% 85%, rgba(100,200,120,.1), transparent 50%);
+  animation:fogMove 10s ease-in-out infinite;
+}
+@keyframes fogMove{0%,100%{transform:translateX(0)}50%{transform:translateX(30px)}}
+
+/* Сцена 5: Костёр */
+.scene-fire{
+  background:
+    radial-gradient(ellipse at 50% 80%, #4a1f0a 0%, #1a0f05 40%, #000 100%);
+}
+.scene-fire::before{
+  content:"";position:absolute;bottom:15%;left:50%;transform:translateX(-50%);
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle, #ffb84d 0%, #ff6b1a 30%, #cc3300 60%, transparent 80%);
+  filter:blur(20px);
+  animation:fireGlow 2s ease-in-out infinite;
+}
+.scene-fire::after{
+  content:"";position:absolute;bottom:20%;left:50%;transform:translateX(-50%);
+  width:80px;height:120px;
+  background:
+    radial-gradient(ellipse at 50% 100%, #ffeb3b 0%, #ff9800 40%, #f44336 70%, transparent 90%);
+  filter:blur(10px);
+  animation:fireFlicker 1.5s ease-in-out infinite;
+}
+@keyframes fireGlow{0%,100%{transform:translateX(-50%) scale(1);opacity:.8}50%{transform:translateX(-50%) scale(1.15);opacity:1}}
+@keyframes fireFlicker{0%,100%{transform:translateX(-50%) scaleY(1)}25%{transform:translateX(-52%) scaleY(1.1)}75%{transform:translateX(-48%) scaleY(.95)}}
 
 /* ============================================================
    ВЕРХНЯЯ ПАНЕЛЬ
    ============================================================ */
 .cz-topbar{
-  position:fixed;top:0;left:0;right:0;z-index:10;
-  padding:20px 30px;
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  padding:18px 30px;
   display:flex;justify-content:space-between;align-items:center;
-  background:linear-gradient(180deg, rgba(10,11,15,.85), transparent);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+  background:linear-gradient(180deg, rgba(0,0,0,.7), transparent);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 .cz-logo{
   display:flex;align-items:center;gap:12px;
   font-size:18px;font-weight:900;letter-spacing:-.5px;
 }
-.cz-logo-icon{
-  font-size:26px;
-  filter:drop-shadow(0 0 12px rgba(255,70,85,.6));
-}
+.cz-logo-icon{font-size:26px;filter:drop-shadow(0 0 12px rgba(255,70,85,.6))}
 .cz-logo-text .accent{color:#ff4655}
 
+.cz-topbar-right{display:flex;align-items:center;gap:14px}
+.cz-clock{
+  font-size:14px;font-weight:700;color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  padding:8px 16px;border-radius:99px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(8px);
+}
 .cz-exit{
-  padding:10px 20px;border-radius:99px;
-  background:rgba(255,70,85,.12);color:#ff6b78;
+  padding:10px 18px;border-radius:99px;
+  background:rgba(255,70,85,.15);color:#ff6b78;
   border:1px solid rgba(255,70,85,.3);
-  font-size:13px;font-weight:700;
-  cursor:pointer;text-decoration:none;
+  font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;
   transition:.3s;
 }
-.cz-exit:hover{background:rgba(255,70,85,.25);transform:translateY(-2px)}
+.cz-exit:hover{background:rgba(255,70,85,.3);transform:translateY(-2px)}
 
 /* ============================================================
-   ЦЕНТРАЛЬНЫЙ КОНТЕНТ
+   ПЕРЕКЛЮЧАТЕЛЬ СЦЕН (левый угол)
+   ============================================================ */
+.cz-scenes{
+  position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:15;
+  display:flex;flex-direction:column;gap:10px;
+  padding:14px;border-radius:20px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.cz-scene-btn{
+  width:52px;height:52px;border-radius:14px;border:0;cursor:pointer;
+  font-size:22px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);color:#fff;
+  transition:.3s;position:relative;
+}
+.cz-scene-btn:hover{background:rgba(255,255,255,.18);transform:scale(1.08)}
+.cz-scene-btn.active{
+  background:linear-gradient(135deg,#ff4655,#a855f7);
+  box-shadow:0 8px 24px rgba(255,70,85,.5);
+}
+
+/* ============================================================
+   ЦЕНТР
    ============================================================ */
 .cz-content{
-  position:relative;z-index:5;
+  position:relative;z-index:10;
   height:100vh;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  text-align:center;padding:20px;
+  text-align:center;padding:100px 20px 200px;
 }
 
 .cz-tag{
   display:inline-block;padding:8px 20px;border-radius:99px;
-  background:linear-gradient(135deg, rgba(255,70,85,.15), rgba(168,85,247,.1));
-  border:1px solid rgba(255,70,85,.3);
+  background:linear-gradient(135deg, rgba(255,70,85,.2), rgba(168,85,247,.15));
+  border:1px solid rgba(255,70,85,.4);
   color:#ff6b78;font-size:12px;font-weight:700;
   letter-spacing:3px;text-transform:uppercase;
-  margin-bottom:30px;
-  animation:tagIn 1.2s ease;
+  margin-bottom:28px;
+  backdrop-filter:blur(8px);
 }
-@keyframes tagIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
 .cz-title{
-  font-size:clamp(40px, 8vw, 96px);
-  font-weight:900;letter-spacing:-3px;line-height:1;
-  margin-bottom:20px;
-  background:linear-gradient(135deg, #fff 0%, #ff6b78 50%, #a855f7 100%);
+  font-size:clamp(44px, 9vw, 110px);
+  font-weight:900;letter-spacing:-4px;line-height:1;
+  margin-bottom:18px;
+  background:linear-gradient(135deg, #fff 0%, #ff6b78 40%, #a855f7 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 80px rgba(255,70,85,.5);
   animation:titleIn 1.5s ease;
-  text-shadow:0 0 80px rgba(255,70,85,.4);
 }
 @keyframes titleIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
 
 .cz-subtitle{
-  font-size:clamp(15px, 2vw, 20px);
-  color:#a8adbd;max-width:640px;line-height:1.6;
-  margin-bottom:50px;
-  animation:subIn 2s ease;
+  font-size:clamp(14px, 1.8vw, 18px);
+  color:rgba(255,255,255,.85);max-width:600px;line-height:1.6;
+  margin-bottom:40px;
+  text-shadow:0 2px 10px rgba(0,0,0,.8);
 }
-@keyframes subIn{from{opacity:0}to{opacity:1}}
 
 /* ============================================================
-   ВИЗУАЛИЗАТОР МУЗЫКИ
+   ВИЗУАЛИЗАТОР
    ============================================================ */
 .cz-visualizer{
-  display:flex;align-items:flex-end;gap:6px;
-  height:80px;margin-bottom:40px;
+  display:flex;align-items:flex-end;gap:5px;
+  height:100px;margin-bottom:30px;
+  filter:drop-shadow(0 0 20px rgba(255,70,85,.5));
 }
 .cz-bar{
   width:6px;background:linear-gradient(180deg, #ff4655, #a855f7, #4aa8ff);
   border-radius:99px;
   animation:barPulse 1.2s ease-in-out infinite;
-  box-shadow:0 0 12px rgba(255,70,85,.5);
 }
 .cz-bar:nth-child(1){animation-delay:0s;height:30%}
-.cz-bar:nth-child(2){animation-delay:.15s;height:60%}
-.cz-bar:nth-child(3){animation-delay:.3s;height:90%}
-.cz-bar:nth-child(4){animation-delay:.45s;height:70%}
-.cz-bar:nth-child(5){animation-delay:.6s;height:100%}
-.cz-bar:nth-child(6){animation-delay:.75s;height:80%}
-.cz-bar:nth-child(7){animation-delay:.9s;height:50%}
-.cz-bar:nth-child(8){animation-delay:1.05s;height:65%}
-.cz-bar:nth-child(9){animation-delay:1.2s;height:40%}
+.cz-bar:nth-child(2){animation-delay:.1s;height:60%}
+.cz-bar:nth-child(3){animation-delay:.2s;height:90%}
+.cz-bar:nth-child(4){animation-delay:.3s;height:70%}
+.cz-bar:nth-child(5){animation-delay:.4s;height:100%}
+.cz-bar:nth-child(6){animation-delay:.5s;height:80%}
+.cz-bar:nth-child(7){animation-delay:.6s;height:50%}
+.cz-bar:nth-child(8){animation-delay:.7s;height:65%}
+.cz-bar:nth-child(9){animation-delay:.8s;height:40%}
+.cz-bar:nth-child(10){animation-delay:.9s;height:75%}
+.cz-bar:nth-child(11){animation-delay:1s;height:55%}
 @keyframes barPulse{
-  0%,100%{transform:scaleY(.5);opacity:.6}
-  50%{transform:scaleY(1.1);opacity:1}
+  0%,100%{transform:scaleY(.4);opacity:.7}
+  50%{transform:scaleY(1.2);opacity:1}
 }
+.cz-visualizer.paused .cz-bar{animation-play-state:paused;opacity:.3}
 
 /* ============================================================
-   ПЛЕЕР
+   ПЛЕЕР (внизу центр)
    ============================================================ */
 .cz-player{
-  display:flex;align-items:center;gap:20px;
-  padding:18px 30px;border-radius:99px;
-  background:rgba(19,20,26,.75);
-  border:1px solid rgba(255,255,255,.1);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-  animation:playerIn 2.5s ease;
-  max-width:90vw;
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  z-index:15;
+  display:flex;align-items:center;gap:16px;
+  padding:14px 22px;border-radius:99px;
+  background:rgba(15,15,20,.85);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  box-shadow:0 20px 60px rgba(0,0,0,.8), 0 0 80px rgba(255,70,85,.15);
+  max-width:92vw;
 }
-@keyframes playerIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 
 .cz-play{
-  width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;
+  width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;flex-shrink:0;
   background:linear-gradient(135deg, #ff4655, #a855f7);
   display:flex;align-items:center;justify-content:center;
-  font-size:24px;color:#fff;
+  font-size:22px;color:#fff;
   transition:.3s;
-  box-shadow:0 8px 24px rgba(255,70,85,.4);
+  box-shadow:0 8px 24px rgba(255,70,85,.5);
 }
-.cz-play:hover{transform:scale(1.08);box-shadow:0 12px 32px rgba(255,70,85,.6)}
+.cz-play:hover{transform:scale(1.08)}
 .cz-play:disabled{opacity:.5;cursor:wait}
 
-.cz-track-info{text-align:left;min-width:0}
-.cz-track-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-.cz-track-artist{font-size:12px;color:#6e7385}
-
-.cz-volume{
-  display:flex;align-items:center;gap:10px;
+.cz-prev,.cz-next{
+  width:36px;height:36px;border-radius:50%;border:0;cursor:pointer;flex-shrink:0;
+  background:rgba(255,255,255,.08);color:#fff;
+  font-size:14px;display:flex;align-items:center;justify-content:center;
+  transition:.3s;
 }
+.cz-prev:hover,.cz-next:hover{background:rgba(255,255,255,.2);transform:scale(1.1)}
+
+.cz-track-info{text-align:left;min-width:0;max-width:220px}
+.cz-track-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cz-track-artist{font-size:11.5px;color:#a8adbd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.cz-volume{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .cz-volume-icon{font-size:16px;color:#a8adbd}
 .cz-volume-slider{
-  width:100px;height:4px;border-radius:99px;
-  background:rgba(255,255,255,.1);
+  width:80px;height:4px;border-radius:99px;
+  background:rgba(255,255,255,.15);
   -webkit-appearance:none;appearance:none;
   outline:none;cursor:pointer;
 }
@@ -176,53 +332,146 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
   -webkit-appearance:none;appearance:none;
   width:14px;height:14px;border-radius:50%;
   background:linear-gradient(135deg,#ff4655,#a855f7);
-  cursor:pointer;box-shadow:0 0 8px rgba(255,70,85,.6);
+  cursor:pointer;box-shadow:0 0 8px rgba(255,70,85,.8);
 }
 .cz-volume-slider::-moz-range-thumb{
   width:14px;height:14px;border-radius:50%;border:0;
-  background:linear-gradient(135deg,#ff4655,#a855f7);
-  cursor:pointer;
+  background:linear-gradient(135deg,#ff4655,#a855f7);cursor:pointer;
 }
 
+.cz-stations-btn{
+  padding:8px 14px;border-radius:99px;
+  background:linear-gradient(135deg, #fbbf24, #d97706);
+  color:#fff;font-size:12px;font-weight:700;
+  border:0;cursor:pointer;transition:.3s;flex-shrink:0;
+}
+.cz-stations-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(251,191,36,.4)}
+
 /* ============================================================
-   НИЖНЯЯ ПАНЕЛЬ — ФРАЗЫ
+   ПАНЕЛЬ СТАНЦИЙ (модалка справа)
+   ============================================================ */
+.cz-stations-panel{
+  position:fixed;top:0;right:-420px;bottom:0;z-index:30;
+  width:420px;max-width:100vw;
+  background:rgba(15,15,20,.98);
+  border-left:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(30px);
+  transition:right .4s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;padding:24px;
+}
+.cz-stations-panel.open{right:0}
+.cz-stations-panel::-webkit-scrollbar{width:6px}
+.cz-stations-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+
+.cz-panel-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:24px;padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.cz-panel-title{font-size:18px;font-weight:900;color:#fff}
+.cz-panel-close{
+  width:36px;height:36px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#fff;font-size:16px;
+  transition:.3s;
+}
+.cz-panel-close:hover{background:rgba(255,70,85,.3)}
+
+.cz-section-title{
+  font-size:11.5px;text-transform:uppercase;letter-spacing:2px;
+  font-weight:800;color:#6e7385;margin:20px 0 12px;
+}
+
+.cz-station{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  margin-bottom:8px;cursor:pointer;transition:.3s;
+}
+.cz-station:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);transform:translateX(-3px)}
+.cz-station.active{background:linear-gradient(135deg, rgba(255,70,85,.2), rgba(168,85,247,.15));border-color:rgba(255,70,85,.5)}
+.cz-station-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg, #ff4655, #a855f7);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.cz-station-info{flex:1;min-width:0}
+.cz-station-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.cz-station-desc{font-size:11.5px;color:#a8adbd}
+
+.cz-custom-url{
+  padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+}
+.cz-custom-url input{
+  width:100%;padding:11px 14px;border-radius:10px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);
+  color:#fff;font-size:13px;outline:none;margin-bottom:10px;
+  font-family:inherit;
+}
+.cz-custom-url input:focus{border-color:#fbbf24}
+.cz-custom-url button{
+  width:100%;padding:11px;border-radius:10px;
+  background:linear-gradient(135deg, #fbbf24, #d97706);
+  color:#fff;font-weight:700;font-size:13px;border:0;cursor:pointer;
+  transition:.3s;
+}
+.cz-custom-url button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(251,191,36,.4)}
+
+/* ============================================================
+   ЦИТАТА
    ============================================================ */
 .cz-quote{
-  position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:120px;left:50%;transform:translateX(-50%);
   z-index:5;text-align:center;
-  font-size:14px;color:#6e7385;font-style:italic;
+  font-size:14px;color:rgba(255,255,255,.7);font-style:italic;
   max-width:600px;padding:0 20px;
-  animation:quoteFade 15s ease-in-out infinite;
+  text-shadow:0 2px 10px rgba(0,0,0,.9);
+  transition:opacity .5s;
 }
 .cz-quote::before{content:"« "}
 .cz-quote::after{content:" »"}
-@keyframes quoteFade{
-  0%,100%{opacity:.4}
-  50%{opacity:.9}
-}
 
 /* ============================================================
    АДАПТИВ
    ============================================================ */
+@media(max-width:900px){
+  .cz-scenes{left:12px;top:auto;bottom:150px;transform:none;padding:10px;gap:6px}
+  .cz-scene-btn{width:42px;height:42px;font-size:18px}
+}
 @media(max-width:700px){
-  .cz-topbar{padding:14px 18px}
-  .cz-logo{font-size:15px}
+  .cz-topbar{padding:12px 16px}
+  .cz-logo{font-size:14px}
+  .cz-clock{font-size:12px;padding:6px 12px}
   .cz-exit{padding:8px 14px;font-size:12px}
-  .cz-visualizer{height:50px;gap:4px;margin-bottom:30px}
+  .cz-player{padding:10px 14px;gap:10px;bottom:16px;flex-wrap:wrap;justify-content:center;max-width:96vw}
+  .cz-play{width:48px;height:48px;font-size:18px}
+  .cz-prev,.cz-next{width:30px;height:30px}
+  .cz-track-info{max-width:140px}
+  .cz-track-title{font-size:12px}
+  .cz-volume{display:none}
+  .cz-stations-btn{padding:6px 10px;font-size:11px}
+  .cz-visualizer{height:60px;gap:3px;margin-bottom:16px}
   .cz-bar{width:4px}
-  .cz-player{padding:14px 20px;gap:12px;flex-wrap:wrap;justify-content:center}
-  .cz-play{width:50px;height:50px;font-size:20px}
-  .cz-track-title{font-size:13px;max-width:200px}
-  .cz-track-artist{font-size:11px}
-  .cz-volume-slider{width:70px}
-  .cz-quote{font-size:12px;bottom:20px}
+  .cz-stations-panel{width:100%;right:-100%}
+  .cz-quote{font-size:12px;bottom:180px}
+  .cz-content{padding:80px 16px 220px}
+  .cz-scenes{left:8px;bottom:190px}
 }
 </style>
 </head>
 <body>
 
-<!-- ФОН -->
-<div class="cz-bg"></div>
+<!-- ============================================================
+     СЦЕНЫ ФОНА
+     ============================================================ -->
+<div class="cz-scene scene-beach active" data-scene="beach"></div>
+<div class="cz-scene scene-sunset" data-scene="sunset"></div>
+<div class="cz-scene scene-night" data-scene="night"></div>
+<div class="cz-scene scene-forest" data-scene="forest"></div>
+<div class="cz-scene scene-fire" data-scene="fire"></div>
 
 <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
 <div class="cz-topbar">
@@ -230,147 +479,287 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
     <span class="cz-logo-icon">⚖️</span>
     <span class="cz-logo-text">RM<span class="accent">RP</span> · Комфорт-зона</span>
   </div>
-  <a href="gate.html" class="cz-exit">← Назад к входу</a>
+  <div class="cz-topbar-right">
+    <div class="cz-clock" id="czClock">--:--:--</div>
+    <a href="index.html" class="cz-exit">← На главную</a>
+  </div>
 </div>
 
-<!-- КОНТЕНТ -->
+<!-- ПЕРЕКЛЮЧАТЕЛЬ СЦЕН -->
+<div class="cz-scenes">
+  <button class="cz-scene-btn active" data-scene="beach" onclick="CZ.setScene('beach')" title="Пляж">🏖️</button>
+  <button class="cz-scene-btn" data-scene="sunset" onclick="CZ.setScene('sunset')" title="Закат">🌅</button>
+  <button class="cz-scene-btn" data-scene="night" onclick="CZ.setScene('night')" title="Ночь">🌙</button>
+  <button class="cz-scene-btn" data-scene="forest" onclick="CZ.setScene('forest')" title="Лес">🌲</button>
+  <button class="cz-scene-btn" data-scene="fire" onclick="CZ.setScene('fire')" title="Костёр">🔥</button>
+</div>
+
+<!-- ЦЕНТРАЛЬНЫЙ КОНТЕНТ -->
 <div class="cz-content">
   <div class="cz-tag">🎖️ Атмосфера службы</div>
-
   <h1 class="cz-title">Комфорт-зона</h1>
-
   <p class="cz-subtitle">
-    Тихое место для отдыха. Включи музыку, сделай вдох — и снова в бой.
+    Тихое место для отдыха. Включи радио, выбери сцену — и сделай вдох перед новым боем.
   </p>
 
   <!-- Визуализатор -->
-  <div class="cz-visualizer">
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-    <div class="cz-bar"></div>
-  </div>
-
-  <!-- Плеер -->
-  <div class="cz-player">
-    <button class="cz-play" id="czPlay" onclick="CZ.toggle()">▶</button>
-    <div class="cz-track-info">
-      <div class="cz-track-title" id="czTitle">Armed Forces Ambient</div>
-      <div class="cz-track-artist">RMRP · Комфорт-зона</div>
-    </div>
-    <div class="cz-volume">
-      <span class="cz-volume-icon">🔊</span>
-      <input type="range" class="cz-volume-slider" id="czVolume" min="0" max="100" value="40" oninput="CZ.setVolume(this.value)">
-    </div>
+  <div class="cz-visualizer" id="czViz">
+    <div class="cz-bar"></div><div class="cz-bar"></div><div class="cz-bar"></div>
+    <div class="cz-bar"></div><div class="cz-bar"></div><div class="cz-bar"></div>
+    <div class="cz-bar"></div><div class="cz-bar"></div><div class="cz-bar"></div>
+    <div class="cz-bar"></div><div class="cz-bar"></div>
   </div>
 </div>
 
 <!-- ЦИТАТА -->
-<div class="cz-quote" id="czQuote">
-  Дисциплина — мать победы
+<div class="cz-quote" id="czQuote">Дисциплина — мать победы</div>
+
+<!-- ============================================================
+     ПЛЕЕР
+     ============================================================ -->
+<div class="cz-player">
+  <button class="cz-prev" id="czPrev" onclick="CZ.prev()" title="Предыдущая">⏮</button>
+  <button class="cz-play" id="czPlay" onclick="CZ.toggle()">▶</button>
+  <button class="cz-next" id="czNext" onclick="CZ.next()" title="Следующая">⏭</button>
+  <div class="cz-track-info">
+    <div class="cz-track-title" id="czTitle">Выберите радио</div>
+    <div class="cz-track-artist" id="czArtist">RMRP · Комфорт-зона</div>
+  </div>
+  <div class="cz-volume">
+    <span class="cz-volume-icon">🔊</span>
+    <input type="range" class="cz-volume-slider" id="czVolume" min="0" max="100" value="50" oninput="CZ.setVolume(this.value)">
+  </div>
+  <button class="cz-stations-btn" onclick="CZ.toggleStations()">📻 Станции</button>
+</div>
+
+<!-- ============================================================
+     ПАНЕЛЬ СТАНЦИЙ
+     ============================================================ -->
+<div class="cz-stations-panel" id="czStationsPanel">
+  <div class="cz-panel-head">
+    <div class="cz-panel-title">📻 Радиостанции</div>
+    <button class="cz-panel-close" onclick="CZ.toggleStations()">✕</button>
+  </div>
+
+  <div class="cz-section-title">🇷🇺 Шансон и ретро</div>
+  <div class="cz-station" data-station="shanson1" onclick="CZ.playStation('shanson1')">
+    <div class="cz-station-icon">🎸</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Радио Шансон</div>
+      <div class="cz-station-desc">Классика русского шансона</div>
+    </div>
+  </div>
+  <div class="cz-station" data-station="shanson2" onclick="CZ.playStation('shanson2')">
+    <div class="cz-station-icon">🎵</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Шансон 24/7</div>
+      <div class="cz-station-desc">Лучшие хиты</div>
+    </div>
+  </div>
+  <div class="cz-station" data-station="retro" onclick="CZ.playStation('retro')">
+    <div class="cz-station-icon">📻</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Ретро FM</div>
+      <div class="cz-station-desc">Хиты 80-х и 90-х</div>
+    </div>
+  </div>
+
+  <div class="cz-section-title">🎯 Армейские / патриотичные</div>
+  <div class="cz-station" data-station="military" onclick="CZ.playStation('military')">
+    <div class="cz-station-icon">🎖️</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Военные марши</div>
+      <div class="cz-station-desc">Парадные марши</div>
+    </div>
+  </div>
+  <div class="cz-station" data-station="epic" onclick="CZ.playStation('epic')">
+    <div class="cz-station-icon">🎬</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Epic Music</div>
+      <div class="cz-station-desc">Кинематографичная</div>
+    </div>
+  </div>
+
+  <div class="cz-section-title">🎧 Chill / Lo-fi</div>
+  <div class="cz-station" data-station="lofi" onclick="CZ.playStation('lofi')">
+    <div class="cz-station-icon">☕</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Lo-Fi Beats</div>
+      <div class="cz-station-desc">Расслабляющая музыка</div>
+    </div>
+  </div>
+  <div class="cz-station" data-station="ambient" onclick="CZ.playStation('ambient')">
+    <div class="cz-station-icon">🌊</div>
+    <div class="cz-station-info">
+      <div class="cz-station-name">Ambient Nature</div>
+      <div class="cz-station-desc">Шум волн и леса</div>
+    </div>
+  </div>
+
+  <div class="cz-section-title">🔗 Своя ссылка</div>
+  <div class="cz-custom-url">
+    <input type="text" id="czCustomUrl" placeholder="https://example.com/radio.mp3">
+    <button onclick="CZ.playCustom()">▶ Включить</button>
+  </div>
 </div>
 
 <script>
 (function(){
   'use strict';
 
-  /* Плейлист с музыкой для комфорт-зоны (замени ссылки при желании) */
-  var PLAYLIST = [
-    {
-      title: 'Armed Forces Ambient',
+  /* ============================================================
+     СТАНЦИИ (реальные рабочие стримы)
+     ============================================================ */
+  var STATIONS = {
+    shanson1: {
+      name: 'Радио Шансон',
       artist: 'RMRP · Комфорт-зона',
-      src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=military-drum-112481.mp3'
+      url: 'https://chanson.hostingradio.ru:8041/chanson128.mp3'
     },
-    {
-      title: 'Epic Battle Music',
+    shanson2: {
+      name: 'Шансон 24/7',
       artist: 'RMRP · Комфорт-зона',
-      src: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=cinematic-documentary-115669.mp3'
+      url: 'https://stream.dixi.md:9443/Shanson'
     },
-    {
-      title: 'Calm Before the Storm',
+    retro: {
+      name: 'Ретро FM',
       artist: 'RMRP · Комфорт-зона',
-      src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=ambient-piano-logo-114118.mp3'
+      url: 'https://retroserver.streamr.ru:8043/retro256.mp3'
+    },
+    military: {
+      name: 'Военные марши',
+      artist: 'RMRP · Комфорт-зона',
+      url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=military-drum-112481.mp3'
+    },
+    epic: {
+      name: 'Epic Music',
+      artist: 'RMRP · Комфорт-зона',
+      url: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=cinematic-documentary-115669.mp3'
+    },
+    lofi: {
+      name: 'Lo-Fi Beats',
+      artist: 'RMRP · Комфорт-зона',
+      url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=ambient-piano-logo-114118.mp3'
+    },
+    ambient: {
+      name: 'Ambient Nature',
+      artist: 'RMRP · Комфорт-зона',
+      url: 'https://cdn.pixabay.com/download/audio/2022/01/24/audio_5e43b08a53.mp3?filename=nature-110241.mp3'
     }
-  ];
+  };
 
-  /* Цитаты */
   var QUOTES = [
     'Дисциплина — мать победы',
     'Служить Отечеству — великая честь',
-    'Солдат, который не мечтает стать генералом, плох',
     'Тяжело в учении — легко в бою',
     'Один в поле не воин',
+    'Смелость города берёт',
     'Воля и труд дивные всходы дают',
     'Родина — это не только земля, но и память',
-    'Смелость города берёт'
+    'Солдат, который не мечтает стать генералом, плох'
   ];
 
   var audio = null;
-  var currentIndex = 0;
+  var currentStation = null;
   var isPlaying = false;
+  var audioCtx = null;
+  var analyser = null;
+  var sourceNode = null;
 
+  /* ============================================================
+     ИНИЦИАЛИЗАЦИЯ
+     ============================================================ */
   window.CZ = {
     init: function(){
       var self = this;
+
       audio = new Audio();
-      audio.volume = 0.4;
-      audio.addEventListener('ended', function(){
-        self.next();
+      audio.crossOrigin = 'anonymous';
+      audio.volume = 0.5;
+
+      /* Web Audio API для визуализации */
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+
+        sourceNode = audioCtx.createMediaElementSource(audio);
+        sourceNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
+      } catch(e){
+        console.warn('[CZ] Web Audio API недоступен:', e.message);
+      }
+
+      /* Обработчики */
+      audio.addEventListener('play', function(){
+        isPlaying = true;
+        document.getElementById('czPlay').textContent = '⏸';
+        document.getElementById('czViz').classList.remove('paused');
+        self.startVisualizer();
       });
-      self.loadTrack(0);
+
+      audio.addEventListener('pause', function(){
+        isPlaying = false;
+        document.getElementById('czPlay').textContent = '▶';
+        document.getElementById('czViz').classList.add('paused');
+      });
+
+      audio.addEventListener('error', function(e){
+        console.error('[CZ] Ошибка аудио:', e);
+        var t = document.getElementById('czTitle');
+        if(t) t.textContent = 'Не удалось загрузить';
+      });
+
+      /* Часы */
+      self.startClock();
+
+      /* Цитаты */
       self.rotateQuote();
 
-      /* Автовоспроизведение после первого клика */
-      document.addEventListener('click', function unlock(){
-        if(!isPlaying){
-          audio.play().then(function(){
-            isPlaying = true;
-            document.getElementById('czPlay').textContent = '⏸';
-          }).catch(function(){});
+      /* Сцена по умолчанию */
+      self.setScene('beach');
+    },
+
+    /* ============================================================
+       ВИЗУАЛИЗАТОР
+       ============================================================ */
+    startVisualizer: function(){
+      if(!analyser) return;
+      var bars = document.querySelectorAll('.cz-bar');
+      var dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function draw(){
+        if(!isPlaying) return;
+        analyser.getByteFrequencyData(dataArray);
+        for(var i = 0; i < bars.length; i++){
+          var val = dataArray[i * 2] / 255;
+          var h = 20 + val * 80;
+          bars[i].style.height = h + '%';
         }
-        document.removeEventListener('click', unlock);
-      }, { once:true });
-    },
-
-    loadTrack: function(idx){
-      currentIndex = (idx + PLAYLIST.length) % PLAYLIST.length;
-      var track = PLAYLIST[currentIndex];
-      audio.src = track.src;
-      document.getElementById('czTitle').textContent = track.title;
-    },
-
-    toggle: function(){
-      var btn = document.getElementById('czPlay');
-      if(isPlaying){
-        audio.pause();
-        isPlaying = false;
-        btn.textContent = '▶';
-      } else {
-        audio.play().then(function(){
-          isPlaying = true;
-          btn.textContent = '⏸';
-        }).catch(function(err){
-          alert('Не удалось воспроизвести: ' + err.message);
-        });
+        requestAnimationFrame(draw);
       }
+      draw();
     },
 
-    next: function(){
-      this.loadTrack(currentIndex + 1);
-      if(isPlaying){
-        audio.play().catch(function(){});
+    /* ============================================================
+       ЧАСЫ
+       ============================================================ */
+    startClock: function(){
+      function update(){
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, '0');
+        var mm = String(now.getMinutes()).padStart(2, '0');
+        var ss = String(now.getSeconds()).padStart(2, '0');
+        var el = document.getElementById('czClock');
+        if(el) el.textContent = hh + ':' + mm + ':' + ss;
       }
+      update();
+      setInterval(update, 1000);
     },
 
-    setVolume: function(val){
-      audio.volume = Math.max(0, Math.min(1, val / 100));
-    },
-
+    /* ============================================================
+       ЦИТАТЫ
+       ============================================================ */
     rotateQuote: function(){
       var el = document.getElementById('czQuote');
       var idx = 0;
@@ -379,13 +768,149 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
         el.style.opacity = '0';
         setTimeout(function(){
           el.textContent = QUOTES[idx];
-          el.style.opacity = '';
+          el.style.opacity = '1';
         }, 500);
       }, 8000);
+    },
+
+    /* ============================================================
+       СЦЕНЫ
+       ============================================================ */
+    setScene: function(scene){
+      document.querySelectorAll('.cz-scene').forEach(function(el){
+        el.classList.toggle('active', el.getAttribute('data-scene') === scene);
+      });
+      document.querySelectorAll('.cz-scene-btn').forEach(function(b){
+        b.classList.toggle('active', b.getAttribute('data-scene') === scene);
+      });
+      try{ localStorage.setItem('rmrp_cz_scene', scene); }catch(e){}
+    },
+
+    /* ============================================================
+       ПЛЕЕР
+       ============================================================ */
+    playStation: function(key){
+      var st = STATIONS[key];
+      if(!st) return;
+
+      /* Если тот же — toggle */
+      if(currentStation === key && isPlaying){
+        audio.pause();
+        return;
+      }
+
+      currentStation = key;
+
+      /* Подсветка активной */
+      document.querySelectorAll('.cz-station').forEach(function(el){
+        el.classList.toggle('active', el.getAttribute('data-station') === key);
+      });
+
+      document.getElementById('czTitle').textContent = st.name;
+      document.getElementById('czArtist').textContent = st.artist;
+
+      audio.src = st.url;
+      audio.load();
+      audio.play().then(function(){
+        console.log('[CZ] Играет:', st.name);
+      }).catch(function(err){
+        console.warn('[CZ] Не удалось воспроизвести:', err.message);
+      });
+    },
+
+    playCustom: function(){
+      var url = document.getElementById('czCustomUrl').value.trim();
+      if(!url){
+        alert('Введи ссылку на аудиопоток (обычно .mp3 или .m3u)');
+        return;
+      }
+      if(!/^https?:\/\//i.test(url)){
+        alert('Ссылка должна начинаться с http:// или https://');
+        return;
+      }
+
+      currentStation = 'custom';
+      document.querySelectorAll('.cz-station').forEach(function(el){ el.classList.remove('active'); });
+
+      document.getElementById('czTitle').textContent = 'Своя ссылка';
+      document.getElementById('czArtist').textContent = url.slice(0, 60);
+
+      audio.src = url;
+      audio.load();
+      audio.play().then(function(){
+        console.log('[CZ] Играет кастомная ссылка');
+      }).catch(function(err){
+        alert('Не удалось воспроизвести: ' + err.message);
+      });
+    },
+
+    toggle: function(){
+      if(!currentStation){
+        /* Ничего не выбрано — запустим первый */
+        this.playStation('shanson1');
+        return;
+      }
+
+      if(isPlaying){
+        audio.pause();
+      } else {
+        /* Resume AudioContext (некоторые браузеры блокируют) */
+        if(audioCtx && audioCtx.state === 'suspended'){
+          audioCtx.resume();
+        }
+        audio.play().catch(function(err){
+          alert('Не удалось воспроизвести: ' + err.message);
+        });
+      }
+    },
+
+    prev: function(){
+      var keys = Object.keys(STATIONS);
+      if(!currentStation || keys.indexOf(currentStation) === -1){
+        this.playStation(keys[0]);
+        return;
+      }
+      var idx = keys.indexOf(currentStation);
+      idx = (idx - 1 + keys.length) % keys.length;
+      this.playStation(keys[idx]);
+    },
+
+    next: function(){
+      var keys = Object.keys(STATIONS);
+      if(!currentStation || keys.indexOf(currentStation) === -1){
+        this.playStation(keys[0]);
+        return;
+      }
+      var idx = keys.indexOf(currentStation);
+      idx = (idx + 1) % keys.length;
+      this.playStation(keys[idx]);
+    },
+
+    setVolume: function(val){
+      if(audio) audio.volume = Math.max(0, Math.min(1, val / 100));
+    },
+
+    /* ============================================================
+       ПАНЕЛЬ СТАНЦИЙ
+       ============================================================ */
+    toggleStations: function(){
+      var panel = document.getElementById('czStationsPanel');
+      panel.classList.toggle('open');
     }
   };
 
+  /* ============================================================
+     СТАРТ
+     ============================================================ */
   CZ.init();
+
+  /* Загружаем сохранённую сцену */
+  try{
+    var saved = localStorage.getItem('rmrp_cz_scene');
+    if(saved && document.querySelector('.cz-scene[data-scene="' + saved + '"]')){
+      CZ.setScene(saved);
+    }
+  }catch(e){}
 
 })();
 </script>
