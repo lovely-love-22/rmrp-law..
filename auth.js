@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v3: роли, доступы, защита, баннеры)
+   RMRP — auth.js (v4: только админ выдаёт админку)
    ============================================================ */
 (function(){
   'use strict';
@@ -7,10 +7,6 @@
   var LS_USERS    = 'rmrp_users';
   var LS_CURRENT  = 'rmrp_current_user';
   var LS_GATE     = 'rmrp_gate_pass';
-
-  /* ============================================================
-     КОНСТАНТЫ
-     ============================================================ */
 
   var RANKS = [
     'Младший Сержант','Сержант','Старший Сержант','Старшина','Прапорщик',
@@ -36,13 +32,11 @@
     'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
   };
 
-  /* Кто МОЖЕТ выдавать доступы */
   function canGiveAccess(user){
     if(!user) return false;
     if(user.role === 'Администратор') return true;
     var posIdx = POS_IDX[user.position];
     if(posIdx === undefined) return false;
-    /* Только Инструктор ВК и выше */
     return posIdx >= POS_IDX['Инструктор ВК'];
   }
 
@@ -82,15 +76,19 @@
     return true;
   }
 
-  /* ============================================================
-     GATE
-     ============================================================ */
+  /* МОЖЕТ ЛИ текущий выдавать роль */
+  function canChangeRole(current, target){
+    if(!current) return false;
+    /* Только Администратор */
+    if(current.role !== 'Администратор') return false;
+    /* Нельзя менять роль себе */
+    if(target && current.login === target.login) return false;
+    return true;
+  }
+
   var GATE_CODE = 'RMRP2025';
   var GATE_DAYS = 30;
 
-  /* ============================================================
-     УТИЛИТЫ
-     ============================================================ */
   function lsGet(key, def){
     try{ var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
     catch(e){ return def; }
@@ -109,9 +107,6 @@
     return 'h' + Math.abs(h).toString(36) + '_' + s.length;
   }
 
-  /* ============================================================
-     API
-     ============================================================ */
   var Auth = {
     RANKS: RANKS,
     POSITIONS: POSITIONS,
@@ -209,7 +204,12 @@
       if(!target) return { ok:false, error:'Пользователь не найден' };
       if(!canEdit(cur, target)) return { ok:false, error:'Недостаточно прав: цель выше вас по званию или должности' };
 
-      if(patch.role && cur.role !== 'Администратор') delete patch.role;
+      /* РОЛЬ — только Администратор */
+      if(patch.role !== undefined){
+        if(!canChangeRole(cur, target)){
+          return { ok:false, error:'Только Администратор может менять роли доступа' };
+        }
+      }
 
       if(patch.rank && cur.role !== 'Администратор'){
         var tIdx = RANK_IDX[patch.rank];
@@ -245,6 +245,7 @@
 
     canEdit: canEdit,
     canGiveAccess: canGiveAccess,
+    canChangeRole: canChangeRole,
     maxRankByRole: maxRankByRole,
     maxPositionByRole: maxPositionByRole,
 
@@ -289,9 +290,6 @@
 
   window.RMRPAuth = Auth;
 
-  /* ============================================================
-     АВТО-ЗАЩИТА
-     ============================================================ */
   (function(){
     if(Auth.checkGate()) return;
     if(/gate\.html?$/i.test(location.pathname)) return;
