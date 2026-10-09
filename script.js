@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v4, финальный)
+   RMRP LAW — script.js (v5)
    ============================================================ */
 
 (function () {
@@ -23,76 +23,94 @@
   onReady(function () {
     console.log('[RMRP] script.js loaded');
 
-    try { initMediaLink(); }   catch(e){ console.warn('mediaLink', e); }
-    try { initModals(); }      catch(e){ console.warn('modals', e); }
-    try { initAccordion(); }   catch(e){ console.warn('accordion', e); }
-    try { initBurger(); }      catch(e){ console.warn('burger', e); }
-    try { initDocSearch(); }   catch(e){ console.warn('docSearch', e); }
-    try { initToTop(); }       catch(e){ console.warn('toTop', e); }
-    try { initSliders(); }     catch(e){ console.warn('sliders', e); }
-    try { initBgTabs(); }      catch(e){ console.warn('bgTabs', e); }
-    try { initEditor(); }      catch(e){ console.warn('editor', e); }
-    try { initBgActions(); }   catch(e){ console.warn('bgActions', e); }
-    try { initExport(); }      catch(e){ console.warn('export', e); }
-    try { restoreLaws(); }     catch(e){ console.warn('restoreLaws', e); }
-    try { restoreBg(); }       catch(e){ console.warn('restoreBg', e); }
+    try { initHeaderButtons(); } catch(e){ console.warn('headerButtons', e); }
+    try { initModals(); }        catch(e){ console.warn('modals', e); }
+    try { initAccordion(); }     catch(e){ console.warn('accordion', e); }
+    try { initBurger(); }        catch(e){ console.warn('burger', e); }
+    try { initDocSearch(); }     catch(e){ console.warn('docSearch', e); }
+    try { initToTop(); }         catch(e){ console.warn('toTop', e); }
+    try { initSliders(); }       catch(e){ console.warn('sliders', e); }
+    try { initBgTabs(); }        catch(e){ console.warn('bgTabs', e); }
+    try { initEditor(); }        catch(e){ console.warn('editor', e); }
+    try { initBgActions(); }     catch(e){ console.warn('bgActions', e); }
+    try { initExport(); }        catch(e){ console.warn('export', e); }
+    try { restoreLaws(); }       catch(e){ console.warn('restoreLaws', e); }
+    try { restoreBg(); }         catch(e){ console.warn('restoreBg', e); }
+    try { initLogoutButton(); }  catch(e){ console.warn('logoutButton', e); }
 
     console.log('[RMRP] init done');
   });
 
   /* ============================================================
-     КНОПКА «МЕДИА» В ШАПКЕ — автодобавление на всех страницах
+     КНОПКИ В ШАПКЕ — Медиа + Профиль
      ============================================================ */
-  function initMediaLink() {
+  function initHeaderButtons() {
     var actions = document.querySelector('.header-actions');
     if (!actions) return;
 
-    /* Если уже есть — не дублируем */
-    if (actions.querySelector('.btn-media')) return;
+    var path = location.pathname;
+    var isMediaPage   = /media\.html?$/i.test(path);
+    var isProfilePage = /profile\.html?$/i.test(path);
+    var isGatePage    = /gate\.html?$/i.test(path);
 
-    /* Определяем, на какой мы странице — media.html или нет */
-    var isMediaPage = /media\.html?$/i.test(location.pathname);
+    if (isGatePage) return;
 
-    var a = document.createElement('a');
-    a.href = isMediaPage ? 'index.html' : 'media.html';
-    a.className = 'btn-media';
-    a.title = isMediaPage ? 'На главную' : 'Медиа-галерея';
-    a.innerHTML = isMediaPage
-      ? '<span>🏠</span><span class="btn-add-text">Главная</span>'
-      : '<span>🎬</span><span class="btn-add-text">Медиа</span>';
-    a.style.cssText = [
-      'display:flex',
-      'align-items:center',
-      'gap:6px',
-      'padding:8px 12px',
-      'border-radius:9px',
-      'background:linear-gradient(135deg,#7c3aed,#a855f7)',
-      'color:#fff',
-      'text-decoration:none',
-      'font-size:12.5px',
-      'font-weight:600',
-      'white-space:nowrap',
-      'transition:.25s cubic-bezier(.4,0,.2,1)'
-    ].join(';');
+    /* --- Профиль --- */
+    if (!actions.querySelector('.btn-profile')) {
+      var p = document.createElement('a');
+      p.href = 'profile.html';
+      p.className = 'btn-media btn-profile';
+      p.title = 'Личный кабинет';
+      p.style.background = 'linear-gradient(135deg,#4aa8ff,#3ddc84)';
+      p.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
+      var addBtn = actions.querySelector('.btn-add');
+      if (addBtn) actions.insertBefore(p, addBtn);
+      else actions.appendChild(p);
+    }
 
-    /* Hover-эффект */
-    a.addEventListener('mouseenter', function () {
-      a.style.transform = 'translateY(-1px)';
-      a.style.boxShadow = '0 6px 18px rgba(168,85,247,.3)';
-    });
-    a.addEventListener('mouseleave', function () {
-      a.style.transform = '';
-      a.style.boxShadow = '';
-    });
-
-    /* Вставляем ПЕРЕД кнопкой «Добавить» */
-    var addBtn = actions.querySelector('.btn-add');
-    if (addBtn) actions.insertBefore(a, addBtn);
-    else actions.appendChild(a);
+    /* --- Медиа --- */
+    if (!actions.querySelector('.btn-media:not(.btn-profile)')) {
+      var a = document.createElement('a');
+      a.href = isMediaPage ? 'index.html' : 'media.html';
+      a.className = 'btn-media';
+      a.title = isMediaPage ? 'На главную' : 'Медиа-галерея';
+      a.innerHTML = isMediaPage
+        ? '<span>🏠</span><span class="btn-add-text">Главная</span>'
+        : '<span>🎬</span><span class="btn-add-text">Медиа</span>';
+      var addBtn2 = actions.querySelector('.btn-add');
+      if (addBtn2) actions.insertBefore(a, addBtn2);
+      else actions.appendChild(a);
+    }
   }
 
   /* ============================================================
-     МОДАЛКИ — 4 способа закрыть
+     КНОПКА «ВЫЙТИ» (появляется после входа)
+     ============================================================ */
+  function initLogoutButton() {
+    if (!window.RMRPAuth) return;
+    var user = RMRPAuth.getCurrent();
+    if (!user) return;
+
+    var actions = document.querySelector('.header-actions');
+    if (!actions) return;
+    if (actions.querySelector('.btn-logout')) return;
+
+    var btn = document.createElement('button');
+    btn.className = 'btn-logout btn-bg';
+    btn.title = 'Выйти (' + (user.displayName || user.login) + ')';
+    btn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px';
+    btn.innerHTML = '<span>🚪</span>';
+    btn.onclick = function(){
+      if(!confirm('Выйти из аккаунта?')) return;
+      RMRPAuth.logout();
+      location.reload();
+    };
+
+    actions.appendChild(btn);
+  }
+
+  /* ============================================================
+     МОДАЛКИ
      ============================================================ */
   function openModal(m) { if (m) m.hidden = false; }
   function closeAllModals() {
@@ -334,7 +352,10 @@
           laws: JSON.parse(localStorage.getItem(LS.laws) || '{}'),
           bg: localStorage.getItem(LS.bg),
           media: JSON.parse(localStorage.getItem('rmrp_media_gallery') || '[]'),
-          vkCalc: JSON.parse(localStorage.getItem('rmrp_vk_calc_v2') || 'null')
+          albums: JSON.parse(localStorage.getItem('rmrp_media_albums') || '[]'),
+          vkCalc: JSON.parse(localStorage.getItem('rmrp_vk_calc_v2') || 'null'),
+          users: JSON.parse(localStorage.getItem('rmrp_users') || '{}'),
+          auditHistory: JSON.parse(localStorage.getItem('rmrp_audit_history') || '[]')
         };
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
@@ -348,10 +369,13 @@
         reader.onload = function (e) {
           try {
             var data = JSON.parse(e.target.result);
-            if (data.laws)  localStorage.setItem(LS.laws, JSON.stringify(data.laws));
-            if (data.bg)    localStorage.setItem(LS.bg, data.bg);
-            if (data.media) localStorage.setItem('rmrp_media_gallery', JSON.stringify(data.media));
-            if (data.vkCalc) localStorage.setItem('rmrp_vk_calc_v2', JSON.stringify(data.vkCalc));
+            if (data.laws)    localStorage.setItem(LS.laws, JSON.stringify(data.laws));
+            if (data.bg)      localStorage.setItem(LS.bg, data.bg);
+            if (data.media)   localStorage.setItem('rmrp_media_gallery', JSON.stringify(data.media));
+            if (data.albums)  localStorage.setItem('rmrp_media_albums', JSON.stringify(data.albums));
+            if (data.vkCalc)  localStorage.setItem('rmrp_vk_calc_v2', JSON.stringify(data.vkCalc));
+            if (data.users)   localStorage.setItem('rmrp_users', JSON.stringify(data.users));
+            if (data.auditHistory) localStorage.setItem('rmrp_audit_history', JSON.stringify(data.auditHistory));
             alert('Импорт выполнен.');
             location.reload();
           } catch (err) { alert('Ошибка: ' + err.message); }
