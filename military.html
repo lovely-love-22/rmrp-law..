@@ -53,6 +53,72 @@
   </div>
 </section>
 
+<!-- ===== КАЛЬКУЛЯТОР БАЛЛОВ ===== -->
+<section class="section" id="vk-calc">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Калькулятор</span>
+      <h2 class="section-title">🧮 Калькулятор баллов ВК</h2>
+      <p class="section-desc">Выбери свой ранг и ранг, на который повышаешься — система покажет, сколько баллов нужно набрать.</p>
+    </div>
+
+    <div class="vk-calc">
+      <div class="vk-calc-grid">
+        <div class="vk-calc-row">
+          <label for="calcCurrentRank">Текущий ранг</label>
+          <select id="calcCurrentRank">
+            <option value="0">@|| Младший сержант</option>
+            <option value="1">@||| Сержант</option>
+            <option value="2">@━ Старший сержант</option>
+            <option value="3">@❚ Старшина</option>
+            <option value="4">@☆☆ Прапорщик</option>
+            <option value="5">@☆☆☆ Старший прапорщик</option>
+            <option value="6">@✮ Младший лейтенант</option>
+            <option value="7">@✮✮ Лейтенант</option>
+            <option value="8">@✮✮✮ Старший лейтенант</option>
+          </select>
+        </div>
+
+        <div class="vk-calc-row">
+          <label for="calcTargetRank">Ранг, на который повышаешься</label>
+          <select id="calcTargetRank">
+            <option value="1">@||| Сержант</option>
+            <option value="2">@━ Старший сержант</option>
+            <option value="3">@❚ Старшина</option>
+            <option value="4">@☆☆ Прапорщик</option>
+            <option value="5">@☆☆☆ Старший прапорщик</option>
+            <option value="6">@✮ Младший лейтенант</option>
+            <option value="7">@✮✮ Лейтенант</option>
+            <option value="8">@✮✮✮ Старший лейтенант</option>
+            <option value="9">@✮✮✮✮ Капитан</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="vk-calc-row" style="margin-bottom:18px;">
+        <label for="calcPoints">Сколько баллов ты уже набрал?</label>
+        <input type="number" id="calcPoints" min="0" step="1" placeholder="Введи количество баллов" value="0">
+      </div>
+
+      <div class="vk-calc-result" id="calcResult">
+        <div class="vk-calc-info">
+          <div class="vk-calc-needed">Нужно набрать: <b id="calcNeeded">0</b></div>
+          <div class="vk-calc-status" id="calcStatus">—</div>
+        </div>
+        <div class="vk-calc-bar"><div class="vk-calc-bar-fill" id="calcBarFill"></div></div>
+        <div class="vk-calc-info">
+          <span class="vk-calc-needed">У тебя: <b id="calcHave">0</b></span>
+          <span class="vk-calc-needed">Осталось: <b id="calcRemain">0</b></span>
+        </div>
+      </div>
+
+      <div class="vk-calc-hint">
+        💡 Баллы начисляются за выполнение задач (призывы, КМБ/УКМБ, поставки, агитационные МП). Полный список — на этой же странице в разделе «🏛️ Балльная система Военкомата».
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="section-head">
@@ -89,7 +155,7 @@
       <div class="vk-progress-step"><div class="vk-step-num">7</div><div class="vk-step-body"><div class="vk-step-title">Лекция по ППС + практический экзамен</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
       <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Строевая подготовка + практический экзамен</div><div class="vk-step-role">🚨 Военная полиция · ★ Майор</div></div></div>
       <div class="vk-progress-step"><div class="vk-step-num">9</div><div class="vk-step-body"><div class="vk-step-title">Правила проведения поставок + практический экзамен</div><div class="vk-step-role">⚔️ ССО · 🎓 Военный комиссариат</div></div></div>
-      <div class="vk-progress-step"><div class="vk-step-num">10</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ (внутренний, строевой, дисциплинарный, караульный)</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">10</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
     </div>
   </div>
 </section>
