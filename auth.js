@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v6: Firebase + доступ к аудиту)
+   RMRP — auth.js (v8: роль Разработчик + DEV_LOGIN kiryushaz)
    ============================================================ */
 (function(){
   'use strict';
@@ -8,6 +8,8 @@
   var LS_CURRENT   = 'rmrp_current_user';
   var LS_GATE      = 'rmrp_gate_pass';
   var LS_USERS_CACHE = 'rmrp_users_cache';
+
+  var DEV_LOGIN = 'kiryushaz';
 
   var RANKS = [
     'Младший Сержант','Сержант','Старший Сержант','Старшина','Прапорщик',
@@ -20,7 +22,7 @@
     'Заместитель военного комиссара','Военный Комиссар'
   ];
 
-  var ROLES = ['Пользователь', 'Сотрудник', 'Администратор'];
+  var ROLES = ['Пользователь', 'Сотрудник', 'Администратор', 'Разработчик'];
 
   var RANK_IDX = {
     'Младший Сержант': 0, 'Сержант': 1, 'Старший Сержант': 2, 'Старшина': 3,
@@ -33,39 +35,34 @@
     'Заместитель военного комиссара': 3, 'Военный Комиссар': 4
   };
 
-  /* ============================================================
-     ПРАВА ДОСТУПА
-     ============================================================ */
+  function isDev(user){
+    return user && user.role === 'Разработчик';
+  }
+  function isAdmin(user){
+    return user && (user.role === 'Администратор' || user.role === 'Разработчик');
+  }
 
-  /* Может ли выдавать доступы (Инструктор ВК+ или Админ) */
   function canGiveAccess(user){
     if(!user) return false;
-    if(user.role === 'Администратор') return true;
+    if(isAdmin(user)) return true;
     var posIdx = POS_IDX[user.position];
     if(posIdx === undefined) return false;
     return posIdx >= POS_IDX['Инструктор ВК'];
   }
 
-  /* Может ли пользоваться кадровым аудитом (Майор+ ИЛИ Инструктор ВК+) */
   function canUseAudit(user){
     if(!user) return false;
-    if(user.role === 'Администратор') return true;
-
-    /* По званию: Майор и выше */
+    if(isAdmin(user)) return true;
     var rankIdx = RANK_IDX[user.rank];
     if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
-
-    /* По должности: Инструктор ВК и выше */
     var posIdx = POS_IDX[user.position];
     if(posIdx !== undefined && posIdx >= POS_IDX['Инструктор ВК']) return true;
-
     return false;
   }
 
-  /* Максимальное звание, которое может выдать текущий юзер */
   function maxRankByRole(user){
     if(!user) return -1;
-    if(user.role === 'Администратор') return RANKS.length - 1;
+    if(isAdmin(user)) return RANKS.length - 1;
     var myRankIdx = RANK_IDX[user.rank];
     if(myRankIdx === undefined) return -1;
     if(myRankIdx >= RANK_IDX['Генерал-Майор']) return RANKS.length - 1;
@@ -76,10 +73,9 @@
     return -1;
   }
 
-  /* Максимальная должность */
   function maxPositionByRole(user){
     if(!user) return -1;
-    if(user.role === 'Администратор') return POSITIONS.length - 1;
+    if(isAdmin(user)) return POSITIONS.length - 1;
     var myPosIdx = POS_IDX[user.position];
     if(myPosIdx === undefined) return -1;
     if(myPosIdx >= POS_IDX['Заместитель военного комиссара']) return myPosIdx;
@@ -87,10 +83,9 @@
     return -1;
   }
 
-  /* Может ли редактировать цель */
   function canEdit(current, target){
     if(!current || !target) return false;
-    if(current.role === 'Администратор') return true;
+    if(isAdmin(current)) return true;
     if(current.login === target.login) return true;
     var tRankIdx = RANK_IDX[target.rank];
     var maxRank = maxRankByRole(current);
@@ -101,23 +96,16 @@
     return true;
   }
 
-  /* Может ли менять роль (только Админ, не себе) */
   function canChangeRole(current, target){
     if(!current) return false;
-    if(current.role !== 'Администратор') return false;
+    if(!isAdmin(current)) return false;
     if(target && current.login === target.login) return false;
     return true;
   }
 
-  /* ============================================================
-     GATE
-     ============================================================ */
   var GATE_CODE = 'RMRP2025';
   var GATE_DAYS = 30;
 
-  /* ============================================================
-     УТИЛИТЫ
-     ============================================================ */
   function lsGet(key, def){
     try{ var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
     catch(e){ return def; }
@@ -136,11 +124,7 @@
     return 'h' + Math.abs(h).toString(36) + '_' + s.length;
   }
 
-  /* ============================================================
-     FIREBASE REST API
-     ============================================================ */
   function fbUrl(path){ return FIREBASE_URL + '/' + path + '.json'; }
-
   function fbGet(path){
     return fetch(fbUrl(path)).then(function(r){
       if(!r.ok) throw new Error('Firebase read error: ' + r.status);
@@ -174,17 +158,14 @@
     });
   }
 
-  /* ============================================================
-     API
-     ============================================================ */
   var Auth = {
     RANKS: RANKS,
     POSITIONS: POSITIONS,
     ROLES: ROLES,
     RANK_IDX: RANK_IDX,
     POS_IDX: POS_IDX,
+    DEV_LOGIN: DEV_LOGIN,
 
-    /* ---------- Gate ---------- */
     checkGate: function(){
       try{
         var g = JSON.parse(localStorage.getItem(LS_GATE) || 'null');
@@ -203,15 +184,17 @@
     },
     lockGate: function(){ localStorage.removeItem(LS_GATE); },
 
-    /* ---------- Текущий пользователь ---------- */
     getCurrent: function(){ return lsGet(LS_CURRENT, null); },
     setCurrent: function(u){ lsSet(LS_CURRENT, u); },
     logout: function(){ localStorage.removeItem(LS_CURRENT); },
 
-    /* ---------- Пользователи ---------- */
     getUsers: function(){
       return fbGet('users').then(function(data){
         var users = data || {};
+        if(users[DEV_LOGIN] && users[DEV_LOGIN].role !== 'Разработчик'){
+          users[DEV_LOGIN].role = 'Разработчик';
+          fbPatch('users/' + DEV_LOGIN, { role: 'Разработчик' });
+        }
         lsSet(LS_USERS_CACHE, users);
         return users;
       }).catch(function(err){
@@ -222,7 +205,6 @@
 
     getUsersSync: function(){ return lsGet(LS_USERS_CACHE, {}); },
 
-    /* ---------- Регистрация ---------- */
     register: function(data){
       var login = (data.login || '').trim().toLowerCase();
       if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
@@ -233,6 +215,7 @@
         if(users[login]) throw new Error('Такой логин уже занят');
 
         var isFirst = Object.keys(users).length === 0;
+        var isDev = (login === DEV_LOGIN);
 
         var user = {
           login: login,
@@ -240,7 +223,7 @@
           password: hashPass(data.password),
           rank: data.rank || RANKS[0],
           position: data.position || POSITIONS[0],
-          role: isFirst ? 'Администратор' : 'Пользователь',
+          role: isDev ? 'Разработчик' : (isFirst ? 'Администратор' : 'Пользователь'),
           discord: data.discord || '',
           forum: data.forum || '',
           avatar: data.avatar || '',
@@ -257,7 +240,6 @@
       });
     },
 
-    /* ---------- Вход ---------- */
     login: function(login, password){
       login = (login || '').trim().toLowerCase();
       if(!login) return Promise.resolve({ ok:false, error:'Введите логин' });
@@ -265,6 +247,10 @@
       return fbGet('users/' + login).then(function(user){
         if(!user) throw new Error('Пользователь не найден');
         if(user.password !== hashPass(password)) throw new Error('Неверный пароль');
+        if(login === DEV_LOGIN && user.role !== 'Разработчик'){
+          user.role = 'Разработчик';
+          fbPatch('users/' + login, { role: 'Разработчик' });
+        }
         Auth.setCurrent(user);
         return { ok:true, user: user };
       }).catch(function(err){
@@ -272,7 +258,6 @@
       });
     },
 
-    /* ---------- Обновление себя ---------- */
     update: function(patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -292,7 +277,6 @@
       });
     },
 
-    /* ---------- Обновление чужого юзера ---------- */
     updateOther: function(login, patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -301,17 +285,22 @@
         if(!target) throw new Error('Пользователь не найден');
         if(!canEdit(cur, target)) throw new Error('Недостаточно прав: цель выше вас по званию или должности');
 
-        if(patch.role !== undefined && !canChangeRole(cur, target)){
-          throw new Error('Только Администратор может менять роли доступа');
+        if(patch.role !== undefined){
+          if(!canChangeRole(cur, target)){
+            throw new Error('Только Администратор или Разработчик может менять роли');
+          }
+          if(patch.role === 'Разработчик' && !isDev(cur)){
+            throw new Error('Только Разработчик может выдавать роль Разработчик');
+          }
         }
 
-        if(patch.rank && cur.role !== 'Администратор'){
+        if(patch.rank && !isAdmin(cur)){
           var tIdx = RANK_IDX[patch.rank];
           var maxIdx = maxRankByRole(cur);
           if(tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
         }
 
-        if(patch.position && cur.role !== 'Администратор'){
+        if(patch.position && !isAdmin(cur)){
           var pIdx = POS_IDX[patch.position];
           var maxP = maxPositionByRole(cur);
           if(pIdx > maxP) throw new Error('Нельзя выдать должность выше своей');
@@ -331,11 +320,10 @@
       });
     },
 
-    /* ---------- Удаление ---------- */
     deleteUser: function(login){
       var cur = Auth.getCurrent();
-      if(!cur || cur.role !== 'Администратор'){
-        return Promise.resolve({ ok:false, error:'Только администратор' });
+      if(!isAdmin(cur)){
+        return Promise.resolve({ ok:false, error:'Только Администратор или Разработчик' });
       }
       if(login === cur.login){
         return Promise.resolve({ ok:false, error:'Нельзя удалить себя' });
@@ -347,49 +335,64 @@
       });
     },
 
-    /* ---------- Экспорт функций прав ---------- */
     canEdit: canEdit,
     canGiveAccess: canGiveAccess,
     canChangeRole: canChangeRole,
     canUseAudit: canUseAudit,
+    isAdmin: isAdmin,
+    isDev: isDev,
     maxRankByRole: maxRankByRole,
     maxPositionByRole: maxPositionByRole,
 
-    /* ---------- Цвета ---------- */
     rankColor: function(rank){
       var map = {
-        'Младший Сержант':'#6b7280,#9ca3af','Сержант':'#16a34a,#22c55e',
-        'Старший Сержант':'#15803d,#16a34a','Старшина':'#0e7490,#0891b2',
-        'Прапорщик':'#0369a1,#0284c7','Ст. Прапорщик':'#075985,#0c4a6e',
-        'Младший лейтенант':'#7c3aed,#a855f7','Лейтенант':'#6d28d9,#8b5cf6',
-        'Ст. Лейтенант':'#5b21b6,#7c3aed','Капитан':'#4c1d95,#6d28d9',
-        'Майор':'#dc2626,#ef4444','Подполковник':'#b91c1c,#dc2626',
-        'Полковник':'#991b1b,#b91c1c','Генерал-Майор':'#ff4655,#ff6b78'
+        'Младший Сержант':   '#4b5563,#6b7280,#9ca3af',
+        'Сержант':           '#15803d,#16a34a,#22c55e',
+        'Старший Сержант':   '#15803d,#22c55e,#4ade80',
+        'Старшина':          '#0e7490,#0891b2,#22d3ee',
+        'Прапорщик':         '#0369a1,#0284c7,#38bdf8',
+        'Ст. Прапорщик':     '#075985,#0c4a6e,#0284c7',
+        'Младший лейтенант': '#6d28d9,#7c3aed,#a855f7',
+        'Лейтенант':         '#5b21b6,#6d28d9,#8b5cf6',
+        'Ст. Лейтенант':     '#4c1d95,#5b21b6,#7c3aed',
+        'Капитан':           '#3b0764,#4c1d95,#6d28d9',
+        'Майор':             '#7f1d1d,#dc2626,#ef4444,#f87171',
+        'Подполковник':      '#581c87,#7e22ce,#b91c1c,#dc2626',
+        'Полковник':         '#450a0a,#7f1d1d,#dc2626,#fbbf24',
+        'Генерал-Майор':     '#7c2d12,#dc2626,#f59e0b,#fbbf24,#fde047'
       };
-      return map[rank] || '#6b7280,#9ca3af';
+      return map[rank] || '#4b5563,#6b7280,#9ca3af';
     },
+
     positionColor: function(pos){
       var map = {
-        'Стажер ВК':'#4b5563,#6b7280','Сотрудник ВК':'#1d4ed8,#3b82f6',
-        'Инструктор ВК':'#047857,#10b981','Заместитель военного комиссара':'#6d28d9,#a855f7',
-        'Военный Комиссар':'#991b1b,#ff4655'
+        'Стажер ВК':                       '#374151,#4b5563,#6b7280',
+        'Сотрудник ВК':                    '#1e3a8a,#1d4ed8,#3b82f6,#60a5fa',
+        'Инструктор ВК':                   '#064e3b,#047857,#10b981,#34d399',
+        'Заместитель военного комиссара':  '#4c1d95,#6d28d9,#a855f7,#c084fc',
+        'Военный Комиссар':                '#7f1d1d,#991b1b,#ff4655,#ff6b78'
       };
-      return map[pos] || '#4b5563,#6b7280';
+      return map[pos] || '#4b5563,#6b7280,#9ca3af';
     },
+
     roleColor: function(role){
       var map = {
-        'Пользователь':'#4b5563,#6b7280','Сотрудник':'#1d4ed8,#3b82f6',
-        'Администратор':'#991b1b,#ff4655'
+        'Пользователь': '#374151,#4b5563,#6b7280',
+        'Сотрудник':    '#1e3a8a,#1d4ed8,#3b82f6',
+        'Администратор':'#450a0a,#7f1d1d,#dc2626,#ff4655',
+        'Разработчик':  '#4c1d95,#7c3aed,#a855f7,#ec4899,#f472b6'
       };
-      return map[role] || '#4b5563,#6b7280';
+      return map[role] || '#4b5563,#6b7280,#9ca3af';
+    },
+
+    hasGlow: function(rank, role){
+      var glowRanks = ['Майор','Подполковник','Полковник','Генерал-Майор'];
+      return glowRanks.indexOf(rank) !== -1 || role === 'Разработчик' || role === 'Администратор';
     }
   };
 
   window.RMRPAuth = Auth;
 
-  /* ============================================================
-     АВТО-ЗАЩИТА: редирект на gate
-     ============================================================ */
   (function(){
     if(Auth.checkGate()) return;
     if(/gate\.html?$/i.test(location.pathname)) return;
