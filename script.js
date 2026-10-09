@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v5)
+   RMRP LAW — script.js (v7)
    ============================================================ */
 
 (function () {
@@ -36,13 +36,12 @@
     try { initExport(); }        catch(e){ console.warn('export', e); }
     try { restoreLaws(); }       catch(e){ console.warn('restoreLaws', e); }
     try { restoreBg(); }         catch(e){ console.warn('restoreBg', e); }
-    try { initLogoutButton(); }  catch(e){ console.warn('logoutButton', e); }
 
     console.log('[RMRP] init done');
   });
 
   /* ============================================================
-     КНОПКИ В ШАПКЕ — Медиа + Профиль
+     КНОПКИ В ШАПКЕ
      ============================================================ */
   function initHeaderButtons() {
     var actions = document.querySelector('.header-actions');
@@ -55,58 +54,70 @@
 
     if (isGatePage) return;
 
-    /* --- Профиль --- */
-    if (!actions.querySelector('.btn-profile')) {
-      var p = document.createElement('a');
-      p.href = 'profile.html';
-      p.className = 'btn-media btn-profile';
-      p.title = 'Личный кабинет';
-      p.style.background = 'linear-gradient(135deg,#4aa8ff,#3ddc84)';
-      p.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
-      var addBtn = actions.querySelector('.btn-add');
-      if (addBtn) actions.insertBefore(p, addBtn);
-      else actions.appendChild(p);
+    /* Чистим дубликаты */
+    actions.querySelectorAll('.btn-profile').forEach(function(el, idx){ if(idx > 0) el.remove(); });
+    actions.querySelectorAll('.btn-media:not(.btn-profile)').forEach(function(el, idx){ if(idx > 0) el.remove(); });
+
+    /* --- ПРОФИЛЬ --- */
+    var existingProfile = actions.querySelector('.btn-profile');
+    if (existingProfile) existingProfile.remove();
+
+    var p = document.createElement('a');
+    p.href = 'profile.html';
+    p.className = 'btn-media btn-profile' + (isProfilePage ? ' is-active' : '');
+    p.title = isProfilePage ? 'Вы в личном кабинете' : 'Личный кабинет';
+
+    if (isProfilePage) {
+      p.style.cssText = 'background:rgba(74,168,255,.15);color:#4aa8ff;box-shadow:inset 0 -2px 0 #4aa8ff';
+    } else {
+      p.style.cssText = 'background:linear-gradient(135deg,#4aa8ff,#3ddc84)';
+    }
+    p.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
+
+    var addBtn = actions.querySelector('.btn-add');
+    if (addBtn) actions.insertBefore(p, addBtn);
+    else actions.appendChild(p);
+
+    /* --- МЕДИА --- */
+    var existingMedia = actions.querySelector('.btn-media:not(.btn-profile)');
+    if (existingMedia) existingMedia.remove();
+
+    var a = document.createElement('a');
+    a.href = isMediaPage ? 'index.html' : 'media.html';
+    a.className = 'btn-media' + (isMediaPage ? ' is-active' : '');
+
+    if (isMediaPage) {
+      a.title = 'Вы в медиа-галерее';
+      a.style.cssText = 'background:rgba(168,85,247,.15);color:#a855f7;box-shadow:inset 0 -2px 0 #a855f7';
+      a.innerHTML = '<span>🎬</span><span class="btn-add-text">Медиа</span>';
+    } else {
+      a.title = 'Медиа-галерея';
+      a.innerHTML = '<span>🎬</span><span class="btn-add-text">Медиа</span>';
     }
 
-    /* --- Медиа --- */
-    if (!actions.querySelector('.btn-media:not(.btn-profile)')) {
-      var a = document.createElement('a');
-      a.href = isMediaPage ? 'index.html' : 'media.html';
-      a.className = 'btn-media';
-      a.title = isMediaPage ? 'На главную' : 'Медиа-галерея';
-      a.innerHTML = isMediaPage
-        ? '<span>🏠</span><span class="btn-add-text">Главная</span>'
-        : '<span>🎬</span><span class="btn-add-text">Медиа</span>';
-      var addBtn2 = actions.querySelector('.btn-add');
-      if (addBtn2) actions.insertBefore(a, addBtn2);
-      else actions.appendChild(a);
+    var addBtn2 = actions.querySelector('.btn-add');
+    if (addBtn2) actions.insertBefore(a, addBtn2);
+    else actions.appendChild(a);
+
+    /* --- ВЫЙТИ --- */
+    if (window.RMRPAuth) {
+      var user = RMRPAuth.getCurrent();
+      if (user && !actions.querySelector('.btn-logout')) {
+        var btn = document.createElement('button');
+        btn.className = 'btn-logout';
+        btn.title = 'Выйти (' + (user.displayName || user.login) + ')';
+        btn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px;transition:.25s';
+        btn.innerHTML = '🚪';
+        btn.onmouseenter = function(){ btn.style.background = 'rgba(255,70,85,.25)'; };
+        btn.onmouseleave = function(){ btn.style.background = 'rgba(255,70,85,.12)'; };
+        btn.onclick = function(){
+          if(!confirm('Выйти из аккаунта?')) return;
+          RMRPAuth.logout();
+          location.reload();
+        };
+        actions.appendChild(btn);
+      }
     }
-  }
-
-  /* ============================================================
-     КНОПКА «ВЫЙТИ» (появляется после входа)
-     ============================================================ */
-  function initLogoutButton() {
-    if (!window.RMRPAuth) return;
-    var user = RMRPAuth.getCurrent();
-    if (!user) return;
-
-    var actions = document.querySelector('.header-actions');
-    if (!actions) return;
-    if (actions.querySelector('.btn-logout')) return;
-
-    var btn = document.createElement('button');
-    btn.className = 'btn-logout btn-bg';
-    btn.title = 'Выйти (' + (user.displayName || user.login) + ')';
-    btn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px';
-    btn.innerHTML = '<span>🚪</span>';
-    btn.onclick = function(){
-      if(!confirm('Выйти из аккаунта?')) return;
-      RMRPAuth.logout();
-      location.reload();
-    };
-
-    actions.appendChild(btn);
   }
 
   /* ============================================================
@@ -239,7 +250,7 @@
     if (!saveBtn) return;
     saveBtn.addEventListener('click', function () {
       var cat = $('#lawCategory').value;
-      var tag = $('#lawTag').value.trim();
+      var tag = $('#lawTag').value;
       var title = $('#lawTitle').value.trim();
       var text = $('#editorArea').innerHTML.trim();
       if (!title || !text) { alert('Заполните заголовок и текст'); return; }
