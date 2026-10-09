@@ -14,15 +14,16 @@
 @media(max-width:900px){.vk-calc-grid{grid-template-columns:1fr}}
 .vk-calc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
 .vk-calc-card h3{color:var(--txt-0);font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-.vk-calc-field{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:10px 14px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;transition:var(--transition)}
+.vk-calc-field{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:10px 14px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;transition:var(--transition);cursor:pointer}
 .vk-calc-field:hover{border-color:var(--line-2)}
-.vk-calc-field label{flex:1;font-size:13.5px;color:var(--txt-1);cursor:pointer}
+.vk-calc-field.active{border-color:#3ddc84;background:rgba(61,220,132,.05)}
+.vk-calc-field label{flex:1;font-size:13.5px;color:var(--txt-1);cursor:pointer;user-select:none}
 .vk-calc-field .vk-calc-icon{font-size:18px;flex-shrink:0}
 .vk-calc-field input[type="checkbox"]{width:18px;height:18px;accent-color:#3ddc84;cursor:pointer;flex-shrink:0}
 .vk-calc-field input[type="number"]{width:70px;padding:6px 8px;border-radius:7px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-0);font-size:14px;text-align:center;outline:none}
 .vk-calc-field input[type="number"]:focus{border-color:#3ddc84}
+.vk-calc-field input[type="number"]:disabled{opacity:.4;cursor:not-allowed}
 .vk-calc-field .vk-calc-points{font-size:12px;color:#7ee5a1;font-weight:600;white-space:nowrap}
-.vk-calc-field.disabled{opacity:.45;pointer-events:none}
 .vk-calc-total{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:linear-gradient(135deg,rgba(61,220,132,.1),rgba(74,168,255,.08));border:1px solid rgba(61,220,132,.3);border-radius:14px;margin-top:18px}
 .vk-calc-total-label{font-size:15px;font-weight:600;color:var(--txt-1)}
 .vk-calc-total-value{font-size:28px;font-weight:900;color:#3ddc84}
@@ -49,12 +50,14 @@
 .vk-report-form label{display:block;font-size:13px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
 .vk-report-form input,.vk-report-form textarea,.vk-report-form select{width:100%;padding:10px 13px;border-radius:9px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:14px;outline:none;transition:var(--transition);font-family:inherit}
 .vk-report-form input:focus,.vk-report-form textarea:focus,.vk-report-form select:focus{border-color:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.15)}
-.vk-report-form textarea{min-height:90px;resize:vertical;line-height:1.6}
+.vk-report-form textarea{min-height:320px;resize:vertical;line-height:1.6}
 .vk-report-output{margin-top:20px;padding:20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.7;white-space:pre-wrap;color:var(--txt-1);max-height:400px;overflow-y:auto;font-family:'Inter',monospace}
 .vk-report-copy{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
 .vk-copy-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px}
 .vk-copy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(61,220,132,.3)}
 .vk-copy-btn.copied{background:linear-gradient(135deg,#2a9d5c,#3a7bc8)}
+.vk-autofill-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#ff4655,#ff6b78);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.vk-autofill-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,70,85,.3)}
 
 /* Обновлённая шапка */
 .vk-header-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:30px}
@@ -106,7 +109,7 @@
   </div>
 </header>
 
-<!-- ====== УЛУЧШЕННАЯ ШАПКА ВОЕНКОМАТА ====== -->
+<!-- ====== ШАПКА ВОЕНКОМАТА ====== -->
 <section class="vk-hero">
   <div class="vk-hero-bg"></div>
   <div class="container vk-hero-content">
@@ -174,51 +177,37 @@
     </div>
 
     <div class="vk-calc-grid">
-      <!-- ЛЕВАЯ КОЛОНКА: задания -->
       <div class="vk-calc-card">
         <h3>📋 Выберите выполненные задания</h3>
-
         <div class="vk-time-toggle">
           <button class="vk-time-btn active" data-mult="1">🕐 Обычное <span class="mult">×1</span></button>
           <button class="vk-time-btn" data-mult="1.2">⚡ Пиковое (17–21) <span class="mult">×1.2</span></button>
           <button class="vk-time-btn" data-mult="1.25">🌙 Ночное (22–03) <span class="mult">×1.25</span></button>
         </div>
-
-        <div id="calcTasks">
-          <!-- Задания будут сгенерированы JS -->
-        </div>
-
+        <div id="calcTasks"></div>
         <div class="vk-calc-actions">
           <button class="btn btn-ghost" onclick="VKCalc.reset()">🔄 Сбросить всё</button>
           <button class="btn btn-ghost" onclick="VKCalc.selectAll()">✅ Выбрать все</button>
         </div>
       </div>
 
-      <!-- ПРАВАЯ КОЛОНКА: итог -->
       <div class="vk-calc-card">
         <h3>💰 Итоговый подсчёт</h3>
-
-        <div class="vk-calc-field" style="margin-bottom:18px">
+        <div class="vk-calc-field" style="margin-bottom:18px;cursor:default">
           <span class="vk-calc-icon">🎯</span>
           <label for="currentPoints">Текущие баллы (до отчёта)</label>
           <input type="number" id="currentPoints" value="0" min="0" style="width:90px" oninput="VKCalc.update()">
         </div>
-
-        <div id="calcResult">
-          <!-- Результат будет сгенерирован JS -->
-        </div>
-
+        <div id="calcResult"></div>
         <div class="vk-calc-total">
           <span class="vk-calc-total-label">Всего баллов:</span>
           <span class="vk-calc-total-value" id="totalPoints">0</span>
         </div>
-
         <div style="margin-top:14px;font-size:12.5px;color:var(--txt-3);line-height:1.6">
           <div>• Баллы за задания умножаются на коэффициент времени</div>
           <div>• Итог = текущие баллы + сумма баллов за задания</div>
           <div>• Замену благодарностью можно отметить вручную</div>
         </div>
-
         <div class="vk-calc-actions" style="margin-top:18px">
           <button class="btn btn-primary" onclick="VKCalc.copyResult()">📋 Скопировать результат</button>
         </div>
@@ -237,6 +226,10 @@
     </div>
 
     <div class="vk-calc-card">
+      <button class="vk-autofill-btn" onclick="VKReport.autofillFromCalc()">
+        🪄 Заполнить из калькулятора (задания, баллы, дата)
+      </button>
+
       <h3>✍️ Заполните данные</h3>
       <div class="vk-report-form">
         <div>
@@ -253,22 +246,19 @@
         </div>
         <div>
           <label>Дата</label>
-          <input type="text" id="rpDate" placeholder="10.10.2025" value="10.10.2025">
+          <input type="text" id="rpDate" placeholder="10.10.2025">
         </div>
         <div class="full">
-          <label>Остаток баллов за предыдущий отчёт (ссылка на сообщение или «нету»)</label>
+          <label>Остаток баллов за предыдущий отчёт (ссылка или «нету»)</label>
           <input type="text" id="rpPrevPoints" placeholder="нету" value="нету">
         </div>
         <div class="full">
           <label>Сколько всего баллов (число и ссылка)</label>
-          <input type="text" id="rpTotalPoints" placeholder="180 баллов https://discord.com/..." value="180 баллов">
+          <input type="text" id="rpTotalPoints" placeholder="180 баллов https://discord.com/...">
         </div>
         <div class="full">
           <label>Проделанная работа (каждая строка — отдельный пункт)</label>
-          <textarea id="rpWork" placeholder="Принял отчётов: Число - 2&#10;https://discord.com/...&#10;Участвовал в призывах: Число 1&#10;https://discord.com/...">Принял отчётов: Число - 2
-https://discord.com/channels/892857029507551262/896097445073797122/1558073211977994271
-Участвовал в призывах: Число 1
-https://discord.com/channels/892857029507551262/1518392582265114655/1557773184093126697</textarea>
+          <textarea id="rpWork" placeholder="Нажмите «Заполнить из калькулятора» — задания подставятся автоматически&#10;или впишите вручную"></textarea>
         </div>
         <div>
           <label>Подпись</label>
@@ -584,7 +574,7 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   ВОЕНКОМАТ — калькулятор, рапорт, табы
+   ВОЕНКОМАТ — калькулятор, рапорт, табы, автозаполнение
    ============================================================ */
 (function(){
   'use strict';
@@ -604,43 +594,52 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
 
   /* ---------- ДАННЫЕ ЗАДАНИЙ ---------- */
   var TASKS = [
-    { id:'prizyv_full', icon:'📋', label:'Провести призыв', points:85, canReplace:true },
-    { id:'prizyv_part', icon:'👥', label:'Участие в призыве', points:45, canReplace:true },
-    { id:'kmb', icon:'🎓', label:'Полный КМБ/УКМБ', points:60, canReplace:true },
-    { id:'report_check', icon:'📊', label:'Проверка отчёта на повышение', points:25, canReplace:true },
-    { id:'agit_mp', icon:'📢', label:'Агитационное МП', points:75, canReplace:true },
-    { id:'agit_mp_part', icon:'🎯', label:'Участие в агитационном МП', points:30, canReplace:true },
-    { id:'accept_human', icon:'✍️', label:'Принятие человека во фракцию', points:20, canReplace:true },
-    { id:'accept_exam', icon:'📝', label:'Принятие экзамена', points:15, canReplace:true },
-    { id:'delivery', icon:'🚚', label:'Участие в поставке / ограблении', points:25, canReplace:true },
-    { id:'kraz', icon:'🪖', label:'Участие в КрАЗ', points:20, canReplace:true }
+    { id:'prizyv_full', icon:'📋', label:'Провести призыв', points:85, reportName:'Провёл призывов' },
+    { id:'prizyv_part', icon:'👥', label:'Участие в призыве', points:45, reportName:'Участвовал в призывах' },
+    { id:'kmb', icon:'🎓', label:'Полный КМБ/УКМБ', points:60, reportName:'Провёл КМБ/УКМБ' },
+    { id:'report_check', icon:'📊', label:'Проверка отчёта на повышение', points:25, reportName:'Принял отчётов' },
+    { id:'agit_mp', icon:'📢', label:'Агитационное МП', points:75, reportName:'Провёл агитационных МП' },
+    { id:'agit_mp_part', icon:'🎯', label:'Участие в агитационном МП', points:30, reportName:'Участвовал в агитационных МП' },
+    { id:'accept_human', icon:'✍️', label:'Принятие человека во фракцию', points:20, reportName:'Принял людей во фракцию' },
+    { id:'accept_exam', icon:'📝', label:'Принятие экзамена', points:15, reportName:'Принял экзаменов' },
+    { id:'delivery', icon:'🚚', label:'Участие в поставке / ограблении', points:25, reportName:'Участвовал в поставках' },
+    { id:'kraz', icon:'🪖', label:'Участие в КрАЗ', points:20, reportName:'Участвовал в КрАЗ' }
   ];
 
   var state = {
     mult: 1,
-    selected: {},   // id -> {checked, qty}
+    selected: {},
     currentPoints: 0
   };
 
-  /* ---------- ГЕНЕРАЦИЯ СПИСКА ЗАДАНИЙ ---------- */
   var tasksContainer = document.getElementById('calcTasks');
 
   function renderTasks(){
     if(!tasksContainer) return;
     tasksContainer.innerHTML = TASKS.map(function(t){
       var sel = state.selected[t.id] || {checked:false, qty:1};
-      return '<div class="vk-calc-field' + (sel.checked ? '' : ' disabled') + '" data-task="' + t.id + '">' +
-        '<input type="checkbox" ' + (sel.checked ? 'checked' : '') + ' onchange="VKCalc.toggle(\'' + t.id + '\', this.checked)">' +
+      return '<div class="vk-calc-field' + (sel.checked ? ' active' : '') + '" data-task="' + t.id + '">' +
+        '<input type="checkbox" ' + (sel.checked ? 'checked' : '') +
+          ' onchange="VKCalc.toggle(\'' + t.id + '\', this.checked)">' +
         '<span class="vk-calc-icon">' + t.icon + '</span>' +
         '<label>' + t.label + '</label>' +
-        '<input type="number" min="1" max="99" value="' + sel.qty + '" ' + (sel.checked ? '' : 'disabled') +
+        '<input type="number" min="1" max="99" value="' + sel.qty + '"' +
+          (sel.checked ? '' : ' disabled') +
           ' onchange="VKCalc.setQty(\'' + t.id + '\', this.value)">' +
         '<span class="vk-calc-points">' + t.points + ' б.</span>' +
       '</div>';
     }).join('');
+
+    tasksContainer.querySelectorAll('.vk-calc-field').forEach(function(row){
+      row.addEventListener('click', function(e){
+        if(e.target.tagName === 'INPUT') return;
+        var id = row.getAttribute('data-task');
+        var sel = state.selected[id] || {checked:false, qty:1};
+        VKCalc.toggle(id, !sel.checked);
+      });
+    });
   }
 
-  /* ---------- ПЕРЕСЧЁТ ---------- */
   function calcSum(){
     var sum = 0;
     var details = [];
@@ -649,7 +648,7 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
       if(sel && sel.checked){
         var p = t.points * sel.qty * state.mult;
         sum += p;
-        details.push({ label:t.label, qty:sel.qty, points:t.points, total:Math.round(p) });
+        details.push({ id:t.id, label:t.label, reportName:t.reportName, qty:sel.qty, total:Math.round(p) });
       }
     });
     return { sum: Math.round(sum), details: details };
@@ -681,7 +680,6 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
     if(totalEl) totalEl.textContent = current + res.sum;
   }
 
-  /* ---------- ПУБЛИЧНЫЙ API ---------- */
   window.VKCalc = {
     toggle: function(id, checked){
       if(!state.selected[id]) state.selected[id] = {checked:false, qty:1};
@@ -694,13 +692,8 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
       state.selected[id].qty = Math.max(1, parseInt(val) || 1);
       renderResult();
     },
-    setMult: function(m){
-      state.mult = m;
-      renderResult();
-    },
-    update: function(){
-      renderResult();
-    },
+    setMult: function(m){ state.mult = m; renderResult(); },
+    update: function(){ renderResult(); },
     reset: function(){
       state.selected = {};
       state.mult = 1;
@@ -713,9 +706,7 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
       renderResult();
     },
     selectAll: function(){
-      TASKS.forEach(function(t){
-        state.selected[t.id] = {checked:true, qty:1};
-      });
+      TASKS.forEach(function(t){ state.selected[t.id] = {checked:true, qty:1}; });
       renderTasks();
       renderResult();
     },
@@ -738,41 +729,88 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
       }
       lines.push('');
       lines.push('ИТОГО БАЛЛОВ: ' + (current + res.sum));
-      var text = lines.join('\n');
-      copyToClipboard(text);
+      copyToClipboard(lines.join('\n'));
       alert('Результат скопирован в буфер обмена!');
+    },
+    /* Для автозаполнения рапорта */
+    getData: function(){
+      return {
+        mult: state.mult,
+        currentPoints: state.currentPoints,
+        details: calcSum().details,
+        sum: calcSum().sum,
+        total: state.currentPoints + calcSum().sum
+      };
     }
   };
 
-  /* ---------- КНОПКИ ВРЕМЕНИ ---------- */
   document.querySelectorAll('.vk-time-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('.vk-time-btn').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
-      var m = parseFloat(btn.getAttribute('data-mult')) || 1;
-      VKCalc.setMult(m);
+      VKCalc.setMult(parseFloat(btn.getAttribute('data-mult')) || 1);
     });
   });
 
-  /* ---------- ТЕКУЩИЕ БАЛЛЫ ---------- */
   var cpInput = document.getElementById('currentPoints');
-  if(cpInput){
-    cpInput.addEventListener('input', renderResult);
-  }
+  if(cpInput) cpInput.addEventListener('input', renderResult);
 
-  /* ---------- ИНИЦИАЛИЗАЦИЯ КАЛЬКУЛЯТОРА ---------- */
   renderTasks();
   renderResult();
 
   /* ============================================================
-     ФОРМА РАПОРТА
+     ФОРМА РАПОРТА + АВТОЗАПОЛНЕНИЕ
      ============================================================ */
-  function getVal(id){
-    var el = document.getElementById(id);
-    return el ? el.value : '';
+  function getVal(id){ var el = document.getElementById(id); return el ? el.value : ''; }
+  function setVal(id, val){ var el = document.getElementById(id); if(el) el.value = val; }
+
+  function todayStr(){
+    var d = new Date();
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mm = ('0' + (d.getMonth()+1)).slice(-2);
+    return dd + '.' + mm + '.' + d.getFullYear();
   }
 
   window.VKReport = {
+    /* Автозаполнение из калькулятора */
+    autofillFromCalc: function(){
+      var data = VKCalc.getData();
+
+      if(data.details.length === 0){
+        if(!confirm('В калькуляторе не отмечено ни одного задания. Заполнить только баллы и дату?')) return;
+      }
+
+      /* Формируем блок «Проделанная работа» */
+      var workLines = [];
+      data.details.forEach(function(d){
+        workLines.push(d.reportName + ': Число ' + d.qty);
+        workLines.push('ссылка'); /* место под ссылку */
+        workLines.push('');
+      });
+
+      if(workLines.length === 0){
+        workLines.push('Укажите проделанную работу вручную');
+      }
+
+      setVal('rpWork', workLines.join('\n'));
+      setVal('rpDate', todayStr());
+
+      /* «Сколько всего баллов» — общий итог */
+      setVal('rpTotalPoints', data.total + ' баллов');
+
+      /* Если пользователь оставил пустое поле «Остаток» — ставим нету */
+      if(!getVal('rpPrevPoints')) setVal('rpPrevPoints', 'нету');
+
+      /* Обновляем предпросмотр */
+      VKReport.generate();
+
+      /* Небольшое уведомление */
+      var btn = event.target;
+      var old = btn.innerHTML;
+      btn.innerHTML = '✅ Заполнено! Дополните ссылки в блоке работы';
+      setTimeout(function(){ btn.innerHTML = old; }, 2500);
+    },
+
     generate: function(){
       var rank = getVal('rpRank') || 'Звание';
       var name = getVal('rpName') || 'ФИО';
@@ -806,9 +844,9 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
       if(out) out.textContent = text;
       return text;
     },
+
     copy: function(){
-      var text = VKReport.generate();
-      copyToClipboard(text);
+      copyToClipboard(VKReport.generate());
       var btn = document.getElementById('rpCopyBtn');
       if(btn){
         btn.classList.add('copied');
@@ -819,6 +857,7 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
         }, 2000);
       }
     },
+
     clear: function(){
       ['rpRank','rpName','rpNextRank','rpDate','rpPrevPoints','rpTotalPoints','rpWork','rpSign'].forEach(function(id){
         var el = document.getElementById(id);
@@ -828,26 +867,23 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
     }
   };
 
-  /* Автогенерация при вводе */
   ['rpRank','rpName','rpNextRank','rpDate','rpPrevPoints','rpTotalPoints','rpWork','rpSign'].forEach(function(id){
     var el = document.getElementById(id);
     if(el) el.addEventListener('input', VKReport.generate);
   });
 
-  /* Первичная генерация */
+  /* Ставим дату по умолчанию и генерируем превью */
+  setVal('rpDate', todayStr());
   VKReport.generate();
 
-  /* ---------- КОПИРОВАНИЕ В БУФЕР ---------- */
+  /* ---------- КОПИРОВАНИЕ ---------- */
   function copyToClipboard(text){
     if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).catch(function(){
-        fallbackCopy(text);
-      });
+      navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
     } else {
       fallbackCopy(text);
     }
   }
-
   function fallbackCopy(text){
     var ta = document.createElement('textarea');
     ta.value = text;
@@ -858,7 +894,6 @@ https://discord.com/channels/892857029507551262/1518392582265114655/155777318409
     try { document.execCommand('copy'); } catch(e){}
     document.body.removeChild(ta);
   }
-
 })();
 </script>
 </body>
