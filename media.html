@@ -9,12 +9,23 @@
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-.media-hero{position:relative;padding:70px 0 40px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(74,168,255,.05))}
+.media-hero{position:relative;padding:60px 0 40px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(74,168,255,.05))}
 .media-hero h1{font-size:clamp(28px,5vw,48px);font-weight:900;color:var(--txt-0);letter-spacing:-1.2px}
 .media-hero h1 .accent{background:linear-gradient(135deg,#a855f7,#4aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .media-hero p{color:var(--txt-2);margin-top:12px;font-size:15px}
 
-.media-upload{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px;margin-bottom:30px}
+/* ТАБЫ страниц */
+.media-pages{display:flex;gap:6px;margin:24px 0 20px;padding:6px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.media-page-btn{padding:9px 18px;border-radius:10px;background:transparent;color:var(--txt-2);font-size:13px;font-weight:600;border:0;cursor:pointer;transition:var(--transition);white-space:nowrap}
+.media-page-btn:hover{background:var(--bg-3);color:var(--txt-0)}
+.media-page-btn.active{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+
+.media-view{display:none}
+.media-view.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ФОРМА ДОБАВЛЕНИЯ */
+.media-upload{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;margin-bottom:24px}
 .media-upload h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .media-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
 .media-tab{padding:8px 16px;border-radius:9px;background:var(--bg-3);color:var(--txt-2);font-size:13px;font-weight:600;border:1px solid var(--line);cursor:pointer;transition:var(--transition)}
@@ -22,37 +33,71 @@
 .media-tab.active{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border-color:transparent}
 .media-panel{display:none}
 .media-panel.active{display:block}
-.media-panel input,.media-panel textarea{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:14px;outline:none;transition:var(--transition);font-family:inherit;margin-bottom:12px}
-.media-panel input:focus,.media-panel textarea:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.media-panel input,.media-panel textarea,.media-panel select{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:14px;outline:none;transition:var(--transition);font-family:inherit;margin-bottom:12px}
+.media-panel input:focus,.media-panel textarea:focus,.media-panel select:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
 .media-panel textarea{min-height:80px;resize:vertical}
-.media-panel input[type="file"]{padding:9px;background:var(--bg-1)}
 .media-add-btn{padding:11px 22px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
 .media-add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
+.media-add-btn.green{background:linear-gradient(135deg,#3ddc84,#4aa8ff)}
+.media-add-btn.green:hover{box-shadow:0 8px 24px rgba(61,220,132,.3)}
 
 .media-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .media-filter{padding:7px 14px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);color:var(--txt-2);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--transition)}
 .media-filter:hover{background:var(--bg-3);color:var(--txt-0)}
 .media-filter.active{background:#4aa8ff;color:#fff;border-color:transparent}
 
-.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+/* АЛЬБОМЫ */
+.albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.album-card{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:var(--transition);position:relative}
+.album-card:hover{transform:translateY(-4px);border-color:#a855f7;box-shadow:0 16px 40px rgba(168,85,247,.15)}
+.album-cover{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#1a1c24,#23262f);display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden;position:relative}
+.album-cover img{width:100%;height:100%;object-fit:cover}
+.album-cover .empty-icon{opacity:.35}
+.album-badge{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:8px;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);color:#fff;font-size:11px;font-weight:700}
+.album-info{padding:12px 14px}
+.album-title{font-size:14px;font-weight:700;color:var(--txt-0);margin-bottom:4px;word-break:break-word}
+.album-desc{font-size:12px;color:var(--txt-3);line-height:1.5;min-height:32px;word-break:break-word}
+.album-date{font-size:11px;color:var(--txt-3);margin-top:8px;opacity:.7}
+.album-del{position:absolute;top:8px;left:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:0;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:var(--transition);backdrop-filter:blur(4px);z-index:2}
+.album-del:hover{background:#ff4655}
+
+/* МЕДИА СЕТКА */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 .media-card{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:var(--transition);position:relative}
 .media-card:hover{transform:translateY(-3px);border-color:#a855f7;box-shadow:0 12px 30px rgba(168,85,247,.15)}
 .media-preview{position:relative;width:100%;aspect-ratio:16/10;background:#000;overflow:hidden}
-.media-preview img,.media-preview video{width:100%;height:100%;object-fit:cover;display:block}
+.media-preview img,.media-preview video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
 .media-preview iframe{width:100%;height:100%;border:0;display:block}
 .media-type{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.5px;backdrop-filter:blur(4px)}
-.media-del{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:0;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:var(--transition);backdrop-filter:blur(4px)}
+.media-del{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:0;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:var(--transition);backdrop-filter:blur(4px);z-index:2}
 .media-del:hover{background:#ff4655}
 .media-info{padding:12px 14px}
 .media-title{font-size:13.5px;font-weight:600;color:var(--txt-0);margin-bottom:4px;word-break:break-word}
 .media-desc{font-size:12px;color:var(--txt-3);line-height:1.5;word-break:break-word}
 .media-date{font-size:11px;color:var(--txt-3);margin-top:8px;opacity:.7}
 
+/* АЛЬБОМ — просмотр */
+.album-view-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:18px 20px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px}
+.album-view-cover{width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;flex-shrink:0}
+.album-view-cover img{width:100%;height:100%;object-fit:cover}
+.album-view-body{flex:1;min-width:0}
+.album-view-title{font-size:20px;font-weight:800;color:var(--txt-0);margin-bottom:4px}
+.album-view-desc{font-size:13px;color:var(--txt-2)}
+.album-view-back{padding:9px 16px;border-radius:10px;background:var(--bg-3);border:1px solid var(--line);color:var(--txt-1);font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.album-view-back:hover{background:var(--bg-4)}
+
 .media-empty{padding:60px 20px;text-align:center;color:var(--txt-3);background:var(--bg-2);border:1px dashed var(--line);border-radius:14px;font-size:14px}
 .media-empty .icon{font-size:48px;display:block;margin-bottom:12px;opacity:.4}
 
 .media-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px;font-size:13px;color:var(--txt-3)}
 .media-stats b{color:var(--txt-0)}
+
+/* Лайтбокс */
+.lightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.active{display:flex}
+.lightbox img,.lightbox video{max-width:95vw;max-height:90vh;border-radius:10px;display:block}
+.lightbox-close{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.lightbox-close:hover{background:#ff4655}
 </style>
 </head>
 <body>
@@ -77,7 +122,8 @@
       <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
     </nav>
     <div class="header-actions">
-      <a href="media.html" class="btn-media" style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:9px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:600;text-decoration:none;font-size:12.5px">🎬 Медиа</a>
+      <a href="profile.html" class="btn-media" style="background:linear-gradient(135deg,#4aa8ff,#3ddc84)"><span>👤</span><span class="btn-add-text">Профиль</span></a>
+      <a href="media.html" class="btn-media"><span>🎬</span><span class="btn-add-text">Медиа</span></a>
       <button class="btn-add" id="openEditor" style="padding:8px 12px;font-size:12.5px"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
       <button class="btn-bg" id="openBgPicker" style="padding:8px 12px"><span>🖼</span></button>
       <button class="burger" id="burger"><span></span><span></span><span></span></button>
@@ -88,53 +134,91 @@
 <section class="media-hero">
   <div class="container">
     <h1>🎬 Медиа-<span class="accent">галерея</span></h1>
-    <p>Скрины, видео и материалы проекта. Всё хранится локально в твоём браузере.</p>
+    <p>Скрины, видео, альбомы и материалы проекта. Всё хранится локально в твоём браузере.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
 
-    <!-- ФОРМА ЗАГРУЗКИ -->
-    <div class="media-upload">
-      <h3>📤 Добавить медиа</h3>
-      <div class="media-tabs">
-        <button class="media-tab active" data-media-tab="file">📁 Файл (фото/видео)</button>
-        <button class="media-tab" data-media-tab="url">🔗 Ссылка (Discord, YouTube, Imgur)</button>
+    <!-- ТАБЫ -->
+    <div class="media-pages">
+      <button class="media-page-btn active" data-media-page="albums">📁 Альбомы</button>
+      <button class="media-page-btn" data-media-page="all">🖼 Все файлы</button>
+    </div>
+
+    <!-- АЛЬБОМЫ -->
+    <div class="media-view active" data-media-view="albums">
+      <div class="media-upload">
+        <h3>➕ Создать альбом</h3>
+        <input type="text" id="albumTitle" placeholder="Название альбома (например: Поставки Октябрь 2026)">
+        <textarea id="albumDesc" placeholder="Описание (необязательно)"></textarea>
+        <button class="media-add-btn" onclick="MediaGallery.createAlbum()">📁 Создать альбом</button>
       </div>
 
-      <div class="media-panel active" data-media-panel="file">
-        <input type="text" id="mediaFileTitle" placeholder="Название (например: Поставка 09.10.2026)">
-        <textarea id="mediaFileDesc" placeholder="Описание (необязательно)"></textarea>
-        <input type="file" id="mediaFileInput" accept="image/*,video/*">
-        <button class="media-add-btn" onclick="MediaGallery.addFile()">➕ Добавить файл</button>
+      <div class="albums-grid" id="albumsGrid"></div>
+    </div>
+
+    <!-- ВСЕ ФАЙЛЫ -->
+    <div class="media-view" data-media-view="all">
+      <div class="media-upload">
+        <h3>📤 Добавить медиа</h3>
+        <div class="media-tabs">
+          <button class="media-tab active" data-media-tab="file">📁 Файл (фото/видео)</button>
+          <button class="media-tab" data-media-tab="url">🔗 Ссылка</button>
+        </div>
+
+        <div class="media-panel active" data-media-panel="file">
+          <input type="text" id="mediaFileTitle" placeholder="Название">
+          <textarea id="mediaFileDesc" placeholder="Описание (необязательно)"></textarea>
+          <select id="mediaFileAlbum">
+            <option value="">📁 Без альбома</option>
+          </select>
+          <input type="file" id="mediaFileInput" accept="image/*,video/*">
+          <button class="media-add-btn" onclick="MediaGallery.addFile()">➕ Добавить файл</button>
+        </div>
+
+        <div class="media-panel" data-media-panel="url">
+          <input type="text" id="mediaUrlTitle" placeholder="Название">
+          <textarea id="mediaUrlDesc" placeholder="Описание (необязательно)"></textarea>
+          <select id="mediaUrlAlbum">
+            <option value="">📁 Без альбома</option>
+          </select>
+          <input type="text" id="mediaUrlInput" placeholder="https://discord.com/... или https://youtube.com/...">
+          <button class="media-add-btn" onclick="MediaGallery.addUrl()">➕ Добавить ссылку</button>
+        </div>
       </div>
 
-      <div class="media-panel" data-media-panel="url">
-        <input type="text" id="mediaUrlTitle" placeholder="Название">
-        <textarea id="mediaUrlDesc" placeholder="Описание (необязательно)"></textarea>
-        <input type="text" id="mediaUrlInput" placeholder="https://discord.com/... или https://youtube.com/...">
-        <button class="media-add-btn" onclick="MediaGallery.addUrl()">➕ Добавить ссылку</button>
+      <div class="media-filters">
+        <button class="media-filter active" data-media-filter="all">📚 Все</button>
+        <button class="media-filter" data-media-filter="image">🖼 Изображения</button>
+        <button class="media-filter" data-media-filter="video">🎥 Видео</button>
+        <button class="media-filter" data-media-filter="link">🔗 Ссылки</button>
+      </div>
+
+      <div class="media-grid" id="mediaGrid"></div>
+
+      <div class="media-stats">
+        <div>Всего: <b id="statTotal">0</b></div>
+        <div>Изображений: <b id="statImg">0</b></div>
+        <div>Видео: <b id="statVid">0</b></div>
+        <div>Ссылок: <b id="statLink">0</b></div>
       </div>
     </div>
 
-    <!-- ФИЛЬТРЫ -->
-    <div class="media-filters">
-      <button class="media-filter active" data-media-filter="all">📚 Все</button>
-      <button class="media-filter" data-media-filter="image">🖼 Изображения</button>
-      <button class="media-filter" data-media-filter="video">🎥 Видео</button>
-      <button class="media-filter" data-media-filter="link">🔗 Ссылки</button>
+    <!-- ПРОСМОТР АЛЬБОМА -->
+    <div class="media-view" data-media-view="album">
+      <div class="album-view-head">
+        <div class="album-view-cover" id="avCover">📁</div>
+        <div class="album-view-body">
+          <div class="album-view-title" id="avTitle">Альбом</div>
+          <div class="album-view-desc" id="avDesc"></div>
+        </div>
+        <a href="#" class="album-view-back" onclick="MediaGallery.backToAlbums();return false">← Назад</a>
+      </div>
+      <div class="media-grid" id="albumGrid"></div>
     </div>
 
-    <!-- ГАЛЕРЕЯ -->
-    <div class="media-grid" id="mediaGrid"></div>
-
-    <div class="media-stats">
-      <div>Всего: <b id="statTotal">0</b></div>
-      <div>Изображений: <b id="statImg">0</b></div>
-      <div>Видео: <b id="statVid">0</b></div>
-      <div>Ссылок: <b id="statLink">0</b></div>
-    </div>
   </div>
 </section>
 
@@ -159,7 +243,13 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалка редактора (копия для совместимости со script.js) -->
+<!-- Лайтбокс -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="MediaGallery.closeLightbox()">✕</button>
+  <div id="lightboxContent"></div>
+</div>
+
+<!-- Модалки для совместимости со script.js -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -178,7 +268,6 @@
   </div>
 </div>
 
-<!-- Модалка фона -->
 <div class="modal-overlay" id="bgModal" hidden>
   <div class="modal modal-sm">
     <div class="modal-head"><h3 class="modal-title">🖼 Настройка фона</h3><button class="modal-close" id="closeBgPicker">✕</button></div>
@@ -196,194 +285,207 @@
   </div>
 </div>
 
+<script src="auth.js"></script>
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   MEDIA GALLERY — отдельная страница
+   MEDIA GALLERY v2 — с альбомами
    ============================================================ */
 (function(){
   'use strict';
 
-  var LS_KEY = 'rmrp_media_gallery';
-  var items = [];
-  var filter = 'all';
+  var LS_MEDIA  = 'rmrp_media_gallery';
+  var LS_ALBUMS = 'rmrp_media_albums';
 
-  /* ---------- ТАБЫ ---------- */
-  document.querySelectorAll('.media-tab').forEach(function(tab){
+  var media = [];
+  var albums = [];
+  var filter = 'all';
+  var currentAlbumId = null;
+
+  /* ---------- Утилиты ---------- */
+  function $(s,c){ return (c||document).querySelector(s); }
+  function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
+  function esc(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function setText(id,v){ var el = document.getElementById(id); if(el) el.textContent = v; }
+
+  function load(){
+    try{ media  = JSON.parse(localStorage.getItem(LS_MEDIA)  || '[]'); }catch(e){ media = []; }
+    try{ albums = JSON.parse(localStorage.getItem(LS_ALBUMS) || '[]'); }catch(e){ albums = []; }
+    if(!Array.isArray(media))  media = [];
+    if(!Array.isArray(albums)) albums = [];
+  }
+  function save(){
+    try{
+      localStorage.setItem(LS_MEDIA, JSON.stringify(media));
+      localStorage.setItem(LS_ALBUMS, JSON.stringify(albums));
+    }catch(e){
+      alert('Хранилище переполнено (~5 МБ). Удали что-нибудь или используй ссылки.');
+    }
+  }
+
+  /* ---------- ТАБЫ СТРАНИЦ ---------- */
+  $$('.media-page-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var page = b.getAttribute('data-media-page');
+      $$('.media-page-btn').forEach(function(x){ x.classList.toggle('active', x === b); });
+      $$('.media-view').forEach(function(v){
+        v.classList.toggle('active', v.getAttribute('data-media-view') === page);
+      });
+    });
+  });
+
+  /* ---------- ТАБЫ ФОРМЫ ---------- */
+  $$('.media-tab').forEach(function(tab){
     tab.addEventListener('click', function(){
       var name = tab.getAttribute('data-media-tab');
-      document.querySelectorAll('.media-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
-      document.querySelectorAll('.media-panel').forEach(function(p){
+      $$('.media-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
+      $$('.media-panel').forEach(function(p){
         p.classList.toggle('active', p.getAttribute('data-media-panel') === name);
       });
     });
   });
 
   /* ---------- ФИЛЬТРЫ ---------- */
-  document.querySelectorAll('.media-filter').forEach(function(btn){
+  $$('.media-filter').forEach(function(btn){
     btn.addEventListener('click', function(){
-      document.querySelectorAll('.media-filter').forEach(function(b){ b.classList.remove('active'); });
+      $$('.media-filter').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
       filter = btn.getAttribute('data-media-filter');
-      render();
+      renderAll();
     });
   });
 
-  /* ---------- ЗАГРУЗКА ---------- */
-  function load(){
-    try{
-      var raw = localStorage.getItem(LS_KEY);
-      items = raw ? JSON.parse(raw) : [];
-      if(!Array.isArray(items)) items = [];
-    }catch(e){ items = []; }
-  }
-  function save(){
-    try{
-      localStorage.setItem(LS_KEY, JSON.stringify(items));
-    }catch(e){
-      alert('Не удалось сохранить: переполнено хранилище (localStorage ~5МБ). Удали что-нибудь.');
-    }
-  }
-
-  /* ---------- ДОБАВЛЕНИЕ ---------- */
-  function addFile(){
-    var title = document.getElementById('mediaFileTitle').value.trim() || 'Без названия';
-    var desc  = document.getElementById('mediaFileDesc').value.trim();
-    var file  = document.getElementById('mediaFileInput').files[0];
-
-    if(!file){ alert('Выбери файл'); return; }
-
-    /* Ограничение 3 МБ */
-    if(file.size > 3 * 1024 * 1024){
-      alert('Файл слишком большой (макс 3 МБ). Сожми или используй ссылку.');
-      return;
-    }
-
-    var reader = new FileReader();
-    reader.onload = function(e){
-      var type = file.type.indexOf('video') === 0 ? 'video' : 'image';
-      items.unshift({
-        id: Date.now(),
-        type: type,
-        src: e.target.result,
-        title: title,
-        desc: desc,
-        date: new Date().toLocaleString('ru-RU')
-      });
-      save();
-      render();
-      resetForm();
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function addUrl(){
-    var title = document.getElementById('mediaUrlTitle').value.trim() || 'Без названия';
-    var desc  = document.getElementById('mediaUrlDesc').value.trim();
-    var url   = document.getElementById('mediaUrlInput').value.trim();
-
-    if(!url){ alert('Введи ссылку'); return; }
-    if(!/^https?:\/\//i.test(url)){ alert('Ссылка должна начинаться с http:// или https://'); return; }
-
-    var type = detectType(url);
-    items.unshift({
+  /* ---------- АЛЬБОМЫ ---------- */
+  function createAlbum(){
+    var t = $('#albumTitle').value.trim();
+    var d = $('#albumDesc').value.trim();
+    if(!t){ alert('Введи название альбома'); return; }
+    albums.unshift({
       id: Date.now(),
-      type: type,
-      src: url,
-      title: title,
-      desc: desc,
-      date: new Date().toLocaleString('ru-RU')
+      title: t,
+      desc: d,
+      date: new Date().toLocaleString('ru-RU'),
+      cover: ''
     });
     save();
-    render();
-    resetForm();
+    $('#albumTitle').value = '';
+    $('#albumDesc').value = '';
+    renderAlbums();
+    renderAlbumSelects();
   }
 
-  function detectType(url){
-    var u = url.toLowerCase();
-    if(u.indexOf('youtube.com') !== -1 || u.indexOf('youtu.be') !== -1) return 'youtube';
-    if(/\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/i.test(u)) return 'image';
-    if(/\.(mp4|webm|ogg|mov)(\?|$)/i.test(u)) return 'video';
-    return 'link';
-  }
-
-  function resetForm(){
-    ['mediaFileTitle','mediaFileDesc','mediaFileInput','mediaUrlTitle','mediaUrlDesc','mediaUrlInput'].forEach(function(id){
-      var el = document.getElementById(id);
-      if(el) el.value = '';
-    });
-  }
-
-  /* ---------- УДАЛЕНИЕ ---------- */
-  function remove(id){
-    if(!confirm('Удалить этот элемент?')) return;
-    items = items.filter(function(i){ return i.id !== id; });
+  function deleteAlbum(id){
+    if(!confirm('Удалить альбом? Медиа внутри останутся, но без альбома.')) return;
+    albums = albums.filter(function(a){ return a.id !== id; });
+    media.forEach(function(m){ if(m.albumId === id) m.albumId = null; });
     save();
-    render();
+    renderAll();
   }
 
-  /* ---------- РЕНДЕР ---------- */
-  function render(){
-    var grid = document.getElementById('mediaGrid');
+  function openAlbum(id){
+    currentAlbumId = id;
+    var album = albums.find(function(a){ return a.id === id; });
+    if(!album) return;
+
+    $$('.media-view').forEach(function(v){ v.classList.remove('active'); });
+    $$('.media-page-btn').forEach(function(b){ b.classList.remove('active'); });
+    var view = document.querySelector('.media-view[data-media-view="album"]');
+    if(view) view.classList.add('active');
+
+    setText('avTitle', album.title);
+    setText('avDesc', album.desc || 'Без описания');
+
+    var cover = document.getElementById('avCover');
+    if(cover){
+      if(album.cover){
+        cover.innerHTML = '<img src="' + album.cover + '" alt="">';
+      } else {
+        cover.innerHTML = '📁';
+      }
+    }
+
+    renderAlbumGrid(id);
+  }
+
+  function backToAlbums(){
+    currentAlbumId = null;
+    $$('.media-view').forEach(function(v){ v.classList.remove('active'); });
+    var view = document.querySelector('.media-view[data-media-view="albums"]');
+    if(view) view.classList.add('active');
+    $$('.media-page-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-media-page') === 'albums');
+    });
+    renderAlbums();
+  }
+
+  function renderAlbums(){
+    var grid = document.getElementById('albumsGrid');
     if(!grid) return;
 
-    var list = items;
-    if(filter !== 'all'){
-      list = items.filter(function(i){
-        if(filter === 'image')  return i.type === 'image';
-        if(filter === 'video')  return i.type === 'video';
-        if(filter === 'link')   return i.type === 'link' || i.type === 'youtube';
-        return true;
-      });
-    }
-
-    /* Статистика */
-    var stats = { total: items.length, img:0, vid:0, link:0 };
-    items.forEach(function(i){
-      if(i.type === 'image') stats.img++;
-      else if(i.type === 'video') stats.vid++;
-      else stats.link++;
-    });
-    setText('statTotal', stats.total);
-    setText('statImg', stats.img);
-    setText('statVid', stats.vid);
-    setText('statLink', stats.link);
-
-    if(list.length === 0){
-      grid.innerHTML = '<div class="media-empty" style="grid-column:1/-1"><span class="icon">📭</span>Здесь пока ничего нет. Добавь первый элемент!</div>';
+    if(albums.length === 0){
+      grid.innerHTML = '<div class="media-empty" style="grid-column:1/-1"><span class="icon">📁</span>Пока нет альбомов. Создай первый!</div>';
       return;
     }
 
-    grid.innerHTML = list.map(function(i){
-      return '<div class="media-card">' +
-        '<div class="media-preview">' + previewHtml(i) +
-          '<span class="media-type">' + typeLabel(i.type) + '</span>' +
-          '<button class="media-del" onclick="MediaGallery.remove(' + i.id + ')" title="Удалить">✕</button>' +
+    grid.innerHTML = albums.map(function(a){
+      var count = media.filter(function(m){ return m.albumId === a.id; }).length;
+      var coverHtml = a.cover
+        ? '<img src="' + esc(a.cover) + '" alt="">'
+        : '<span class="empty-icon">📁</span>';
+      return '<div class="album-card" onclick="MediaGallery.openAlbum(' + a.id + ')">' +
+        '<button class="album-del" onclick="event.stopPropagation(); MediaGallery.deleteAlbum(' + a.id + ')" title="Удалить">✕</button>' +
+        '<div class="album-cover">' + coverHtml +
+          '<span class="album-badge">' + count + ' 📷</span>' +
         '</div>' +
-        '<div class="media-info">' +
-          '<div class="media-title">' + escapeHtml(i.title) + '</div>' +
-          (i.desc ? '<div class="media-desc">' + escapeHtml(i.desc) + '</div>' : '') +
-          '<div class="media-date">' + i.date + '</div>' +
+        '<div class="album-info">' +
+          '<div class="album-title">' + esc(a.title) + '</div>' +
+          '<div class="album-desc">' + esc(a.desc || 'Без описания') + '</div>' +
+          '<div class="album-date">' + a.date + '</div>' +
         '</div>' +
       '</div>';
     }).join('');
   }
 
-  function previewHtml(i){
-    if(i.type === 'image'){
-      return '<img src="' + i.src + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=\'<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;color:#666;font-size:13px&quot;>❌ Не загрузилось</div>\'">';
+  function renderAlbumGrid(id){
+    var grid = document.getElementById('albumGrid');
+    if(!grid) return;
+    var list = media.filter(function(m){ return m.albumId === id; });
+    if(list.length === 0){
+      grid.innerHTML = '<div class="media-empty" style="grid-column:1/-1"><span class="icon">📷</span>В этом альбоме пока пусто</div>';
+      return;
     }
-    if(i.type === 'video'){
-      return '<video src="' + i.src + '" controls preload="metadata"></video>';
+    grid.innerHTML = list.map(renderMediaCard).join('');
+  }
+
+  /* ---------- МЕДИА ---------- */
+  function renderMediaCard(m){
+    return '<div class="media-card">' +
+      '<div class="media-preview">' + previewHtml(m) +
+        '<span class="media-type">' + typeLabel(m.type) + '</span>' +
+        '<button class="media-del" onclick="MediaGallery.removeMedia(' + m.id + ')" title="Удалить">✕</button>' +
+      '</div>' +
+      '<div class="media-info">' +
+        '<div class="media-title">' + esc(m.title) + '</div>' +
+        (m.desc ? '<div class="media-desc">' + esc(m.desc) + '</div>' : '') +
+        '<div class="media-date">' + m.date + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function previewHtml(m){
+    if(m.type === 'image'){
+      return '<img src="' + esc(m.src) + '" alt="" loading="lazy" onclick="MediaGallery.openLightbox(\'' + esc(m.src) + '\',\'image\')">';
     }
-    if(i.type === 'youtube'){
-      var ytId = extractYouTubeId(i.src);
+    if(m.type === 'video'){
+      return '<video src="' + esc(m.src) + '" controls preload="metadata"></video>';
+    }
+    if(m.type === 'youtube'){
+      var ytId = extractYouTubeId(m.src);
       if(ytId){
         return '<iframe src="https://www.youtube.com/embed/' + ytId + '" allowfullscreen loading="lazy"></iframe>';
       }
     }
-    /* Обычная ссылка */
-    return '<a href="' + i.src + '" target="_blank" style="display:flex;align-items:center;justify-content:center;height:100%;color:#4aa8ff;font-size:13px;text-decoration:none;padding:20px;text-align:center;word-break:break-all">🔗 ' + escapeHtml(i.src) + '</a>';
+    return '<a href="' + esc(m.src) + '" target="_blank" style="display:flex;align-items:center;justify-content:center;height:100%;color:#4aa8ff;font-size:12px;text-decoration:none;padding:16px;text-align:center;word-break:break-all">🔗 ' + esc(m.src) + '</a>';
   }
 
   function extractYouTubeId(url){
@@ -395,27 +497,186 @@
     return { image:'🖼 IMG', video:'🎥 VID', youtube:'▶ YT', link:'🔗 LINK' }[t] || '❓';
   }
 
-  function setText(id, v){ var el = document.getElementById(id); if(el) el.textContent = v; }
-  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function detectType(url){
+    var u = url.toLowerCase();
+    if(u.indexOf('youtube.com') !== -1 || u.indexOf('youtu.be') !== -1) return 'youtube';
+    if(/\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/i.test(u)) return 'image';
+    if(/\.(mp4|webm|ogg|mov)(\?|$)/i.test(u)) return 'video';
+    return 'link';
+  }
 
-  /* ---------- ПУБЛИЧНЫЙ API ---------- */
+  /* ---------- ДОБАВЛЕНИЕ ---------- */
+  function addFile(){
+    var title = $('#mediaFileTitle').value.trim() || 'Без названия';
+    var desc  = $('#mediaFileDesc').value.trim();
+    var albumId = parseInt($('#mediaFileAlbum').value) || null;
+    var file  = $('#mediaFileInput').files[0];
+
+    if(!file){ alert('Выбери файл'); return; }
+    if(file.size > 3 * 1024 * 1024){
+      alert('Файл слишком большой (макс 3 МБ)');
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var type = file.type.indexOf('video') === 0 ? 'video' : 'image';
+      media.unshift({
+        id: Date.now(),
+        type: type,
+        src: e.target.result,
+        title: title,
+        desc: desc,
+        albumId: albumId,
+        date: new Date().toLocaleString('ru-RU')
+      });
+      save();
+      updateAlbumCover(albumId);
+      renderAll();
+      resetForm();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function addUrl(){
+    var title = $('#mediaUrlTitle').value.trim() || 'Без названия';
+    var desc  = $('#mediaUrlDesc').value.trim();
+    var albumId = parseInt($('#mediaUrlAlbum').value) || null;
+    var url   = $('#mediaUrlInput').value.trim();
+
+    if(!url){ alert('Введи ссылку'); return; }
+    if(!/^https?:\/\//i.test(url)){ alert('Ссылка должна начинаться с http(s)://'); return; }
+
+    var type = detectType(url);
+    media.unshift({
+      id: Date.now(),
+      type: type,
+      src: url,
+      title: title,
+      desc: desc,
+      albumId: albumId,
+      date: new Date().toLocaleString('ru-RU')
+    });
+    save();
+    updateAlbumCover(albumId);
+    renderAll();
+    resetForm();
+  }
+
+  function updateAlbumCover(albumId){
+    if(!albumId) return;
+    var album = albums.find(function(a){ return a.id === albumId; });
+    if(!album) return;
+    if(album.cover) return;
+    var firstImg = media.find(function(m){ return m.albumId === albumId && m.type === 'image'; });
+    if(firstImg) album.cover = firstImg.src;
+  }
+
+  function removeMedia(id){
+    if(!confirm('Удалить этот элемент?')) return;
+    media = media.filter(function(m){ return m.id !== id; });
+    save();
+    renderAll();
+    if(currentAlbumId) renderAlbumGrid(currentAlbumId);
+  }
+
+  function resetForm(){
+    ['mediaFileTitle','mediaFileDesc','mediaFileInput','mediaUrlTitle','mediaUrlDesc','mediaUrlInput'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.value = '';
+    });
+  }
+
+  /* ---------- ЛАЙТБОКС ---------- */
+  function openLightbox(src, type){
+    var lb = document.getElementById('lightbox');
+    var content = document.getElementById('lightboxContent');
+    if(!lb || !content) return;
+    content.innerHTML = type === 'image'
+      ? '<img src="' + src + '" alt="">'
+      : '<video src="' + src + '" controls autoplay></video>';
+    lb.classList.add('active');
+  }
+  function closeLightbox(){
+    var lb = document.getElementById('lightbox');
+    var content = document.getElementById('lightboxContent');
+    if(lb) lb.classList.remove('active');
+    if(content) content.innerHTML = '';
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeLightbox();
+  });
+  document.addEventListener('click', function(e){
+    if(e.target && e.target.id === 'lightbox') closeLightbox();
+  });
+
+  /* ---------- SELECT АЛЬБОМОВ ---------- */
+  function renderAlbumSelects(){
+    ['mediaFileAlbum','mediaUrlAlbum'].forEach(function(id){
+      var sel = document.getElementById(id);
+      if(!sel) return;
+      var current = sel.value;
+      sel.innerHTML = '<option value="">📁 Без альбома</option>' +
+        albums.map(function(a){ return '<option value="' + a.id + '">📁 ' + esc(a.title) + '</option>'; }).join('');
+      if(current) sel.value = current;
+    });
+  }
+
+  /* ---------- РЕНДЕР ВСЕГО ---------- */
+  function renderAll(){
+    /* Сетка «Все файлы» */
+    var grid = document.getElementById('mediaGrid');
+    if(grid){
+      var list = media;
+      if(filter !== 'all'){
+        list = media.filter(function(m){
+          if(filter === 'image')  return m.type === 'image';
+          if(filter === 'video')  return m.type === 'video';
+          if(filter === 'link')   return m.type === 'link' || m.type === 'youtube';
+          return true;
+        });
+      }
+
+      if(list.length === 0){
+        grid.innerHTML = '<div class="media-empty" style="grid-column:1/-1"><span class="icon">📭</span>Здесь пока ничего нет</div>';
+      } else {
+        grid.innerHTML = list.map(renderMediaCard).join('');
+      }
+
+      /* Статистика */
+      var stats = { total: media.length, img:0, vid:0, link:0 };
+      media.forEach(function(m){
+        if(m.type === 'image') stats.img++;
+        else if(m.type === 'video') stats.vid++;
+        else stats.link++;
+      });
+      setText('statTotal', stats.total);
+      setText('statImg', stats.img);
+      setText('statVid', stats.vid);
+      setText('statLink', stats.link);
+    }
+
+    renderAlbums();
+    renderAlbumSelects();
+  }
+
+  /* ---------- API ---------- */
   window.MediaGallery = {
+    createAlbum: createAlbum,
+    deleteAlbum: deleteAlbum,
+    openAlbum: openAlbum,
+    backToAlbums: backToAlbums,
     addFile: addFile,
     addUrl: addUrl,
-    remove: remove,
-    getAll: function(){ return items; },
-    clearAll: function(){
-      if(!confirm('Удалить ВСЕ медиа?')) return;
-      items = [];
-      save();
-      render();
-    }
+    removeMedia: removeMedia,
+    openLightbox: openLightbox,
+    closeLightbox: closeLightbox,
+    getAll: function(){ return media; },
+    getAlbums: function(){ return albums; }
   };
 
-  /* ---------- ЗАПУСК ---------- */
   load();
-  render();
-
+  renderAll();
 })();
 </script>
 </body>
