@@ -22,6 +22,7 @@
       <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
       <a href="media.html" class="nav-link">🎬 Медиа</a>
       <a href="profile.html" class="nav-link">👤 Профиль</a>
+      <a href="audit.html" class="nav-link">📋 Аудит</a>
     </nav>
     <div class="header-actions">
       <button class="btn-add" id="openEditor">
@@ -34,7 +35,7 @@
   </div>
 </header>
 
-<!-- БЛОК ПРОФИЛЯ НА ГЛАВНОЙ (если авторизован) -->
+<!-- БЛОК ПРОФИЛЯ НА ГЛАВНОЙ -->
 <section class="section" id="homeProfileSection" hidden style="padding:30px 0">
   <div class="container">
     <div id="homeProfileWrap"></div>
@@ -58,22 +59,52 @@
 
 <section class="quick-nav">
   <div class="container">
-    <div class="quick-grid">
-      <a href="constitution.html" class="quick-card"><span class="quick-emoji">🏛️</span><span class="quick-title">Конституция РФ</span><span class="quick-desc">8 глав · 84 статьи</span></a>
-      <a href="uk.html" class="quick-card"><span class="quick-emoji">⚔️</span><span class="quick-title">Уголовный кодекс</span><span class="quick-desc">22 главы · 99 статей</span></a>
-      <a href="koap.html" class="quick-card"><span class="quick-emoji">📋</span><span class="quick-title">КоАП РФ</span><span class="quick-desc">11 глав · 60+ статей</span></a>
-      <a href="process.html" class="quick-card"><span class="quick-emoji">🛡️</span><span class="quick-title">Процессуальный</span><span class="quick-desc">Задержание · Обыск</span></a>
-      <a href="weapons.html" class="quick-card"><span class="quick-emoji">🔫</span><span class="quick-title">Об оружии</span><span class="quick-desc">Лицензии · СИЗ</span></a>
-      <a href="property.html" class="quick-card"><span class="quick-emoji">🏢</span><span class="quick-title">Госсобственность</span><span class="quick-desc">Закрытые территории</span></a>
-      <a href="raids.html" class="quick-card"><span class="quick-emoji">🚚</span><span class="quick-title">Ограбления и поставки</span><span class="quick-desc">Перекрытия · Колонны</span></a>
-      <a href="vzk.html" class="quick-card"><span class="quick-emoji">🪖</span><span class="quick-title">Война за КрАЗ</span><span class="quick-desc">21 правило</span></a>
-      <a href="discipline.html" class="quick-card"><span class="quick-emoji">🎖️</span><span class="quick-title">Дисциплинарный устав</span><span class="quick-desc">Поощрения · Взыскания</span></a>
-      <a href="garrison.html" class="quick-card"><span class="quick-emoji">🛡️</span><span class="quick-title">Устав гарнизонной службы</span><span class="quick-desc">Караулы · Пропуск</span></a>
-      <a href="internal.html" class="quick-card"><span class="quick-emoji">📋</span><span class="quick-title">Устав внутренней службы</span><span class="quick-desc">Права · Обязанности</span></a>
-      <a href="drill.html" class="quick-card"><span class="quick-emoji">🥾</span><span class="quick-title">Строевой устав</span><span class="quick-desc">Строи · Приёмы</span></a>
-      <a href="military.html" class="quick-card" style="background:linear-gradient(135deg,rgba(61,220,132,.08),rgba(74,168,255,.05));border-color:rgba(61,220,132,.3)"><span class="quick-emoji">🎓</span><span class="quick-title">Военный комиссариат</span><span class="quick-desc">КМБ · УКМБ · Баллы</span></a>
-      <a href="media.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)"><span class="quick-emoji">🎬</span><span class="quick-title">Медиа-галерея</span><span class="quick-desc">Скрины · Видео · Ссылки</span></a>
-      <a href="audit.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)"><span class="quick-emoji">📋</span><span class="quick-title">Кадровый аудит</span><span class="quick-desc">Приём · Повышение</span></a>
+    <div class="quick-grid" id="quickGrid">
+      <a href="constitution.html" class="quick-card">
+        <span class="quick-emoji">🏛️</span><span class="quick-title">Конституция РФ</span><span class="quick-desc">8 глав · 84 статьи</span>
+      </a>
+      <a href="uk.html" class="quick-card">
+        <span class="quick-emoji">⚔️</span><span class="quick-title">Уголовный кодекс</span><span class="quick-desc">22 главы · 99 статей</span>
+      </a>
+      <a href="koap.html" class="quick-card">
+        <span class="quick-emoji">📋</span><span class="quick-title">КоАП РФ</span><span class="quick-desc">11 глав · 60+ статей</span>
+      </a>
+      <a href="process.html" class="quick-card">
+        <span class="quick-emoji">🛡️</span><span class="quick-title">Процессуальный</span><span class="quick-desc">Задержание · Обыск</span>
+      </a>
+      <a href="weapons.html" class="quick-card">
+        <span class="quick-emoji">🔫</span><span class="quick-title">Об оружии</span><span class="quick-desc">Лицензии · СИЗ</span>
+      </a>
+      <a href="property.html" class="quick-card">
+        <span class="quick-emoji">🏢</span><span class="quick-title">Госсобственность</span><span class="quick-desc">Закрытые территории</span>
+      </a>
+      <a href="raids.html" class="quick-card">
+        <span class="quick-emoji">🚚</span><span class="quick-title">Ограбления и поставки</span><span class="quick-desc">Перекрытия · Колонны</span>
+      </a>
+      <a href="vzk.html" class="quick-card">
+        <span class="quick-emoji">🪖</span><span class="quick-title">Война за КрАЗ</span><span class="quick-desc">21 правило</span>
+      </a>
+      <a href="discipline.html" class="quick-card">
+        <span class="quick-emoji">🎖️</span><span class="quick-title">Дисциплинарный устав</span><span class="quick-desc">Поощрения · Взыскания</span>
+      </a>
+      <a href="garrison.html" class="quick-card">
+        <span class="quick-emoji">🛡️</span><span class="quick-title">Устав гарнизонной службы</span><span class="quick-desc">Караулы · Пропуск</span>
+      </a>
+      <a href="internal.html" class="quick-card">
+        <span class="quick-emoji">📋</span><span class="quick-title">Устав внутренней службы</span><span class="quick-desc">Права · Обязанности</span>
+      </a>
+      <a href="drill.html" class="quick-card">
+        <span class="quick-emoji">🥾</span><span class="quick-title">Строевой устав</span><span class="quick-desc">Строи · Приёмы</span>
+      </a>
+      <a href="military.html" class="quick-card" id="cardMilitary" style="background:linear-gradient(135deg,rgba(61,220,132,.08),rgba(74,168,255,.05));border-color:rgba(61,220,132,.3)">
+        <span class="quick-emoji">🎓</span><span class="quick-title">Военный комиссариат</span><span class="quick-desc">КМБ · УКМБ · Баллы</span>
+      </a>
+      <a href="media.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)">
+        <span class="quick-emoji">🎬</span><span class="quick-title">Медиа-галерея</span><span class="quick-desc">Скрины · Видео · Ссылки</span>
+      </a>
+      <a href="audit.html" class="quick-card" style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05));border-color:rgba(168,85,247,.3)">
+        <span class="quick-emoji">📋</span><span class="quick-title">Кадровый аудит</span><span class="quick-desc">Приём · Повышение</span>
+      </a>
     </div>
   </div>
 </section>
@@ -83,12 +114,11 @@
     <div class="section-head">
       <span class="section-tag">О проекте</span>
       <h2 class="section-title">📖 Добро пожаловать</h2>
-      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам — выбирай нужный из карточек ниже.</p>
+      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам — выбирай нужный из карточек выше.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ ПОЛНЫЙ СПИСОК ДОКУМЕНТОВ ВНИЗУ ============ -->
 <section class="section section-dark" id="allDocs">
   <div class="container">
     <div class="section-head">
@@ -157,7 +187,6 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Модалка редактора законов -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -222,6 +251,7 @@
 /* Блок профиля на главной */
 (function(){
   function initHomeProfile(){
+    if(!window.RMRPAuth) return;
     var cur = RMRPAuth.getCurrent();
     if(!cur) return;
     var section = document.getElementById('homeProfileSection');
@@ -265,8 +295,45 @@
     section.hidden = false;
   }
 
-  if(window.RMRPAuth) initHomeProfile();
-  else document.addEventListener('DOMContentLoaded', initHomeProfile);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initHomeProfile);
+  } else {
+    initHomeProfile();
+  }
+})();
+
+/* Замок на Военкомате для тех, кто ниже Мл.Сержанта */
+(function(){
+  function lockMilitaryCard(){
+    if(!window.RMRPAuth) return;
+    var user = RMRPAuth.getCurrent();
+    /* Есть доступ — не трогаем */
+    if(user && RMRPAuth.canReadDocs && RMRPAuth.canReadDocs(user)) return;
+
+    var card = document.getElementById('cardMilitary');
+    if(!card) return;
+
+    card.style.position = 'relative';
+    card.style.opacity = '.55';
+    card.style.pointerEvents = 'none';
+    card.style.cursor = 'not-allowed';
+
+    var lock = document.createElement('span');
+    lock.textContent = '🔒';
+    lock.style.cssText = 'position:absolute;top:12px;right:12px;font-size:18px;filter:drop-shadow(0 0 8px rgba(61,220,132,.6))';
+    card.appendChild(lock);
+
+    var hint = document.createElement('span');
+    hint.textContent = 'Только Мл.Сержант+';
+    hint.style.cssText = 'position:absolute;bottom:10px;right:12px;font-size:10.5px;color:#3ddc84;font-weight:700;letter-spacing:.3px';
+    card.appendChild(hint);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', lockMilitaryCard);
+  } else {
+    lockMilitaryCard();
+  }
 })();
 </script>
 </body>
