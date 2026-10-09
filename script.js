@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v4, с калькулятором ВК)
+   RMRP LAW — script.js (v5, калькулятор с выражениями)
    ============================================================ */
 
 (function () {
@@ -41,7 +41,7 @@
   });
 
   /* ============================================================
-     МОДАЛКИ — 4 способа закрыть
+     МОДАЛКИ
      ============================================================ */
   function openModal(m) { if (m) m.hidden = false; }
   function closeAllModals() {
@@ -307,7 +307,7 @@
   }
 
   /* ============================================================
-     КАЛЬКУЛЯТОР БАЛЛОВ ВК
+     КАЛЬКУЛЯТОР БАЛЛОВ ВК (с поддержкой выражений)
      ============================================================ */
   var VK_REQUIRED = {
     '0_1': 60,    // Младший сержант → Сержант
@@ -325,6 +325,8 @@
     var curSelect = $('#calcCurrentRank');
     var tgtSelect = $('#calcTargetRank');
     var pointsInput = $('#calcPoints');
+    var exprInfo = $('#calcExprInfo');
+    var exprResult = $('#calcExprResult');
     var resultBox = $('#calcResult');
     var neededEl = $('#calcNeeded');
     var statusEl = $('#calcStatus');
@@ -334,10 +336,37 @@
 
     if (!curSelect || !tgtSelect || !pointsInput || !resultBox) return;
 
+    /* ---- Парсер выражения: запятая, +, -, *, /, скобки ---- */
+    function evaluateExpression(raw) {
+      if (!raw) return 0;
+
+      // Запятая → точка (десятичный разделитель)
+      var s = String(raw).replace(/,/g, '.');
+
+      // Оставить только цифры, операторы, скобки, пробелы
+      s = s.replace(/[^0-9+\-*/().\s]/g, '');
+
+      // Пусто → 0
+      if (!s.trim()) return 0;
+
+      // Безопасный расчёт
+      try {
+        var result = Function('"use strict"; return (' + s + ')')();
+        if (typeof result !== 'number' || !isFinite(result)) return 0;
+        return Math.max(0, result);
+      } catch (e) {
+        return null; // невалидное выражение
+      }
+    }
+
+    function formatNumber(n) {
+      var rounded = Math.round(n * 100) / 100;
+      return (Number.isInteger(rounded)) ? String(rounded) : rounded.toFixed(2);
+    }
+
     function update() {
       var cur = parseInt(curSelect.value, 10);
       var tgt = parseInt(tgtSelect.value, 10);
-      var have = parseInt(pointsInput.value, 10) || 0;
 
       // Автокоррекция: цель не может быть <= текущего
       if (tgt <= cur) {
@@ -346,9 +375,35 @@
         tgt = parseInt(tgtSelect.value, 10);
       }
 
+      // Парсим баллы
+      var raw = pointsInput.value;
+      var parsed = evaluateExpression(raw);
+      var isValid = (parsed !== null);
+      var have = isValid ? parsed : 0;
+
+      // Показ «= X» под полем, если введено выражение
+      if (exprInfo && exprResult) {
+        var isExpression = /[+\-*/(),]/.test(raw);
+        if (isExpression && isValid) {
+          exprInfo.style.display = 'block';
+          exprResult.textContent = formatNumber(have);
+        } else {
+          exprInfo.style.display = 'none';
+        }
+      }
+
+      // Подсветка ошибки
+      if (!isValid) {
+        pointsInput.style.borderColor = '#ff4655';
+        pointsInput.style.boxShadow = '0 0 0 3px rgba(255,70,85,.25)';
+      } else {
+        pointsInput.style.borderColor = '';
+        pointsInput.style.boxShadow = '';
+      }
+
+      // Сколько нужно баллов
       var key = cur + '_' + tgt;
       var required = VK_REQUIRED[key];
-
       if (!required) {
         required = 0;
         for (var i = cur; i < tgt; i++) {
@@ -358,13 +413,20 @@
       }
 
       neededEl.textContent = required;
-      haveEl.textContent = have;
+      haveEl.textContent = formatNumber(have);
 
       var remain = Math.max(0, required - have);
-      remainEl.textContent = remain;
+      remainEl.textContent = formatNumber(remain);
 
       var percent = required > 0 ? Math.min(100, (have / required) * 100) : 0;
       barEl.style.width = percent + '%';
+
+      if (!isValid) {
+        resultBox.classList.remove('status-ok');
+        resultBox.classList.add('status-low');
+        statusEl.textContent = '✗ Ошибка в выражении';
+        return;
+      }
 
       if (have >= required && required > 0) {
         resultBox.classList.add('status-ok');
@@ -376,6 +438,14 @@
         statusEl.textContent = '✗ Недостаточно баллов';
       }
     }
+
+    // Enter — пересчёт
+    pointsInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        update();
+      }
+    });
 
     curSelect.addEventListener('change', update);
     tgtSelect.addEventListener('change', update);
