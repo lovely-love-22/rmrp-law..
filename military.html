@@ -59,7 +59,7 @@
     <div class="section-head">
       <span class="section-tag">Калькулятор</span>
       <h2 class="section-title">🧮 Калькулятор баллов ВК</h2>
-      <p class="section-desc">Выбери свой ранг и ранг, на который повышаешься — система покажет, сколько баллов нужно набрать.</p>
+      <p class="section-desc">Выбери свой ранг и ранг, на который повышаешься — система покажет, сколько баллов нужно набрать. В поле «Сколько баллов ты уже набрал» можно писать выражения: <b>85 + 45 + 60</b>.</p>
     </div>
 
     <div class="vk-calc">
@@ -96,8 +96,11 @@
       </div>
 
       <div class="vk-calc-row" style="margin-bottom:18px;">
-        <label for="calcPoints">Сколько баллов ты уже набрал?</label>
-        <input type="number" id="calcPoints" min="0" step="1" placeholder="Введи количество баллов" value="0">
+        <label for="calcPoints">Сколько баллов ты уже набрал? (можно складывать: <b style="color:#7ee5a1">85 + 45 + 60</b>)</label>
+        <input type="text" id="calcPoints" placeholder="Например: 85 + 45 + 60" value="0" autocomplete="off">
+        <div id="calcExprInfo" style="font-size:12.5px;color:#6e7385;margin-top:6px;display:none;">
+          = <b id="calcExprResult" style="color:#7ee5a1">0</b>
+        </div>
       </div>
 
       <div class="vk-calc-result" id="calcResult">
@@ -113,7 +116,7 @@
       </div>
 
       <div class="vk-calc-hint">
-        💡 Баллы начисляются за выполнение задач (призывы, КМБ/УКМБ, поставки, агитационные МП). Полный список — на этой же странице в разделе «🏛️ Балльная система Военкомата».
+        💡 Баллы начисляются за выполнение задач (призывы, КМБ/УКМБ, поставки, агитационные МП). Полный список — на этой же странице в разделе «🏛️ Балльная система Военкомата». В поле можно писать: <b>85 + 45 + 60</b>, <b>100 * 2</b>, <b>(85 + 45) * 2</b>, <b>85,5 + 45,5</b>.
       </div>
     </div>
   </div>
