@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v5, калькулятор с выражениями)
+   RMRP LAW — script.js (v4, финальный)
    ============================================================ */
 
 (function () {
@@ -23,25 +23,76 @@
   onReady(function () {
     console.log('[RMRP] script.js loaded');
 
-    try { initModals(); } catch(e){ console.warn('modals', e); }
-    try { initAccordion(); } catch(e){ console.warn('accordion', e); }
-    try { initBurger(); } catch(e){ console.warn('burger', e); }
-    try { initDocSearch(); } catch(e){ console.warn('docSearch', e); }
-    try { initToTop(); } catch(e){ console.warn('toTop', e); }
-    try { initSliders(); } catch(e){ console.warn('sliders', e); }
-    try { initBgTabs(); } catch(e){ console.warn('bgTabs', e); }
-    try { initEditor(); } catch(e){ console.warn('editor', e); }
-    try { initBgActions(); } catch(e){ console.warn('bgActions', e); }
-    try { initExport(); } catch(e){ console.warn('export', e); }
-    try { initVkCalc(); } catch(e){ console.warn('vkCalc', e); }
-    try { restoreLaws(); } catch(e){ console.warn('restoreLaws', e); }
-    try { restoreBg(); } catch(e){ console.warn('restoreBg', e); }
+    try { initMediaLink(); }   catch(e){ console.warn('mediaLink', e); }
+    try { initModals(); }      catch(e){ console.warn('modals', e); }
+    try { initAccordion(); }   catch(e){ console.warn('accordion', e); }
+    try { initBurger(); }      catch(e){ console.warn('burger', e); }
+    try { initDocSearch(); }   catch(e){ console.warn('docSearch', e); }
+    try { initToTop(); }       catch(e){ console.warn('toTop', e); }
+    try { initSliders(); }     catch(e){ console.warn('sliders', e); }
+    try { initBgTabs(); }      catch(e){ console.warn('bgTabs', e); }
+    try { initEditor(); }      catch(e){ console.warn('editor', e); }
+    try { initBgActions(); }   catch(e){ console.warn('bgActions', e); }
+    try { initExport(); }      catch(e){ console.warn('export', e); }
+    try { restoreLaws(); }     catch(e){ console.warn('restoreLaws', e); }
+    try { restoreBg(); }       catch(e){ console.warn('restoreBg', e); }
 
     console.log('[RMRP] init done');
   });
 
   /* ============================================================
-     МОДАЛКИ
+     КНОПКА «МЕДИА» В ШАПКЕ — автодобавление на всех страницах
+     ============================================================ */
+  function initMediaLink() {
+    var actions = document.querySelector('.header-actions');
+    if (!actions) return;
+
+    /* Если уже есть — не дублируем */
+    if (actions.querySelector('.btn-media')) return;
+
+    /* Определяем, на какой мы странице — media.html или нет */
+    var isMediaPage = /media\.html?$/i.test(location.pathname);
+
+    var a = document.createElement('a');
+    a.href = isMediaPage ? 'index.html' : 'media.html';
+    a.className = 'btn-media';
+    a.title = isMediaPage ? 'На главную' : 'Медиа-галерея';
+    a.innerHTML = isMediaPage
+      ? '<span>🏠</span><span class="btn-add-text">Главная</span>'
+      : '<span>🎬</span><span class="btn-add-text">Медиа</span>';
+    a.style.cssText = [
+      'display:flex',
+      'align-items:center',
+      'gap:6px',
+      'padding:8px 12px',
+      'border-radius:9px',
+      'background:linear-gradient(135deg,#7c3aed,#a855f7)',
+      'color:#fff',
+      'text-decoration:none',
+      'font-size:12.5px',
+      'font-weight:600',
+      'white-space:nowrap',
+      'transition:.25s cubic-bezier(.4,0,.2,1)'
+    ].join(';');
+
+    /* Hover-эффект */
+    a.addEventListener('mouseenter', function () {
+      a.style.transform = 'translateY(-1px)';
+      a.style.boxShadow = '0 6px 18px rgba(168,85,247,.3)';
+    });
+    a.addEventListener('mouseleave', function () {
+      a.style.transform = '';
+      a.style.boxShadow = '';
+    });
+
+    /* Вставляем ПЕРЕД кнопкой «Добавить» */
+    var addBtn = actions.querySelector('.btn-add');
+    if (addBtn) actions.insertBefore(a, addBtn);
+    else actions.appendChild(a);
+  }
+
+  /* ============================================================
+     МОДАЛКИ — 4 способа закрыть
      ============================================================ */
   function openModal(m) { if (m) m.hidden = false; }
   function closeAllModals() {
@@ -281,7 +332,9 @@
       export: function () {
         var data = {
           laws: JSON.parse(localStorage.getItem(LS.laws) || '{}'),
-          bg: localStorage.getItem(LS.bg)
+          bg: localStorage.getItem(LS.bg),
+          media: JSON.parse(localStorage.getItem('rmrp_media_gallery') || '[]'),
+          vkCalc: JSON.parse(localStorage.getItem('rmrp_vk_calc_v2') || 'null')
         };
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
@@ -295,8 +348,10 @@
         reader.onload = function (e) {
           try {
             var data = JSON.parse(e.target.result);
-            if (data.laws) localStorage.setItem(LS.laws, JSON.stringify(data.laws));
-            if (data.bg) localStorage.setItem(LS.bg, data.bg);
+            if (data.laws)  localStorage.setItem(LS.laws, JSON.stringify(data.laws));
+            if (data.bg)    localStorage.setItem(LS.bg, data.bg);
+            if (data.media) localStorage.setItem('rmrp_media_gallery', JSON.stringify(data.media));
+            if (data.vkCalc) localStorage.setItem('rmrp_vk_calc_v2', JSON.stringify(data.vkCalc));
             alert('Импорт выполнен.');
             location.reload();
           } catch (err) { alert('Ошибка: ' + err.message); }
@@ -304,154 +359,6 @@
         reader.readAsText(file);
       }
     };
-  }
-
-  /* ============================================================
-     КАЛЬКУЛЯТОР БАЛЛОВ ВК (с поддержкой выражений)
-     ============================================================ */
-  var VK_REQUIRED = {
-    '0_1': 60,    // Младший сержант → Сержант
-    '1_2': 130,   // Сержант → Старший сержант
-    '2_3': 250,   // Старший сержант → Старшина
-    '3_4': 350,   // Старшина → Прапорщик
-    '4_5': 500,   // Прапорщик → Старший прапорщик
-    '5_6': 650,   // Старший прапорщик → Младший лейтенант
-    '6_7': 750,   // Младший лейтенант → Лейтенант
-    '7_8': 850,   // Лейтенант → Старший лейтенант
-    '8_9': 1000   // Старший лейтенант → Капитан
-  };
-
-  function initVkCalc() {
-    var curSelect = $('#calcCurrentRank');
-    var tgtSelect = $('#calcTargetRank');
-    var pointsInput = $('#calcPoints');
-    var exprInfo = $('#calcExprInfo');
-    var exprResult = $('#calcExprResult');
-    var resultBox = $('#calcResult');
-    var neededEl = $('#calcNeeded');
-    var statusEl = $('#calcStatus');
-    var barEl = $('#calcBarFill');
-    var haveEl = $('#calcHave');
-    var remainEl = $('#calcRemain');
-
-    if (!curSelect || !tgtSelect || !pointsInput || !resultBox) return;
-
-    /* ---- Парсер выражения: запятая, +, -, *, /, скобки ---- */
-    function evaluateExpression(raw) {
-      if (!raw) return 0;
-
-      // Запятая → точка (десятичный разделитель)
-      var s = String(raw).replace(/,/g, '.');
-
-      // Оставить только цифры, операторы, скобки, пробелы
-      s = s.replace(/[^0-9+\-*/().\s]/g, '');
-
-      // Пусто → 0
-      if (!s.trim()) return 0;
-
-      // Безопасный расчёт
-      try {
-        var result = Function('"use strict"; return (' + s + ')')();
-        if (typeof result !== 'number' || !isFinite(result)) return 0;
-        return Math.max(0, result);
-      } catch (e) {
-        return null; // невалидное выражение
-      }
-    }
-
-    function formatNumber(n) {
-      var rounded = Math.round(n * 100) / 100;
-      return (Number.isInteger(rounded)) ? String(rounded) : rounded.toFixed(2);
-    }
-
-    function update() {
-      var cur = parseInt(curSelect.value, 10);
-      var tgt = parseInt(tgtSelect.value, 10);
-
-      // Автокоррекция: цель не может быть <= текущего
-      if (tgt <= cur) {
-        tgt = cur + 1;
-        tgtSelect.value = Math.min(tgt, 9);
-        tgt = parseInt(tgtSelect.value, 10);
-      }
-
-      // Парсим баллы
-      var raw = pointsInput.value;
-      var parsed = evaluateExpression(raw);
-      var isValid = (parsed !== null);
-      var have = isValid ? parsed : 0;
-
-      // Показ «= X» под полем, если введено выражение
-      if (exprInfo && exprResult) {
-        var isExpression = /[+\-*/(),]/.test(raw);
-        if (isExpression && isValid) {
-          exprInfo.style.display = 'block';
-          exprResult.textContent = formatNumber(have);
-        } else {
-          exprInfo.style.display = 'none';
-        }
-      }
-
-      // Подсветка ошибки
-      if (!isValid) {
-        pointsInput.style.borderColor = '#ff4655';
-        pointsInput.style.boxShadow = '0 0 0 3px rgba(255,70,85,.25)';
-      } else {
-        pointsInput.style.borderColor = '';
-        pointsInput.style.boxShadow = '';
-      }
-
-      // Сколько нужно баллов
-      var key = cur + '_' + tgt;
-      var required = VK_REQUIRED[key];
-      if (!required) {
-        required = 0;
-        for (var i = cur; i < tgt; i++) {
-          var k = i + '_' + (i + 1);
-          required += (VK_REQUIRED[k] || 0);
-        }
-      }
-
-      neededEl.textContent = required;
-      haveEl.textContent = formatNumber(have);
-
-      var remain = Math.max(0, required - have);
-      remainEl.textContent = formatNumber(remain);
-
-      var percent = required > 0 ? Math.min(100, (have / required) * 100) : 0;
-      barEl.style.width = percent + '%';
-
-      if (!isValid) {
-        resultBox.classList.remove('status-ok');
-        resultBox.classList.add('status-low');
-        statusEl.textContent = '✗ Ошибка в выражении';
-        return;
-      }
-
-      if (have >= required && required > 0) {
-        resultBox.classList.add('status-ok');
-        resultBox.classList.remove('status-low');
-        statusEl.textContent = '✓ Готов к повышению!';
-      } else {
-        resultBox.classList.add('status-low');
-        resultBox.classList.remove('status-ok');
-        statusEl.textContent = '✗ Недостаточно баллов';
-      }
-    }
-
-    // Enter — пересчёт
-    pointsInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        update();
-      }
-    });
-
-    curSelect.addEventListener('change', update);
-    tgtSelect.addEventListener('change', update);
-    pointsInput.addEventListener('input', update);
-
-    update();
   }
 
 })();
