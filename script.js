@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v18: единая шапка + живой фон + комфорт-зона)
+   RMRP LAW — script.js (v19: единая шапка + админ-панель + живой фон)
    ============================================================ */
 
 (function () {
@@ -71,7 +71,6 @@
     var cfg = BG_CONFIG[page];
     if(!cfg) return;
 
-    /* Убираем старый bg если был */
     var old = document.querySelector('.rmrp-live-bg');
     if(old) old.remove();
     var oldStyle = document.getElementById('rmrp-live-bg-styles');
@@ -121,7 +120,7 @@
   }
 
   /* ============================================================
-     ЕДИНАЯ ШАПКА + КНОПКА КОМФОРТ-ЗОНЫ
+     ЕДИНАЯ ШАПКА + ПАНЕЛЬ + КОМФОРТ-ЗОНА
      ============================================================ */
   function initHeaderButtons() {
     var nav = document.querySelector('.nav');
@@ -155,44 +154,71 @@
       }).join('');
     }
 
-    /* Кнопки справа */
+    /* КНОПКИ СПРАВА */
     if (actions) {
-      actions.querySelectorAll('.btn-profile, .btn-media').forEach(function(el){ el.remove(); });
+      actions.querySelectorAll('.btn-profile, .btn-media, .btn-panel').forEach(function(el){ el.remove(); });
 
+      var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
+      var isAdminUser = user && window.RMRPAuth.isAdmin && RMRPAuth.isAdmin(user);
+
+      /* 🛠️ ПАНЕЛЬ — только для Админа/Разработчика */
+      if (isAdminUser) {
+        var panelBtn = document.createElement('a');
+        panelBtn.href = 'index.html#adminPanel';
+        panelBtn.className = 'btn-panel';
+        panelBtn.title = 'Панель управления';
+        panelBtn.style.cssText = 'background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;text-decoration:none;padding:8px 12px;border-radius:9px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:5px;transition:.25s';
+        panelBtn.innerHTML = '<span>🛠️</span><span class="btn-add-text">Панель</span>';
+        panelBtn.onmouseenter = function(){ panelBtn.style.transform = 'translateY(-1px)'; };
+        panelBtn.onmouseleave = function(){ panelBtn.style.transform = ''; };
+
+        panelBtn.addEventListener('click', function(){
+          setTimeout(function(){
+            var adminPanel = document.getElementById('adminPanel');
+            if(adminPanel){
+              adminPanel.hidden = false;
+              adminPanel.classList.add('open');
+              adminPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 300);
+        });
+
+        var addBtnP = actions.querySelector('.btn-add');
+        if (addBtnP) actions.insertBefore(panelBtn, addBtnP);
+        else actions.appendChild(panelBtn);
+      }
+
+      /* 👤 ПРОФИЛЬ */
       var profileBtn = document.createElement('a');
       profileBtn.href = 'profile.html';
-      profileBtn.className = 'btn-media';
+      profileBtn.className = 'btn-media btn-profile';
       profileBtn.title = 'Личный кабинет';
       profileBtn.style.cssText = 'background:linear-gradient(135deg,#4aa8ff,#3ddc84);text-decoration:none';
       profileBtn.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
-
-      var logoutBtn = null;
-      if (window.RMRPAuth) {
-        var user = RMRPAuth.getCurrent();
-        if (user) {
-          logoutBtn = document.createElement('button');
-          logoutBtn.className = 'btn-logout';
-          logoutBtn.title = 'Выйти (' + (user.displayName || user.login) + ')';
-          logoutBtn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px;transition:.25s';
-          logoutBtn.innerHTML = '🚪';
-          logoutBtn.onmouseenter = function(){ logoutBtn.style.background = 'rgba(255,70,85,.25)'; };
-          logoutBtn.onmouseleave = function(){ logoutBtn.style.background = 'rgba(255,70,85,.12)'; };
-          logoutBtn.onclick = function(){
-            if(!confirm('Выйти из аккаунта?')) return;
-            RMRPAuth.logout();
-            location.href = 'index.html';
-          };
-        }
-      }
 
       var addBtn = actions.querySelector('.btn-add');
       if (addBtn) actions.insertBefore(profileBtn, addBtn);
       else actions.appendChild(profileBtn);
 
-      if (logoutBtn) actions.appendChild(logoutBtn);
+      /* 🚪 ВЫЙТИ */
+      if (user) {
+        var logoutBtn = document.createElement('button');
+        logoutBtn.className = 'btn-logout';
+        logoutBtn.title = 'Выйти (' + (user.displayName || user.login) + ')';
+        logoutBtn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px;transition:.25s';
+        logoutBtn.innerHTML = '🚪';
+        logoutBtn.onmouseenter = function(){ logoutBtn.style.background = 'rgba(255,70,85,.25)'; };
+        logoutBtn.onmouseleave = function(){ logoutBtn.style.background = 'rgba(255,70,85,.12)'; };
+        logoutBtn.onclick = function(){
+          if(!confirm('Выйти из аккаунта?')) return;
+          RMRPAuth.logout();
+          location.href = 'index.html';
+        };
+        actions.appendChild(logoutBtn);
+      }
     }
 
-    /* Кнопка Комфорт-зоны */
+    /* 🎧 КОМФОРТ-ЗОНА */
     if (!isComfort && !document.querySelector('.comfort-float-btn')) {
       var cBtn = document.createElement('a');
       cBtn.href = 'comfort.html';
@@ -221,6 +247,18 @@
             '.cfb-text{display:none}}';
         document.head.appendChild(st);
       }
+    }
+
+    /* Автооткрытие админ-панели если хэш #adminPanel */
+    if (location.hash === '#adminPanel' && isAdminUser) {
+      setTimeout(function(){
+        var adminPanel = document.getElementById('adminPanel');
+        if(adminPanel){
+          adminPanel.hidden = false;
+          adminPanel.classList.add('open');
+          adminPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
     }
   }
 
@@ -452,7 +490,7 @@
   }
 
   /* ============================================================
-     ФОН (кастомный пользовательский)
+     ФОН (кастомный)
      ============================================================ */
   function applyBg(url, overlay, blur) {
     localStorage.setItem(LS.bg, JSON.stringify({ url: url, overlay: overlay, blur: blur }));
