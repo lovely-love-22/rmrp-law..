@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v16: комфорт-зона + блокировка военкомата)
+   RMRP LAW — script.js (v17: единая шапка + комфорт-зона)
    ============================================================ */
 
 (function () {
@@ -24,7 +24,6 @@
     console.log('[RMRP] script.js loaded');
 
     try { initHeaderButtons(); } catch(e){ console.warn('headerButtons', e); }
-    try { initComfortButton(); } catch(e){ console.warn('comfortButton', e); }
     try { initDocAccess(); }     catch(e){ console.warn('docAccess', e); }
     try { initModals(); }        catch(e){ console.warn('modals', e); }
     try { initAccordion(); }     catch(e){ console.warn('accordion', e); }
@@ -43,93 +42,111 @@
   });
 
   /* ============================================================
-     КНОПКИ В ШАПКЕ
+     ЕДИНАЯ ШАПКА + КНОПКА КОМФОРТ-ЗОНЫ НА ВСЕХ СТРАНИЦАХ
      ============================================================ */
   function initHeaderButtons() {
+    var nav = document.querySelector('.nav');
     var actions = document.querySelector('.header-actions');
-    if (!actions) return;
 
-    var path = location.pathname;
-    var isGatePage = /gate\.html?$/i.test(path);
-    if (isGatePage) return;
+    var path = location.pathname.split('/').pop() || 'index.html';
+    var isGate = /gate\.html?$/i.test(path);
+    var isComfort = /comfort\.html?$/i.test(path);
 
-    /* Кнопка «Выйти» */
-    if (window.RMRPAuth) {
-      var user = RMRPAuth.getCurrent();
-      if (user && !actions.querySelector('.btn-logout')) {
-        var btn = document.createElement('button');
-        btn.className = 'btn-logout';
-        btn.title = 'Выйти (' + (user.displayName || user.login) + ')';
-        btn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px;transition:.25s';
-        btn.innerHTML = '🚪';
-        btn.onmouseenter = function(){ btn.style.background = 'rgba(255,70,85,.25)'; };
-        btn.onmouseleave = function(){ btn.style.background = 'rgba(255,70,85,.12)'; };
-        btn.onclick = function(){
-          if(!confirm('Выйти из аккаунта?')) return;
-          RMRPAuth.logout();
-          location.href = 'index.html';
-        };
-        actions.appendChild(btn);
+    if (isGate) return;
+
+    /* ---------- 1. NAV — 5 ссылок ---------- */
+    if (nav) {
+      var links = [
+        { href: 'index.html',    icon: '🏠', label: 'Главная',   file: 'index.html' },
+        { href: 'military.html', icon: '🎓', label: 'Военкомат', file: 'military.html', green: true },
+        { href: 'media.html',    icon: '🎬', label: 'Медиа',     file: 'media.html' },
+        { href: 'profile.html',  icon: '👤', label: 'Профиль',   file: 'profile.html' },
+        { href: 'audit.html',    icon: '📋', label: 'Аудит',     file: 'audit.html' }
+      ];
+
+      nav.innerHTML = links.map(function(l){
+        var isActive = (l.file === path);
+        var style = '';
+        if (isActive) style = 'background:var(--accent);color:#fff;';
+        else if (l.green) style = 'background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff;';
+        return '<a href="' + l.href + '" class="nav-link' + (isActive ? ' active' : '') + '"' +
+          (style ? ' style="' + style + '"' : '') + '>' +
+          l.icon + ' ' + l.label +
+        '</a>';
+      }).join('');
+    }
+
+    /* ---------- 2. КНОПКИ СПРАВА ---------- */
+    if (actions) {
+      actions.querySelectorAll('.btn-profile, .btn-media').forEach(function(el){ el.remove(); });
+
+      var profileBtn = document.createElement('a');
+      profileBtn.href = 'profile.html';
+      profileBtn.className = 'btn-media';
+      profileBtn.title = 'Личный кабинет';
+      profileBtn.style.cssText = 'background:linear-gradient(135deg,#4aa8ff,#3ddc84);text-decoration:none';
+      profileBtn.innerHTML = '<span>👤</span><span class="btn-add-text">Профиль</span>';
+
+      var logoutBtn = null;
+      if (window.RMRPAuth) {
+        var user = RMRPAuth.getCurrent();
+        if (user) {
+          logoutBtn = document.createElement('button');
+          logoutBtn.className = 'btn-logout';
+          logoutBtn.title = 'Выйти (' + (user.displayName || user.login) + ')';
+          logoutBtn.style.cssText = 'background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:14px;transition:.25s';
+          logoutBtn.innerHTML = '🚪';
+          logoutBtn.onmouseenter = function(){ logoutBtn.style.background = 'rgba(255,70,85,.25)'; };
+          logoutBtn.onmouseleave = function(){ logoutBtn.style.background = 'rgba(255,70,85,.12)'; };
+          logoutBtn.onclick = function(){
+            if(!confirm('Выйти из аккаунта?')) return;
+            RMRPAuth.logout();
+            location.href = 'index.html';
+          };
+        }
+      }
+
+      var addBtn = actions.querySelector('.btn-add');
+      if (addBtn) actions.insertBefore(profileBtn, addBtn);
+      else actions.appendChild(profileBtn);
+
+      if (logoutBtn) actions.appendChild(logoutBtn);
+    }
+
+    /* ---------- 3. КОМФОРТ-ЗОНА ВНИЗУ СПРАВА ---------- */
+    if (!isComfort && !document.querySelector('.comfort-float-btn')) {
+      var cBtn = document.createElement('a');
+      cBtn.href = 'comfort.html';
+      cBtn.className = 'comfort-float-btn';
+      cBtn.title = 'Комфорт-зона';
+      cBtn.innerHTML = '<span style="font-size:18px">🎧</span><span class="cfb-text">Комфорт-зона</span>';
+      document.body.appendChild(cBtn);
+
+      if (!document.getElementById('comfort-btn-styles')) {
+        var st = document.createElement('style');
+        st.id = 'comfort-btn-styles';
+        st.textContent =
+          '.comfort-float-btn{position:fixed;bottom:22px;right:22px;z-index:999;' +
+            'padding:14px 22px;border-radius:99px;' +
+            'background:linear-gradient(135deg,#0e7490,#0891b2,#0284c7,#a855f7);' +
+            'background-size:200% 200%;animation:cfbGradient 6s ease infinite;' +
+            'color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.4px;' +
+            'text-decoration:none;display:flex;align-items:center;gap:10px;' +
+            'box-shadow:0 10px 30px rgba(8,145,178,.4), 0 0 60px rgba(168,85,247,.25);' +
+            'transition:.3s;}' +
+          '.comfort-float-btn:hover{transform:translateY(-3px) scale(1.03);}' +
+          '@keyframes cfbGradient{' +
+            '0%,100%{background-position:0% 50%}' +
+            '50%{background-position:100% 50%}}' +
+          '@media(max-width:600px){.comfort-float-btn{padding:11px 14px;font-size:12px}' +
+            '.cfb-text{display:none}}';
+        document.head.appendChild(st);
       }
     }
   }
 
   /* ============================================================
-     КНОПКА «КОМФОРТ-ЗОНА» НА ВСЕХ СТРАНИЦАХ
-     ============================================================ */
-  function initComfortButton(){
-    /* Не показываем на gate и в самой comfort зоне */
-    var path = location.pathname;
-    if(/gate\.html?$/i.test(path)) return;
-    if(/comfort\.html?$/i.test(path)) return;
-
-    /* Не дублируем */
-    if(document.querySelector('.comfort-float-btn')) return;
-
-    var btn = document.createElement('a');
-    btn.href = 'comfort.html';
-    btn.className = 'comfort-float-btn';
-    btn.title = 'Комфорт-зона — музыка и отдых';
-    btn.innerHTML = '<span class="cfb-icon">🎧</span><span class="cfb-text">Комфорт-зона</span>';
-
-    document.body.appendChild(btn);
-
-    /* Стили вставляем один раз */
-    if(!document.getElementById('comfort-btn-styles')){
-      var st = document.createElement('style');
-      st.id = 'comfort-btn-styles';
-      st.textContent =
-        '.comfort-float-btn{' +
-          'position:fixed;bottom:22px;right:22px;z-index:999;' +
-          'padding:14px 22px;border-radius:99px;' +
-          'background:linear-gradient(135deg,#0e7490,#0891b2,#0284c7,#a855f7);' +
-          'background-size:200% 200%;' +
-          'animation:cfbGradient 6s ease infinite;' +
-          'color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.4px;' +
-          'text-decoration:none;' +
-          'box-shadow:0 10px 30px rgba(8,145,178,.4), 0 0 60px rgba(168,85,247,.25);' +
-          'display:flex;align-items:center;gap:10px;' +
-          'transition:.3s;' +
-        '}' +
-        '.comfort-float-btn:hover{' +
-          'transform:translateY(-3px) scale(1.03);' +
-          'box-shadow:0 14px 40px rgba(8,145,178,.6), 0 0 80px rgba(168,85,247,.35);' +
-        '}' +
-        '.comfort-float-btn .cfb-icon{font-size:18px}' +
-        '@keyframes cfbGradient{' +
-          '0%,100%{background-position:0% 50%}' +
-          '50%{background-position:100% 50%}' +
-        '}' +
-        '@media(max-width:600px){' +
-          '.comfort-float-btn{padding:11px 14px;font-size:12px}' +
-          '.comfort-float-btn .cfb-text{display:none}' +
-        '}';
-      document.head.appendChild(st);
-    }
-  }
-
-  /* ============================================================
-     БЛОКИРОВКА — только Военкомат для тех, кто ниже Мл.Сержанта
+     БЛОКИРОВКА ВОЕНКОМАТА
      ============================================================ */
   function initDocAccess(){
     var LOCKED_PAGES = ['military.html'];
@@ -145,11 +162,10 @@
 
     if(user && RMRPAuth.canReadDocs && RMRPAuth.canReadDocs(user)) return;
 
-    /* Не авторизован */
     if(!user){
-      var container0 = document.querySelector('.container');
-      if(container0){
-        container0.innerHTML =
+      var c0 = document.querySelector('.container');
+      if(c0){
+        c0.innerHTML =
           '<div style="max-width:520px;margin:80px auto;padding:44px 32px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:center">' +
             '<div style="font-size:64px;margin-bottom:20px">🎓</div>' +
             '<h3 style="color:var(--txt-0);font-size:22px;font-weight:900;margin-bottom:12px">Требуется авторизация</h3>' +
@@ -160,7 +176,6 @@
       return;
     }
 
-    /* Авторизован, но нет доступа */
     var container = document.querySelector('.container');
     if(!container) return;
 
@@ -171,14 +186,13 @@
     var lock = document.createElement('div');
     lock.style.cssText = 'max-width:560px;margin:60px auto;padding:48px 36px;background:linear-gradient(135deg,rgba(61,220,132,.06),rgba(74,168,255,.04));border:1px solid rgba(61,220,132,.3);border-radius:20px;text-align:center';
     lock.innerHTML =
-      '<div style="font-size:72px;margin-bottom:20px;filter:drop-shadow(0 10px 30px rgba(61,220,132,.4))">🎓</div>' +
-      '<h3 style="color:var(--txt-0);font-size:24px;font-weight:900;margin-bottom:12px;letter-spacing:-.5px">Доступ ограничен</h3>' +
-      '<p style="color:var(--txt-2);font-size:15px;line-height:1.7;margin-bottom:20px">Военный комиссариат доступен только военнослужащим <b style="color:#3ddc84">от Младшего Сержанта</b> и выше.</p>' +
+      '<div style="font-size:72px;margin-bottom:20px">🎓</div>' +
+      '<h3 style="color:var(--txt-0);font-size:24px;font-weight:900;margin-bottom:12px">Доступ ограничен</h3>' +
+      '<p style="color:var(--txt-2);font-size:15px;line-height:1.7;margin-bottom:20px">Военный комиссариат доступен только <b style="color:#3ddc84">от Младшего Сержанта</b> и выше.</p>' +
       '<div style="padding:18px 22px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;max-width:400px;margin:0 auto 22px;text-align:left">' +
         '<div style="font-size:11.5px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;color:var(--txt-3);margin-bottom:10px">Требования</div>' +
         '<div style="font-size:13.5px;color:var(--txt-1);line-height:1.8">' +
           '🎖️ Звание: <b>Мл.Сержант</b> и выше<br>' +
-          '🛠️ Должность: <b>Ст. ВК</b> и выше<br>' +
           '🔐 Или роль: <b>Администратор / Разработчик</b>' +
         '</div>' +
       '</div>' +
@@ -220,8 +234,7 @@
      АККОРДЕОН
      ============================================================ */
   function initAccordion() {
-    var headers = $$('.acc-header');
-    headers.forEach(function (btn) {
+    $$('.acc-header').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         var item = btn.closest('.acc-item');
@@ -248,7 +261,7 @@
   }
 
   /* ============================================================
-     ПОИСК ПО ДОКУМЕНТУ
+     ПОИСК
      ============================================================ */
   function initDocSearch() {
     $$('.doc-search').forEach(function (input) {
@@ -292,7 +305,6 @@
     }
     bind('bgOverlay', 'bgOverlayValue', '%');
     bind('bgBlur', 'bgBlurValue', 'px');
-    bind('bgVolume', 'bgVolumeValue', '%');
   }
 
   /* ============================================================
