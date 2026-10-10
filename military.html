@@ -166,10 +166,8 @@
   .exam-card{flex-direction:column;text-align:center;padding:22px}
   .exam-card-btn{width:100%;text-align:center;padding:14px}
 }
-
 .exam-section{margin-bottom:30px}
 .exam-section-title{font-size:17px;font-weight:800;color:var(--txt-0);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-
 .exam-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .exam-grade{
   padding:16px 18px;border-radius:14px;
@@ -193,7 +191,6 @@
 .exam-grade-2{border-color:rgba(255,70,85,.4)}
 .exam-grade-name{font-size:14px;font-weight:700;color:var(--txt-0);margin-bottom:2px}
 .exam-grade-points{font-size:12px;color:var(--txt-3);font-weight:600}
-
 .exam-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .exam-topic{
   padding:16px 18px;border-radius:14px;
@@ -204,7 +201,6 @@
 .exam-topic-icon{font-size:26px;margin-bottom:8px}
 .exam-topic-name{font-size:13.5px;font-weight:700;color:var(--txt-0);margin-bottom:4px}
 .exam-topic-desc{font-size:11.5px;color:var(--txt-3)}
-
 .exam-warning{
   display:flex;gap:16px;padding:18px 22px;
   background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(217,119,6,.06));
@@ -214,6 +210,117 @@
 .exam-warning-icon{font-size:28px;flex-shrink:0}
 .exam-warning-title{font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:6px}
 .exam-warning-text{font-size:13.5px;color:var(--txt-1);line-height:1.7}
+
+/* ====== ГРАФИК СОБЕСЕДОВАНИЙ ====== */
+.interview-today{
+  padding:24px 28px;border-radius:var(--radius-lg);
+  background:linear-gradient(135deg, rgba(61,220,132,.12), rgba(74,168,255,.08));
+  border:1px solid rgba(61,220,132,.4);
+  margin-bottom:30px;
+  position:relative;overflow:hidden;
+}
+.interview-today::before{
+  content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle, rgba(61,220,132,.2), transparent 70%);
+  pointer-events:none;
+}
+.interview-today-label{
+  font-size:12px;text-transform:uppercase;letter-spacing:2px;
+  font-weight:800;color:#7ee5a1;margin-bottom:10px;
+  position:relative;z-index:1;
+}
+.interview-today-title{
+  font-size:22px;font-weight:900;color:#fff;margin-bottom:16px;
+  position:relative;z-index:1;
+}
+.interview-today-slots{
+  display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1;
+}
+.interview-today-slot{
+  padding:10px 18px;border-radius:10px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(61,220,132,.5);
+  color:#fff;font-weight:700;font-size:15px;
+  display:flex;align-items:center;gap:8px;
+  transition:.3s;
+}
+.interview-today-slot:hover{
+  background:rgba(61,220,132,.2);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(61,220,132,.3);
+}
+.interview-today-slot .icon{font-size:18px}
+.interview-today-empty{
+  padding:18px;background:rgba(0,0,0,.3);border-radius:10px;
+  color:var(--txt-2);font-size:14px;font-style:italic;
+  position:relative;z-index:1;
+}
+.interview-section{margin-bottom:30px}
+.interview-section-title{
+  font-size:17px;font-weight:800;color:var(--txt-0);
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.interview-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+.interview-day{
+  background:rgba(19,20,26,.85);border:1px solid var(--line);
+  border-radius:var(--radius);padding:18px;
+  transition:var(--transition);backdrop-filter:blur(6px);
+}
+.interview-day:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.interview-day.today{
+  border-color:#3ddc84;
+  box-shadow:0 8px 24px rgba(61,220,132,.2);
+  background:linear-gradient(135deg, rgba(61,220,132,.08), rgba(19,20,26,.85));
+}
+.interview-day-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+}
+.interview-day-name{
+  font-size:14px;font-weight:800;color:var(--txt-0);
+}
+.interview-day-badge{
+  padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:800;
+  background:linear-gradient(135deg,#3ddc84,#16a34a);color:#fff;
+  letter-spacing:.5px;
+}
+.interview-day-count{
+  font-size:11.5px;color:var(--txt-3);font-weight:600;
+}
+.interview-slots{display:flex;flex-direction:column;gap:8px}
+.interview-slot{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:9px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);
+  font-size:14px;font-weight:700;color:var(--txt-0);
+  transition:.3s;
+}
+.interview-slot:hover{
+  background:rgba(61,220,132,.15);
+  border-color:rgba(61,220,132,.4);
+  transform:translateX(4px);
+}
+.interview-slot-icon{font-size:15px;flex-shrink:0}
+.interview-slot-time{flex:1}
+.interview-slot-duration{font-size:11px;color:var(--txt-3);font-weight:500}
+.interview-warning{
+  display:flex;gap:16px;padding:18px 22px;
+  background:linear-gradient(135deg,rgba(74,168,255,.1),rgba(168,85,247,.06));
+  border:1px solid rgba(74,168,255,.35);
+  border-radius:14px;align-items:flex-start;
+}
+.interview-warning-icon{font-size:28px;flex-shrink:0}
+.interview-warning-title{font-size:15px;font-weight:800;color:#4aa8ff;margin-bottom:6px}
+.interview-warning-text{font-size:13.5px;color:var(--txt-1);line-height:1.8}
+@media(max-width:640px){
+  .interview-today{padding:18px}
+  .interview-today-title{font-size:18px}
+  .interview-today-slot{font-size:13.5px;padding:8px 14px}
+  .interview-grid{grid-template-columns:1fr}
+}
 
 /* Табы */
 .vk-tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;padding:6px;background:rgba(19,20,26,.85);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(6px)}
@@ -249,13 +356,12 @@
   </div>
 </header>
 
-<!-- ШАПКА ВОЕНКОМАТА -->
 <section class="vk-hero">
   <div class="vk-hero-bg"></div>
   <div class="container vk-hero-content">
     <span class="vk-hero-tag">🎓 Учебный центр</span>
     <h1 class="vk-hero-title">Военный<br><span class="accent">Комиссариат</span></h1>
-    <p class="vk-hero-subtitle">Лекции, курсы КМБ и УКМБ, система повышения, калькулятор баллов, итоговый экзамен и форма рапорта.</p>
+    <p class="vk-hero-subtitle">Лекции, КМБ и УКМБ, калькулятор баллов, итоговый экзамен, график собеседований и форма рапорта.</p>
     <div class="vk-header-grid">
       <div class="vk-header-card">
         <div class="icon">📊</div>
@@ -282,18 +388,17 @@
         </div>
       </div>
       <div class="vk-header-card">
-        <div class="icon">🗺️</div>
+        <div class="icon">📅</div>
         <div class="info">
-          <div class="title">Карта поставок</div>
-          <div class="desc">Схема маршрутов</div>
-          <a href="#map">Перейти →</a>
+          <div class="title">Собеседования</div>
+          <div class="desc">График Армии</div>
+          <a href="#interviews">Перейти →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ТАБЫ -->
 <section class="section" style="padding-top:26px;padding-bottom:26px">
   <div class="container">
     <div class="vk-tabs">
@@ -301,6 +406,7 @@
       <button class="vk-tab" data-vk-tab="report">📝 Форма рапорта</button>
       <button class="vk-tab" data-vk-tab="lectures">📚 Лекции</button>
       <button class="vk-tab" data-vk-tab="exam">🎓 Итоговый экзамен</button>
+      <button class="vk-tab" data-vk-tab="interviews">📅 График собеседований</button>
       <button class="vk-tab" data-vk-tab="map">🗺️ Карта поставок</button>
       <button class="vk-tab" data-vk-tab="progress">📈 Повышение</button>
       <button class="vk-tab" data-vk-tab="points">🏛️ Баллы</button>
@@ -542,7 +648,6 @@
       <p class="section-desc">Финальная аттестация по всем изученным дисциплинам. Сдаётся после прохождения КМБ/УКМБ.</p>
     </div>
 
-    <!-- Главная карточка -->
     <div class="exam-card">
       <div class="exam-card-icon">📝</div>
       <div class="exam-card-body">
@@ -562,7 +667,6 @@
       </a>
     </div>
 
-    <!-- Система зачёта -->
     <div class="exam-section">
       <h3 class="exam-section-title">📊 Система зачёта</h3>
       <div class="exam-grades">
@@ -597,7 +701,6 @@
       </div>
     </div>
 
-    <!-- Темы вопросов -->
     <div class="exam-section">
       <h3 class="exam-section-title">📚 Что проверяется</h3>
       <div class="exam-topics">
@@ -634,7 +737,6 @@
       </div>
     </div>
 
-    <!-- Предупреждение -->
     <div class="exam-warning">
       <div class="exam-warning-icon">⚠️</div>
       <div class="exam-warning-body">
@@ -648,8 +750,39 @@
   </div>
 </section>
 
+<!-- ГРАФИК СОБЕСЕДОВАНИЙ -->
+<section class="section section-dark vk-panel" id="interviews" data-vk-panel="interviews">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Расписание</span>
+      <h2 class="section-title">📅 График собеседований в Армию</h2>
+      <p class="section-desc">По 2 слота в день. Каждое собеседование — 30 минут.</p>
+    </div>
+
+    <div class="interview-today" id="interviewToday"></div>
+
+    <div class="interview-section">
+      <h3 class="interview-section-title">📋 Все слоты на неделю</h3>
+      <div class="interview-grid" id="interviewGrid"></div>
+    </div>
+
+    <div class="interview-warning">
+      <div class="interview-warning-icon">💡</div>
+      <div class="interview-warning-body">
+        <div class="interview-warning-title">Как записаться</div>
+        <div class="interview-warning-text">
+          1. Выбери удобный день и время<br>
+          2. Приди на собеседование вовремя (не более чем за 5 минут до начала)<br>
+          3. Возьми с собой: удостоверение личности (паспорт)<br>
+          4. Опоздание более 5 минут = перенос на другой день
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- КАРТА -->
-<section class="section section-dark vk-panel" id="map" data-vk-panel="map">
+<section class="section vk-panel" id="map" data-vk-panel="map">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Схема</span>
@@ -664,7 +797,7 @@
 </section>
 
 <!-- ПОВЫШЕНИЕ -->
-<section class="section vk-panel" id="progress" data-vk-panel="progress">
+<section class="section section-dark vk-panel" id="progress" data-vk-panel="progress">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Курс молодого бойца</span>
@@ -705,7 +838,7 @@
 </section>
 
 <!-- БАЛЛЫ -->
-<section class="section section-dark vk-panel" id="points" data-vk-panel="points">
+<section class="section vk-panel" id="points" data-vk-panel="points">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Баллы</span>
@@ -787,13 +920,14 @@
 <script src="script.js"></script>
 <script>
 /* ============================================================
-   ВОЕНКОМАТ — калькулятор, рапорт, табы
+   ВОЕНКОМАТ — табы, калькулятор, рапорт, собеседования
    ============================================================ */
 (function(){
   'use strict';
 
   var LS_CALC = 'rmrp_vk_calc_v2';
 
+  /* ТАБЫ */
   var tabs = document.querySelectorAll('.vk-tab');
   var panels = document.querySelectorAll('.vk-panel');
   tabs.forEach(function(tab){
@@ -806,6 +940,7 @@
     });
   });
 
+  /* ЗАДАНИЯ */
   var TASKS = [
     { id:'prizyv_full', icon:'📋', label:'Провести призыв', points:85, reportName:'Провёл призывов' },
     { id:'prizyv_part', icon:'👥', label:'Участие в призыве', points:45, reportName:'Участвовал в призывах' },
@@ -1132,6 +1267,88 @@
 
   setVal('rpDate', todayStr());
   VKReport.generate();
+
+  /* ============================================================
+     ГРАФИК СОБЕСЕДОВАНИЙ (только Армия — 2 слота в день)
+     ============================================================ */
+  var INTERVIEW_SCHEDULE = {
+    'Понедельник': ['16:00', '20:30'],
+    'Вторник':     ['16:30', '21:30'],
+    'Среда':       ['17:00', '17:30'],
+    'Четверг':     ['17:30', '22:00'],
+    'Пятница':     ['18:00', '22:30'],
+    'Суббота':     ['14:00', '21:00'],
+    'Воскресенье': ['14:30', '19:00']
+  };
+
+  var DAYS_ORDER = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+  var DAYS_JS = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+
+  function getTodayName(){
+    return DAYS_JS[new Date().getDay()];
+  }
+
+  function renderInterviews(){
+    var grid = document.getElementById('interviewGrid');
+    var todayEl = document.getElementById('interviewToday');
+    if(!grid) return;
+
+    var today = getTodayName();
+
+    /* Блок «Сегодня» */
+    if(todayEl){
+      var todaySlots = INTERVIEW_SCHEDULE[today] || [];
+      var todayHtml =
+        '<div class="interview-today-label">📅 Сегодня · ' + today + '</div>' +
+        '<div class="interview-today-title">' +
+          (todaySlots.length > 0 ? 'Собеседования в Армию' : 'Сегодня собеседований нет') +
+        '</div>';
+
+      if(todaySlots.length > 0){
+        todayHtml += '<div class="interview-today-slots">' +
+          todaySlots.map(function(t){
+            return '<div class="interview-today-slot">' +
+              '<span class="icon">🎯</span>' +
+              '<span>' + t + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>';
+      } else {
+        todayHtml += '<div class="interview-today-empty">Ближайшие собеседования — в другие дни. Смотри график ниже.</div>';
+      }
+
+      todayEl.innerHTML = todayHtml;
+    }
+
+    /* Сетка на неделю */
+    grid.innerHTML = DAYS_ORDER.map(function(day){
+      var slots = INTERVIEW_SCHEDULE[day] || [];
+      var isToday = (day === today);
+
+      return '<div class="interview-day' + (isToday ? ' today' : '') + '">' +
+        '<div class="interview-day-head">' +
+          '<div class="interview-day-name">' + day + '</div>' +
+          (isToday
+            ? '<span class="interview-day-badge">СЕГОДНЯ</span>'
+            : '<span class="interview-day-count">' + slots.length + ' слота</span>') +
+        '</div>' +
+        '<div class="interview-slots">' +
+          (slots.length > 0
+            ? slots.map(function(t){
+                return '<div class="interview-slot">' +
+                  '<span class="interview-slot-icon">🎯</span>' +
+                  '<span class="interview-slot-time">' + t + '</span>' +
+                  '<span class="interview-slot-duration">30 мин</span>' +
+                '</div>';
+              }).join('')
+            : '<div style="color:var(--txt-3);font-size:13px;font-style:italic;padding:8px 0">Нет собеседований</div>'
+          ) +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  renderInterviews();
 
   function copyToClipboard(text){
     if(navigator.clipboard && navigator.clipboard.writeText){
