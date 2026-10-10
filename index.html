@@ -12,10 +12,7 @@
 /* ============================================================
    ЖИВОЙ ФОН ГЛАВНОЙ
    ============================================================ */
-.hero{
-  position:relative;padding:90px 0 70px;overflow:hidden;
-  border-bottom:1px solid var(--line);
-}
+.hero{position:relative;padding:90px 0 70px;overflow:hidden;border-bottom:1px solid var(--line)}
 .hero-live-bg{
   position:absolute;inset:0;z-index:0;overflow:hidden;
   background:
@@ -23,7 +20,6 @@
     radial-gradient(800px 500px at 80% 80%, rgba(74,168,255,.12), transparent 60%),
     linear-gradient(180deg, #0a0b0f 0%, #13141a 50%, #0a0b0f 100%);
 }
-/* Сетка */
 .hero-live-bg::before{
   content:"";position:absolute;inset:0;
   background-image:
@@ -33,10 +29,7 @@
   mask-image:radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
   -webkit-mask-image:radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
 }
-/* Плавающие частицы */
-.hero-particles{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;
-}
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .hero-particle{
   position:absolute;border-radius:50%;
   background:linear-gradient(135deg, #ff4655, #a855f7);
@@ -50,14 +43,13 @@
   100%{transform:translateY(-100vh) translateX(50px) scale(.5);opacity:0}
 }
 
-/* Верхняя строка новостей */
+/* Бегущая строка новостей */
 .news-ticker{
   position:relative;z-index:5;
   background:linear-gradient(90deg, rgba(255,70,85,.15), rgba(168,85,247,.12), rgba(74,168,255,.15));
   border-top:1px solid rgba(255,70,85,.3);
   border-bottom:1px solid rgba(255,70,85,.3);
   padding:10px 0;overflow:hidden;
-  margin-bottom:0;
 }
 .news-ticker-content{
   display:flex;gap:60px;
@@ -73,10 +65,8 @@
   100%{transform:translateX(-50%)}
 }
 
-/* Живой контент поверх */
 .hero-content{position:relative;z-index:1;text-align:center}
 
-/* Тёплое приветствие */
 .hero-greeting{
   font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
   color:#4aa8ff;margin-bottom:20px;
@@ -85,11 +75,10 @@
   background:rgba(74,168,255,.1);border:1px solid rgba(74,168,255,.3);
 }
 
-/* Красивые цифры */
 .hero-stats{display:flex;justify-content:center;gap:44px;flex-wrap:wrap;margin-top:38px}
 .stat{display:flex;flex-direction:column;align-items:center;position:relative;padding:0 10px}
 .stat-num{
-  font-size:38px;font-weight:900;color:var(--accent);letter-spacing:-1.5px;
+  font-size:38px;font-weight:900;letter-spacing:-1.5px;
   background:linear-gradient(135deg, #ff4655, #a855f7);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   font-variant-numeric:tabular-nums;
@@ -101,9 +90,7 @@
   background:linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
-/* ============================================================
-   МИНИ-ПРОФИЛЬ (сверху справа)
-   ============================================================ */
+/* Мини-профиль */
 .hero-user-panel{
   position:absolute;top:20px;right:20px;z-index:5;
   display:flex;align-items:center;gap:10px;
@@ -123,9 +110,7 @@
 .hero-user-name{font-size:12.5px;color:#fff}
 .hero-user-rank{font-size:10.5px;color:#a8adbd;font-weight:500}
 
-/* ============================================================
-   ЦИТАТА ДНЯ
-   ============================================================ */
+/* Цитата дня */
 .hero-quote{
   margin-top:38px;
   font-size:14.5px;color:var(--txt-2);font-style:italic;
@@ -141,9 +126,7 @@
   font-family:serif;
 }
 
-/* ============================================================
-   БЫСТРЫЕ ДЕЙСТВИЯ
-   ============================================================ */
+/* Быстрые действия */
 .quick-actions{
   display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
   margin-top:38px;
@@ -165,9 +148,7 @@
 }
 .quick-action-btn .qa-icon{font-size:16px}
 
-/* ============================================================
-   АДМИН-ПАНЕЛЬ
-   ============================================================ */
+/* Админ-панель */
 .admin-panel{
   margin-top:36px;padding:0;
   background:linear-gradient(135deg, rgba(168,85,247,.08), rgba(74,168,255,.05));
@@ -194,21 +175,15 @@
   background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;
   letter-spacing:1px;
 }
-.admin-panel-toggle{
-  font-size:18px;color:#a8adbd;transition:.3s;
-}
+.admin-panel-toggle{font-size:18px;color:#a8adbd;transition:.3s}
 .admin-panel.open .admin-panel-toggle{transform:rotate(180deg)}
-
-.admin-panel-body{
-  max-height:0;overflow:hidden;transition:max-height .4s ease;
-}
+.admin-panel-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .admin-panel.open .admin-panel-body{max-height:2000px}
 
 .admin-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:12px;padding:20px 24px 24px;
 }
-
 .admin-card{
   padding:16px 18px;border-radius:14px;
   background:rgba(0,0,0,.35);
@@ -223,22 +198,10 @@
   transform:translateY(-3px);
   box-shadow:0 12px 30px rgba(168,85,247,.2);
 }
-.admin-card-icon{
-  font-size:26px;margin-bottom:10px;display:block;
-}
-.admin-card-title{
-  font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;
-}
-.admin-card-desc{
-  font-size:11.5px;color:#a8adbd;line-height:1.5;
-}
-.admin-card-count{
-  display:inline-block;padding:2px 8px;border-radius:99px;
-  background:rgba(255,70,85,.2);color:#ff6b78;
-  font-size:10.5px;font-weight:800;margin-left:6px;
-}
+.admin-card-icon{font-size:26px;margin-bottom:10px;display:block}
+.admin-card-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.admin-card-desc{font-size:11.5px;color:#a8adbd;line-height:1.5}
 
-/* Админ-статистика */
 .admin-stats-row{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
   gap:10px;padding:0 24px 20px;
@@ -250,7 +213,7 @@
   text-align:center;
 }
 .admin-stat-val{
-  font-size:24px;font-weight:900;color:#fff;
+  font-size:24px;font-weight:900;
   background:linear-gradient(135deg,#4aa8ff,#a855f7);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -259,9 +222,7 @@
   letter-spacing:1px;font-weight:700;margin-top:4px;
 }
 
-/* ============================================================
-   ЖИВОЙ ИНДИКАТОР ОНЛАЙНА
-   ============================================================ */
+/* Онлайн-индикатор */
 .online-indicator{
   position:fixed;bottom:22px;left:22px;z-index:99;
   display:flex;align-items:center;gap:10px;
@@ -282,7 +243,6 @@
   50%{transform:scale(1.3);opacity:.7}
 }
 
-/* Уведомление о новом объявлении */
 .admin-broadcast{
   margin-top:20px;padding:16px 22px;border-radius:14px;
   background:linear-gradient(135deg, rgba(251,191,36,.15), rgba(217,119,6,.1));
@@ -349,17 +309,15 @@
   </div>
 </div>
 
-<!-- ГЛАВНАЯ (живой баннер) -->
+<!-- ГЛАВНАЯ -->
 <section class="hero">
   <div class="hero-live-bg"></div>
   <div class="hero-particles" id="heroParticles"></div>
 
-  <!-- Мини-профиль справа -->
   <div class="hero-user-panel" id="heroUserPanel" hidden></div>
 
   <div class="container hero-content">
 
-    <!-- Приветствие по времени -->
     <div class="hero-greeting" id="heroGreeting">
       <span id="greetingIcon">🌅</span>
       <span id="greetingText">Добро пожаловать</span>
@@ -368,7 +326,6 @@
     <h1 class="hero-title">Законодательная база<br><span class="accent">RMRP</span></h1>
     <p class="hero-subtitle">Все кодексы, законы и правила проекта в одном месте. Актуально на 2025 год.</p>
 
-    <!-- Живые цифры -->
     <div class="hero-stats">
       <div class="stat"><span class="stat-num" data-count="13">0</span><span class="stat-label">Документов</span></div>
       <div class="stat"><span class="stat-num" data-count="700" data-suffix="+">0</span><span class="stat-label">Статей</span></div>
@@ -376,10 +333,8 @@
       <div class="stat"><span class="stat-num" data-count="0" id="statUsers">0</span><span class="stat-label">Пользователей</span></div>
     </div>
 
-    <!-- Цитата дня -->
     <div class="hero-quote" id="heroQuote">Дисциплина — мать победы</div>
 
-    <!-- Быстрые действия -->
     <div class="quick-actions">
       <a href="military.html" class="quick-action-btn"><span class="qa-icon">🎓</span>Военкомат</a>
       <a href="media.html" class="quick-action-btn"><span class="qa-icon">🎬</span>Медиа</a>
@@ -388,10 +343,8 @@
       <a href="comfort.html" class="quick-action-btn"><span class="qa-icon">🎧</span>Комфорт-зона</a>
     </div>
 
-    <!-- Объявление от админа (появляется, если есть) -->
     <div id="adminBroadcastWrap"></div>
 
-    <!-- АДМИН-ПАНЕЛЬ -->
     <div class="admin-panel" id="adminPanel" hidden>
       <div class="admin-panel-head" onclick="AdminPanel.toggle()">
         <div class="admin-panel-title">
@@ -402,7 +355,6 @@
         <span class="admin-panel-toggle">▼</span>
       </div>
       <div class="admin-panel-body">
-        <!-- Статистика -->
         <div class="admin-stats-row" id="adminStats">
           <div class="admin-stat-box">
             <div class="admin-stat-val" id="adminStatUsers">0</div>
@@ -421,8 +373,6 @@
             <div class="admin-stat-lbl">Медиа</div>
           </div>
         </div>
-
-        <!-- Быстрые ссылки -->
         <div class="admin-grid">
           <a href="profile.html" class="admin-card">
             <span class="admin-card-icon">👥</span>
@@ -461,7 +411,7 @@
   </div>
 </section>
 
-<!-- Блок профиля (как было) -->
+<!-- Блок профиля -->
 <section class="section" id="homeProfileSection" hidden style="padding:30px 0">
   <div class="container">
     <div id="homeProfileWrap"></div>
@@ -597,13 +547,11 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<!-- Индикатор онлайна -->
 <div class="online-indicator">
   <span class="online-dot"></span>
   <span id="onlineCount">0</span> онлайн
 </div>
 
-<!-- Модалки -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -675,7 +623,7 @@
   function $(s,c){ return (c||document).querySelector(s); }
   function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
 
-  /* ---------- 1. Анимированные цифры ---------- */
+  /* 1. Анимированные цифры */
   function animateNumbers(){
     $$('.stat-num').forEach(function(el){
       var target = parseInt(el.getAttribute('data-count')) || 0;
@@ -693,12 +641,11 @@
     });
   }
 
-  /* ---------- 2. Плавающие частицы ---------- */
+  /* 2. Плавающие частицы */
   function createParticles(){
     var container = $('heroParticles');
     if(!container) return;
-    var count = 18;
-    for(var i = 0; i < count; i++){
+    for(var i = 0; i < 18; i++){
       var p = document.createElement('div');
       p.className = 'hero-particle';
       var size = 4 + Math.random() * 8;
@@ -712,7 +659,7 @@
     }
   }
 
-  /* ---------- 3. Приветствие по времени ---------- */
+  /* 3. Приветствие */
   function setGreeting(){
     var h = new Date().getHours();
     var icon = '🌅', text = 'Доброе утро';
@@ -733,7 +680,7 @@
     if(tEl) tEl.textContent = text;
   }
 
-  /* ---------- 4. Цитата дня ---------- */
+  /* 4. Цитата дня */
   var QUOTES = [
     'Дисциплина — мать победы',
     'Служить Отечеству — великая честь',
@@ -752,7 +699,7 @@
     if(el) el.textContent = QUOTES[idx];
   }
 
-  /* ---------- 5. Мини-профиль справа ---------- */
+  /* 5. Мини-профиль справа */
   function renderUserPanel(){
     var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
     if(!user) return;
@@ -773,14 +720,12 @@
       '</div>';
 
     panel.hidden = false;
-
-    /* Клик — переход в профиль */
     panel.style.cursor = 'pointer';
     panel.onclick = function(){ location.href = 'profile.html'; };
     panel.title = 'Открыть профиль';
   }
 
-  /* ---------- 6. Онлайн-индикатор ---------- */
+  /* 6. Онлайн-индикатор */
   function initOnlineCount(){
     var LS = 'rmrp_online';
     var now = Date.now();
@@ -788,13 +733,11 @@
     try{ sessions = JSON.parse(localStorage.getItem(LS) || '{}'); }
     catch(e){ sessions = {}; }
 
-    /* Удаляем старые (старше 5 минут) */
     var cutoff = now - 5 * 60 * 1000;
     Object.keys(sessions).forEach(function(k){
       if(sessions[k] < cutoff) delete sessions[k];
     });
 
-    /* Регистрируем себя */
     var myId = Math.random().toString(36).slice(2, 10);
     sessions[myId] = now;
     try{ localStorage.setItem(LS, JSON.stringify(sessions)); }catch(e){}
@@ -804,11 +747,10 @@
     if(el) el.textContent = count;
   }
 
-  /* ---------- 7. Загрузка статистики из Firebase ---------- */
+  /* 7. Статистика Firebase */
   function loadStats(){
     if(!window.RMRPAuth) return;
 
-    /* Пользователи */
     RMRPAuth.getUsers().then(function(users){
       var logins = Object.keys(users);
       var usersCount = logins.length;
@@ -836,7 +778,6 @@
       if(aSA) aSA.textContent = adminsCount;
     });
 
-    /* Заявки */
     if(RMRPAuth.getRequests){
       RMRPAuth.getRequests().then(function(reqs){
         var arr = Object.keys(reqs).map(function(k){ return reqs[k]; });
@@ -846,7 +787,6 @@
       });
     }
 
-    /* Медиа */
     if(RMRPAuth.getMedia){
       RMRPAuth.getMedia().then(function(media){
         var count = Object.keys(media).length;
@@ -856,7 +796,7 @@
     }
   }
 
-  /* ---------- 8. Объявление от админа ---------- */
+  /* 8. Объявление от админа */
   function checkBroadcast(){
     var raw;
     try{ raw = localStorage.getItem('rmrp_broadcast'); }catch(e){}
@@ -884,13 +824,12 @@
     });
   }
 
-  /* ---------- 9. АДМИН-ПАНЕЛЬ ---------- */
+  /* 9. Админ-панель */
   window.AdminPanel = {
     toggle: function(){
       var p = $('adminPanel');
       if(p) p.classList.toggle('open');
     },
-
     broadcast: function(){
       var text = prompt('Введите текст объявления (появится всем на главной):', '');
       if(!text) return;
@@ -907,7 +846,6 @@
       alert('✅ Объявление отправлено на ' + d + ' дн.');
       location.reload();
     },
-
     clearBroadcast: function(){
       if(!confirm('Убрать объявление?')) return;
       localStorage.removeItem('rmrp_broadcast');
@@ -915,36 +853,28 @@
       if(wrap) wrap.innerHTML = '';
       alert('✅ Убрано');
     },
-
     showLogs: function(){
       var logs;
       try{ logs = JSON.parse(localStorage.getItem('rmrp_logs') || '[]'); }
       catch(e){ logs = []; }
-
       if(!logs.length){
         alert('📜 Логов пока нет.');
         return;
       }
-
       var text = logs.slice(-20).map(function(l, i){
         return (i+1) + '. [' + l.date + '] ' + l.text;
       }).join('\n');
-
       alert('📜 Последние 20 действий:\n\n' + text);
     }
   };
 
-  /* Показ админ-панели */
   function initAdminPanel(){
     var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
     if(!user) return;
-
     var isAdmin = RMRPAuth.isAdmin && RMRPAuth.isAdmin(user);
     if(!isAdmin) return;
-
     var panel = $('adminPanel');
     if(panel) panel.hidden = false;
-
     var badge = $('adminRoleBadge');
     if(badge){
       badge.textContent = user.role === 'Разработчик' ? 'DEV' : 'ADMIN';
@@ -954,7 +884,6 @@
     }
   }
 
-  /* ---------- СТАРТ ---------- */
   function init(){
     animateNumbers();
     createParticles();
@@ -973,12 +902,10 @@
     init();
   }
 
-  /* Обновление онлайн каждые 30 сек */
   setInterval(initOnlineCount, 30000);
-
 })();
 
-/* Блок профиля (как раньше) */
+/* Блок профиля */
 (function(){
   function initHomeProfile(){
     if(!window.RMRPAuth) return;
