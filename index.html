@@ -8,6 +8,309 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ЖИВОЙ ФОН ГЛАВНОЙ
+   ============================================================ */
+.hero{
+  position:relative;padding:90px 0 70px;overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.hero-live-bg{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+  background:
+    radial-gradient(900px 500px at 20% 20%, rgba(255,70,85,.15), transparent 60%),
+    radial-gradient(800px 500px at 80% 80%, rgba(74,168,255,.12), transparent 60%),
+    linear-gradient(180deg, #0a0b0f 0%, #13141a 50%, #0a0b0f 100%);
+}
+/* Сетка */
+.hero-live-bg::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:50px 50px;
+  mask-image:radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
+  -webkit-mask-image:radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
+}
+/* Плавающие частицы */
+.hero-particles{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.hero-particle{
+  position:absolute;border-radius:50%;
+  background:linear-gradient(135deg, #ff4655, #a855f7);
+  animation:floatParticle linear infinite;
+  opacity:.35;
+}
+@keyframes floatParticle{
+  0%{transform:translateY(0) translateX(0) scale(1);opacity:0}
+  10%{opacity:.5}
+  90%{opacity:.5}
+  100%{transform:translateY(-100vh) translateX(50px) scale(.5);opacity:0}
+}
+
+/* Верхняя строка новостей */
+.news-ticker{
+  position:relative;z-index:5;
+  background:linear-gradient(90deg, rgba(255,70,85,.15), rgba(168,85,247,.12), rgba(74,168,255,.15));
+  border-top:1px solid rgba(255,70,85,.3);
+  border-bottom:1px solid rgba(255,70,85,.3);
+  padding:10px 0;overflow:hidden;
+  margin-bottom:0;
+}
+.news-ticker-content{
+  display:flex;gap:60px;
+  animation:tickerMove 40s linear infinite;
+  white-space:nowrap;font-size:13.5px;font-weight:600;color:#fff;
+}
+.news-ticker-content span{
+  display:inline-flex;align-items:center;gap:8px;
+  text-shadow:0 0 20px rgba(255,70,85,.5);
+}
+@keyframes tickerMove{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+/* Живой контент поверх */
+.hero-content{position:relative;z-index:1;text-align:center}
+
+/* Тёплое приветствие */
+.hero-greeting{
+  font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:#4aa8ff;margin-bottom:20px;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 18px;border-radius:99px;
+  background:rgba(74,168,255,.1);border:1px solid rgba(74,168,255,.3);
+}
+
+/* Красивые цифры */
+.hero-stats{display:flex;justify-content:center;gap:44px;flex-wrap:wrap;margin-top:38px}
+.stat{display:flex;flex-direction:column;align-items:center;position:relative;padding:0 10px}
+.stat-num{
+  font-size:38px;font-weight:900;color:var(--accent);letter-spacing:-1.5px;
+  background:linear-gradient(135deg, #ff4655, #a855f7);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-variant-numeric:tabular-nums;
+}
+.stat-label{font-size:12.5px;color:var(--txt-3);text-transform:uppercase;letter-spacing:1.2px;margin-top:4px}
+.stat::after{
+  content:"";position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+  width:40px;height:2px;border-radius:99px;
+  background:linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+/* ============================================================
+   МИНИ-ПРОФИЛЬ (сверху справа)
+   ============================================================ */
+.hero-user-panel{
+  position:absolute;top:20px;right:20px;z-index:5;
+  display:flex;align-items:center;gap:10px;
+  padding:8px 14px;border-radius:99px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-size:12.5px;font-weight:600;color:#fff;
+}
+.hero-user-avatar{
+  width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;
+  background:linear-gradient(135deg,#4aa8ff,#3ddc84);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:14px;
+}
+.hero-user-avatar img{width:100%;height:100%;object-fit:cover}
+.hero-user-info{display:flex;flex-direction:column;line-height:1.2}
+.hero-user-name{font-size:12.5px;color:#fff}
+.hero-user-rank{font-size:10.5px;color:#a8adbd;font-weight:500}
+
+/* ============================================================
+   ЦИТАТА ДНЯ
+   ============================================================ */
+.hero-quote{
+  margin-top:38px;
+  font-size:14.5px;color:var(--txt-2);font-style:italic;
+  max-width:620px;margin-left:auto;margin-right:auto;
+  padding:16px 22px;border-radius:14px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  line-height:1.6;position:relative;
+}
+.hero-quote::before{
+  content:"❝";position:absolute;top:-10px;left:14px;
+  font-size:34px;color:var(--accent);opacity:.4;
+  font-family:serif;
+}
+
+/* ============================================================
+   БЫСТРЫЕ ДЕЙСТВИЯ
+   ============================================================ */
+.quick-actions{
+  display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+  margin-top:38px;
+}
+.quick-action-btn{
+  padding:12px 20px;border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;font-size:13.5px;font-weight:600;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:.3s;
+}
+.quick-action-btn:hover{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,70,85,.5);
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(255,70,85,.2);
+}
+.quick-action-btn .qa-icon{font-size:16px}
+
+/* ============================================================
+   АДМИН-ПАНЕЛЬ
+   ============================================================ */
+.admin-panel{
+  margin-top:36px;padding:0;
+  background:linear-gradient(135deg, rgba(168,85,247,.08), rgba(74,168,255,.05));
+  border:1px solid rgba(168,85,247,.3);
+  border-radius:20px;
+  overflow:hidden;
+}
+.admin-panel-head{
+  padding:18px 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(168,85,247,.2);
+  background:rgba(0,0,0,.2);
+  cursor:pointer;
+  transition:.3s;
+}
+.admin-panel-head:hover{background:rgba(0,0,0,.35)}
+.admin-panel-title{
+  display:flex;align-items:center;gap:12px;
+  font-size:15px;font-weight:800;color:#fff;
+}
+.admin-panel-title .icon{font-size:22px}
+.admin-panel-badge{
+  padding:3px 10px;border-radius:99px;font-size:11px;font-weight:800;
+  background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;
+  letter-spacing:1px;
+}
+.admin-panel-toggle{
+  font-size:18px;color:#a8adbd;transition:.3s;
+}
+.admin-panel.open .admin-panel-toggle{transform:rotate(180deg)}
+
+.admin-panel-body{
+  max-height:0;overflow:hidden;transition:max-height .4s ease;
+}
+.admin-panel.open .admin-panel-body{max-height:2000px}
+
+.admin-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;padding:20px 24px 24px;
+}
+
+.admin-card{
+  padding:16px 18px;border-radius:14px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;
+  transition:.3s;
+  text-decoration:none;color:inherit;display:block;
+}
+.admin-card:hover{
+  background:rgba(0,0,0,.55);
+  border-color:rgba(168,85,247,.5);
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(168,85,247,.2);
+}
+.admin-card-icon{
+  font-size:26px;margin-bottom:10px;display:block;
+}
+.admin-card-title{
+  font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;
+}
+.admin-card-desc{
+  font-size:11.5px;color:#a8adbd;line-height:1.5;
+}
+.admin-card-count{
+  display:inline-block;padding:2px 8px;border-radius:99px;
+  background:rgba(255,70,85,.2);color:#ff6b78;
+  font-size:10.5px;font-weight:800;margin-left:6px;
+}
+
+/* Админ-статистика */
+.admin-stats-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:10px;padding:0 24px 20px;
+}
+.admin-stat-box{
+  padding:14px;border-radius:12px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.06);
+  text-align:center;
+}
+.admin-stat-val{
+  font-size:24px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#4aa8ff,#a855f7);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.admin-stat-lbl{
+  font-size:10.5px;color:#6e7385;text-transform:uppercase;
+  letter-spacing:1px;font-weight:700;margin-top:4px;
+}
+
+/* ============================================================
+   ЖИВОЙ ИНДИКАТОР ОНЛАЙНА
+   ============================================================ */
+.online-indicator{
+  position:fixed;bottom:22px;left:22px;z-index:99;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;border-radius:99px;
+  background:rgba(15,15,20,.85);
+  border:1px solid rgba(61,220,132,.3);
+  backdrop-filter:blur(10px);
+  font-size:12.5px;font-weight:700;color:#fff;
+}
+.online-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#3ddc84;
+  box-shadow:0 0 12px #3ddc84;
+  animation:pulseOnline 1.5s ease-in-out infinite;
+}
+@keyframes pulseOnline{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.3);opacity:.7}
+}
+
+/* Уведомление о новом объявлении */
+.admin-broadcast{
+  margin-top:20px;padding:16px 22px;border-radius:14px;
+  background:linear-gradient(135deg, rgba(251,191,36,.15), rgba(217,119,6,.1));
+  border:1px solid rgba(251,191,36,.4);
+  color:#fbbf24;font-weight:600;font-size:14px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;z-index:2;
+}
+.admin-broadcast .bc-icon{font-size:20px}
+.admin-broadcast-close{
+  margin-left:auto;background:none;border:0;color:inherit;
+  font-size:16px;cursor:pointer;opacity:.6;
+}
+.admin-broadcast-close:hover{opacity:1}
+
+@media(max-width:700px){
+  .hero-user-panel{top:10px;right:10px;font-size:11px;padding:6px 10px}
+  .hero-user-avatar{width:26px;height:26px;font-size:12px}
+  .hero-user-name{font-size:11px}
+  .hero-user-rank{font-size:9.5px}
+  .hero-greeting{font-size:11px;padding:6px 14px}
+  .stat-num{font-size:28px}
+  .hero-stats{gap:24px}
+  .quick-actions{gap:8px}
+  .quick-action-btn{padding:10px 14px;font-size:12px}
+  .online-indicator{bottom:80px;left:10px;font-size:11px;padding:8px 12px}
+}
+</style>
 </head>
 <body>
 
@@ -35,28 +338,137 @@
   </div>
 </header>
 
-<!-- БЛОК ПРОФИЛЯ НА ГЛАВНОЙ -->
+<!-- Бегущая строка -->
+<div class="news-ticker">
+  <div class="news-ticker-content" id="newsTicker">
+    <span>🎖️ Добро пожаловать на портал RMRP LAW</span>
+    <span>📜 Актуальная законодательная база 2025</span>
+    <span>🚀 Онлайн-сервисы: Военкомат, Медиа, Аудит</span>
+    <span>🎓 КМБ / УКМБ — для новых бойцов</span>
+    <span>💬 Discord — присоединяйся к сообществу</span>
+  </div>
+</div>
+
+<!-- ГЛАВНАЯ (живой баннер) -->
+<section class="hero">
+  <div class="hero-live-bg"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+
+  <!-- Мини-профиль справа -->
+  <div class="hero-user-panel" id="heroUserPanel" hidden></div>
+
+  <div class="container hero-content">
+
+    <!-- Приветствие по времени -->
+    <div class="hero-greeting" id="heroGreeting">
+      <span id="greetingIcon">🌅</span>
+      <span id="greetingText">Добро пожаловать</span>
+    </div>
+
+    <h1 class="hero-title">Законодательная база<br><span class="accent">RMRP</span></h1>
+    <p class="hero-subtitle">Все кодексы, законы и правила проекта в одном месте. Актуально на 2025 год.</p>
+
+    <!-- Живые цифры -->
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" data-count="13">0</span><span class="stat-label">Документов</span></div>
+      <div class="stat"><span class="stat-num" data-count="700" data-suffix="+">0</span><span class="stat-label">Статей</span></div>
+      <div class="stat"><span class="stat-num" data-count="90" data-suffix="+">0</span><span class="stat-label">Правил</span></div>
+      <div class="stat"><span class="stat-num" data-count="0" id="statUsers">0</span><span class="stat-label">Пользователей</span></div>
+    </div>
+
+    <!-- Цитата дня -->
+    <div class="hero-quote" id="heroQuote">Дисциплина — мать победы</div>
+
+    <!-- Быстрые действия -->
+    <div class="quick-actions">
+      <a href="military.html" class="quick-action-btn"><span class="qa-icon">🎓</span>Военкомат</a>
+      <a href="media.html" class="quick-action-btn"><span class="qa-icon">🎬</span>Медиа</a>
+      <a href="audit.html" class="quick-action-btn"><span class="qa-icon">📋</span>Аудит</a>
+      <a href="profile.html" class="quick-action-btn"><span class="qa-icon">👤</span>Профиль</a>
+      <a href="comfort.html" class="quick-action-btn"><span class="qa-icon">🎧</span>Комфорт-зона</a>
+    </div>
+
+    <!-- Объявление от админа (появляется, если есть) -->
+    <div id="adminBroadcastWrap"></div>
+
+    <!-- АДМИН-ПАНЕЛЬ -->
+    <div class="admin-panel" id="adminPanel" hidden>
+      <div class="admin-panel-head" onclick="AdminPanel.toggle()">
+        <div class="admin-panel-title">
+          <span class="icon">🛠️</span>
+          <span>Панель управления</span>
+          <span class="admin-panel-badge" id="adminRoleBadge">ADMIN</span>
+        </div>
+        <span class="admin-panel-toggle">▼</span>
+      </div>
+      <div class="admin-panel-body">
+        <!-- Статистика -->
+        <div class="admin-stats-row" id="adminStats">
+          <div class="admin-stat-box">
+            <div class="admin-stat-val" id="adminStatUsers">0</div>
+            <div class="admin-stat-lbl">Пользователей</div>
+          </div>
+          <div class="admin-stat-box">
+            <div class="admin-stat-val" id="adminStatAdmins">0</div>
+            <div class="admin-stat-lbl">Админов</div>
+          </div>
+          <div class="admin-stat-box">
+            <div class="admin-stat-val" id="adminStatPending">0</div>
+            <div class="admin-stat-lbl">Заявок</div>
+          </div>
+          <div class="admin-stat-box">
+            <div class="admin-stat-val" id="adminStatMedia">0</div>
+            <div class="admin-stat-lbl">Медиа</div>
+          </div>
+        </div>
+
+        <!-- Быстрые ссылки -->
+        <div class="admin-grid">
+          <a href="profile.html" class="admin-card">
+            <span class="admin-card-icon">👥</span>
+            <div class="admin-card-title">Управление юзерами</div>
+            <div class="admin-card-desc">Редактировать, повышать, удалять</div>
+          </a>
+          <a href="audit.html" class="admin-card">
+            <span class="admin-card-icon">📋</span>
+            <div class="admin-card-title">Кадровый аудит</div>
+            <div class="admin-card-desc">Приём и повышение сотрудников</div>
+          </a>
+          <a href="media.html" class="admin-card">
+            <span class="admin-card-icon">🎬</span>
+            <div class="admin-card-title">Медиа-галерея</div>
+            <div class="admin-card-desc">Скрины, видео, альбомы</div>
+          </a>
+          <a href="#" onclick="AdminPanel.broadcast();return false;" class="admin-card">
+            <span class="admin-card-icon">📢</span>
+            <div class="admin-card-title">Отправить объявление</div>
+            <div class="admin-card-desc">Покажется всем на главной</div>
+          </a>
+          <a href="#" onclick="AdminPanel.showLogs();return false;" class="admin-card">
+            <span class="admin-card-icon">📜</span>
+            <div class="admin-card-title">Логи действий</div>
+            <div class="admin-card-desc">Кто, что, когда менял</div>
+          </a>
+          <a href="#" onclick="AdminPanel.clearBroadcast();return false;" class="admin-card">
+            <span class="admin-card-icon">🗑️</span>
+            <div class="admin-card-title">Убрать объявление</div>
+            <div class="admin-card-desc">Скрыть текущее объявление</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Блок профиля (как было) -->
 <section class="section" id="homeProfileSection" hidden style="padding:30px 0">
   <div class="container">
     <div id="homeProfileWrap"></div>
   </div>
 </section>
 
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="container hero-content">
-    <span class="hero-tag">📜 Официальный портал</span>
-    <h1 class="hero-title">Законодательная база<br><span class="accent">RMRP</span></h1>
-    <p class="hero-subtitle">Все кодексы, законы и правила проекта в одном месте. Актуально на 2025 год.</p>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num">13</span><span class="stat-label">Документов</span></div>
-      <div class="stat"><span class="stat-num">700+</span><span class="stat-label">Статей</span></div>
-      <div class="stat"><span class="stat-num">90+</span><span class="stat-label">Правил</span></div>
-      <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Доступ</span></div>
-    </div>
-  </div>
-</section>
-
+<!-- Список документов -->
 <section class="quick-nav">
   <div class="container">
     <div class="quick-grid" id="quickGrid">
@@ -114,7 +526,7 @@
     <div class="section-head">
       <span class="section-tag">О проекте</span>
       <h2 class="section-title">📖 Добро пожаловать</h2>
-      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам — выбирай нужный из карточек выше.</p>
+      <p class="section-desc">Это официальный информационный портал законодательной базы проекта RMRP. Все документы разделены по отдельным страницам.</p>
     </div>
   </div>
 </section>
@@ -124,9 +536,7 @@
     <div class="section-head">
       <span class="section-tag">Все документы</span>
       <h2 class="section-title">📚 Полный список законов</h2>
-      <p class="section-desc">Ниже — все документы законодательной базы RMRP.</p>
     </div>
-
     <div class="footer-categories">
       <div class="footer-cat">
         <h4>📕 Документы</h4>
@@ -170,7 +580,7 @@
   <div class="container footer-inner">
     <div class="footer-col">
       <div class="logo"><span class="logo-icon">⚖️</span><span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">LAW</span></span></div>
-      <p>Официальный информационный портал законодательной базы проекта RMRP. Актуально на 2025 год.</p>
+      <p>Официальный информационный портал законодательной базы проекта RMRP.</p>
     </div>
     <div class="footer-col"><h4>Документы</h4><a href="constitution.html">Конституция РФ</a><a href="uk.html">Уголовный кодекс</a><a href="koap.html">КоАП РФ</a><a href="process.html">Процессуальный кодекс</a></div>
     <div class="footer-col"><h4>Законы</h4><a href="weapons.html">Об оружии</a><a href="property.html">Госсобственность</a><a href="raids.html">Ограбления и поставки</a><a href="vzk.html">Война за КрАЗ</a></div>
@@ -187,6 +597,13 @@
 
 <button class="to-top" id="toTop">↑</button>
 
+<!-- Индикатор онлайна -->
+<div class="online-indicator">
+  <span class="online-dot"></span>
+  <span id="onlineCount">0</span> онлайн
+</div>
+
+<!-- Модалки -->
 <div class="modal-overlay" id="editorModal" hidden>
   <div class="modal">
     <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
@@ -248,7 +665,320 @@
 <script src="auth.js"></script>
 <script src="script.js"></script>
 <script>
-/* Блок профиля на главной */
+/* ============================================================
+   ГЛАВНАЯ — живые плюшки
+   ============================================================ */
+(function(){
+  'use strict';
+
+  function $(id){ return document.getElementById(id); }
+  function $(s,c){ return (c||document).querySelector(s); }
+  function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
+
+  /* ---------- 1. Анимированные цифры ---------- */
+  function animateNumbers(){
+    $$('.stat-num').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-count')) || 0;
+      var suffix = el.getAttribute('data-suffix') || '';
+      var duration = 1500;
+      var start = Date.now();
+      function tick(){
+        var t = Math.min(1, (Date.now() - start) / duration);
+        var eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.floor(target * eased) + suffix;
+        if(t < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      }
+      tick();
+    });
+  }
+
+  /* ---------- 2. Плавающие частицы ---------- */
+  function createParticles(){
+    var container = $('heroParticles');
+    if(!container) return;
+    var count = 18;
+    for(var i = 0; i < count; i++){
+      var p = document.createElement('div');
+      p.className = 'hero-particle';
+      var size = 4 + Math.random() * 8;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.bottom = '-20px';
+      p.style.animationDuration = (10 + Math.random() * 15) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      container.appendChild(p);
+    }
+  }
+
+  /* ---------- 3. Приветствие по времени ---------- */
+  function setGreeting(){
+    var h = new Date().getHours();
+    var icon = '🌅', text = 'Доброе утро';
+    if(h >= 5 && h < 12){ icon = '🌅'; text = 'Доброе утро'; }
+    else if(h >= 12 && h < 18){ icon = '☀️'; text = 'Добрый день'; }
+    else if(h >= 18 && h < 23){ icon = '🌆'; text = 'Добрый вечер'; }
+    else { icon = '🌙'; text = 'Доброй ночи'; }
+
+    var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
+    if(user){
+      var name = (user.displayName || user.login).split(' ')[0];
+      text += ', ' + name;
+    }
+
+    var iEl = $('greetingIcon');
+    var tEl = $('greetingText');
+    if(iEl) iEl.textContent = icon;
+    if(tEl) tEl.textContent = text;
+  }
+
+  /* ---------- 4. Цитата дня ---------- */
+  var QUOTES = [
+    'Дисциплина — мать победы',
+    'Служить Отечеству — великая честь',
+    'Тяжело в учении — легко в бою',
+    'Один в поле не воин',
+    'Смелость города берёт',
+    'Воля и труд дивные всходы дают',
+    'Родина — это не только земля, но и память',
+    'Солдат, который не мечтает стать генералом, плох',
+    'Порядок бьёт класс',
+    'Кто к нам с мечом придёт — тот от меча и погибнет'
+  ];
+  function setDailyQuote(){
+    var idx = Math.floor(Date.now() / 86400000) % QUOTES.length;
+    var el = $('heroQuote');
+    if(el) el.textContent = QUOTES[idx];
+  }
+
+  /* ---------- 5. Мини-профиль справа ---------- */
+  function renderUserPanel(){
+    var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
+    if(!user) return;
+
+    var panel = $('heroUserPanel');
+    if(!panel) return;
+
+    var letter = (user.displayName || user.login).charAt(0).toUpperCase();
+    var avatarHtml = user.avatar
+      ? '<img src="' + user.avatar + '" alt="">'
+      : letter;
+
+    panel.innerHTML =
+      '<div class="hero-user-avatar">' + avatarHtml + '</div>' +
+      '<div class="hero-user-info">' +
+        '<div class="hero-user-name">' + (user.displayName || user.login) + '</div>' +
+        '<div class="hero-user-rank">' + (user.rank || '—') + ' · ' + (user.position || '—') + '</div>' +
+      '</div>';
+
+    panel.hidden = false;
+
+    /* Клик — переход в профиль */
+    panel.style.cursor = 'pointer';
+    panel.onclick = function(){ location.href = 'profile.html'; };
+    panel.title = 'Открыть профиль';
+  }
+
+  /* ---------- 6. Онлайн-индикатор ---------- */
+  function initOnlineCount(){
+    var LS = 'rmrp_online';
+    var now = Date.now();
+    var sessions;
+    try{ sessions = JSON.parse(localStorage.getItem(LS) || '{}'); }
+    catch(e){ sessions = {}; }
+
+    /* Удаляем старые (старше 5 минут) */
+    var cutoff = now - 5 * 60 * 1000;
+    Object.keys(sessions).forEach(function(k){
+      if(sessions[k] < cutoff) delete sessions[k];
+    });
+
+    /* Регистрируем себя */
+    var myId = Math.random().toString(36).slice(2, 10);
+    sessions[myId] = now;
+    try{ localStorage.setItem(LS, JSON.stringify(sessions)); }catch(e){}
+
+    var count = Object.keys(sessions).length;
+    var el = $('onlineCount');
+    if(el) el.textContent = count;
+  }
+
+  /* ---------- 7. Загрузка статистики из Firebase ---------- */
+  function loadStats(){
+    if(!window.RMRPAuth) return;
+
+    /* Пользователи */
+    RMRPAuth.getUsers().then(function(users){
+      var logins = Object.keys(users);
+      var usersCount = logins.length;
+      var adminsCount = logins.filter(function(l){
+        var u = users[l];
+        return u.role === 'Администратор' || u.role === 'Разработчик';
+      }).length;
+
+      var statUsers = $('statUsers');
+      if(statUsers){
+        var start = Date.now();
+        var duration = 1500;
+        (function tick(){
+          var t = Math.min(1, (Date.now() - start) / duration);
+          var eased = 1 - Math.pow(1 - t, 3);
+          statUsers.textContent = Math.floor(usersCount * eased);
+          if(t < 1) requestAnimationFrame(tick);
+          else statUsers.textContent = usersCount;
+        })();
+      }
+
+      var aSU = $('adminStatUsers');
+      if(aSU) aSU.textContent = usersCount;
+      var aSA = $('adminStatAdmins');
+      if(aSA) aSA.textContent = adminsCount;
+    });
+
+    /* Заявки */
+    if(RMRPAuth.getRequests){
+      RMRPAuth.getRequests().then(function(reqs){
+        var arr = Object.keys(reqs).map(function(k){ return reqs[k]; });
+        var pending = arr.filter(function(r){ return r.status === 'pending'; }).length;
+        var aSP = $('adminStatPending');
+        if(aSP) aSP.textContent = pending;
+      });
+    }
+
+    /* Медиа */
+    if(RMRPAuth.getMedia){
+      RMRPAuth.getMedia().then(function(media){
+        var count = Object.keys(media).length;
+        var aSM = $('adminStatMedia');
+        if(aSM) aSM.textContent = count;
+      });
+    }
+  }
+
+  /* ---------- 8. Объявление от админа ---------- */
+  function checkBroadcast(){
+    var raw;
+    try{ raw = localStorage.getItem('rmrp_broadcast'); }catch(e){}
+    if(!raw) return;
+
+    var bc;
+    try{ bc = JSON.parse(raw); }catch(e){ return; }
+    if(!bc || !bc.text) return;
+    if(bc.hidden) return;
+    if(bc.expires && Date.now() > bc.expires) return;
+
+    var wrap = $('adminBroadcastWrap');
+    if(!wrap) return;
+
+    wrap.innerHTML =
+      '<div class="admin-broadcast">' +
+        '<span class="bc-icon">📢</span>' +
+        '<span>' + escapeHtml(bc.text) + '</span>' +
+        '<button class="admin-broadcast-close" onclick="this.parentNode.remove()">✕</button>' +
+      '</div>';
+  }
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  /* ---------- 9. АДМИН-ПАНЕЛЬ ---------- */
+  window.AdminPanel = {
+    toggle: function(){
+      var p = $('adminPanel');
+      if(p) p.classList.toggle('open');
+    },
+
+    broadcast: function(){
+      var text = prompt('Введите текст объявления (появится всем на главной):', '');
+      if(!text) return;
+      var days = prompt('Сколько дней показывать? (1-7)', '1');
+      var d = parseInt(days) || 1;
+      var bc = {
+        text: text,
+        createdAt: Date.now(),
+        expires: Date.now() + d * 24 * 60 * 60 * 1000,
+        hidden: false,
+        author: (window.RMRPAuth && RMRPAuth.getCurrent()) ? RMRPAuth.getCurrent().login : '?'
+      };
+      try{ localStorage.setItem('rmrp_broadcast', JSON.stringify(bc)); }catch(e){}
+      alert('✅ Объявление отправлено на ' + d + ' дн.');
+      location.reload();
+    },
+
+    clearBroadcast: function(){
+      if(!confirm('Убрать объявление?')) return;
+      localStorage.removeItem('rmrp_broadcast');
+      var wrap = $('adminBroadcastWrap');
+      if(wrap) wrap.innerHTML = '';
+      alert('✅ Убрано');
+    },
+
+    showLogs: function(){
+      var logs;
+      try{ logs = JSON.parse(localStorage.getItem('rmrp_logs') || '[]'); }
+      catch(e){ logs = []; }
+
+      if(!logs.length){
+        alert('📜 Логов пока нет.');
+        return;
+      }
+
+      var text = logs.slice(-20).map(function(l, i){
+        return (i+1) + '. [' + l.date + '] ' + l.text;
+      }).join('\n');
+
+      alert('📜 Последние 20 действий:\n\n' + text);
+    }
+  };
+
+  /* Показ админ-панели */
+  function initAdminPanel(){
+    var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
+    if(!user) return;
+
+    var isAdmin = RMRPAuth.isAdmin && RMRPAuth.isAdmin(user);
+    if(!isAdmin) return;
+
+    var panel = $('adminPanel');
+    if(panel) panel.hidden = false;
+
+    var badge = $('adminRoleBadge');
+    if(badge){
+      badge.textContent = user.role === 'Разработчик' ? 'DEV' : 'ADMIN';
+      if(user.role === 'Разработчик'){
+        badge.style.background = 'linear-gradient(135deg,#a855f7,#ec4899)';
+      }
+    }
+  }
+
+  /* ---------- СТАРТ ---------- */
+  function init(){
+    animateNumbers();
+    createParticles();
+    setGreeting();
+    setDailyQuote();
+    renderUserPanel();
+    initOnlineCount();
+    loadStats();
+    checkBroadcast();
+    initAdminPanel();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  /* Обновление онлайн каждые 30 сек */
+  setInterval(initOnlineCount, 30000);
+
+})();
+
+/* Блок профиля (как раньше) */
 (function(){
   function initHomeProfile(){
     if(!window.RMRPAuth) return;
@@ -302,12 +1032,11 @@
   }
 })();
 
-/* Замок на Военкомате для тех, кто ниже Мл.Сержанта */
+/* Блокировка Военкомата */
 (function(){
   function lockMilitaryCard(){
     if(!window.RMRPAuth) return;
     var user = RMRPAuth.getCurrent();
-    /* Есть доступ — не трогаем */
     if(user && RMRPAuth.canReadDocs && RMRPAuth.canReadDocs(user)) return;
 
     var card = document.getElementById('cardMilitary');
@@ -325,7 +1054,7 @@
 
     var hint = document.createElement('span');
     hint.textContent = 'Только Мл.Сержант+';
-    hint.style.cssText = 'position:absolute;bottom:10px;right:12px;font-size:10.5px;color:#3ddc84;font-weight:700;letter-spacing:.3px';
+    hint.style.cssText = 'position:absolute;bottom:10px;right:12px;font-size:10.5px;color:#3ddc84;font-weight:700';
     card.appendChild(hint);
   }
 
