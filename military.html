@@ -21,7 +21,7 @@
 /* ====== КАЛЬКУЛЯТОР ====== */
 .vk-calc-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
 @media(max-width:1000px){.vk-calc-grid{grid-template-columns:1fr}}
-.vk-calc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
+.vk-calc-card{background:rgba(19,20,26,.85);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;backdrop-filter:blur(6px)}
 .vk-calc-card h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
 .vk-task{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;transition:var(--transition);overflow:hidden}
 .vk-task:hover{border-color:var(--line-2)}
@@ -77,7 +77,7 @@
 
 /* Шапка военкомата */
 .vk-header-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:28px}
-.vk-header-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;transition:var(--transition)}
+.vk-header-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(19,20,26,.85);border:1px solid var(--line);border-radius:14px;transition:var(--transition);backdrop-filter:blur(6px)}
 .vk-header-card:hover{border-color:#3ddc84;transform:translateY(-2px)}
 .vk-header-card .icon{font-size:24px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(61,220,132,.1);border-radius:12px;flex-shrink:0}
 .vk-header-card .info{flex:1;min-width:0}
@@ -99,7 +99,7 @@
 
 /* Прогресс */
 .vk-progress{display:flex;flex-direction:column;gap:10px;max-width:900px}
-.vk-progress-step{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:var(--radius);background:var(--bg-2);border:1px solid var(--line);transition:var(--transition)}
+.vk-progress-step{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:var(--radius);background:rgba(19,20,26,.85);border:1px solid var(--line);transition:var(--transition);backdrop-filter:blur(6px)}
 .vk-progress-step:hover{border-color:var(--line-2);background:var(--bg-3);transform:translateX(4px)}
 .vk-step-num{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff;font-weight:800;font-size:16px;border-radius:50%}
 .vk-step-body{flex:1}
@@ -112,13 +112,13 @@
 
 /* Точки */
 .vk-points-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:30px}
-.vk-points-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:20px;text-align:center;transition:var(--transition)}
+.vk-points-card{background:rgba(19,20,26,.85);border:1px solid var(--line);border-radius:var(--radius);padding:20px;text-align:center;transition:var(--transition);backdrop-filter:blur(6px)}
 .vk-points-card:hover{transform:translateY(-3px);border-color:#4aa8ff;box-shadow:0 12px 28px rgba(74,168,255,.15)}
 .vk-points-icon{font-size:30px;margin-bottom:10px}
 .vk-points-name{font-size:13px;color:var(--txt-2);margin-bottom:8px;min-height:36px}
 .vk-points-value{font-size:20px;font-weight:800;color:#4aa8ff}
 .vk-notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.vk-note{display:flex;gap:14px;align-items:center;padding:18px 20px;border-radius:var(--radius);background:var(--bg-2);border:1px solid var(--line);transition:var(--transition)}
+.vk-note{display:flex;gap:14px;align-items:center;padding:18px 20px;border-radius:var(--radius);background:rgba(19,20,26,.85);border:1px solid var(--line);transition:var(--transition);backdrop-filter:blur(6px)}
 .vk-note:hover{border-color:var(--line-2)}
 .vk-note-warn{background:rgba(255,176,32,.06);border-color:rgba(255,176,32,.3)}
 .vk-note-icon{font-size:28px;flex-shrink:0}
@@ -126,12 +126,97 @@
 .vk-note-desc{font-size:13px;color:var(--txt-2)}
 
 /* Карта */
-.vk-map-wrap{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);background:var(--bg-2)}
+.vk-map-wrap{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);background:rgba(19,20,26,.85);backdrop-filter:blur(6px)}
 .vk-map-wrap img{width:100%;display:block}
-.vk-map-hint{padding:12px 16px;background:var(--bg-2);border-top:1px solid var(--line);font-size:12.5px;color:var(--txt-3);display:flex;align-items:center;gap:8px}
+.vk-map-hint{padding:12px 16px;background:rgba(19,20,26,.85);border-top:1px solid var(--line);font-size:12.5px;color:var(--txt-3);display:flex;align-items:center;gap:8px}
+
+/* ====== ИТОГОВЫЙ ЭКЗАМЕН ====== */
+.exam-card{
+  display:flex;align-items:center;gap:24px;padding:28px 32px;
+  background:linear-gradient(135deg, rgba(74,168,255,.1), rgba(168,85,247,.06));
+  border:1px solid rgba(74,168,255,.35);
+  border-radius:var(--radius-lg);
+  margin-bottom:30px;
+  position:relative;overflow:hidden;
+  transition:var(--transition);
+  backdrop-filter:blur(6px);
+}
+.exam-card::before{
+  content:"";position:absolute;right:-80px;top:-80px;width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle, rgba(74,168,255,.15), transparent 70%);
+  pointer-events:none;
+}
+.exam-card:hover{border-color:#4aa8ff;transform:translateY(-3px);box-shadow:0 20px 40px rgba(74,168,255,.15)}
+.exam-card-icon{font-size:52px;flex-shrink:0;filter:drop-shadow(0 8px 24px rgba(74,168,255,.4))}
+.exam-card-body{flex:1;min-width:0;position:relative;z-index:1}
+.exam-card-title{font-size:22px;font-weight:900;color:var(--txt-0);margin-bottom:8px;letter-spacing:-.4px}
+.exam-card-desc{font-size:14px;color:var(--txt-2);line-height:1.65;margin-bottom:12px}
+.exam-card-meta{display:flex;gap:16px;flex-wrap:wrap}
+.exam-meta-item{font-size:12.5px;color:#4aa8ff;font-weight:700;padding:4px 10px;background:rgba(74,168,255,.12);border-radius:8px}
+.exam-card-btn{
+  padding:14px 26px;border-radius:12px;
+  background:linear-gradient(135deg,#4aa8ff,#a855f7);
+  color:#fff;text-decoration:none;font-weight:800;font-size:14.5px;
+  white-space:nowrap;flex-shrink:0;
+  box-shadow:0 8px 24px rgba(74,168,255,.3);
+  transition:var(--transition);position:relative;z-index:1;
+}
+.exam-card-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 14px 36px rgba(74,168,255,.5)}
+@media(max-width:700px){
+  .exam-card{flex-direction:column;text-align:center;padding:22px}
+  .exam-card-btn{width:100%;text-align:center;padding:14px}
+}
+
+.exam-section{margin-bottom:30px}
+.exam-section-title{font-size:17px;font-weight:800;color:var(--txt-0);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+.exam-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.exam-grade{
+  padding:16px 18px;border-radius:14px;
+  background:rgba(19,20,26,.85);border:1px solid var(--line);
+  display:flex;align-items:center;gap:14px;
+  transition:var(--transition);backdrop-filter:blur(6px);
+}
+.exam-grade:hover{transform:translateY(-2px)}
+.exam-grade-num{
+  width:48px;height:48px;flex-shrink:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#fff;
+}
+.exam-grade-5 .exam-grade-num{background:linear-gradient(135deg,#3ddc84,#16a34a);box-shadow:0 6px 20px rgba(61,220,132,.4)}
+.exam-grade-5{border-color:rgba(61,220,132,.4)}
+.exam-grade-4 .exam-grade-num{background:linear-gradient(135deg,#4aa8ff,#2563eb);box-shadow:0 6px 20px rgba(74,168,255,.4)}
+.exam-grade-4{border-color:rgba(74,168,255,.4)}
+.exam-grade-3 .exam-grade-num{background:linear-gradient(135deg,#fbbf24,#d97706);box-shadow:0 6px 20px rgba(251,191,36,.4)}
+.exam-grade-3{border-color:rgba(251,191,36,.4)}
+.exam-grade-2 .exam-grade-num{background:linear-gradient(135deg,#ff4655,#991b1b);box-shadow:0 6px 20px rgba(255,70,85,.4)}
+.exam-grade-2{border-color:rgba(255,70,85,.4)}
+.exam-grade-name{font-size:14px;font-weight:700;color:var(--txt-0);margin-bottom:2px}
+.exam-grade-points{font-size:12px;color:var(--txt-3);font-weight:600}
+
+.exam-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.exam-topic{
+  padding:16px 18px;border-radius:14px;
+  background:rgba(19,20,26,.85);border:1px solid var(--line);
+  transition:var(--transition);backdrop-filter:blur(6px);
+}
+.exam-topic:hover{border-color:rgba(74,168,255,.4);transform:translateY(-2px)}
+.exam-topic-icon{font-size:26px;margin-bottom:8px}
+.exam-topic-name{font-size:13.5px;font-weight:700;color:var(--txt-0);margin-bottom:4px}
+.exam-topic-desc{font-size:11.5px;color:var(--txt-3)}
+
+.exam-warning{
+  display:flex;gap:16px;padding:18px 22px;
+  background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(217,119,6,.06));
+  border:1px solid rgba(251,191,36,.35);
+  border-radius:14px;align-items:flex-start;
+}
+.exam-warning-icon{font-size:28px;flex-shrink:0}
+.exam-warning-title{font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:6px}
+.exam-warning-text{font-size:13.5px;color:var(--txt-1);line-height:1.7}
 
 /* Табы */
-.vk-tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;padding:6px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px}
+.vk-tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;padding:6px;background:rgba(19,20,26,.85);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(6px)}
 .vk-tab{padding:9px 16px;border-radius:10px;background:transparent;color:var(--txt-2);font-size:13px;font-weight:600;transition:var(--transition);cursor:pointer;border:0;white-space:nowrap}
 .vk-tab:hover{background:var(--bg-3);color:var(--txt-0)}
 .vk-tab.active{background:linear-gradient(135deg,#3ddc84,#4aa8ff);color:#fff}
@@ -170,7 +255,7 @@
   <div class="container vk-hero-content">
     <span class="vk-hero-tag">🎓 Учебный центр</span>
     <h1 class="vk-hero-title">Военный<br><span class="accent">Комиссариат</span></h1>
-    <p class="vk-hero-subtitle">Лекции, курсы КМБ и УКМБ, система повышения, калькулятор баллов и форма рапорта.</p>
+    <p class="vk-hero-subtitle">Лекции, курсы КМБ и УКМБ, система повышения, калькулятор баллов, итоговый экзамен и форма рапорта.</p>
     <div class="vk-header-grid">
       <div class="vk-header-card">
         <div class="icon">📊</div>
@@ -189,19 +274,19 @@
         </div>
       </div>
       <div class="vk-header-card">
+        <div class="icon">🎓</div>
+        <div class="info">
+          <div class="title">Итоговый экзамен</div>
+          <div class="desc">Аттестация</div>
+          <a href="#exam">Перейти →</a>
+        </div>
+      </div>
+      <div class="vk-header-card">
         <div class="icon">🗺️</div>
         <div class="info">
           <div class="title">Карта поставок</div>
           <div class="desc">Схема маршрутов</div>
           <a href="#map">Перейти →</a>
-        </div>
-      </div>
-      <div class="vk-header-card">
-        <div class="icon">📚</div>
-        <div class="info">
-          <div class="title">Лекции</div>
-          <div class="desc">Слайды и материалы</div>
-          <a href="#lectures">Перейти →</a>
         </div>
       </div>
     </div>
@@ -215,6 +300,7 @@
       <button class="vk-tab active" data-vk-tab="calc">🧮 Калькулятор баллов</button>
       <button class="vk-tab" data-vk-tab="report">📝 Форма рапорта</button>
       <button class="vk-tab" data-vk-tab="lectures">📚 Лекции</button>
+      <button class="vk-tab" data-vk-tab="exam">🎓 Итоговый экзамен</button>
       <button class="vk-tab" data-vk-tab="map">🗺️ Карта поставок</button>
       <button class="vk-tab" data-vk-tab="progress">📈 Повышение</button>
       <button class="vk-tab" data-vk-tab="points">🏛️ Баллы</button>
@@ -324,7 +410,6 @@
     </div>
   </div>
 </section>
-
 <!-- ЛЕКЦИИ -->
 <section class="section section-dark vk-panel" id="lectures" data-vk-panel="lectures">
   <div class="container">
@@ -448,8 +533,123 @@
   </div>
 </section>
 
+<!-- ИТОГОВЫЙ ЭКЗАМЕН -->
+<section class="section vk-panel" id="exam" data-vk-panel="exam">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Аттестация</span>
+      <h2 class="section-title">🎓 Итоговый экзамен ВС РФ</h2>
+      <p class="section-desc">Финальная аттестация по всем изученным дисциплинам. Сдаётся после прохождения КМБ/УКМБ.</p>
+    </div>
+
+    <!-- Главная карточка -->
+    <div class="exam-card">
+      <div class="exam-card-icon">📝</div>
+      <div class="exam-card-body">
+        <div class="exam-card-title">Итоговый экзамен ВС РФ Рублевка</div>
+        <div class="exam-card-desc">
+          21 вопрос · система зачёта по баллам · сдаётся через Google Forms.<br>
+          Проверяются знания: Дисциплинарный устав, Строевой устав, Устав гарнизонной службы, Внутренний устав, ФЗ № 86.
+        </div>
+        <div class="exam-card-meta">
+          <span class="exam-meta-item">⏱ ~15 минут</span>
+          <span class="exam-meta-item">📊 22 балла</span>
+          <span class="exam-meta-item">🎯 Проходной: 11</span>
+        </div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSft-vedo_3zWoBx3EiIiXdioBvDN-c48G23KD26WHXZiRTRSg/viewform?usp=publish-editor" target="_blank" class="exam-card-btn">
+        🚀 Пройти экзамен
+      </a>
+    </div>
+
+    <!-- Система зачёта -->
+    <div class="exam-section">
+      <h3 class="exam-section-title">📊 Система зачёта</h3>
+      <div class="exam-grades">
+        <div class="exam-grade exam-grade-5">
+          <div class="exam-grade-num">5</div>
+          <div class="exam-grade-info">
+            <div class="exam-grade-name">Отлично</div>
+            <div class="exam-grade-points">20–22 балла</div>
+          </div>
+        </div>
+        <div class="exam-grade exam-grade-4">
+          <div class="exam-grade-num">4</div>
+          <div class="exam-grade-info">
+            <div class="exam-grade-name">Хорошо</div>
+            <div class="exam-grade-points">16–19 баллов</div>
+          </div>
+        </div>
+        <div class="exam-grade exam-grade-3">
+          <div class="exam-grade-num">3</div>
+          <div class="exam-grade-info">
+            <div class="exam-grade-name">Удовлетворительно</div>
+            <div class="exam-grade-points">11–15 баллов</div>
+          </div>
+        </div>
+        <div class="exam-grade exam-grade-2">
+          <div class="exam-grade-num">2</div>
+          <div class="exam-grade-info">
+            <div class="exam-grade-name">Неудовлетворительно</div>
+            <div class="exam-grade-points">0–10 баллов</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Темы вопросов -->
+    <div class="exam-section">
+      <h3 class="exam-section-title">📚 Что проверяется</h3>
+      <div class="exam-topics">
+        <div class="exam-topic">
+          <div class="exam-topic-icon">🎖️</div>
+          <div class="exam-topic-name">Дисциплинарный устав</div>
+          <div class="exam-topic-desc">Вопросы 1–11</div>
+        </div>
+        <div class="exam-topic">
+          <div class="exam-topic-icon">🗣️</div>
+          <div class="exam-topic-name">Субординация</div>
+          <div class="exam-topic-desc">Вопросы 12–14</div>
+        </div>
+        <div class="exam-topic">
+          <div class="exam-topic-icon">🥾</div>
+          <div class="exam-topic-name">Строевой устав</div>
+          <div class="exam-topic-desc">Вопросы 15–16</div>
+        </div>
+        <div class="exam-topic">
+          <div class="exam-topic-icon">🛡️</div>
+          <div class="exam-topic-name">Гарнизонная служба</div>
+          <div class="exam-topic-desc">Вопросы 17–19</div>
+        </div>
+        <div class="exam-topic">
+          <div class="exam-topic-icon">📋</div>
+          <div class="exam-topic-name">Внутренняя служба</div>
+          <div class="exam-topic-desc">Вопрос 20</div>
+        </div>
+        <div class="exam-topic">
+          <div class="exam-topic-icon">🔥</div>
+          <div class="exam-topic-name">Повышенная сложность</div>
+          <div class="exam-topic-desc">Вопрос 21 · 2 балла</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Предупреждение -->
+    <div class="exam-warning">
+      <div class="exam-warning-icon">⚠️</div>
+      <div class="exam-warning-body">
+        <div class="exam-warning-title">Важно</div>
+        <div class="exam-warning-text">
+          Неудовлетворительная оценка (2) — пересдача через 24 часа.<br>
+          При повторной неудаче — отстранение от службы до повторного прохождения КМБ.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- КАРТА -->
-<section class="section vk-panel" id="map" data-vk-panel="map">
+<section class="section section-dark vk-panel" id="map" data-vk-panel="map">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Схема</span>
@@ -464,7 +664,7 @@
 </section>
 
 <!-- ПОВЫШЕНИЕ -->
-<section class="section section-dark vk-panel" id="progress" data-vk-panel="progress">
+<section class="section vk-panel" id="progress" data-vk-panel="progress">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Курс молодого бойца</span>
@@ -483,11 +683,29 @@
       <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Правила проведения поставок + практический экзамен</div><div class="vk-step-role">⚔️ ССО · 🎓 Военный комиссариат</div></div></div>
       <div class="vk-progress-step"><div class="vk-step-num">9</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
     </div>
+
+    <div class="section-head" style="margin-top:50px">
+      <span class="section-tag">Ускоренный курс</span>
+      <h2 class="section-title">⚡ Система повышения УКМБ</h2>
+      <p class="section-desc">Ускоренная программа для сотрудников силовых структур.</p>
+    </div>
+    <div class="vk-progress">
+      <div class="vk-rank-up"><span class="vk-rank-from">@ Рядовой</span><span class="vk-rank-arrow">→</span><span class="vk-rank-to">@| Ефрейтор</span></div>
+      <div class="vk-progress-step"><div class="vk-step-num">1</div><div class="vk-step-body"><div class="vk-step-title">Прослушать вступительную лекцию</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">2</div><div class="vk-step-body"><div class="vk-step-title">Пройти экскурсию по территории ВЧ</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">3</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по субординации</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">4</div><div class="vk-step-body"><div class="vk-step-title">Пройти занятие по строевой подготовке</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">5</div><div class="vk-step-body"><div class="vk-step-title">Принять присягу</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-rank-up"><span class="vk-rank-from">@| Ефрейтор</span><span class="vk-rank-arrow">→</span><span class="vk-rank-to">@|| Младший сержант</span></div>
+      <div class="vk-progress-step"><div class="vk-step-num">6</div><div class="vk-step-body"><div class="vk-step-title">Лекция по ППС + практический экзамен</div><div class="vk-step-role">🎓 Военный комиссариат</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">7</div><div class="vk-step-body"><div class="vk-step-title">Строевая подготовка + практический экзамен</div><div class="vk-step-role">🚨 Военная полиция · ★ Майор</div></div></div>
+      <div class="vk-progress-step"><div class="vk-step-num">8</div><div class="vk-step-body"><div class="vk-step-title">Итоговый экзамен по уставам ВС РФ</div><div class="vk-step-role">🚨 Военная полиция · 🎓 Военный комиссариат</div></div></div>
+    </div>
   </div>
 </section>
 
 <!-- БАЛЛЫ -->
-<section class="section vk-panel" id="points" data-vk-panel="points">
+<section class="section section-dark vk-panel" id="points" data-vk-panel="points">
   <div class="container">
     <div class="section-head">
       <span class="section-tag">Баллы</span>
@@ -811,9 +1029,7 @@
   renderTasks();
   renderResult();
 
-  /* ============================================================
-     ФОРМА РАПОРТА
-     ============================================================ */
+  /* РАПОРТ */
   function getVal(id){ var el = document.getElementById(id); return el ? el.value : ''; }
   function setVal(id, v){ var el = document.getElementById(id); if(el) el.value = v; }
   function todayStr(){
