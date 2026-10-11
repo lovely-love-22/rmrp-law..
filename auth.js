@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v16: Рядовой, Ефрейтор, КМБ, УКМБ, Восстановление)
+   RMRP — auth.js (v17: динамические звания/должности)
    ============================================================ */
 (function(){
   'use strict';
@@ -8,6 +8,8 @@
   var LS_CURRENT   = 'rmrp_current_user';
   var LS_GATE      = 'rmrp_gate_pass';
   var LS_USERS_CACHE = 'rmrp_users_cache';
+  var LS_RANKS_CUSTOM = 'rmrp_fsb_ranks_v2';
+  var LS_POS_CUSTOM   = 'rmrp_fsb_pos_v2';
 
   var DEV_LOGIN = 'kiryushaz';
 
@@ -42,63 +44,136 @@
   var REG_MAX_RANK = 'Капитан';
   var REG_MAX_POS  = 'Инструктор ВК';
 
+  /* ============================================================
+     ДИНАМИЧЕСКИЕ СПИСКИ (читают кастомные из localStorage)
+     ============================================================ */
+  function getCustomRanks(){
+    try {
+      var raw = localStorage.getItem(LS_RANKS_CUSTOM);
+      if(!raw) return null;
+      var arr = JSON.parse(raw);
+      if(!Array.isArray(arr) || arr.length === 0) return null;
+      arr.sort(function(a,b){ return a.order - b.order; });
+      return arr.map(function(x){ return x.name; });
+    } catch(e){ return null; }
+  }
+
+  function getCustomPositions(){
+    try {
+      var raw = localStorage.getItem(LS_POS_CUSTOM);
+      if(!raw) return null;
+      var arr = JSON.parse(raw);
+      if(!Array.isArray(arr) || arr.length === 0) return null;
+      arr.sort(function(a,b){ return a.order - b.order; });
+      return arr.map(function(x){ return x.name; });
+    } catch(e){ return null; }
+  }
+
+  function getRanks(){
+    var custom = getCustomRanks();
+    return custom || RANKS.slice();
+  }
+
+  function getPositions(){
+    var custom = getCustomPositions();
+    return custom || POSITIONS.slice();
+  }
+
+  function getRankIdx(){
+    var list = getRanks();
+    var idx = {};
+    list.forEach(function(r, i){ idx[r] = i; });
+    return idx;
+  }
+
+  function getPosIdx(){
+    var list = getPositions();
+    var idx = {};
+    list.forEach(function(p, i){ idx[p] = i; });
+    return idx;
+  }
+
   function isDev(user){ return user && user.role === 'Разработчик'; }
   function isAdmin(user){ return user && (user.role === 'Администратор' || user.role === 'Разработчик'); }
 
   function canGiveAccess(user){
     if(!user) return false;
     if(isAdmin(user)) return true;
-    var posIdx = POS_IDX[user.position];
-    if(posIdx === undefined) return false;
-    return posIdx >= POS_IDX['Инструктор ВК'];
+    var posIdx = getPosIdx();
+    var pos = posIdx[user.position];
+    if(pos === undefined) return false;
+    var minIdx = posIdx['Инструктор ВК'];
+    if(minIdx === undefined) return true;
+    return pos >= minIdx;
   }
 
   function canUseAudit(user){
     if(!user) return false;
     if(isAdmin(user)) return true;
-    var rankIdx = RANK_IDX[user.rank];
-    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
-    var posIdx = POS_IDX[user.position];
-    if(posIdx !== undefined && posIdx >= POS_IDX['Инструктор ВК']) return true;
+    var rankIdx = getRankIdx();
+    var posIdx = getPosIdx();
+
+    var myRank = rankIdx[user.rank];
+    var majorIdx = rankIdx['Майор'];
+    if(majorIdx !== undefined && myRank !== undefined && myRank >= majorIdx) return true;
+
+    var myPos = posIdx[user.position];
+    var instIdx = posIdx['Инструктор ВК'];
+    if(instIdx !== undefined && myPos !== undefined && myPos >= instIdx) return true;
+
     return false;
   }
 
   function canSelfPromote(user){
     if(!user) return false;
     if(isAdmin(user)) return true;
-    var rankIdx = RANK_IDX[user.rank];
-    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Майор']) return true;
+    var rankIdx = getRankIdx();
+    var myRank = rankIdx[user.rank];
+    var majorIdx = rankIdx['Майор'];
+    if(majorIdx !== undefined && myRank !== undefined && myRank >= majorIdx) return true;
     return false;
   }
 
   function canReadDocs(user){
     if(!user) return false;
     if(isAdmin(user)) return true;
-    var rankIdx = RANK_IDX[user.rank];
-    if(rankIdx !== undefined && rankIdx >= RANK_IDX['Младший Сержант']) return true;
+    var rankIdx = getRankIdx();
+    var myRank = rankIdx[user.rank];
+    var msIdx = rankIdx['Младший Сержант'];
+    if(msIdx !== undefined && myRank !== undefined && myRank >= msIdx) return true;
     return false;
   }
 
   function maxRankByRole(user){
     if(!user) return -1;
-    if(isAdmin(user)) return RANKS.length - 1;
-    var myRankIdx = RANK_IDX[user.rank];
+    var ranks = getRanks();
+    var rankIdx = getRankIdx();
+    if(isAdmin(user)) return ranks.length - 1;
+    var myRankIdx = rankIdx[user.rank];
     if(myRankIdx === undefined) return -1;
-    if(myRankIdx >= RANK_IDX['Генерал-Майор']) return RANKS.length - 1;
-    if(myRankIdx >= RANK_IDX['Майор']) return myRankIdx;
-    if(myRankIdx >= RANK_IDX['Младший Сержант'] && myRankIdx <= RANK_IDX['Капитан']){
-      return RANK_IDX['Капитан'];
+    var genIdx = rankIdx['Генерал-Майор'];
+    if(genIdx !== undefined && myRankIdx >= genIdx) return ranks.length - 1;
+    var majIdx = rankIdx['Майор'];
+    if(majIdx !== undefined && myRankIdx >= majIdx) return myRankIdx;
+    var msIdx = rankIdx['Младший Сержант'];
+    var capIdx = rankIdx['Капитан'];
+    if(msIdx !== undefined && capIdx !== undefined && myRankIdx >= msIdx && myRankIdx <= capIdx){
+      return capIdx;
     }
     return -1;
   }
 
   function maxPositionByRole(user){
     if(!user) return -1;
-    if(isAdmin(user)) return POSITIONS.length - 1;
-    var myPosIdx = POS_IDX[user.position];
+    var positions = getPositions();
+    var posIdx = getPosIdx();
+    if(isAdmin(user)) return positions.length - 1;
+    var myPosIdx = posIdx[user.position];
     if(myPosIdx === undefined) return -1;
-    if(myPosIdx >= POS_IDX['Заместитель военного комиссара']) return myPosIdx;
-    if(myPosIdx >= POS_IDX['Инструктор ВК']) return POS_IDX['Инструктор ВК'];
+    var zamIdx = posIdx['Заместитель военного комиссара'];
+    if(zamIdx !== undefined && myPosIdx >= zamIdx) return myPosIdx;
+    var instIdx = posIdx['Инструктор ВК'];
+    if(instIdx !== undefined && myPosIdx >= instIdx) return instIdx;
     return -1;
   }
 
@@ -106,12 +181,14 @@
     if(!current || !target) return false;
     if(isAdmin(current)) return true;
     if(current.login === target.login) return true;
-    var tRankIdx = RANK_IDX[target.rank];
+    var rankIdx = getRankIdx();
+    var posIdx = getPosIdx();
+    var tRankIdx = rankIdx[target.rank];
     var maxRank = maxRankByRole(current);
-    if(tRankIdx > maxRank) return false;
-    var tPosIdx = POS_IDX[target.position];
+    if(tRankIdx !== undefined && tRankIdx > maxRank) return false;
+    var tPosIdx = posIdx[target.position];
     var maxPos = maxPositionByRole(current);
-    if(tPosIdx > maxPos) return false;
+    if(tPosIdx !== undefined && tPosIdx > maxPos) return false;
     return true;
   }
 
@@ -251,6 +328,12 @@
     DEV_LOGIN: DEV_LOGIN,
     REG_MAX_RANK: REG_MAX_RANK,
     REG_MAX_POS: REG_MAX_POS,
+
+    /* динамические списки */
+    getRanks: getRanks,
+    getPositions: getPositions,
+    getRankIdx: getRankIdx,
+    getPosIdx: getPosIdx,
 
     checkGate: function(){
       try{
@@ -406,10 +489,17 @@
         var isFirst = Object.keys(users).length === 0;
         var isDevUser = (login === DEV_LOGIN);
 
-        var regRank = data.rank || RANKS[0];
-        var regPos = data.position || POSITIONS[0];
-        if(RANK_IDX[regRank] > RANK_IDX[REG_MAX_RANK]) regRank = REG_MAX_RANK;
-        if(POS_IDX[regPos] > POS_IDX[REG_MAX_POS]) regPos = REG_MAX_POS;
+        var ranks = getRanks();
+        var positions = getPositions();
+        var rankIdx = getRankIdx();
+        var posIdx = getPosIdx();
+
+        var regRank = data.rank || ranks[0];
+        var regPos = data.position || positions[0];
+        var maxRankIdx = rankIdx[REG_MAX_RANK];
+        var maxPosIdx = posIdx[REG_MAX_POS];
+        if(maxRankIdx !== undefined && rankIdx[regRank] > maxRankIdx) regRank = REG_MAX_RANK;
+        if(maxPosIdx !== undefined && posIdx[regPos] > maxPosIdx) regPos = REG_MAX_POS;
 
         var user = {
           login: login,
@@ -468,18 +558,22 @@
             return;
           }
           if(!isAdmin(cur)){
+            var ranks = getRanks();
+            var positions = getPositions();
+            var rankIdx = getRankIdx();
+            var posIdx = getPosIdx();
             if(k === 'rank'){
-              var newIdx = RANK_IDX[patch[k]];
-              var curIdx = RANK_IDX[cur.rank];
-              if(newIdx > curIdx){
+              var newIdx = rankIdx[patch[k]];
+              var curIdx = rankIdx[cur.rank];
+              if(newIdx !== undefined && curIdx !== undefined && newIdx > curIdx){
                 blocked = 'Нельзя повысить себя выше текущего звания';
                 return;
               }
             }
             if(k === 'position'){
-              var newP = POS_IDX[patch[k]];
-              var curP = POS_IDX[cur.position];
-              if(newP > curP){
+              var newP = posIdx[patch[k]];
+              var curP = posIdx[cur.position];
+              if(newP !== undefined && curP !== undefined && newP > curP){
                 blocked = 'Нельзя повысить себя выше текущей должности';
                 return;
               }
@@ -522,15 +616,17 @@
         }
 
         if(patch.rank && !isAdmin(cur)){
-          var tIdx = RANK_IDX[patch.rank];
+          var rankIdx = getRankIdx();
+          var tIdx = rankIdx[patch.rank];
           var maxIdx = maxRankByRole(cur);
-          if(tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
+          if(tIdx !== undefined && tIdx > maxIdx) throw new Error('Нельзя выдать звание выше своего');
         }
 
         if(patch.position && !isAdmin(cur)){
-          var pIdx = POS_IDX[patch.position];
+          var posIdx = getPosIdx();
+          var pIdx = posIdx[patch.position];
           var maxP = maxPositionByRole(cur);
-          if(pIdx > maxP) throw new Error('Нельзя выдать должность выше своей');
+          if(pIdx !== undefined && pIdx > maxP) throw new Error('Нельзя выдать должность выше своей');
         }
 
         var cleanPatch = {};
