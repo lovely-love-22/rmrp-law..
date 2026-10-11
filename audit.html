@@ -395,7 +395,6 @@ body {
 }
 .roster-table .btn-del-small:hover { background: rgba(231, 76, 60, 0.25); }
 
-.roster-requests { margin-bottom: 18px; }
 .roster-request-item {
   padding: 14px 16px; background: #0a0c0f;
   border: 1px solid var(--fsb-border); border-left: 3px solid #fbbf24;
@@ -541,7 +540,7 @@ body {
 <section class="audit-hero">
   <div class="container">
     <h1>🛡️ Управление <span class="accent">«А»</span></h1>
-    <p>Спецподразделение ФСБ. Калькулятор баллов, рапорты, задачи, звания и состав.</p>
+    <p>Спецподразделение ФСБ. Калькулятор баллов, рапорты, состав подразделения.</p>
   </div>
 </section>
 
@@ -559,8 +558,8 @@ body {
       <div class="vk-tabs">
         <button class="vk-tab active" data-vk-tab="calc">🧮 Калькулятор</button>
         <button class="vk-tab" data-vk-tab="report">📝 Рапорт</button>
-        <button class="vk-tab" data-vk-tab="tasks">⚙️ Задачи</button>
-        <button class="vk-tab" data-vk-tab="ranks">🎖️ Звания и должности</button>
+        <button class="vk-tab vk-tab-admin" data-vk-tab="tasks" data-admin-only="1">⚙️ Задачи</button>
+        <button class="vk-tab vk-tab-admin" data-vk-tab="ranks" data-admin-only="1">🎖️ Звания и должности</button>
         <button class="vk-tab" data-vk-tab="roster">👥 Состав</button>
       </div>
 
@@ -620,7 +619,7 @@ body {
         </div>
       </div>
 
-      <!-- ЗАДАЧИ -->
+      <!-- ЗАДАЧИ (только админам/разработчикам) -->
       <div class="vk-panel" data-vk-panel="tasks">
         <div class="vk-calc-card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
@@ -634,7 +633,7 @@ body {
         </div>
       </div>
 
-      <!-- ЗВАНИЯ И ДОЛЖНОСТИ -->
+      <!-- ЗВАНИЯ И ДОЛЖНОСТИ (только админам/разработчикам) -->
       <div class="vk-panel" data-vk-panel="ranks">
         <div class="vk-calc-card" style="margin-bottom:20px">
           <h3>🎖️ Кадровый состав Управления «А»</h3>
@@ -683,7 +682,6 @@ body {
       <!-- СОСТАВ -->
       <div class="vk-panel" data-vk-panel="roster">
 
-        <!-- ФОРМА ЗАЯВКИ -->
         <div class="vk-calc-card" style="margin-bottom:20px">
           <h3>📤 Заявление на добавление в состав</h3>
           <p style="font-size:13px;color:var(--fsb-text-dim);margin-bottom:18px;font-family:var(--fsb-mono)">
@@ -732,7 +730,6 @@ body {
           </div>
         </div>
 
-        <!-- ЗАЯВКИ (для Майора+) -->
         <div class="vk-calc-card" id="rosterRequestsCard" style="margin-bottom:20px" hidden>
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--fsb-border)">
             <h3 style="margin:0;border:0;padding:0">📥 Заявки на вступление</h3>
@@ -746,7 +743,6 @@ body {
           <div id="rosterRequestsList"></div>
         </div>
 
-        <!-- ТАБЛИЦА СОСТАВА -->
         <div class="vk-calc-card">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--fsb-border)">
             <h3 style="margin:0;border:0;padding:0">👥 Состав Управления «А»</h3>
@@ -898,15 +894,49 @@ body {
     document.body.removeChild(ta);
   }
 
+  /* ============================================================
+     ДОСТУП К АДМИН-ВКЛАДКАМ
+     ============================================================ */
+  function isAdminUser(){
+    var cur = (window.RMRPAuth && RMRPAuth.getCurrent) ? RMRPAuth.getCurrent() : null;
+    return !!(cur && RMRPAuth.isAdmin && RMRPAuth.isAdmin(cur));
+  }
+
+  function requireAdmin(){
+    if(!isAdminUser()){
+      showFancy('Доступ запрещён', 'Этот раздел доступен только Администраторам и Разработчикам');
+      return false;
+    }
+    return true;
+  }
+
+  function applyTabAccess(){
+    var isAdmin = isAdminUser();
+    document.querySelectorAll('[data-admin-only="1"]').forEach(function(el){
+      el.style.display = isAdmin ? '' : 'none';
+    });
+    if(!isAdmin){
+      var active = document.querySelector('.vk-tab.active');
+      if(active && active.getAttribute('data-admin-only') === '1'){
+        var calcTab = document.querySelector('.vk-tab[data-vk-tab="calc"]');
+        if(calcTab) calcTab.click();
+      }
+    }
+  }
+
   /* ====== ТАБЫ ====== */
   document.querySelectorAll('.vk-tab').forEach(function(tab){
     tab.addEventListener('click', function(){
+      if(tab.getAttribute('data-admin-only') === '1' && !isAdminUser()){
+        showFancy('Доступ запрещён', 'Только Администратор или Разработчик');
+        return;
+      }
       var name = tab.getAttribute('data-vk-tab');
       document.querySelectorAll('.vk-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
       document.querySelectorAll('.vk-panel').forEach(function(p){
         p.classList.toggle('active', p.getAttribute('data-vk-panel') === name);
       });
-      if(name === 'roster') Roster.init();
+      if(name === 'roster' && window.Roster) Roster.init();
     });
   });
 
@@ -1171,9 +1201,10 @@ body {
   setVal('rpDate', todayStr());
   VKReport.generate();
 
-  /* ====== ЗАДАЧИ (УПРАВЛЕНИЕ) ====== */
+  /* ====== ЗАДАЧИ (УПРАВЛЕНИЕ, ТОЛЬКО АДМИН) ====== */
   window.TaskManager = {
     openModal: function(id){
+      if(!requireAdmin()) return;
       var modal = $('taskModal');
       if(id){
         var t = tasks.find(function(x){ return x.id === id; });
@@ -1196,6 +1227,7 @@ body {
     },
     closeModal: function(){ $('taskModal').hidden = true; },
     saveTask: function(){
+      if(!requireAdmin()) return;
       var id = getVal('taskEditId');
       var name = getVal('taskName').trim();
       var icon = getVal('taskIcon').trim() || '📌';
@@ -1215,12 +1247,14 @@ body {
       showFancy('✅ Сохранено', 'Задача сохранена');
     },
     deleteTask: function(id){
+      if(!requireAdmin()) return;
       if(!confirm('Удалить задачу?')) return;
       tasks = tasks.filter(function(t){ return t.id !== id; });
       saveTasks(); TaskManager.renderList(); VKCalc.reset();
       showFancy('✅ Удалено', 'Задача удалена');
     },
     resetToDefault: function(){
+      if(!requireAdmin()) return;
       if(!confirm('Сбросить задачи к стандартным?')) return;
       tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
       saveTasks(); TaskManager.renderList(); VKCalc.reset();
@@ -1246,7 +1280,7 @@ body {
     }
   };
 
-  /* ====== ЗВАНИЯ И ДОЛЖНОСТИ ====== */
+  /* ====== ЗВАНИЯ И ДОЛЖНОСТИ (ТОЛЬКО АДМИН) ====== */
   var DEFAULT_RANKS = (window.RMRPAuth && RMRPAuth.RANKS)
     ? RMRPAuth.RANKS.slice()
     : ['Рядовой','Ефрейтор','Младший Сержант','Сержант','Старший Сержант','Старшина','Прапорщик','Ст. Прапорщик','Младший лейтенант','Лейтенант','Ст. Лейтенант','Капитан','Майор','Подполковник','Полковник','Генерал-Майор'];
@@ -1323,6 +1357,7 @@ body {
     },
 
     openModal: function(type, id){
+      if(!requireAdmin()) return;
       var modal = $('rankModal');
       setVal('rankEditType', type);
       if(id){
@@ -1343,6 +1378,7 @@ body {
     closeModal: function(){ $('rankModal').hidden = true; },
 
     saveItem: function(){
+      if(!requireAdmin()) return;
       var type = getVal('rankEditType');
       var id = getVal('rankEditId');
       var name = getVal('rankName').trim();
@@ -1377,11 +1413,12 @@ body {
       } catch(e){}
 
       RankManager.closeModal();
-      Roster.renderForm();
+      if(window.Roster) Roster.renderForm();
       showFancy('✅ Сохранено', 'Профиль увидит изменения при следующей загрузке');
     },
 
     deleteItem: function(type, id){
+      if(!requireAdmin()) return;
       if(!confirm('Удалить запись?')) return;
       if(type === 'rank'){
         ranks = ranks.filter(function(x){ return x.id !== id; });
@@ -1396,11 +1433,12 @@ body {
           newValue: JSON.stringify(type === 'rank' ? ranks : positions)
         }));
       } catch(e){}
-      Roster.renderForm();
+      if(window.Roster) Roster.renderForm();
       showFancy('✅ Удалено', 'Запись удалена');
     },
 
     resetToDefault: function(type){
+      if(!requireAdmin()) return;
       if(!confirm('Сбросить к стандартным?')) return;
       if(type === 'rank'){
         ranks = DEFAULT_RANKS.map(function(r,i){ return { id:'rank_'+i, name:r, order:i }; });
@@ -1415,7 +1453,7 @@ body {
           newValue: JSON.stringify(type === 'rank' ? ranks : positions)
         }));
       } catch(e){}
-      Roster.renderForm();
+      if(window.Roster) Roster.renderForm();
       showFancy('✅ Сброшено', 'Список восстановлен');
     },
 
@@ -1553,7 +1591,6 @@ body {
     },
 
     updateAccess: function(){
-      var u = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
       var canApprove = Roster.canApprove();
       var card = $('rosterRequestsCard');
       if(card) card.hidden = !canApprove;
@@ -1870,6 +1907,7 @@ body {
   renderTasks();
   renderResult();
   Audit.renderHistory();
+  Roster.init();
 
   var cpInput = $('currentPoints');
   if(cpInput){
@@ -1877,7 +1915,7 @@ body {
     cpInput.addEventListener('input', renderResult);
   }
 
-  /* ====== МЯГКАЯ ПРОВЕРКА АВТОРИЗАЦИИ ====== */
+  /* ====== ПРОВЕРКА АВТОРИЗАЦИИ ====== */
   try {
     if(window.RMRPAuth && RMRPAuth.getCurrent){
       var u = RMRPAuth.getCurrent();
@@ -1892,6 +1930,9 @@ body {
   } catch(e) {
     console.warn('Auth check failed, showing content anyway:', e);
   }
+
+  /* ====== ПРИМЕНЯЕМ ДОСТУП К ВКЛАДКАМ ====== */
+  applyTabAccess();
 
 })();
 </script>
