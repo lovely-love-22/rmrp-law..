@@ -233,225 +233,94 @@ body {
 .task-item-actions .del-btn:hover { background: rgba(231, 76, 60, 0.3); }
 
 /* ============================================================
-   КРАСИВОЕ ОФОРМЛЕНИЕ ЗВАНИЙ И ДОЛЖНОСТЕЙ (ФСБ СТИЛЬ)
+   ЗВАНИЯ / ДОЛЖНОСТИ
    ============================================================ */
 .rank-toolbar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; margin-bottom: 8px;
 }
-.rank-search {
-  position: relative;
-  flex: 1;
-  min-width: 220px;
-  max-width: 460px;
-}
+.rank-search { position: relative; flex: 1; min-width: 220px; max-width: 460px; }
 .rank-search-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 15px;
-  opacity: 0.6;
-  pointer-events: none;
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 15px; opacity: 0.6; pointer-events: none;
 }
 .rank-search input {
-  width: 100%;
-  padding: 11px 16px 11px 42px;
-  border-radius: 8px;
-  background: #0a0c0f;
-  border: 1px solid var(--fsb-border);
-  color: #fff;
-  font-size: 13.5px;
-  outline: none;
-  font-family: var(--fsb-mono);
-  transition: all 0.25s;
+  width: 100%; padding: 11px 16px 11px 42px; border-radius: 8px;
+  background: #0a0c0f; border: 1px solid var(--fsb-border); color: #fff;
+  font-size: 13.5px; outline: none; font-family: var(--fsb-mono); transition: all 0.25s;
 }
-.rank-search input:focus {
-  border-color: var(--fsb-accent);
-  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
-}
-.rank-filters {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
+.rank-search input:focus { border-color: var(--fsb-accent); box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15); }
+.rank-filters { display: flex; gap: 6px; flex-wrap: wrap; }
 .rank-filter-btn {
-  padding: 9px 16px;
-  border-radius: 8px;
-  background: #0a0c0f;
-  border: 1px solid var(--fsb-border);
-  color: var(--fsb-text-dim);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: var(--fsb-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 9px 16px; border-radius: 8px; background: #0a0c0f;
+  border: 1px solid var(--fsb-border); color: var(--fsb-text-dim);
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  font-family: var(--fsb-mono); text-transform: uppercase; letter-spacing: 0.5px;
 }
 .rank-filter-btn:hover { background: #1a1e24; color: var(--fsb-text); }
-.rank-filter-btn.active {
-  background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue));
-  color: #000;
-  border-color: transparent;
-}
+.rank-filter-btn.active { background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue)); color: #000; border-color: transparent; }
 
 .rank-section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-  padding-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 12px;
   border-bottom: 1px solid var(--fsb-border);
 }
-.rank-section-head h3 {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 15px;
-}
+.rank-section-head h3 { margin: 0; padding: 0; border: 0; font-size: 15px; }
 .rank-section-head h3::before { display: none; }
 
 .rank-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 620px;
-  overflow-y: auto;
-  padding-right: 4px;
+  display: flex; flex-direction: column; gap: 10px;
+  max-height: 620px; overflow-y: auto; padding-right: 4px;
 }
 .rank-list::-webkit-scrollbar { width: 6px; }
-.rank-list::-webkit-scrollbar-thumb {
-  background: var(--fsb-border);
-  border-radius: 3px;
-}
+.rank-list::-webkit-scrollbar-thumb { background: var(--fsb-border); border-radius: 3px; }
 
 .rank-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px 14px 18px;
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px 14px 18px;
   background: linear-gradient(135deg, rgba(15, 18, 22, 0.95), rgba(10, 12, 15, 0.95));
-  border: 1px solid var(--fsb-border);
-  border-radius: 10px;
-  transition: all 0.25s;
-  position: relative;
-  overflow: hidden;
+  border: 1px solid var(--fsb-border); border-radius: 10px;
+  transition: all 0.25s; position: relative; overflow: hidden;
 }
 .rank-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   background: var(--rank-color, var(--fsb-accent));
   box-shadow: 0 0 12px var(--rank-color, var(--fsb-accent));
 }
 .rank-item:hover {
   border-color: var(--rank-color, var(--fsb-accent));
-  transform: translateX(4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateX(4px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
-
 .rank-item-badge {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  position: relative;
+  width: 52px; height: 52px; flex-shrink: 0; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);
 }
 .rank-item-badge svg { display: block; }
-.rank-item-badge .rank-emoji {
-  font-size: 24px;
-  filter: drop-shadow(0 0 8px var(--rank-color, var(--fsb-accent)));
-}
-
+.rank-item-badge .rank-emoji { font-size: 24px; filter: drop-shadow(0 0 8px var(--rank-color, var(--fsb-accent))); }
 .rank-item-body { flex: 1; min-width: 0; }
 .rank-item-name {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #fff;
-  font-family: var(--fsb-mono);
-  letter-spacing: 0.3px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-  word-break: break-word;
-  flex-wrap: wrap;
+  font-size: 14.5px; font-weight: 700; color: #fff; font-family: var(--fsb-mono);
+  letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px; word-break: break-word; flex-wrap: wrap;
 }
 .rank-item-name .rank-level-tag {
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--rank-color, var(--fsb-accent));
-  font-size: 10px;
-  font-weight: 800;
+  padding: 2px 8px; border-radius: 4px; background: rgba(0, 0, 0, 0.5);
+  color: var(--rank-color, var(--fsb-accent)); font-size: 10px; font-weight: 800;
   border: 1px solid var(--rank-color, var(--fsb-accent));
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-transform: uppercase; letter-spacing: 0.5px;
 }
-.rank-item-meta {
-  font-size: 11.5px;
-  color: var(--fsb-text-dim);
-  font-family: var(--fsb-mono);
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.rank-item-meta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.rank-item-actions {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
+.rank-item-meta { font-size: 11.5px; color: var(--fsb-text-dim); font-family: var(--fsb-mono); display: flex; gap: 12px; flex-wrap: wrap; }
+.rank-item-meta span { display: inline-flex; align-items: center; gap: 4px; }
+.rank-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
 .rank-item-actions button {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
+  width: 34px; height: 34px; border-radius: 8px; font-size: 13px;
+  cursor: pointer; transition: all 0.2s; display: flex; align-items: center;
+  justify-content: center; border: 1px solid transparent;
 }
-.rank-item-actions .rank-edit {
-  background: rgba(52, 152, 219, 0.15);
-  color: var(--fsb-blue);
-  border-color: rgba(52, 152, 219, 0.3);
-}
-.rank-item-actions .rank-edit:hover {
-  background: rgba(52, 152, 219, 0.3);
-  transform: scale(1.08);
-}
-.rank-item-actions .rank-del {
-  background: rgba(231, 76, 60, 0.15);
-  color: var(--fsb-red);
-  border-color: rgba(231, 76, 60, 0.3);
-}
-.rank-item-actions .rank-del:hover {
-  background: rgba(231, 76, 60, 0.3);
-  transform: scale(1.08);
-}
+.rank-item-actions .rank-edit { background: rgba(52, 152, 219, 0.15); color: var(--fsb-blue); border-color: rgba(52, 152, 219, 0.3); }
+.rank-item-actions .rank-edit:hover { background: rgba(52, 152, 219, 0.3); transform: scale(1.08); }
+.rank-item-actions .rank-del { background: rgba(231, 76, 60, 0.15); color: var(--fsb-red); border-color: rgba(231, 76, 60, 0.3); }
+.rank-item-actions .rank-del:hover { background: rgba(231, 76, 60, 0.3); transform: scale(1.08); }
 
 .rank-level-0  { --rank-color: #6b7280; }
 .rank-level-1  { --rank-color: #10b981; }
@@ -460,20 +329,126 @@ body {
 .rank-level-4  { --rank-color: #fbbf24; }
 
 .rank-empty {
-  padding: 40px 20px;
-  text-align: center;
-  color: #586069;
-  font-size: 13px;
-  font-style: italic;
-  font-family: var(--fsb-mono);
-  border: 1px dashed var(--fsb-border);
-  border-radius: 10px;
+  padding: 40px 20px; text-align: center; color: #586069; font-size: 13px;
+  font-style: italic; font-family: var(--fsb-mono);
+  border: 1px dashed var(--fsb-border); border-radius: 10px;
 }
 
-@media (max-width: 900px) {
-  .rank-item-badge { width: 44px; height: 44px; }
-  .rank-item-badge .rank-emoji { font-size: 20px; }
-  .rank-item-name { font-size: 13.5px; }
+/* ============================================================
+   СОСТАВ
+   ============================================================ */
+.roster-form {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;
+}
+.roster-form .full { grid-column: 1/-1; }
+.roster-form label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--fsb-text-dim); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.roster-form input, .roster-form select, .roster-form textarea {
+  width: 100%; padding: 10px 13px; border-radius: 8px; background: #0a0c0f;
+  border: 1px solid var(--fsb-border); color: #fff; font-size: 13.5px;
+  outline: none; transition: all 0.25s; font-family: inherit; box-sizing: border-box;
+}
+.roster-form input:focus, .roster-form select:focus, .roster-form textarea:focus {
+  border-color: var(--fsb-accent); box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+}
+.roster-form textarea { min-height: 70px; resize: vertical; }
+.roster-form-actions { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+
+.roster-table-wrap {
+  overflow-x: auto; border-radius: 12px; border: 1px solid var(--fsb-border);
+  background: #0a0c0f; margin-top: 18px;
+}
+.roster-table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+.roster-table th, .roster-table td {
+  padding: 12px 14px; text-align: left; font-size: 12.5px;
+  border-bottom: 1px solid var(--fsb-border);
+  font-family: var(--fsb-mono); vertical-align: top;
+}
+.roster-table th {
+  background: rgba(46, 204, 113, 0.06); color: var(--fsb-accent);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;
+  position: sticky; top: 0; z-index: 2;
+}
+.roster-table tr:last-child td { border-bottom: 0; }
+.roster-table tr:hover td { background: rgba(46, 204, 113, 0.04); }
+.roster-table a { color: var(--fsb-blue); text-decoration: none; word-break: break-all; }
+.roster-table a:hover { text-decoration: underline; }
+.roster-table .static-id {
+  color: var(--fsb-accent); font-weight: 700;
+  background: rgba(46, 204, 113, 0.08); padding: 2px 8px;
+  border-radius: 5px; border: 1px solid rgba(46, 204, 113, 0.25);
+  display: inline-block; font-size: 11.5px;
+}
+.roster-table .callsign {
+  color: #fbbf24; font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.roster-table .btn-del-small {
+  padding: 5px 10px; border-radius: 6px;
+  background: rgba(231, 76, 60, 0.12); color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3); font-size: 11px;
+  font-weight: 700; cursor: pointer; font-family: var(--fsb-mono);
+  transition: all 0.2s;
+}
+.roster-table .btn-del-small:hover { background: rgba(231, 76, 60, 0.25); }
+
+.roster-requests { margin-bottom: 18px; }
+.roster-request-item {
+  padding: 14px 16px; background: #0a0c0f;
+  border: 1px solid var(--fsb-border); border-left: 3px solid #fbbf24;
+  border-radius: 8px; margin-bottom: 10px; font-family: var(--fsb-mono);
+  font-size: 12.5px;
+}
+.roster-request-head {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.roster-request-name { color: #fff; font-weight: 700; font-size: 14px; }
+.roster-request-date { color: #586069; font-size: 11px; }
+.roster-request-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px; margin-bottom: 10px;
+}
+.roster-request-field {
+  padding: 8px 10px; background: #0f1216; border: 1px solid var(--fsb-border);
+  border-radius: 6px;
+}
+.roster-request-field-label {
+  color: var(--fsb-text-dim); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 3px;
+}
+.roster-request-field-value { color: #fff; font-size: 12.5px; word-break: break-word; }
+.roster-request-reason {
+  padding: 10px 12px; background: rgba(46, 204, 113, 0.04);
+  border: 1px solid var(--fsb-border); border-radius: 6px;
+  color: var(--fsb-text); line-height: 1.5; margin-bottom: 10px;
+}
+.roster-request-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.roster-request-actions button {
+  padding: 8px 14px; border-radius: 6px; font-size: 12px;
+  font-weight: 700; cursor: pointer; font-family: var(--fsb-mono);
+  text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; border: 0;
+}
+.roster-request-actions .btn-approve {
+  background: linear-gradient(135deg, #2ecc71, #27ae60); color: #000;
+}
+.roster-request-actions .btn-approve:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46, 204, 113, 0.4); }
+.roster-request-actions .btn-reject {
+  background: rgba(231, 76, 60, 0.15); color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.roster-request-actions .btn-reject:hover { background: rgba(231, 76, 60, 0.3); }
+.roster-request-actions .btn-delete {
+  background: #1a1e24; color: var(--fsb-text-dim);
+  border: 1px solid var(--fsb-border);
+}
+.roster-request-actions .btn-delete:hover { background: #252a32; color: #fff; }
+
+@media(max-width: 700px) {
+  .roster-form { grid-template-columns: 1fr; }
 }
 
 .modal-overlay { position: fixed; inset: 0; z-index: 999;
@@ -566,7 +541,7 @@ body {
 <section class="audit-hero">
   <div class="container">
     <h1>🛡️ Управление <span class="accent">«А»</span></h1>
-    <p>Спецподразделение ФСБ. Калькулятор баллов, рапорты, задачи, звания и должности.</p>
+    <p>Спецподразделение ФСБ. Калькулятор баллов, рапорты, задачи, звания и состав.</p>
   </div>
 </section>
 
@@ -586,6 +561,7 @@ body {
         <button class="vk-tab" data-vk-tab="report">📝 Рапорт</button>
         <button class="vk-tab" data-vk-tab="tasks">⚙️ Задачи</button>
         <button class="vk-tab" data-vk-tab="ranks">🎖️ Звания и должности</button>
+        <button class="vk-tab" data-vk-tab="roster">👥 Состав</button>
       </div>
 
       <!-- КАЛЬКУЛЯТОР -->
@@ -702,6 +678,106 @@ body {
             <div class="rank-list" id="posList"></div>
           </div>
         </div>
+      </div>
+
+      <!-- СОСТАВ -->
+      <div class="vk-panel" data-vk-panel="roster">
+
+        <!-- ФОРМА ЗАЯВКИ -->
+        <div class="vk-calc-card" style="margin-bottom:20px">
+          <h3>📤 Заявление на добавление в состав</h3>
+          <p style="font-size:13px;color:var(--fsb-text-dim);margin-bottom:18px;font-family:var(--fsb-mono)">
+            Заполни данные. Заявку одобряет Майор и выше — после одобрения ты автоматически попадёшь в таблицу состава.
+          </p>
+          <div class="roster-form">
+            <div>
+              <label>Ник_Нейм *</label>
+              <input type="text" id="rsName" placeholder="Kirill_Karavaev">
+            </div>
+            <div>
+              <label>Static ID *</label>
+              <input type="text" id="rsStatic" placeholder="12345" maxlength="10">
+            </div>
+            <div>
+              <label>Звание *</label>
+              <select id="rsRank"></select>
+            </div>
+            <div>
+              <label>Должность *</label>
+              <select id="rsPos"></select>
+            </div>
+            <div>
+              <label>Номер телефона (в игре)</label>
+              <input type="text" id="rsPhone" placeholder="777-777">
+            </div>
+            <div>
+              <label>Позывной</label>
+              <input type="text" id="rsCallsign" placeholder="Альфа">
+            </div>
+            <div>
+              <label>Discord</label>
+              <input type="text" id="rsDiscord" placeholder="@username">
+            </div>
+            <div>
+              <label>Ссылка на форумный аккаунт</label>
+              <input type="text" id="rsForum" placeholder="https://forum.rmrp.ru/members/...">
+            </div>
+            <div class="full">
+              <label>Причина / обоснование *</label>
+              <textarea id="rsReason" placeholder="Опиши, почему тебя нужно добавить в состав"></textarea>
+            </div>
+          </div>
+          <div class="roster-form-actions">
+            <button class="btn btn-primary" id="rsSubmitBtn" onclick="Roster.submitRequest()">📤 Подать заявление</button>
+          </div>
+        </div>
+
+        <!-- ЗАЯВКИ (для Майора+) -->
+        <div class="vk-calc-card" id="rosterRequestsCard" style="margin-bottom:20px" hidden>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--fsb-border)">
+            <h3 style="margin:0;border:0;padding:0">📥 Заявки на вступление</h3>
+            <div class="rank-filters">
+              <button class="rank-filter-btn active" data-rs-filter="pending" onclick="Roster.setFilter('pending')">Ожидают</button>
+              <button class="rank-filter-btn" data-rs-filter="approved" onclick="Roster.setFilter('approved')">Одобрено</button>
+              <button class="rank-filter-btn" data-rs-filter="rejected" onclick="Roster.setFilter('rejected')">Отклонено</button>
+              <button class="rank-filter-btn" data-rs-filter="all" onclick="Roster.setFilter('all')">Все</button>
+            </div>
+          </div>
+          <div id="rosterRequestsList"></div>
+        </div>
+
+        <!-- ТАБЛИЦА СОСТАВА -->
+        <div class="vk-calc-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--fsb-border)">
+            <h3 style="margin:0;border:0;padding:0">👥 Состав Управления «А»</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input type="text" id="rosterSearch" placeholder="🔍 Поиск…" oninput="Roster.search(this.value)"
+                style="padding:8px 14px;border-radius:8px;background:#0a0c0f;border:1px solid var(--fsb-border);color:#fff;font-size:13px;outline:none;font-family:var(--fsb-mono);min-width:200px">
+            </div>
+          </div>
+          <div class="roster-table-wrap">
+            <table class="roster-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Ник_Нейм</th>
+                  <th>Static ID</th>
+                  <th>Звание</th>
+                  <th>Должность</th>
+                  <th>Телефон</th>
+                  <th>Позывной</th>
+                  <th>Discord</th>
+                  <th>Форум</th>
+                  <th>Дата</th>
+                  <th id="rosterActionsCol" hidden></th>
+                </tr>
+              </thead>
+              <tbody id="rosterTbody"></tbody>
+            </table>
+          </div>
+          <div class="audit-history-empty" id="rosterEmpty" style="margin-top:20px;display:none">Пока никого нет в составе</div>
+        </div>
+
       </div>
 
       <!-- ИСТОРИЯ -->
@@ -830,6 +906,7 @@ body {
       document.querySelectorAll('.vk-panel').forEach(function(p){
         p.classList.toggle('active', p.getAttribute('data-vk-panel') === name);
       });
+      if(name === 'roster') Roster.init();
     });
   });
 
@@ -1195,12 +1272,8 @@ body {
       savePositions();
     }
   }
-  function saveRanks(){
-    try { localStorage.setItem(LS_RANKS, JSON.stringify(ranks)); } catch(e){}
-  }
-  function savePositions(){
-    try { localStorage.setItem(LS_POS, JSON.stringify(positions)); } catch(e){}
-  }
+  function saveRanks(){ try { localStorage.setItem(LS_RANKS, JSON.stringify(ranks)); } catch(e){} }
+  function savePositions(){ try { localStorage.setItem(LS_POS, JSON.stringify(positions)); } catch(e){} }
 
   window.RankManager = {
     currentFilter: 'all',
@@ -1304,6 +1377,7 @@ body {
       } catch(e){}
 
       RankManager.closeModal();
+      Roster.renderForm();
       showFancy('✅ Сохранено', 'Профиль увидит изменения при следующей загрузке');
     },
 
@@ -1322,6 +1396,7 @@ body {
           newValue: JSON.stringify(type === 'rank' ? ranks : positions)
         }));
       } catch(e){}
+      Roster.renderForm();
       showFancy('✅ Удалено', 'Запись удалена');
     },
 
@@ -1340,6 +1415,7 @@ body {
           newValue: JSON.stringify(type === 'rank' ? ranks : positions)
         }));
       } catch(e){}
+      Roster.renderForm();
       showFancy('✅ Сброшено', 'Список восстановлен');
     },
 
@@ -1425,13 +1501,308 @@ body {
 
     setFilter: function(filter){
       RankManager.currentFilter = filter;
-      document.querySelectorAll('.rank-filter-btn').forEach(function(b){
+      document.querySelectorAll('.rank-filter-btn[data-rank-filter]').forEach(function(b){
         b.classList.toggle('active', b.getAttribute('data-rank-filter') === filter);
       });
       var rankCard = $('rankCardWrap');
       var posCard = $('posCardWrap');
       if(rankCard) rankCard.style.display = (filter === 'all' || filter === 'rank') ? '' : 'none';
       if(posCard) posCard.style.display = (filter === 'all' || filter === 'pos') ? '' : 'none';
+    }
+  };
+
+  /* ============================================================
+     СОСТАВ УПРАВЛЕНИЯ «А»
+     ============================================================ */
+  var LS_ROSTER = 'rmrp_fsb_roster_v2';
+  var LS_ROSTER_REQ = 'rmrp_fsb_roster_requests_v2';
+
+  function loadRoster(){
+    try { var raw = localStorage.getItem(LS_ROSTER); return raw ? JSON.parse(raw) : []; }
+    catch(e){ return []; }
+  }
+  function saveRoster(list){
+    try { localStorage.setItem(LS_ROSTER, JSON.stringify(list)); } catch(e){}
+  }
+  function loadRosterRequests(){
+    try { var raw = localStorage.getItem(LS_ROSTER_REQ); return raw ? JSON.parse(raw) : []; }
+    catch(e){ return []; }
+  }
+  function saveRosterRequests(list){
+    try { localStorage.setItem(LS_ROSTER_REQ, JSON.stringify(list)); } catch(e){}
+  }
+
+  window.Roster = {
+    currentFilter: 'pending',
+    searchQuery: '',
+
+    init: function(){
+      Roster.renderForm();
+      Roster.renderTable();
+      Roster.updateAccess();
+      Roster.renderRequests();
+    },
+
+    canApprove: function(){
+      var u = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
+      if(!u) return false;
+      if(RMRPAuth.isAdmin && RMRPAuth.isAdmin(u)) return true;
+      if(RMRPAuth.canSelfPromote && RMRPAuth.canSelfPromote(u)) return true;
+      if(RMRPAuth.canGiveAccess && RMRPAuth.canGiveAccess(u)) return true;
+      return false;
+    },
+
+    updateAccess: function(){
+      var u = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
+      var canApprove = Roster.canApprove();
+      var card = $('rosterRequestsCard');
+      if(card) card.hidden = !canApprove;
+      var col = $('rosterActionsCol');
+      if(col) col.hidden = !canApprove;
+    },
+
+    renderForm: function(){
+      var rsRank = $('rsRank');
+      var rsPos = $('rsPos');
+      if(rsRank){
+        rsRank.innerHTML = ranks.map(function(r){ return '<option>' + esc(r.name) + '</option>'; }).join('');
+      }
+      if(rsPos){
+        rsPos.innerHTML = positions.map(function(p){ return '<option>' + esc(p.name) + '</option>'; }).join('');
+      }
+    },
+
+    submitRequest: function(){
+      var name = ($('rsName') ? $('rsName').value : '').trim();
+      var staticId = ($('rsStatic') ? $('rsStatic').value : '').trim();
+      var rank = $('rsRank') ? $('rsRank').value : '';
+      var pos = $('rsPos') ? $('rsPos').value : '';
+      var phone = ($('rsPhone') ? $('rsPhone').value : '').trim();
+      var callsign = ($('rsCallsign') ? $('rsCallsign').value : '').trim();
+      var discord = ($('rsDiscord') ? $('rsDiscord').value : '').trim();
+      var forum = ($('rsForum') ? $('rsForum').value : '').trim();
+      var reason = ($('rsReason') ? $('rsReason').value : '').trim();
+
+      if(!name){ showFancy('Ошибка', 'Введи Ник_Нейм'); return; }
+      if(!staticId){ showFancy('Ошибка', 'Введи Static ID'); return; }
+      if(!/^\d+$/.test(staticId)){ showFancy('Ошибка', 'Static ID должен содержать только цифры'); return; }
+      if(!reason){ showFancy('Ошибка', 'Опиши причину'); return; }
+
+      var user = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
+
+      var reqs = loadRosterRequests();
+      reqs.unshift({
+        id: 'rr_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+        login: user ? user.login : 'anon',
+        loginName: user ? (user.displayName || user.login) : 'Гость',
+        name: name,
+        staticId: staticId,
+        rank: rank,
+        position: pos,
+        phone: phone,
+        callsign: callsign,
+        discord: discord,
+        forum: forum,
+        reason: reason,
+        status: 'pending',
+        createdAt: Date.now()
+      });
+      saveRosterRequests(reqs);
+
+      ['rsName','rsStatic','rsPhone','rsCallsign','rsDiscord','rsForum','rsReason'].forEach(function(id){
+        var el = $(id);
+        if(el) el.value = '';
+      });
+
+      showFancy('✅ Отправлено', 'Заявка отправлена на рассмотрение');
+      Roster.renderRequests();
+    },
+
+    setFilter: function(f){
+      Roster.currentFilter = f;
+      document.querySelectorAll('.rank-filter-btn[data-rs-filter]').forEach(function(b){
+        b.classList.toggle('active', b.getAttribute('data-rs-filter') === f);
+      });
+      Roster.renderRequests();
+    },
+
+    renderRequests: function(){
+      var list = $('rosterRequestsList');
+      if(!list) return;
+      if(!Roster.canApprove()){
+        list.innerHTML = '<div class="audit-history-empty">Одобрять заявки может только Майор и выше</div>';
+        return;
+      }
+      var reqs = loadRosterRequests();
+      var filtered = reqs;
+      if(Roster.currentFilter !== 'all'){
+        filtered = reqs.filter(function(r){ return r.status === Roster.currentFilter; });
+      }
+      if(filtered.length === 0){
+        list.innerHTML = '<div class="audit-history-empty">Нет заявок</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(function(r){
+        var dt = new Date(r.createdAt).toLocaleString('ru-RU');
+        var statusIcon = r.status === 'pending' ? '⏳' :
+                        r.status === 'approved' ? '✅' : '❌';
+
+        var fields = '';
+        fields += '<div class="roster-request-field"><div class="roster-request-field-label">Static ID</div><div class="roster-request-field-value">' + esc(r.staticId) + '</div></div>';
+        if(r.rank) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Звание</div><div class="roster-request-field-value">' + esc(r.rank) + '</div></div>';
+        if(r.position) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Должность</div><div class="roster-request-field-value">' + esc(r.position) + '</div></div>';
+        if(r.phone) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Телефон</div><div class="roster-request-field-value">' + esc(r.phone) + '</div></div>';
+        if(r.callsign) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Позывной</div><div class="roster-request-field-value">' + esc(r.callsign) + '</div></div>';
+        if(r.discord) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Discord</div><div class="roster-request-field-value">' + esc(r.discord) + '</div></div>';
+        if(r.forum) fields += '<div class="roster-request-field"><div class="roster-request-field-label">Форум</div><div class="roster-request-field-value">' + esc(r.forum) + '</div></div>';
+
+        var actions = '';
+        if(r.status === 'pending'){
+          actions =
+            '<button class="btn-approve" onclick="Roster.approve(\'' + r.id + '\')">✅ Одобрить</button>' +
+            '<button class="btn-reject" onclick="Roster.reject(\'' + r.id + '\')">❌ Отклонить</button>';
+        } else {
+          actions =
+            '<button class="btn-delete" onclick="Roster.deleteReq(\'' + r.id + '\')">🗑 Удалить из истории</button>' +
+            '<span style="font-size:11px;color:var(--fsb-text-dim);align-self:center">' + statusIcon + ' Обработано</span>';
+        }
+
+        return '<div class="roster-request-item">' +
+          '<div class="roster-request-head">' +
+            '<div>' +
+              '<div class="roster-request-name">' + esc(r.name) + '</div>' +
+              '<div style="font-size:11px;color:var(--fsb-text-dim)">от @' + esc(r.login) + '</div>' +
+            '</div>' +
+            '<div class="roster-request-date">' + dt + '</div>' +
+          '</div>' +
+          '<div class="roster-request-grid">' + fields + '</div>' +
+          '<div class="roster-request-reason"><b style="color:var(--fsb-accent)">Причина:</b> ' + esc(r.reason) + '</div>' +
+          '<div class="roster-request-actions">' + actions + '</div>' +
+        '</div>';
+      }).join('');
+    },
+
+    approve: function(id){
+      if(!Roster.canApprove()){
+        showFancy('Нет прав', 'Одобрять может только Майор и выше');
+        return;
+      }
+      if(!confirm('Одобрить заявку? Сотрудник попадёт в состав.')) return;
+      var reqs = loadRosterRequests();
+      var r = reqs.find(function(x){ return x.id === id; });
+      if(!r) return;
+
+      var roster = loadRoster();
+      roster.unshift({
+        id: 'r_' + Date.now(),
+        name: r.name,
+        staticId: r.staticId,
+        rank: r.rank,
+        position: r.position,
+        phone: r.phone,
+        callsign: r.callsign,
+        discord: r.discord,
+        forum: r.forum,
+        addedAt: Date.now()
+      });
+      saveRoster(roster);
+
+      r.status = 'approved';
+      r.resolvedAt = Date.now();
+      var u = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
+      r.resolvedBy = u ? u.login : '?';
+      saveRosterRequests(reqs);
+
+      Roster.renderRequests();
+      Roster.renderTable();
+      showFancy('✅ Одобрено', 'Сотрудник добавлен в состав');
+    },
+
+    reject: function(id){
+      if(!Roster.canApprove()) return;
+      var reason = prompt('Причина отказа (необязательно):', '');
+      if(reason === null) return;
+      var reqs = loadRosterRequests();
+      var r = reqs.find(function(x){ return x.id === id; });
+      if(!r) return;
+      r.status = 'rejected';
+      r.resolvedAt = Date.now();
+      r.rejectReason = reason;
+      var u = window.RMRPAuth && RMRPAuth.getCurrent ? RMRPAuth.getCurrent() : null;
+      r.resolvedBy = u ? u.login : '?';
+      saveRosterRequests(reqs);
+      Roster.renderRequests();
+      showFancy('❌ Отклонено', 'Заявка отклонена');
+    },
+
+    deleteReq: function(id){
+      if(!Roster.canApprove()) return;
+      if(!confirm('Удалить заявку из истории?')) return;
+      var reqs = loadRosterRequests().filter(function(x){ return x.id !== id; });
+      saveRosterRequests(reqs);
+      Roster.renderRequests();
+    },
+
+    search: function(q){
+      Roster.searchQuery = (q || '').toLowerCase().trim();
+      Roster.renderTable();
+    },
+
+    renderTable: function(){
+      var tbody = $('rosterTbody');
+      var empty = $('rosterEmpty');
+      if(!tbody) return;
+      var roster = loadRoster();
+      var filtered = roster.filter(function(r){
+        if(!Roster.searchQuery) return true;
+        var hay = [r.name, r.staticId, r.rank, r.position, r.phone, r.callsign, r.discord, r.forum].join(' ').toLowerCase();
+        return hay.indexOf(Roster.searchQuery) !== -1;
+      });
+
+      if(filtered.length === 0){
+        tbody.innerHTML = '';
+        if(empty) empty.style.display = '';
+        return;
+      }
+      if(empty) empty.style.display = 'none';
+
+      var canApprove = Roster.canApprove();
+      tbody.innerHTML = filtered.map(function(r, i){
+        var dt = new Date(r.addedAt).toLocaleDateString('ru-RU');
+        var forumCell = r.forum ? '<a href="' + esc(r.forum) + '" target="_blank">🔗 профиль</a>' : '—';
+        var discordCell = r.discord ? esc(r.discord) : '—';
+        var phoneCell = r.phone ? esc(r.phone) : '—';
+        var callsignCell = r.callsign ? '<span class="callsign">' + esc(r.callsign) + '</span>' : '—';
+
+        var actions = '';
+        if(canApprove){
+          actions = '<button class="btn-del-small" onclick="Roster.removeFromRoster(\'' + r.id + '\')" title="Удалить">🗑</button>';
+        }
+
+        return '<tr>' +
+          '<td>' + (i+1) + '</td>' +
+          '<td><b>' + esc(r.name) + '</b></td>' +
+          '<td><span class="static-id">' + esc(r.staticId) + '</span></td>' +
+          '<td>' + esc(r.rank || '—') + '</td>' +
+          '<td>' + esc(r.position || '—') + '</td>' +
+          '<td>' + phoneCell + '</td>' +
+          '<td>' + callsignCell + '</td>' +
+          '<td>' + discordCell + '</td>' +
+          '<td>' + forumCell + '</td>' +
+          '<td>' + dt + '</td>' +
+          (canApprove ? '<td>' + actions + '</td>' : '') +
+        '</tr>';
+      }).join('');
+    },
+
+    removeFromRoster: function(id){
+      if(!Roster.canApprove()) return;
+      if(!confirm('Удалить сотрудника из состава?')) return;
+      var roster = loadRoster().filter(function(x){ return x.id !== id; });
+      saveRoster(roster);
+      Roster.renderTable();
+      showFancy('✅ Удалено', 'Сотрудник убран из состава');
     }
   };
 
