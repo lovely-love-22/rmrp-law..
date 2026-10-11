@@ -212,7 +212,7 @@ body {
   color: var(--fsb-red); border: 1px solid rgba(231, 76, 60, 0.3); }
 
 .task-list { display: flex; flex-direction: column; gap: 8px;
-  max-height: 400px; overflow-y: auto; padding-right: 4px; }
+  max-height: 500px; overflow-y: auto; padding-right: 4px; }
 .task-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px;
   background: #0a0c0f; border: 1px solid var(--fsb-border);
   border-radius: 8px; transition: all 0.2s; }
@@ -894,8 +894,12 @@ body {
   };
 
   /* ====== ЗВАНИЯ И ДОЛЖНОСТИ ====== */
-  var DEFAULT_RANKS = RMRPAuth && RMRPAuth.RANKS ? RMRPAuth.RANKS.slice() : ['Рядовой','Ефрейтор','Мл.Сержант','Сержант','Ст.Сержант','Старшина','Прапорщик','Ст.Прапорщик','Мл.Лейтенант','Лейтенант','Ст.Лейтенант','Капитан','Майор','Подполковник','Полковник','Генерал-Майор'];
-  var DEFAULT_POS = RMRPAuth && RMRPAuth.POSITIONS ? RMRPAuth.POSITIONS.slice() : ['КМБ','УКМБ','Стажер','Сотрудник','Инструктор','Зам.Начальника','Начальник'];
+  var DEFAULT_RANKS = (window.RMRPAuth && RMRPAuth.RANKS)
+    ? RMRPAuth.RANKS.slice()
+    : ['Рядовой','Ефрейтор','Мл.Сержант','Сержант','Ст.Сержант','Старшина','Прапорщик','Ст.Прапорщик','Мл.Лейтенант','Лейтенант','Ст.Лейтенант','Капитан','Майор','Подполковник','Полковник','Генерал-Майор'];
+  var DEFAULT_POS = (window.RMRPAuth && RMRPAuth.POSITIONS)
+    ? RMRPAuth.POSITIONS.slice()
+    : ['КМБ','УКМБ','Стажер','Сотрудник','Инструктор','Зам.Начальника','Начальник'];
 
   var LS_RANKS = 'rmrp_fsb_ranks_v2';
   var LS_POS = 'rmrp_fsb_pos_v2';
@@ -903,14 +907,24 @@ body {
 
   function loadRanks(){
     try { var raw = localStorage.getItem(LS_RANKS); ranks = raw ? JSON.parse(raw) : null; } catch(e){ ranks = null; }
-    if(!Array.isArray(ranks) || ranks.length === 0) ranks = DEFAULT_RANKS.map(function(r,i){ return { id:'rank_'+i, name:r, order:i }; });
+    if(!Array.isArray(ranks) || ranks.length === 0) {
+      ranks = DEFAULT_RANKS.map(function(r,i){ return { id:'rank_'+i, name:r, order:i }; });
+      saveRanks();
+    }
   }
   function loadPositions(){
     try { var raw = localStorage.getItem(LS_POS); positions = raw ? JSON.parse(raw) : null; } catch(e){ positions = null; }
-    if(!Array.isArray(positions) || positions.length === 0) positions = DEFAULT_POS.map(function(p,i){ return { id:'pos_'+i, name:p, order:i }; });
+    if(!Array.isArray(positions) || positions.length === 0) {
+      positions = DEFAULT_POS.map(function(p,i){ return { id:'pos_'+i, name:p, order:i }; });
+      savePositions();
+    }
   }
-  function saveRanks(){ try { localStorage.setItem(LS_RANKS, JSON.stringify(ranks)); } catch(e){} }
-  function savePositions(){ try { localStorage.setItem(LS_POS, JSON.stringify(positions)); } catch(e){} }
+  function saveRanks(){
+    try { localStorage.setItem(LS_RANKS, JSON.stringify(ranks)); } catch(e){}
+  }
+  function savePositions(){
+    try { localStorage.setItem(LS_POS, JSON.stringify(positions)); } catch(e){}
+  }
 
   window.RankManager = {
     openModal: function(type, id){
@@ -958,8 +972,17 @@ body {
         positions.sort(function(a,b){ return a.order - b.order; });
         savePositions(); RankManager.renderPositions();
       }
+
+      // Уведомляем другие вкладки (profile.html)
+      try {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: type === 'rank' ? LS_RANKS : LS_POS,
+          newValue: JSON.stringify(type === 'rank' ? ranks : positions)
+        }));
+      } catch(e){}
+
       RankManager.closeModal();
-      showFancy('✅ Сохранено', 'Запись обновлена');
+      showFancy('✅ Сохранено', 'Запись обновлена. Профиль увидит изменения.');
     },
     deleteItem: function(type, id){
       if(!confirm('Удалить запись?')) return;
@@ -970,6 +993,12 @@ body {
         positions = positions.filter(function(x){ return x.id !== id; });
         savePositions(); RankManager.renderPositions();
       }
+      try {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: type === 'rank' ? LS_RANKS : LS_POS,
+          newValue: JSON.stringify(type === 'rank' ? ranks : positions)
+        }));
+      } catch(e){}
       showFancy('✅ Удалено', 'Запись удалена');
     },
     resetToDefault: function(type){
@@ -981,6 +1010,12 @@ body {
         positions = DEFAULT_POS.map(function(p,i){ return { id:'pos_'+i, name:p, order:i }; });
         savePositions(); RankManager.renderPositions();
       }
+      try {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: type === 'rank' ? LS_RANKS : LS_POS,
+          newValue: JSON.stringify(type === 'rank' ? ranks : positions)
+        }));
+      } catch(e){}
       showFancy('✅ Сброшено', 'Список восстановлен');
     },
     renderRanks: function(){
@@ -1090,7 +1125,7 @@ body {
     cpInput.addEventListener('input', renderResult);
   }
 
-  /* ====== ПРОВЕРКА АВТОРИЗАЦИИ (мягкая) ====== */
+  /* ====== МЯГКАЯ ПРОВЕРКА АВТОРИЗАЦИИ ====== */
   try {
     if(window.RMRPAuth && RMRPAuth.getCurrent){
       var u = RMRPAuth.getCurrent();
