@@ -3,66 +3,686 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0d0e12">
-<title>RMRP | Кадровый аудит</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<meta name="theme-color" content="#0a0b0f">
+<title>RMRP | Управление «А»</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-.audit-hero{padding:50px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(74,168,255,.05))}
-.audit-hero h1{font-size:clamp(26px,4.5vw,42px);font-weight:900;color:var(--txt-0);letter-spacing:-1.2px}
-.audit-hero h1 .accent{background:linear-gradient(135deg,#a855f7,#4aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.audit-hero p{color:var(--txt-2);margin-top:10px;font-size:14.5px}
-.audit-auth-warn{max-width:560px;margin:0 auto;padding:40px 32px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:center}
-.audit-auth-warn.lock{border-color:rgba(255,70,85,.35);background:linear-gradient(135deg,rgba(255,70,85,.06),rgba(168,85,247,.04))}
-.audit-auth-warn .icon{font-size:64px;margin-bottom:20px;display:block}
-.audit-auth-warn h3{color:var(--txt-0);font-size:22px;font-weight:900;margin-bottom:12px}
-.audit-auth-warn p{color:var(--txt-2);font-size:14.5px;line-height:1.7;margin-bottom:22px}
-.audit-auth-warn a{display:inline-block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#4aa8ff,#3ddc84);color:#fff;text-decoration:none;font-weight:700;font-size:14px}
-.audit-req-box{margin:22px auto 0;padding:16px 20px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;max-width:420px;text-align:left}
-.audit-req-box h4{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;color:var(--txt-3);margin-bottom:10px}
-.audit-req-box ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-.audit-req-box li{font-size:13px;color:var(--txt-1);padding-left:22px;position:relative;line-height:1.5}
-.audit-req-box li::before{content:"✓";position:absolute;left:0;color:#3ddc84;font-weight:900}
-.audit-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-@media(max-width:900px){.audit-grid-wrap{grid-template-columns:1fr}}
-.audit-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
-.audit-card h3{color:var(--txt-0);font-size:17px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-.audit-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.audit-field label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
-.audit-field label .req{color:#ff6b78}
-.audit-field input,.audit-field select,.audit-field textarea{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg-1);border:1px solid var(--line);color:var(--txt-0);font-size:13.5px;outline:none;transition:var(--transition);font-family:inherit;box-sizing:border-box}
-.audit-field input:focus,.audit-field select:focus,.audit-field textarea:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
-.audit-field input[type="date"]{cursor:pointer;color-scheme:dark}
-.audit-field textarea{min-height:90px;resize:vertical;line-height:1.6}
-.audit-output{margin-top:18px;padding:18px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--txt-1);font-family:'JetBrains Mono','Courier New',monospace;min-height:200px}
-.audit-copy{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.audit-copy-btn{padding:12px 22px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
-.audit-copy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(168,85,247,.3)}
-.audit-copy-btn.copied{background:linear-gradient(135deg,#2a9d5c,#3a7bc8)}
-.audit-history{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
-.audit-history h3{color:var(--txt-0);font-size:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.audit-history-clear{padding:6px 12px;border-radius:8px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:12px;font-weight:600;cursor:pointer}
-.audit-history-clear:hover{background:rgba(255,70,85,.25)}
-.audit-history-list{display:flex;flex-direction:column;gap:10px;max-height:600px;overflow-y:auto;padding-right:4px}
-.audit-history-list::-webkit-scrollbar{width:6px}
-.audit-history-list::-webkit-scrollbar-thumb{background:var(--bg-4);border-radius:3px}
-.audit-history-item{padding:14px 16px;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--txt-2);line-height:1.6;position:relative}
-.audit-history-item:hover{border-color:var(--line-2)}
-.audit-history-item .audit-h-date{font-size:11px;color:var(--txt-3);margin-bottom:6px;padding-right:160px}
-.audit-history-item .audit-h-preview{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;color:var(--txt-1);max-height:80px;overflow:hidden;opacity:.85;font-size:11.5px}
-.audit-history-item .audit-h-copy{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:7px;background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3);font-size:11px;font-weight:600;cursor:pointer}
-.audit-history-item .audit-h-copy:hover{background:rgba(168,85,247,.25)}
-.audit-history-item .audit-h-del{position:absolute;top:12px;right:100px;padding:5px 10px;border-radius:7px;background:rgba(255,70,85,.12);color:#ff6b78;border:1px solid rgba(255,70,85,.3);font-size:11px;font-weight:600;cursor:pointer}
-.audit-history-item .audit-h-del:hover{background:rgba(255,70,85,.25)}
-.audit-history-empty{padding:30px;text-align:center;color:var(--txt-3);font-size:13px;font-style:italic}
-.fancy-error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:10000;background:var(--bg-2);border:2px solid #a855f7;border-radius:18px;padding:26px 30px;max-width:420px;width:90%;text-align:center;box-shadow:0 30px 90px rgba(168,85,247,.4);opacity:0;pointer-events:none;transition:.3s}
-.fancy-error.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;animation:errIn .4s}
-@keyframes errIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}60%{transform:translate(-50%,-50%) scale(1.03)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
-.fancy-error-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;box-shadow:0 10px 30px rgba(168,85,247,.45)}
-.fancy-error-title{font-size:19px;font-weight:900;color:var(--txt-0);margin-bottom:8px}
-.fancy-error-msg{font-size:14px;color:var(--txt-2);line-height:1.6;margin-bottom:18px}
-.fancy-error-ok{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;font-size:14px;border:0;cursor:pointer}
+/* ============================================================
+   УПРАВЛЕНИЕ «А» — ФСБ СТИЛЬ
+   ============================================================ */
+:root {
+  --fsb-bg: #080a0c;
+  --fsb-card: #0f1216;
+  --fsb-border: #1e2329;
+  --fsb-accent: #2ecc71;
+  --fsb-accent-glow: rgba(46, 204, 113, 0.3);
+  --fsb-red: #e74c3c;
+  --fsb-blue: #3498db;
+  --fsb-text: #c9d1d9;
+  --fsb-text-dim: #8b949e;
+  --fsb-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background-color: var(--fsb-bg);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(52, 152, 219, 0.05), transparent 40%),
+    linear-gradient(rgba(18, 22, 28, 0.95), rgba(8, 10, 12, 0.98)),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(46, 204, 113, 0.02) 2px, rgba(46, 204, 113, 0.02) 4px);
+  background-attachment: fixed;
+}
+
+/* Шапка */
+.header {
+  background: rgba(8, 10, 12, 0.9);
+  border-bottom: 1px solid var(--fsb-border);
+  backdrop-filter: blur(12px);
+}
+.logo-icon { filter: drop-shadow(0 0 8px var(--fsb-accent-glow)); }
+.logo-text .accent { color: var(--fsb-accent); }
+.nav-link.active { background: var(--fsb-accent) !important; color: #000 !important; font-weight: 700; }
+.nav-link:hover { background: rgba(46, 204, 113, 0.1); color: var(--fsb-accent); }
+
+/* Герой-секция */
+.audit-hero {
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--fsb-border);
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.05), rgba(52, 152, 219, 0.03));
+  position: relative;
+  overflow: hidden;
+}
+.audit-hero::before {
+  content: "FSB";
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 120px;
+  font-weight: 900;
+  color: rgba(46, 204, 113, 0.03);
+  font-family: var(--fsb-mono);
+  pointer-events: none;
+  letter-spacing: -5px;
+}
+.audit-hero h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1.5px;
+  font-family: var(--fsb-mono);
+}
+.audit-hero h1 .accent {
+  background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.audit-hero p {
+  color: var(--fsb-text-dim);
+  margin-top: 10px;
+  font-size: 14.5px;
+  font-family: var(--fsb-mono);
+}
+
+/* Карточки */
+.audit-card, .audit-history, .vk-calc-card {
+  background: var(--fsb-card);
+  border: 1px solid var(--fsb-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: border-color 0.3s;
+}
+.audit-card:hover, .audit-history:hover, .vk-calc-card:hover {
+  border-color: rgba(46, 204, 113, 0.3);
+}
+.audit-card h3, .audit-history h3, .vk-calc-card h3 {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--fsb-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.audit-card h3::before, .vk-calc-card h3::before {
+  content: "▸";
+  color: var(--fsb-accent);
+}
+
+/* Поля ввода */
+.audit-field label, .vk-report-form label, .request-form-grid label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fsb-text-dim);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.audit-field input, .audit-field select, .audit-field textarea,
+.vk-report-form input, .vk-report-form textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  color: #fff;
+  font-size: 13.5px;
+  outline: none;
+  transition: all 0.25s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.audit-field input:focus, .audit-field select:focus, .audit-field textarea:focus,
+.vk-report-form input:focus, .vk-report-form textarea:focus {
+  border-color: var(--fsb-accent);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+}
+.audit-field input[type="date"] { cursor: pointer; color-scheme: dark; }
+.audit-field textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+
+/* Кнопки */
+.audit-copy-btn, .vk-copy-btn, .profile-btn.primary {
+  background: linear-gradient(135deg, var(--fsb-accent), #27ae60);
+  color: #000;
+  font-weight: 800;
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.audit-copy-btn:hover, .vk-copy-btn:hover, .profile-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--fsb-accent-glow);
+}
+.audit-copy-btn.copied, .vk-copy-btn.copied {
+  background: linear-gradient(135deg, #27ae60, #1e8449);
+  color: #fff;
+}
+
+.btn-ghost, .profile-btn.ghost {
+  background: #1a1e24;
+  color: var(--fsb-text);
+  border: 1px solid var(--fsb-border);
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.btn-ghost:hover, .profile-btn.ghost:hover {
+  background: #252a32;
+  border-color: var(--fsb-accent);
+}
+
+/* Табы */
+.vk-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  padding: 6px;
+  background: var(--fsb-card);
+  border: 1px solid var(--fsb-border);
+  border-radius: 10px;
+}
+.vk-tab {
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fsb-text-dim);
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: all 0.25s;
+  cursor: pointer;
+  border: 0;
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vk-tab:hover { background: #1a1e24; color: var(--fsb-text); }
+.vk-tab.active {
+  background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue));
+  color: #000;
+}
+.vk-panel { display: none; }
+.vk-panel.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Калькулятор */
+.vk-calc-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: start; }
+@media(max-width: 1000px) { .vk-calc-grid { grid-template-columns: 1fr; } }
+
+.vk-task {
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.25s;
+  overflow: hidden;
+}
+.vk-task:hover { border-color: rgba(46, 204, 113, 0.3); }
+.vk-task.active { border-color: var(--fsb-accent); background: rgba(46, 204, 113, 0.03); }
+.vk-task-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.vk-task-head input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--fsb-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.vk-task-icon { font-size: 18px; flex-shrink: 0; }
+.vk-task-label { flex: 1; font-size: 13.5px; color: var(--fsb-text); font-weight: 500; }
+.vk-task-points { font-size: 12px; color: var(--fsb-accent); font-weight: 700; white-space: nowrap; font-family: var(--fsb-mono); }
+.vk-task-body { display: none; padding: 0 14px 14px; border-top: 1px dashed var(--fsb-border); }
+.vk-task.active .vk-task-body { display: block; }
+
+.vk-time-row { display: grid; grid-template-columns: 1fr 80px; gap: 8px; align-items: center; padding: 8px 0; }
+.vk-time-row + .vk-time-row { border-top: 1px solid var(--fsb-border); }
+.vk-time-label { font-size: 12px; color: var(--fsb-text-dim); display: flex; align-items: center; gap: 6px; }
+.vk-time-label .mult { font-size: 10px; opacity: 0.7; }
+.vk-time-row input[type="number"] {
+  width: 100%; padding: 6px 8px;
+  border-radius: 6px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+  font-family: var(--fsb-mono);
+}
+.vk-time-row input[type="number"]:focus { border-color: var(--fsb-accent); }
+.vk-time-row input[type="number"]:disabled { opacity: 0.3; cursor: not-allowed; }
+.vk-task-link { padding: 8px 0 4px; border-top: 1px solid var(--fsb-border); }
+.vk-task-link input {
+  width: 100%; padding: 8px 11px;
+  border-radius: 6px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  color: #fff;
+  font-size: 12px;
+  outline: none;
+}
+.vk-task-link input:focus { border-color: var(--fsb-blue); }
+
+.vk-calc-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.08));
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 10px;
+  margin-top: 16px;
+}
+.vk-calc-total-label { font-size: 14px; font-weight: 600; color: var(--fsb-text); font-family: var(--fsb-mono); }
+.vk-calc-total-value { font-size: 26px; font-weight: 900; color: var(--fsb-accent); font-family: var(--fsb-mono); }
+
+.vk-result-list { max-height: 340px; overflow-y: auto; padding-right: 4px; margin: 0 -4px; }
+.vk-result-item { padding: 10px 0; border-bottom: 1px solid var(--fsb-border); font-size: 12.5px; }
+.vk-result-item:last-child { border-bottom: 0; }
+.vk-result-row { display: flex; justify-content: space-between; gap: 10px; color: var(--fsb-text-dim); }
+.vk-result-name { flex: 1; min-width: 0; word-break: break-word; }
+.vk-result-time { font-size: 11px; color: #586069; }
+.vk-result-points { color: var(--fsb-accent); font-weight: 700; white-space: nowrap; font-family: var(--fsb-mono); }
+.vk-result-link { display: block; margin-top: 5px; font-size: 11px; color: var(--fsb-blue); word-break: break-all; text-decoration: none; opacity: 0.85; }
+.vk-result-link:hover { opacity: 1; text-decoration: underline; }
+.vk-result-link.empty { color: #586069; font-style: italic; pointer-events: none; }
+.vk-result-sum { display: flex; justify-content: space-between; padding: 12px 0 0; font-size: 13px; color: var(--fsb-text-dim); border-top: 1px solid var(--fsb-border); margin-top: 6px; font-family: var(--fsb-mono); }
+
+/* Форма рапорта */
+.vk-report-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width: 700px) { .vk-report-form { grid-template-columns: 1fr; } }
+.vk-report-form .full { grid-column: 1/-1; }
+.vk-report-output {
+  margin-top: 18px;
+  padding: 18px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  color: var(--fsb-text);
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: var(--fsb-mono);
+}
+.vk-report-copy { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* История */
+.audit-history {
+  background: var(--fsb-card);
+  border: 1px solid var(--fsb-border);
+  border-radius: 12px;
+  padding: 22px;
+}
+.audit-history h3 {
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--fsb-border);
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+}
+.audit-history-clear {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--fsb-mono);
+}
+.audit-history-clear:hover { background: rgba(231, 76, 60, 0.25); }
+.audit-history-list { display: flex; flex-direction: column; gap: 10px; max-height: 600px; overflow-y: auto; padding-right: 4px; }
+.audit-history-list::-webkit-scrollbar { width: 6px; }
+.audit-history-list::-webkit-scrollbar-thumb { background: #2a2d38; border-radius: 3px; }
+.audit-history-item {
+  padding: 14px 16px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--fsb-text-dim);
+  line-height: 1.6;
+  position: relative;
+}
+.audit-history-item:hover { border-color: rgba(46, 204, 113, 0.3); }
+.audit-h-date { font-size: 11px; color: #586069; margin-bottom: 6px; padding-right: 160px; font-family: var(--fsb-mono); }
+.audit-h-preview {
+  white-space: pre-wrap;
+  font-family: var(--fsb-mono);
+  color: var(--fsb-text);
+  max-height: 80px;
+  overflow: hidden;
+  opacity: 0.85;
+  font-size: 11.5px;
+}
+.audit-h-copy {
+  position: absolute; top: 12px; right: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--fsb-accent);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--fsb-mono);
+}
+.audit-h-copy:hover { background: rgba(46, 204, 113, 0.25); }
+.audit-h-del {
+  position: absolute; top: 12px; right: 100px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--fsb-mono);
+}
+.audit-h-del:hover { background: rgba(231, 76, 60, 0.25); }
+.audit-history-empty { padding: 30px; text-align: center; color: #586069; font-size: 13px; font-style: italic; font-family: var(--fsb-mono); }
+
+/* Ошибка */
+.fancy-error {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  z-index: 10000;
+  background: var(--fsb-card);
+  border: 2px solid var(--fsb-accent);
+  border-radius: 14px;
+  padding: 26px 30px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 30px 90px rgba(46, 204, 113, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+.fancy-error.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+.fancy-error-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--fsb-accent), #27ae60);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; margin: 0 auto 16px;
+  box-shadow: 0 10px 30px var(--fsb-accent-glow);
+}
+.fancy-error-title { font-size: 19px; font-weight: 900; color: #fff; margin-bottom: 8px; font-family: var(--fsb-mono); }
+.fancy-error-msg { font-size: 14px; color: var(--fsb-text-dim); line-height: 1.6; margin-bottom: 18px; }
+.fancy-error-ok {
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--fsb-accent), #27ae60);
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--fsb-mono);
+}
+
+/* Доступ */
+.audit-auth-warn {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  background: var(--fsb-card);
+  border: 1px solid var(--fsb-border);
+  border-radius: 16px;
+  text-align: center;
+}
+.audit-auth-warn.lock {
+  border-color: rgba(231, 76, 60, 0.35);
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.06), rgba(46, 204, 113, 0.04));
+}
+.audit-auth-warn .icon { font-size: 64px; margin-bottom: 20px; display: block; }
+.audit-auth-warn h3 { color: #fff; font-size: 22px; font-weight: 900; margin-bottom: 12px; font-family: var(--fsb-mono); }
+.audit-auth-warn p { color: var(--fsb-text-dim); font-size: 14.5px; line-height: 1.7; margin-bottom: 22px; }
+.audit-auth-warn a {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue));
+  color: #000;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--fsb-mono);
+}
+.audit-req-box {
+  margin: 22px auto 0;
+  padding: 16px 20px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  border-radius: 10px;
+  max-width: 420px;
+  text-align: left;
+}
+.audit-req-box h4 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: 800;
+  color: var(--fsb-text-dim);
+  margin-bottom: 10px;
+  font-family: var(--fsb-mono);
+}
+.audit-req-box ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.audit-req-box li {
+  font-size: 13px;
+  color: var(--fsb-text);
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.5;
+}
+.audit-req-box li::before { content: "✓"; position: absolute; left: 0; color: var(--fsb-accent); font-weight: 900; }
+
+/* Сетка */
+.audit-grid-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media(max-width: 900px) { .audit-grid-wrap { grid-template-columns: 1fr; } }
+
+/* Кнопки редактора */
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.editor-actions .btn {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.editor-actions .btn-primary {
+  background: linear-gradient(135deg, var(--fsb-accent), #27ae60);
+  color: #000;
+  border: none;
+  font-weight: 700;
+}
+.editor-actions .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--fsb-accent-glow);
+}
+.editor-actions .btn-danger {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.editor-actions .btn-danger:hover {
+  background: rgba(231, 76, 60, 0.25);
+}
+
+/* Модальные окна */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay[hidden] { display: none !important; }
+.modal {
+  background: var(--fsb-card);
+  border: 1px solid var(--fsb-border);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--fsb-border);
+  flex-shrink: 0;
+}
+.modal-title { font-size: 16px; font-weight: 700; color: #fff; font-family: var(--fsb-mono); text-transform: uppercase; letter-spacing: 1px; }
+.modal-close {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: #1a1e24;
+  color: var(--fsb-text-dim);
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: var(--fsb-red); color: #fff; }
+.modal-body { padding: 22px; overflow-y: auto; flex: 1; }
+.modal-foot {
+  display: flex; gap: 10px; justify-content: flex-end;
+  padding: 16px 22px;
+  border-top: 1px solid var(--fsb-border);
+  flex-shrink: 0;
+}
+.modal-foot .btn {
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--fsb-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.modal-foot .btn-ghost { background: #1a1e24; color: var(--fsb-text-dim); border: 1px solid var(--fsb-border); }
+.modal-foot .btn-ghost:hover { background: #252a32; color: #fff; }
+.modal-foot .btn-primary {
+  background: linear-gradient(135deg, var(--fsb-accent), #27ae60);
+  color: #000;
+  border: none;
+  font-weight: 700;
+}
+.modal-foot .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--fsb-accent-glow); }
+
+/* Формы в модалках */
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--fsb-text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border-radius: 8px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  color: #fff;
+  font-size: 13.5px;
+  outline: none;
+  transition: all 0.25s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--fsb-accent);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+}
+.form-group textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
+
+/* Список задач */
+.task-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+.task-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  background: #0a0c0f;
+  border: 1px solid var(--fsb-border);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.task-item:hover { border-color: rgba(46, 204, 113, 0.3); }
+.task-item-info { flex: 1; min-width: 0; }
+.task-item-name { font-size: 13.5px; font-weight: 600; color: #fff; }
+.task-item-desc { font-size: 11.5px; color: var(--fsb-text-dim); margin-top: 2px; }
+.task-item-points { font-size: 12px; color: var(--fsb-accent); font-weight: 700; font-family: var(--fsb-mono); white-space: nowrap; }
+.task-item-actions { display: flex; gap: 6px; }
+.task-item-actions button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--fsb-mono);
+}
+.task-item-actions .edit-btn {
+  background: rgba(52, 152, 219, 0.15);
+  color: var(--fsb-blue);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+}
+.task-item-actions .edit-btn:hover { background: rgba(52, 152, 219, 0.3); }
+.task-item-actions .del-btn {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--fsb-red);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.task-item-actions .del-btn:hover { background: rgba(231, 76, 60, 0.3); }
+
+/* Адаптив */
+@media(max-width: 768px) {
+  .audit-grid-wrap { grid-template-columns: 1fr; }
+  .vk-calc-grid { grid-template-columns: 1fr; }
+  .vk-report-form { grid-template-columns: 1fr; }
+  .audit-hero::before { font-size: 60px; }
+  .vk-tabs { flex-direction: column; }
+  .vk-tab { width: 100%; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -70,15 +690,15 @@
 <header class="header">
   <div class="container header-inner">
     <a href="index.html" class="logo">
-      <span class="logo-icon">⚖️</span>
-      <span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">LAW</span></span>
+      <span class="logo-icon">🛡️</span>
+      <span class="logo-text">RM<span class="accent">RP</span> <span class="logo-sub">FSB</span></span>
     </a>
     <nav class="nav" id="nav">
       <a href="index.html" class="nav-link">🏠 Главная</a>
       <a href="military.html" class="nav-link" style="background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff">🎓 Военкомат</a>
       <a href="media.html" class="nav-link">🎬 Медиа</a>
       <a href="profile.html" class="nav-link">👤 Профиль</a>
-      <a href="audit.html" class="nav-link active">📋 Аудит</a>
+      <a href="audit.html" class="nav-link active">🛡️ Управление «А»</a>
     </nav>
     <div class="header-actions">
       <button class="btn-add" id="openEditor"><span class="btn-add-icon">+</span><span class="btn-add-text">Добавить</span></button>
@@ -90,8 +710,8 @@
 
 <section class="audit-hero">
   <div class="container">
-    <h1>📋 Кадровый <span class="accent">аудит</span></h1>
-    <p>Оформление приёма и повышения сотрудников ВС РФ. Скопируй готовый текст в Discord.</p>
+    <h1>🛡️ Управление <span class="accent">«А»</span></h1>
+    <p>Спецподразделение ФСБ. Калькулятор баллов, рапорты и система повышения.</p>
   </div>
 </section>
 
@@ -101,14 +721,14 @@
     <div id="auditAuthWarn" class="audit-auth-warn" hidden>
       <span class="icon">🔒</span>
       <h3>Нужна авторизация</h3>
-      <p>Чтобы работать с кадровым аудитом, войди в свой аккаунт.</p>
+      <p>Чтобы работать с Управлением «А», войди в свой аккаунт.</p>
       <a href="profile.html">👤 Войти в личный кабинет</a>
     </div>
 
     <div id="auditNoAccess" class="audit-auth-warn lock" hidden>
       <span class="icon">🚫</span>
       <h3>Доступ ограничен</h3>
-      <p>Кадровый аудит доступен только с определённого звания или должности.</p>
+      <p>Управление «А» доступно только с определённого звания или должности.</p>
       <div class="audit-req-box">
         <h4>Требования доступа</h4>
         <ul>
@@ -119,53 +739,180 @@
       </div>
     </div>
 
-    <div id="auditMain" class="audit-grid-wrap" hidden>
-      <div class="audit-card">
-        <h3>✍️ Заполни поля</h3>
-        <div class="audit-grid">
-          <div class="audit-field">
-            <label>Discord (кому) <span class="req">*</span></label>
-            <input type="text" id="audDiscord" placeholder="@loveyou_love" autocomplete="off">
-          </div>
-          <div class="audit-field">
-            <label>Ping (кого упомянуть) <span class="req">*</span></label>
-            <input type="text" id="audPing" placeholder="@ping" autocomplete="off">
-          </div>
-          <div class="audit-field">
-            <label>Дата принятия в ВС РФ <span class="req">*</span></label>
-            <input type="date" id="audJoinDate">
-          </div>
-          <div class="audit-field">
-            <label>Принят в ряды ВС РФ согласно <span class="req">*</span></label>
-            <textarea id="audJoinReason" placeholder="Опиши, на основании чего принят в ВС РФ.&#10;&#10;Например:&#10;— Приказ №5 от 09.10.2026&#10;— Прошёл КМБ успешно&#10;— Согласовано с Военным Комиссаром" style="min-height:100px"></textarea>
-          </div>
-          <div class="audit-field">
-            <label>Дата повышения <span class="req">*</span></label>
-            <input type="date" id="audPromoDate">
-          </div>
-          <div class="audit-field">
-            <label>Повышен на звание <span class="req">*</span></label>
-            <select id="audRank"></select>
-          </div>
-          <div class="audit-field">
-            <label>Дополнительный текст / ссылки</label>
-            <textarea id="audExtra" placeholder="Вставь ссылки на док-ва, скрины, приказы — любую дополнительную информацию.&#10;&#10;Например:&#10;Приказ №5 от 09.10.2026: https://discord.com/...&#10;Скрин-подтверждение: https://imgur.com/..."></textarea>
-          </div>
-        </div>
-        <div class="audit-copy">
-          <button class="audit-copy-btn" id="audCopyBtn" onclick="Audit.copy()">📋 Скопировать в буфер</button>
-          <button class="btn btn-ghost" onclick="Audit.reset()">🔄 Очистить</button>
-        </div>
-        <div class="audit-output" id="audOutput">Заполни поля выше — текст появится здесь автоматически…</div>
+    <div id="auditMain" hidden>
+      <!-- ТАБЫ -->
+      <div class="vk-tabs">
+        <button class="vk-tab active" data-vk-tab="calc">🧮 Калькулятор баллов</button>
+        <button class="vk-tab" data-vk-tab="report">📝 Форма рапорта</button>
+        <button class="vk-tab" data-vk-tab="tasks">⚙️ Управление задачами</button>
+        <button class="vk-tab" data-vk-tab="ranks">🎖️ Звания и должности</button>
       </div>
 
-      <div class="audit-history">
+      <!-- КАЛЬКУЛЯТОР -->
+      <div class="section section-dark vk-panel active" id="calcPanel" data-vk-panel="calc">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-tag">Инструмент</span>
+            <h2 class="section-title">🧮 Калькулятор баллов</h2>
+            <p class="section-desc">Отметь задание, укажи количество для каждого времени (обычное / пиковое / ночное) и приложи ссылку на скрин. Баллы посчитаются автоматически.</p>
+          </div>
+
+          <div class="vk-calc-grid">
+            <div class="vk-calc-card">
+              <h3>📋 Выберите выполненные задания</h3>
+              <div id="calcTasks"></div>
+              <div class="editor-actions">
+                <button class="btn btn-ghost" onclick="VKCalc.reset()">🔄 Сбросить всё</button>
+                <button class="btn btn-ghost" onclick="VKCalc.selectAll()">✅ Выбрать все</button>
+              </div>
+            </div>
+
+            <div class="vk-calc-card">
+              <h3>💰 Итоговый подсчёт</h3>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0a0c0f;border:1px solid var(--fsb-border);border-radius:8px;margin-bottom:16px">
+                <span style="font-size:18px">🎯</span>
+                <label for="currentPoints" style="flex:1;font-size:13px;color:var(--fsb-text)">Текущие баллы (до отчёта)</label>
+                <input type="number" id="currentPoints" value="0" min="0" style="width:90px;padding:6px 8px;border-radius:6px;background:#0a0c0f;border:1px solid var(--fsb-border);color:#fff;font-size:14px;text-align:center;outline:none;font-family:var(--fsb-mono)" oninput="VKCalc.update()">
+              </div>
+
+              <div class="vk-result-list" id="calcResult"></div>
+
+              <div class="vk-calc-total">
+                <span class="vk-calc-total-label">Всего баллов:</span>
+                <span class="vk-calc-total-value" id="totalPoints">0</span>
+              </div>
+
+              <div class="editor-actions" style="margin-top:16px">
+                <button class="btn btn-primary" onclick="VKCalc.copyResult()">📋 Скопировать результат</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ФОРМА РАПОРТА -->
+      <div class="section vk-panel" id="reportPanel" data-vk-panel="report">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-tag">Документ</span>
+            <h2 class="section-title">📝 Форма рапорта на повышение</h2>
+            <p class="section-desc">Заполни поля — рапорт сформируется автоматически. Нажми «Скопировать» и вставь в Discord.</p>
+          </div>
+
+          <div class="vk-calc-card">
+            <button class="vk-autofill-btn" onclick="VKReport.autofillFromCalc()" style="padding:11px 20px;border-radius:8px;background:linear-gradient(135deg,var(--fsb-accent),#27ae60);color:#000;font-weight:700;font-size:13.5px;border:0;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:16px;font-family:var(--fsb-mono);text-transform:uppercase">
+              🪄 Заполнить из калькулятора (задания, ссылки, баллы, дата)
+            </button>
+
+            <h3>✍️ Заполните данные</h3>
+            <div class="vk-report-form">
+              <div>
+                <label>Ваше звание</label>
+                <input type="text" id="rpRank" placeholder="Майор">
+              </div>
+              <div>
+                <label>Ваше ФИО</label>
+                <input type="text" id="rpName" placeholder="Иванов Иван Иванович">
+              </div>
+              <div>
+                <label>Звание, на которое повышаетесь</label>
+                <input type="text" id="rpNextRank" placeholder="Подполковник">
+              </div>
+              <div>
+                <label>Дата</label>
+                <input type="text" id="rpDate" placeholder="10.10.2026">
+              </div>
+              <div class="full">
+                <label>Остаток баллов за предыдущий отчёт</label>
+                <input type="text" id="rpPrevPoints" placeholder="нету">
+              </div>
+              <div class="full">
+                <label>Сколько всего баллов</label>
+                <input type="text" id="rpTotalPoints" placeholder="0 баллов">
+              </div>
+              <div class="full">
+                <label>Проделанная работа</label>
+                <textarea id="rpWork" placeholder="Нажми «Заполнить из калькулятора» — задания, количество и ссылки подставятся сами" style="min-height:200px"></textarea>
+              </div>
+              <div>
+                <label>Подпись</label>
+                <input type="text" id="rpSign" placeholder="Иванов.И">
+              </div>
+            </div>
+
+            <div class="vk-report-output" id="rpOutput"></div>
+
+            <div class="vk-report-copy">
+              <button class="vk-copy-btn" id="rpCopyBtn" onclick="VKReport.copy()">📋 Скопировать рапорт</button>
+              <button class="btn btn-ghost" onclick="VKReport.generate()">🔄 Обновить</button>
+              <button class="btn btn-ghost" onclick="VKReport.clear()">🗑️ Очистить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- УПРАВЛЕНИЕ ЗАДАЧАМИ -->
+      <div class="section vk-panel" id="tasksPanel" data-vk-panel="tasks">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-tag">Редактор</span>
+            <h2 class="section-title">⚙️ Управление задачами</h2>
+            <p class="section-desc">Добавляй, редактируй и удаляй задачи для калькулятора баллов.</p>
+          </div>
+
+          <div class="vk-calc-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+              <h3 style="margin:0;border:0;padding:0">📋 Список задач</h3>
+              <div class="editor-actions" style="margin:0">
+                <button class="btn btn-primary" onclick="TaskManager.openModal()">➕ Добавить задачу</button>
+                <button class="btn btn-danger" onclick="TaskManager.resetToDefault()">🔄 Сбросить к стандартным</button>
+              </div>
+            </div>
+            <div class="task-list" id="taskList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ЗВАНИЯ И ДОЛЖНОСТИ -->
+      <div class="section vk-panel" id="ranksPanel" data-vk-panel="ranks">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-tag">Редактор</span>
+            <h2 class="section-title">🎖️ Звания и должности</h2>
+            <p class="section-desc">Управляй списком званий и должностей в системе.</p>
+          </div>
+
+          <div class="vk-calc-grid">
+            <div class="vk-calc-card">
+              <h3>🎖️ Звания</h3>
+              <div class="editor-actions" style="margin-bottom:14px">
+                <button class="btn btn-primary" onclick="RankManager.openModal('rank')">➕ Добавить звание</button>
+                <button class="btn btn-danger" onclick="RankManager.resetToDefault('rank')">🔄 Сбросить</button>
+              </div>
+              <div class="task-list" id="rankList"></div>
+            </div>
+
+            <div class="vk-calc-card">
+              <h3>🏛️ Должности</h3>
+              <div class="editor-actions" style="margin-bottom:14px">
+                <button class="btn btn-primary" onclick="RankManager.openModal('pos')">➕ Добавить должность</button>
+                <button class="btn btn-danger" onclick="RankManager.resetToDefault('pos')">🔄 Сбросить</button>
+              </div>
+              <div class="task-list" id="posList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ИСТОРИЯ -->
+      <div class="audit-history" style="margin-top:30px">
         <h3>
-          <span>🕘 История аудитов</span>
+          <span>🕘 История рапортов</span>
           <button class="audit-history-clear" onclick="Audit.clearHistory()">🗑 Очистить</button>
         </h3>
         <div class="audit-history-list" id="audHistoryList"></div>
       </div>
+
     </div>
 
   </div>
@@ -180,7 +927,7 @@
     <div class="footer-col"><h4>Документы</h4><a href="constitution.html">Конституция РФ</a><a href="uk.html">Уголовный кодекс</a><a href="koap.html">КоАП РФ</a><a href="process.html">Процессуальный кодекс</a></div>
     <div class="footer-col"><h4>Законы</h4><a href="weapons.html">Об оружии</a><a href="property.html">Госсобственность</a><a href="raids.html">Ограбления и поставки</a><a href="vzk.html">Война за КрАЗ</a></div>
     <div class="footer-col"><h4>Уставы</h4><a href="discipline.html">Дисциплинарный устав</a><a href="garrison.html">Гарнизонная служба</a><a href="internal.html">Внутренняя служба</a><a href="drill.html">Строевой устав</a></div>
-    <div class="footer-col"><h4>Сервисы</h4><a href="military.html">Военкомат</a><a href="audit.html">Кадровый аудит</a><a href="media.html">Медиа-галерея</a><a href="profile.html">Профиль</a></div>
+    <div class="footer-col"><h4>Сервисы</h4><a href="military.html">Военкомат</a><a href="audit.html">Управление «А»</a><a href="media.html">Медиа-галерея</a><a href="profile.html">Профиль</a></div>
     <div class="footer-col">
       <h4>Резерв</h4>
       <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RMRP.export()">💾 Экспорт JSON</button>
@@ -192,32 +939,84 @@
 
 <button class="to-top" id="toTop">↑</button>
 
-<div class="modal-overlay" id="editorModal" hidden>
+<!-- МОДАЛКА РЕДАКТИРОВАНИЯ ЗАДАЧИ -->
+<div class="modal-overlay" id="taskModal" hidden>
   <div class="modal">
-    <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" id="closeEditor">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label for="lawTitle">Заголовок *</label><input type="text" id="lawTitle" class="form-control"></div>
-      <label>Текст *</label>
-      <div class="editor-area" id="editorArea" contenteditable="true" data-placeholder="Введите текст…"></div>
+    <div class="modal-head">
+      <h3 class="modal-title" id="taskModalTitle">➕ Добавить задачу</h3>
+      <button class="modal-close" onclick="TaskManager.closeModal()">✕</button>
     </div>
-    <div class="modal-foot"><button class="btn btn-ghost" id="cancelEditor">Отмена</button><button class="btn btn-primary" id="saveEditor">💾 Сохранить</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="taskEditId">
+      <div class="form-group">
+        <label>Название задачи *</label>
+        <input type="text" id="taskName" placeholder="Например: Провести призыв">
+      </div>
+      <div class="form-group">
+        <label>Иконка (эмодзи)</label>
+        <input type="text" id="taskIcon" placeholder="📋" maxlength="4">
+      </div>
+      <div class="form-group">
+        <label>Баллы за выполнение *</label>
+        <input type="number" id="taskPoints" placeholder="85" min="1">
+      </div>
+      <div class="form-group">
+        <label>Название в отчёте</label>
+        <input type="text" id="taskReportName" placeholder="Провёл призывов">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="TaskManager.closeModal()">Отмена</button>
+      <button class="btn btn-primary" onclick="TaskManager.saveTask()">💾 Сохранить</button>
+    </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="bgModal" hidden>
-  <div class="modal modal-sm">
-    <div class="modal-head"><h3 class="modal-title">🖼 Фон</h3><button class="modal-close" id="closeBgPicker">✕</button></div>
-    <div class="modal-body">
-      <div class="bg-tabs">
-        <button class="bg-tab active" data-bg-tab="url">🔗 Ссылка</button>
-        <button class="bg-tab" data-bg-tab="file">📁 Файл</button>
-      </div>
-      <div class="bg-panel active" data-bg-panel="url"><label class="form-group"><span>Ссылка</span><input type="url" id="bgUrlInput" class="form-control"></label></div>
-      <div class="bg-panel" data-bg-panel="file"><label class="form-group"><span>Файл</span><input type="file" id="bgFileInput" class="form-control" accept="image/*"></label></div>
-      <div class="form-group"><label><span>Затемнение: <b id="bgOverlayValue">60%</b></span><input type="range" id="bgOverlay" class="form-range" min="0" max="95" value="60"></label></div>
-      <div class="form-group"><label><span>Размытие: <b id="bgBlurValue">0px</b></span><input type="range" id="bgBlur" class="form-range" min="0" max="20" value="0"></label></div>
+<!-- МОДАЛКА РЕДАКТИРОВАНИЯ ЗВАНИЯ/ДОЛЖНОСТИ -->
+<div class="modal-overlay" id="rankModal" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h3 class="modal-title" id="rankModalTitle">➕ Добавить</h3>
+      <button class="modal-close" onclick="RankManager.closeModal()">✕</button>
     </div>
-    <div class="modal-foot"><button class="btn btn-ghost" id="removeBg">Убрать фон</button><button class="btn btn-primary" id="applyBg">Применить</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="rankEditId">
+      <input type="hidden" id="rankEditType">
+      <div class="form-group">
+        <label>Название *</label>
+        <input type="text" id="rankName" placeholder="Например: Лейтенант">
+      </div>
+      <div class="form-group">
+        <label>Порядок (чем меньше — тем выше) *</label>
+        <input type="number" id="rankOrder" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="RankManager.closeModal()">Отмена</button>
+      <button class="btn btn-primary" onclick="RankManager.saveItem()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛКА ФОНА (совместимость) -->
+<div class="modal-overlay" id="bgModal" hidden>
+  <div class="modal">
+    <div class="modal-head"><h3 class="modal-title">🖼 Фон</h3><button class="modal-close" onclick="document.getElementById('bgModal').hidden=true">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Ссылка</label><input type="url" id="bgUrlInput" placeholder="https://example.com/image.jpg"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="document.getElementById('bgModal').hidden=true">Отмена</button><button class="btn btn-primary" onclick="document.getElementById('bgModal').hidden=true">Применить</button></div>
+  </div>
+</div>
+
+<!-- МОДАЛКА РЕДАКТОРА ЗАКОНОВ (совместимость) -->
+<div class="modal-overlay" id="editorModal" hidden>
+  <div class="modal">
+    <div class="modal-head"><h3 class="modal-title">✏️ Новый закон</h3><button class="modal-close" onclick="document.getElementById('editorModal').hidden=true">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Заголовок *</label><input type="text" id="lawTitle"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="document.getElementById('editorModal').hidden=true">Отмена</button><button class="btn btn-primary" onclick="document.getElementById('editorModal').hidden=true">Сохранить</button></div>
   </div>
 </div>
 
@@ -235,21 +1034,22 @@
   'use strict';
 
   function $(id){ return document.getElementById(id); }
-  function setVal(id,v){ var el = $(id); if(el) el.value = v; }
+  function $(s,c){ return (c||document).querySelector(s); }
+  function $$(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); }
   function getVal(id){ var el = $(id); return el ? el.value : ''; }
+  function setVal(id,v){ var el = $(id); if(el) el.value = v; }
+  function setText(id,v){ var el = $(id); if(el) el.textContent = v; }
+  function esc(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
 
   function showFancy(title, msg){
+    var el = $('fancyError');
+    if(!el) return;
     $('fancyErrorTitle').textContent = title;
     $('fancyErrorMsg').textContent = msg;
-    $('fancyError').classList.add('show');
-    setTimeout(function(){ $('fancyError').classList.remove('show'); }, 4000);
+    el.classList.add('show');
+    setTimeout(function(){ el.classList.remove('show'); }, 4000);
   }
 
-  function escapeHtml(s){
-    return String(s||'').replace(/[&<>"']/g, function(c){
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
-    });
-  }
   function copyToClipboard(text){
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
@@ -266,6 +1066,9 @@
     document.body.removeChild(ta);
   }
 
+  /* ============================================================
+     ДОСТУП
+     ============================================================ */
   var cur = RMRPAuth.getCurrent();
 
   if(!cur){
@@ -286,172 +1089,696 @@
   $('auditNoAccess').hidden = true;
   $('auditMain').hidden = false;
 
-  var audRank = $('audRank');
-  if(audRank){
-    audRank.innerHTML = '<option value="">— выбери звание —</option>' +
-      RMRPAuth.RANKS.map(function(r){ return '<option>' + r + '</option>'; }).join('');
+  /* ============================================================
+     ТАБЫ
+     ============================================================ */
+  $$('.vk-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var name = tab.getAttribute('data-vk-tab');
+      $$('.vk-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
+      $$('.vk-panel').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-vk-panel') === name);
+      });
+    });
+  });
+
+  /* ============================================================
+     ЗАДАЧИ
+     ============================================================ */
+  var DEFAULT_TASKS = [
+    { id:'prizyv_full', icon:'📋', label:'Провести призыв', points:85, reportName:'Провёл призывов' },
+    { id:'prizyv_part', icon:'👥', label:'Участие в призыве', points:45, reportName:'Участвовал в призывах' },
+    { id:'kmb', icon:'🎓', label:'Полный КМБ/УКМБ', points:60, reportName:'Провёл КМБ/УКМБ' },
+    { id:'report_check', icon:'📊', label:'Проверка отчёта на повышение', points:25, reportName:'Принял отчётов' },
+    { id:'agit_mp', icon:'📢', label:'Агитационное МП', points:75, reportName:'Провёл агитационных МП' },
+    { id:'agit_mp_part', icon:'🎯', label:'Участие в агитационном МП', points:30, reportName:'Участвовал в агитационных МП' },
+    { id:'accept_human', icon:'✍️', label:'Принятие человека во фракцию', points:20, reportName:'Принял людей во фракцию' },
+    { id:'accept_exam', icon:'📝', label:'Принятие экзамена', points:15, reportName:'Принял экзаменов' },
+    { id:'delivery', icon:'🚚', label:'Участие в поставке / ограблении', points:25, reportName:'Участвовал в поставках' },
+    { id:'kraz', icon:'🪖', label:'Участие в КрАЗ', points:20, reportName:'Участвовал в КРАЗ' }
+  ];
+
+  var LS_TASKS = 'rmrp_fsb_tasks_v2';
+  var tasks = [];
+
+  function loadTasks(){
+    try {
+      var raw = localStorage.getItem(LS_TASKS);
+      tasks = raw ? JSON.parse(raw) : null;
+    } catch(e){ tasks = null; }
+    if(!Array.isArray(tasks) || tasks.length === 0) {
+      tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
+    }
+  }
+  function saveTasks(){
+    try { localStorage.setItem(LS_TASKS, JSON.stringify(tasks)); } catch(e){}
   }
 
-  var Audit = {
-    LS_HISTORY: 'rmrp_audit_history',
-    MAX_HISTORY: 30,
+  /* ============================================================
+     КАЛЬКУЛЯТОР
+     ============================================================ */
+  var LS_CALC = 'rmrp_fsb_calc_v2';
+  var state = { selected: {}, currentPoints: 0 };
 
-    init: function(){
-      var self = this;
-      var today = new Date().toISOString().split('T')[0];
-      if($('audJoinDate') && !$('audJoinDate').value) $('audJoinDate').value = today;
-      if($('audPromoDate') && !$('audPromoDate').value) $('audPromoDate').value = today;
+  function loadState(){
+    try {
+      var raw = localStorage.getItem(LS_CALC);
+      if(raw){
+        var p = JSON.parse(raw);
+        if(p && typeof p === 'object'){
+          state.selected = p.selected || {};
+          state.currentPoints = p.currentPoints || 0;
+        }
+      }
+    } catch(e){}
+  }
+  function saveState(){
+    try {
+      localStorage.setItem(LS_CALC, JSON.stringify({
+        selected: state.selected,
+        currentPoints: state.currentPoints
+      }));
+    } catch(e){}
+  }
 
-      var d = cur.discord || ('@' + cur.login);
-      if(!d.startsWith('@')) d = '@' + d;
-      if($('audDiscord') && !$('audDiscord').value) $('audDiscord').value = d;
+  function getSel(id){
+    if(!state.selected[id]){
+      state.selected[id] = { checked:false, qty:{ normal:0, peak:0, night:0 }, link:'' };
+    }
+    if(typeof state.selected[id].qty === 'number'){
+      state.selected[id].qty = { normal:state.selected[id].qty, peak:0, night:0 };
+    }
+    if(!state.selected[id].qty) state.selected[id].qty = { normal:0, peak:0, night:0 };
+    if(typeof state.selected[id].link !== 'string') state.selected[id].link = '';
+    return state.selected[id];
+  }
 
-      ['audDiscord','audPing','audJoinDate','audJoinReason','audPromoDate','audRank','audExtra'].forEach(function(id){
-        var el = $(id);
-        if(el){
-          el.addEventListener('input', function(){ self.generate(); });
-          el.addEventListener('change', function(){ self.generate(); });
+  function renderTasks(){
+    var container = $('calcTasks');
+    if(!container) return;
+    container.innerHTML = tasks.map(function(t){
+      var sel = getSel(t.id);
+      var active = sel.checked;
+      return '<div class="vk-task' + (active ? ' active' : '') + '" data-task="' + t.id + '">' +
+        '<div class="vk-task-head" onclick="VKCalc.toggleTask(event, \'' + t.id + '\')">' +
+          '<input type="checkbox" ' + (active ? 'checked' : '') + ' onclick="event.stopPropagation(); VKCalc.toggleTask(event, \'' + t.id + '\')">' +
+          '<span class="vk-task-icon">' + (t.icon || '📌') + '</span>' +
+          '<span class="vk-task-label">' + esc(t.label) + '</span>' +
+          '<span class="vk-task-points">' + t.points + ' б.</span>' +
+        '</div>' +
+        '<div class="vk-task-body">' +
+          [{key:'normal',label:'🕐 Обычное',mult:1},{key:'peak',label:'⚡ Пиковое',mult:1.2},{key:'night',label:'🌙 Ночное',mult:1.25}].map(function(tm){
+            var q = sel.qty[tm.key] || 0;
+            return '<div class="vk-time-row">' +
+              '<label class="vk-time-label">' + tm.label + ' <span class="mult">×' + tm.mult + '</span></label>' +
+              '<input type="number" min="0" max="99" value="' + q + '" ' + (active ? '' : 'disabled') +
+                ' onchange="VKCalc.setQty(\'' + t.id + '\', \'' + tm.key + '\', this.value)">' +
+            '</div>';
+          }).join('') +
+          '<div class="vk-task-link">' +
+            '<input type="text" placeholder="🔗 Ссылка на скрин (Discord)" value="' + esc(sel.link) + '" ' + (active ? '' : 'disabled') +
+              ' onchange="VKCalc.setLink(\'' + t.id + '\', this.value)">' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function calcSum(){
+    var total = 0;
+    var details = [];
+    tasks.forEach(function(t){
+      var sel = state.selected[t.id];
+      if(!sel || !sel.checked) return;
+      [{key:'normal',label:'🕐 Обычное',mult:1},{key:'peak',label:'⚡ Пиковое',mult:1.2},{key:'night',label:'🌙 Ночное',mult:1.25}].forEach(function(tm){
+        var q = sel.qty[tm.key] || 0;
+        if(q > 0){
+          var pts = Math.round(t.points * q * tm.mult);
+          total += pts;
+          details.push({
+            id: t.id, name: t.label, time: tm.label,
+            qty: q, points: pts, link: sel.link || ''
+          });
         }
       });
+    });
+    return { total: total, details: details };
+  }
 
-      self.generate();
-      self.renderHistory();
-    },
+  function renderResult(){
+    var res = calcSum();
+    var resultEl = $('calcResult');
+    var totalEl = $('totalPoints');
+    if(!resultEl) return;
 
-    formatDate: function(isoDate){
-      if(!isoDate) return '—';
-      var p = isoDate.split('-');
-      if(p.length !== 3) return isoDate;
-      return p[2] + '.' + p[1] + '.' + p[0];
-    },
+    if(res.details.length === 0){
+      resultEl.innerHTML = '<div style="padding:20px;text-align:center;color:#586069;font-size:13px;font-family:var(--fsb-mono)">Отметь задания слева</div>';
+    } else {
+      resultEl.innerHTML = res.details.map(function(d){
+        var linkHtml = d.link
+          ? '<a class="vk-result-link" href="' + d.link + '" target="_blank">🔗 ' + esc(d.link) + '</a>'
+          : '<span class="vk-result-link empty">🔗 ссылка не указана</span>';
+        return '<div class="vk-result-item">' +
+          '<div class="vk-result-row">' +
+            '<span class="vk-result-name">' + esc(d.name) + ' <span class="vk-result-time">' + d.time + ' × ' + d.qty + '</span></span>' +
+            '<span class="vk-result-points">+' + d.points + '</span>' +
+          '</div>' +
+          linkHtml +
+        '</div>';
+      }).join('') +
+      '<div class="vk-result-sum"><span>Сумма за задания</span><span style="color:var(--fsb-accent);font-weight:700">+' + res.total + '</span></div>';
+    }
 
-    generate: function(){
-      var discord      = getVal('audDiscord').trim();
-      var ping         = getVal('audPing').trim();
-      var joinD        = this.formatDate(getVal('audJoinDate'));
-      var joinReason   = getVal('audJoinReason').trim();
-      var promoD       = this.formatDate(getVal('audPromoDate'));
-      var rank         = getVal('audRank').trim();
-      var extra        = getVal('audExtra').trim();
+    var current = parseInt($('currentPoints').value) || 0;
+    state.currentPoints = current;
+    if(totalEl) totalEl.textContent = current + res.total;
+    saveState();
+  }
 
-      if(!discord && !ping && !rank && !extra && !joinReason){
-        $('audOutput').textContent = 'Заполни поля выше — текст появится здесь автоматически…';
-        return '';
+  window.VKCalc = {
+    toggleTask: function(ev, id){
+      if(ev && ev.target && ev.target.tagName === 'INPUT') ev.stopPropagation();
+      var sel = getSel(id);
+      sel.checked = !sel.checked;
+      if(sel.checked){
+        var any = (sel.qty.normal || 0) + (sel.qty.peak || 0) + (sel.qty.night || 0);
+        if(any === 0) sel.qty.normal = 1;
       }
-
-      var lines = [];
-      lines.push(discord || '@username');
-      lines.push(ping || '@ping');
+      renderTasks();
+      renderResult();
+    },
+    setQty: function(id, timeKey, val){
+      var sel = getSel(id);
+      sel.qty[timeKey] = Math.max(0, parseInt(val) || 0);
+      renderResult();
+    },
+    setLink: function(id, val){
+      var sel = getSel(id);
+      sel.link = val.trim();
+      renderResult();
+    },
+    update: function(){ renderResult(); },
+    reset: function(){
+      state.selected = {};
+      state.currentPoints = 0;
+      var cp = $('currentPoints');
+      if(cp) cp.value = 0;
+      renderTasks();
+      renderResult();
+    },
+    selectAll: function(){
+      tasks.forEach(function(t){
+        var sel = getSel(t.id);
+        sel.checked = true;
+        if((sel.qty.normal||0) + (sel.qty.peak||0) + (sel.qty.night||0) === 0) sel.qty.normal = 1;
+      });
+      renderTasks();
+      renderResult();
+    },
+    getData: function(){
+      var res = calcSum();
+      return {
+        details: res.details,
+        sum: res.total,
+        currentPoints: state.currentPoints,
+        total: state.currentPoints + res.total
+      };
+    },
+    copyResult: function(){
+      var data = VKCalc.getData();
+      var lines = ['=== Подсчёт баллов Управление «А» ===', ''];
+      lines.push('Текущие баллы: ' + data.currentPoints);
       lines.push('');
-      lines.push('Был принят в ряды ВС РФ согласно:');
-      lines.push(joinReason || '—');
-      lines.push('Дата принятия: ' + joinD);
-      lines.push('');
-      lines.push('Был повышен на звание:');
-      lines.push(rank || '—');
-      lines.push('Дата: ' + promoD);
-
-      if(extra){
+      if(data.details.length){
+        lines.push('Выполненные задания:');
+        data.details.forEach(function(d){
+          lines.push('  • ' + d.name + ' [' + d.time + ' × ' + d.qty + '] = +' + d.points);
+          if(d.link) lines.push('    🔗 ' + d.link);
+        });
         lines.push('');
-        lines.push('Дополнительно:');
-        lines.push(extra);
+        lines.push('Сумма за задания: +' + data.sum);
+      } else {
+        lines.push('Задания не отмечены');
       }
+      lines.push('');
+      lines.push('ИТОГО БАЛЛОВ: ' + data.total);
+      copyToClipboard(lines.join('\n'));
+      showFancy('✅ Скопировано', 'Результат скопирован в буфер обмена');
+    }
+  };
 
+  /* ============================================================
+     ФОРМА РАПОРТА
+     ============================================================ */
+  function todayStr(){
+    var d = new Date();
+    return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' + d.getFullYear();
+  }
+
+  window.VKReport = {
+    autofillFromCalc: function(){
+      var data = VKCalc.getData();
+      if(data.details.length === 0){
+        if(!confirm('В калькуляторе не отмечено ни одного задания. Заполнить только баллы и дату?')) return;
+      }
+      var grouped = {};
+      data.details.forEach(function(d){
+        if(!grouped[d.id]){
+          grouped[d.id] = { name:d.name, items:[], link:d.link };
+        }
+        grouped[d.id].items.push({ time:d.time, qty:d.qty });
+        if(d.link) grouped[d.id].link = d.link;
+      });
+      var workLines = [];
+      Object.keys(grouped).forEach(function(id){
+        var g = grouped[id];
+        var totalQty = g.items.reduce(function(s,it){ return s + it.qty; }, 0);
+        var parts = g.items.map(function(it){ return it.time + ' × ' + it.qty; }).join(', ');
+        workLines.push(g.name + ': Число ' + totalQty + ' (' + parts + ')');
+        workLines.push(g.link ? g.link : 'ссылка');
+        workLines.push('');
+      });
+      if(workLines.length === 0) workLines.push('Укажи проделанную работу вручную');
+      setVal('rpWork', workLines.join('\n'));
+      setVal('rpDate', todayStr());
+      setVal('rpTotalPoints', data.total + ' баллов');
+      if(!getVal('rpPrevPoints')) setVal('rpPrevPoints', 'нету');
+      VKReport.generate();
+      var btn = event.target;
+      var old = btn.innerHTML;
+      btn.innerHTML = '✅ Заполнено!';
+      setTimeout(function(){ btn.innerHTML = old; }, 2500);
+    },
+    generate: function(){
+      var rank = getVal('rpRank') || 'Звание';
+      var name = getVal('rpName') || 'ФИО';
+      var nextRank = getVal('rpNextRank') || 'Следующее звание';
+      var date = getVal('rpDate') || 'Дата';
+      var prevPoints = getVal('rpPrevPoints') || 'нету';
+      var totalPts = getVal('rpTotalPoints') || '0';
+      var work = getVal('rpWork') || '';
+      var sign = getVal('rpSign') || 'Подпись';
+
+      var lines = [
+        'Начальнику Управления «А»',
+        '',
+        'От ' + rank + ' ' + name,
+        '',
+        'Рапорт на повышение',
+        '(' + rank + ' -> ' + nextRank + ')',
+        '',
+        'Проделанная работа ↴',
+        '',
+        work,
+        '',
+        'Остаток баллов за предыдущий отчёт - ' + prevPoints,
+        'Сколько всего баллов - ' + totalPts,
+        '',
+        'Дата: ' + date,
+        'Подпись: ' + sign
+      ];
       var text = lines.join('\n');
-      $('audOutput').textContent = text;
+      var out = $('rpOutput');
+      if(out) out.textContent = text;
       return text;
     },
-
     copy: function(){
-      var text = this.generate();
-      if(!text){ showFancy('Пусто', 'Заполни хотя бы одно поле'); return; }
-      copyToClipboard(text);
-      this.saveToHistory(text);
-      var btn = $('audCopyBtn');
+      copyToClipboard(VKReport.generate());
+      Audit.saveToHistory(VKReport.generate());
+      var btn = $('rpCopyBtn');
       if(btn){
         btn.classList.add('copied');
-        var old = btn.innerHTML;
         btn.innerHTML = '✅ Скопировано!';
-        setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = old; }, 2000);
+        setTimeout(function(){
+          btn.classList.remove('copied');
+          btn.innerHTML = '📋 Скопировать рапорт';
+        }, 2000);
       }
-      showFancy('✅ Скопировано', 'Аудит отправлен в буфер обмена');
+      showFancy('✅ Скопировано', 'Рапорт отправлен в буфер обмена');
     },
+    clear: function(){
+      ['rpRank','rpName','rpNextRank','rpDate','rpPrevPoints','rpTotalPoints','rpWork','rpSign'].forEach(function(id){
+        var el = $(id);
+        if(el) el.value = '';
+      });
+      VKReport.generate();
+    }
+  };
 
-    reset: function(){
-      if(!confirm('Очистить поля?')) return;
-      setVal('audPing', '');
-      setVal('audRank', '');
-      setVal('audExtra', '');
-      setVal('audJoinReason', '');
-      var today = new Date().toISOString().split('T')[0];
-      setVal('audJoinDate', today);
-      setVal('audPromoDate', today);
-      var d = cur.discord || ('@' + cur.login);
-      if(!d.startsWith('@')) d = '@' + d;
-      setVal('audDiscord', d);
-      this.generate();
+  ['rpRank','rpName','rpNextRank','rpDate','rpPrevPoints','rpTotalPoints','rpWork','rpSign'].forEach(function(id){
+    var el = $(id);
+    if(el) el.addEventListener('input', VKReport.generate);
+  });
+
+  setVal('rpDate', todayStr());
+  VKReport.generate();
+
+  /* ============================================================
+     УПРАВЛЕНИЕ ЗАДАЧАМИ
+     ============================================================ */
+  window.TaskManager = {
+    openModal: function(id){
+      var modal = $('taskModal');
+      var title = $('taskModalTitle');
+      if(id){
+        var t = tasks.find(function(x){ return x.id === id; });
+        if(!t) return;
+        title.textContent = '✏️ Редактировать задачу';
+        setVal('taskEditId', t.id);
+        setVal('taskName', t.label);
+        setVal('taskIcon', t.icon || '📌');
+        setVal('taskPoints', t.points);
+        setVal('taskReportName', t.reportName || t.label);
+      } else {
+        title.textContent = '➕ Добавить задачу';
+        setVal('taskEditId', '');
+        setVal('taskName', '');
+        setVal('taskIcon', '📌');
+        setVal('taskPoints', '');
+        setVal('taskReportName', '');
+      }
+      modal.hidden = false;
     },
+    closeModal: function(){
+      $('taskModal').hidden = true;
+    },
+    saveTask: function(){
+      var id = getVal('taskEditId');
+      var name = getVal('taskName').trim();
+      var icon = getVal('taskIcon').trim() || '📌';
+      var points = parseInt(getVal('taskPoints'));
+      var reportName = getVal('taskReportName').trim() || name;
 
+      if(!name){ showFancy('Ошибка', 'Введи название задачи'); return; }
+      if(!points || points < 1){ showFancy('Ошибка', 'Введи корректное количество баллов'); return; }
+
+      if(id){
+        var t = tasks.find(function(x){ return x.id === id; });
+        if(t){
+          t.label = name;
+          t.icon = icon;
+          t.points = points;
+          t.reportName = reportName;
+        }
+      } else {
+        tasks.push({
+          id: 'task_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+          icon: icon,
+          label: name,
+          points: points,
+          reportName: reportName
+        });
+      }
+
+      saveTasks();
+      TaskManager.renderList();
+      VKCalc.reset();
+      TaskManager.closeModal();
+      showFancy('✅ Сохранено', 'Задача успешно сохранена');
+    },
+    deleteTask: function(id){
+      if(!confirm('Удалить задачу?')) return;
+      tasks = tasks.filter(function(t){ return t.id !== id; });
+      saveTasks();
+      TaskManager.renderList();
+      VKCalc.reset();
+      showFancy('✅ Удалено', 'Задача удалена');
+    },
+    resetToDefault: function(){
+      if(!confirm('Сбросить все задачи к стандартным? Ваши изменения будут потеряны.')) return;
+      tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
+      saveTasks();
+      TaskManager.renderList();
+      VKCalc.reset();
+      showFancy('✅ Сброшено', 'Список задач восстановлен');
+    },
+    renderList: function(){
+      var list = $('taskList');
+      if(!list) return;
+      if(tasks.length === 0){
+        list.innerHTML = '<div class="audit-history-empty">Нет задач. Добавь первую!</div>';
+        return;
+      }
+      list.innerHTML = tasks.map(function(t){
+        return '<div class="task-item">' +
+          '<div class="task-item-info">' +
+            '<div class="task-item-name">' + (t.icon || '📌') + ' ' + esc(t.label) + '</div>' +
+            '<div class="task-item-desc">' + (t.reportName || t.label) + '</div>' +
+          '</div>' +
+          '<div class="task-item-points">' + t.points + ' б.</div>' +
+          '<div class="task-item-actions">' +
+            '<button class="edit-btn" onclick="TaskManager.openModal(\'' + t.id + '\')">✏️</button>' +
+            '<button class="del-btn" onclick="TaskManager.deleteTask(\'' + t.id + '\')">🗑</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  };
+
+  /* ============================================================
+     УПРАВЛЕНИЕ ЗВАНИЯМИ И ДОЛЖНОСТЯМИ
+     ============================================================ */
+  var DEFAULT_RANKS = RMRPAuth.RANKS.slice();
+  var DEFAULT_POS = RMRPAuth.POSITIONS.slice();
+
+  var LS_RANKS = 'rmrp_fsb_ranks_v2';
+  var LS_POS = 'rmrp_fsb_pos_v2';
+  var ranks = [];
+  var positions = [];
+
+  function loadRanks(){
+    try {
+      var raw = localStorage.getItem(LS_RANKS);
+      ranks = raw ? JSON.parse(raw) : null;
+    } catch(e){ ranks = null; }
+    if(!Array.isArray(ranks) || ranks.length === 0) {
+      ranks = DEFAULT_RANKS.map(function(r, i){ return { id:'rank_' + i, name:r, order:i }; });
+    }
+  }
+
+  function loadPositions(){
+    try {
+      var raw = localStorage.getItem(LS_POS);
+      positions = raw ? JSON.parse(raw) : null;
+    } catch(e){ positions = null; }
+    if(!Array.isArray(positions) || positions.length === 0) {
+      positions = DEFAULT_POS.map(function(p, i){ return { id:'pos_' + i, name:p, order:i }; });
+    }
+  }
+
+  function saveRanks(){
+    try { localStorage.setItem(LS_RANKS, JSON.stringify(ranks)); } catch(e){}
+  }
+  function savePositions(){
+    try { localStorage.setItem(LS_POS, JSON.stringify(positions)); } catch(e){}
+  }
+
+  window.RankManager = {
+    openModal: function(type, id){
+      var modal = $('rankModal');
+      var title = $('rankModalTitle');
+      setVal('rankEditType', type);
+      if(id){
+        var item = type === 'rank'
+          ? ranks.find(function(x){ return x.id === id; })
+          : positions.find(function(x){ return x.id === id; });
+        if(!item) return;
+        title.textContent = '✏️ Редактировать';
+        setVal('rankEditId', item.id);
+        setVal('rankName', item.name);
+        setVal('rankOrder', item.order);
+      } else {
+        title.textContent = type === 'rank' ? '➕ Добавить звание' : '➕ Добавить должность';
+        setVal('rankEditId', '');
+        setVal('rankName', '');
+        setVal('rankOrder', '0');
+      }
+      modal.hidden = false;
+    },
+    closeModal: function(){
+      $('rankModal').hidden = true;
+    },
+    saveItem: function(){
+      var type = getVal('rankEditType');
+      var id = getVal('rankEditId');
+      var name = getVal('rankName').trim();
+      var order = parseInt(getVal('rankOrder')) || 0;
+
+      if(!name){ showFancy('Ошибка', 'Введи название'); return; }
+
+      if(type === 'rank'){
+        if(id){
+          var r = ranks.find(function(x){ return x.id === id; });
+          if(r){ r.name = name; r.order = order; }
+        } else {
+          ranks.push({ id:'rank_' + Date.now(), name: name, order: order });
+        }
+        ranks.sort(function(a,b){ return a.order - b.order; });
+        saveRanks();
+        RankManager.renderRanks();
+      } else {
+        if(id){
+          var p = positions.find(function(x){ return x.id === id; });
+          if(p){ p.name = name; p.order = order; }
+        } else {
+          positions.push({ id:'pos_' + Date.now(), name: name, order: order });
+        }
+        positions.sort(function(a,b){ return a.order - b.order; });
+        savePositions();
+        RankManager.renderPositions();
+      }
+
+      RankManager.closeModal();
+      showFancy('✅ Сохранено', 'Запись обновлена');
+    },
+    deleteItem: function(type, id){
+      if(!confirm('Удалить запись?')) return;
+      if(type === 'rank'){
+        ranks = ranks.filter(function(x){ return x.id !== id; });
+        saveRanks();
+        RankManager.renderRanks();
+      } else {
+        positions = positions.filter(function(x){ return x.id !== id; });
+        savePositions();
+        RankManager.renderPositions();
+      }
+      showFancy('✅ Удалено', 'Запись удалена');
+    },
+    resetToDefault: function(type){
+      if(!confirm('Сбросить к стандартным? Ваши изменения будут потеряны.')) return;
+      if(type === 'rank'){
+        ranks = DEFAULT_RANKS.map(function(r, i){ return { id:'rank_' + i, name:r, order:i }; });
+        saveRanks();
+        RankManager.renderRanks();
+      } else {
+        positions = DEFAULT_POS.map(function(p, i){ return { id:'pos_' + i, name:p, order:i }; });
+        savePositions();
+        RankManager.renderPositions();
+      }
+      showFancy('✅ Сброшено', 'Список восстановлен');
+    },
+    renderRanks: function(){
+      var list = $('rankList');
+      if(!list) return;
+      if(ranks.length === 0){
+        list.innerHTML = '<div class="audit-history-empty">Нет званий</div>';
+        return;
+      }
+      list.innerHTML = ranks.map(function(r){
+        return '<div class="task-item">' +
+          '<div class="task-item-info">' +
+            '<div class="task-item-name">🎖️ ' + esc(r.name) + '</div>' +
+            '<div class="task-item-desc">Порядок: ' + r.order + '</div>' +
+          '</div>' +
+          '<div class="task-item-actions">' +
+            '<button class="edit-btn" onclick="RankManager.openModal(\'rank\', \'' + r.id + '\')">✏️</button>' +
+            '<button class="del-btn" onclick="RankManager.deleteItem(\'rank\', \'' + r.id + '\')">🗑</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    },
+    renderPositions: function(){
+      var list = $('posList');
+      if(!list) return;
+      if(positions.length === 0){
+        list.innerHTML = '<div class="audit-history-empty">Нет должностей</div>';
+        return;
+      }
+      list.innerHTML = positions.map(function(p){
+        return '<div class="task-item">' +
+          '<div class="task-item-info">' +
+            '<div class="task-item-name">🏛️ ' + esc(p.name) + '</div>' +
+            '<div class="task-item-desc">Порядок: ' + p.order + '</div>' +
+          '</div>' +
+          '<div class="task-item-actions">' +
+            '<button class="edit-btn" onclick="RankManager.openModal(\'pos\', \'' + p.id + '\')">✏️</button>' +
+            '<button class="del-btn" onclick="RankManager.deleteItem(\'pos\', \'' + p.id + '\')">🗑</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  };
+
+  /* ============================================================
+     ИСТОРИЯ
+     ============================================================ */
+  var LS_HISTORY = 'rmrp_fsb_history_v2';
+  var MAX_HISTORY = 30;
+
+  function getHistory(){
+    try {
+      var raw = localStorage.getItem(LS_HISTORY);
+      var h = raw ? JSON.parse(raw) : [];
+      return Array.isArray(h) ? h : [];
+    } catch(e){ return []; }
+  }
+
+  window.Audit = {
     saveToHistory: function(text){
-      var hist = this.getHistory();
+      var hist = getHistory();
       hist.unshift({ id: Date.now(), text: text, date: new Date().toLocaleString('ru-RU') });
-      if(hist.length > this.MAX_HISTORY) hist = hist.slice(0, this.MAX_HISTORY);
-      try{ localStorage.setItem(this.LS_HISTORY, JSON.stringify(hist)); }catch(e){}
-      this.renderHistory();
+      if(hist.length > MAX_HISTORY) hist = hist.slice(0, MAX_HISTORY);
+      try { localStorage.setItem(LS_HISTORY, JSON.stringify(hist)); } catch(e){}
+      Audit.renderHistory();
     },
-
-    getHistory: function(){
-      try{
-        var raw = localStorage.getItem(this.LS_HISTORY);
-        var h = raw ? JSON.parse(raw) : [];
-        return Array.isArray(h) ? h : [];
-      }catch(e){ return []; }
-    },
-
     clearHistory: function(){
       if(!confirm('Очистить всю историю?')) return;
-      localStorage.removeItem(this.LS_HISTORY);
-      this.renderHistory();
+      localStorage.removeItem(LS_HISTORY);
+      Audit.renderHistory();
     },
-
     deleteOne: function(id){
       if(!confirm('Удалить эту запись?')) return;
-      var hist = this.getHistory().filter(function(x){ return x.id !== id; });
-      try{ localStorage.setItem(this.LS_HISTORY, JSON.stringify(hist)); }catch(e){}
-      this.renderHistory();
+      var hist = getHistory().filter(function(x){ return x.id !== id; });
+      try { localStorage.setItem(LS_HISTORY, JSON.stringify(hist)); } catch(e){}
+      Audit.renderHistory();
     },
-
+    copyFromHistory: function(id){
+      var item = getHistory().find(function(x){ return x.id === id; });
+      if(!item) return;
+      copyToClipboard(item.text);
+      showFancy('✅ Скопировано', 'Рапорт отправлен в буфер обмена');
+    },
     renderHistory: function(){
       var list = $('audHistoryList');
       if(!list) return;
-      var hist = this.getHistory();
+      var hist = getHistory();
       if(hist.length === 0){
-        list.innerHTML = '<div class="audit-history-empty">Пока нет сохранённых аудитов</div>';
+        list.innerHTML = '<div class="audit-history-empty">Пока нет сохранённых рапортов</div>';
         return;
       }
       list.innerHTML = hist.map(function(item){
         var preview = item.text.length > 260 ? item.text.slice(0, 260) + '…' : item.text;
         return '<div class="audit-history-item">' +
-          '<button class="audit-h-copy" onclick="Audit.copyFromHistory(' + item.id + ')">📋 Копировать</button>' +
+          '<button class="audit-h-copy" onclick="Audit.copyFromHistory(' + item.id + ')">📋</button>' +
           '<button class="audit-h-del" onclick="Audit.deleteOne(' + item.id + ')">🗑</button>' +
           '<div class="audit-h-date">' + item.date + '</div>' +
-          '<div class="audit-h-preview">' + escapeHtml(preview) + '</div>' +
+          '<div class="audit-h-preview">' + esc(preview) + '</div>' +
         '</div>';
       }).join('');
     },
-
-    copyFromHistory: function(id){
-      var item = this.getHistory().find(function(x){ return x.id === id; });
-      if(!item) return;
-      copyToClipboard(item.text);
-      showFancy('✅ Скопировано', 'Аудит отправлен в буфер обмена');
-    },
-
     hideError: function(){ $('fancyError').classList.remove('show'); }
   };
 
-  window.Audit = Audit;
-  Audit.init();
+  /* ============================================================
+     ИНИЦИАЛИЗАЦИЯ
+     ============================================================ */
+  loadTasks();
+  loadState();
+  loadRanks();
+  loadPositions();
+
+  TaskManager.renderList();
+  RankManager.renderRanks();
+  RankManager.renderPositions();
+  renderTasks();
+  renderResult();
+  Audit.renderHistory();
+
+  var cpInput = $('currentPoints');
+  if(cpInput){
+    cpInput.value = state.currentPoints || 0;
+    cpInput.addEventListener('input', renderResult);
+  }
 
   if(RMRPAuth.refreshCurrent){
     RMRPAuth.refreshCurrent().then(function(res){
