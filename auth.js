@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v17: динамические звания/должности)
+   RMRP — auth.js (v18: поддержка Email)
    ============================================================ */
 (function(){
   'use strict';
@@ -44,9 +44,6 @@
   var REG_MAX_RANK = 'Капитан';
   var REG_MAX_POS  = 'Инструктор ВК';
 
-  /* ============================================================
-     ДИНАМИЧЕСКИЕ СПИСКИ (читают кастомные из localStorage)
-     ============================================================ */
   function getCustomRanks(){
     try {
       var raw = localStorage.getItem(LS_RANKS_CUSTOM);
@@ -329,7 +326,6 @@
     REG_MAX_RANK: REG_MAX_RANK,
     REG_MAX_POS: REG_MAX_POS,
 
-    /* динамические списки */
     getRanks: getRanks,
     getPositions: getPositions,
     getRankIdx: getRankIdx,
@@ -504,6 +500,7 @@
         var user = {
           login: login,
           displayName: data.displayName || data.login,
+          email: data.email || '', // СОХРАНЕНИЕ EMAIL
           password: hashPass(data.password),
           rank: regRank,
           position: regPos,
