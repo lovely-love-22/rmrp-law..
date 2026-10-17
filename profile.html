@@ -153,6 +153,8 @@
 .modal-soft-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 .role-lock-hint{font-size:11.5px;color:var(--txt-3);margin-top:4px;font-style:italic;display:none}
 .role-lock-hint.show{display:block}
+.email-lock-hint{font-size:11.5px;color:#fbbf24;margin-top:4px;font-style:italic;display:none}
+.email-lock-hint.show{display:block}
 .fancy-error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:10000;background:var(--bg-2);border:2px solid #ff4655;border-radius:18px;padding:26px 30px;max-width:420px;width:90%;text-align:center;box-shadow:0 30px 90px rgba(255,70,85,.4);opacity:0;pointer-events:none;transition:.3s}
 .fancy-error.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;animation:errIn .4s}
 @keyframes errIn{0%{transform:translate(-50%,-50%) scale(.85);opacity:0}60%{transform:translate(-50%,-50%) scale(1.03)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
@@ -283,7 +285,7 @@
               <div class="profile-link-value" id="pForum">не указан</div>
             </div>
           </a>
-          <!-- НОВЫЙ БЛОК: Email (Виден только админам) -->
+          <!-- EMAIL: Виден только Админу/Разработчику -->
           <a class="profile-link" id="pEmailLink" href="#" style="display:none; border-color: rgba(168,85,247,.5);">
             <span class="profile-link-icon">📧</span>
             <div class="profile-link-body">
@@ -315,6 +317,14 @@
           </div>
           <div><label>Discord</label><input type="text" id="editDiscord"></div>
           <div><label>Форум</label><input type="text" id="editForum"></div>
+          <!-- EMAIL: Только для Админа/Разработчика при редактировании СЕБЯ -->
+          <div class="full" id="editEmailWrap" style="display:none">
+            <label>Email (скрыт от пользователя)</label>
+            <input type="email" id="editEmail" placeholder="user@fsb.ru">
+            <div style="font-size:11.5px;color:#a855f7;margin-top:4px;font-style:italic">
+              🔓 Доступно только Администратору и Разработчику
+            </div>
+          </div>
           <div class="full" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
             <button class="profile-btn primary" id="btnSaveEdit" onclick="Profile.saveEdit()">💾 Сохранить</button>
             <button class="profile-btn ghost" onclick="Profile.toggleEdit()">Отмена</button>
@@ -417,8 +427,12 @@
         <select id="euRole"></select>
         <div class="role-lock-hint" id="roleLockHint">🔒 Менять роль может только Администратор</div>
       </div>
-      <!-- НОВОЕ ПОЛЕ EMAIL -->
-      <div><label>Email (скрыт)</label><input type="email" id="euEmail"></div>
+      <!-- EMAIL: Доступно только Админу/Разработчику -->
+      <div>
+        <label>Email (скрыт от пользователя)</label>
+        <input type="email" id="euEmail" placeholder="user@fsb.ru">
+        <div class="email-lock-hint" id="emailLockHint">🔒 Менять Email может только Администратор или Разработчик</div>
+      </div>
     </div>
     <div class="modal-soft-foot">
       <button class="profile-btn ghost" onclick="Profile.closeUserModal()">Отмена</button>
@@ -628,7 +642,7 @@
     var fLink = document.getElementById('pForumLink');
     if(fLink) fLink.href = u.forum || '#';
 
-    // ОТОБРАЖЕНИЕ EMAIL (ТОЛЬКО ДЛЯ АДМИНОВ)
+    // EMAIL — виден только Админу/Разработчику
     var isAdmin = RMRPAuth.isAdmin(u);
     var pEmailLink = document.getElementById('pEmailLink');
     if (isAdmin) {
@@ -694,6 +708,21 @@
       setVal('editDiscord', u.discord || '');
       setVal('editForum', u.forum || '');
 
+      // EMAIL — только для Админа/Разработчика
+      var editEmailWrap = document.getElementById('editEmailWrap');
+      var editEmailInput = document.getElementById('editEmail');
+      if(editEmailWrap && editEmailInput){
+        if(RMRPAuth.isAdmin(u)){
+          editEmailWrap.style.display = '';
+          editEmailInput.value = u.email || '';
+          editEmailInput.disabled = false;
+        } else {
+          editEmailWrap.style.display = 'none';
+          editEmailInput.value = '';
+          editEmailInput.disabled = true;
+        }
+      }
+
       var canSelf = RMRPAuth.canSelfPromote(u);
       var rankSel = document.getElementById('editRank');
       var posSel  = document.getElementById('editPos');
@@ -756,6 +785,13 @@
       discord: getVal('editDiscord'),
       forum: getVal('editForum')
     };
+
+    // EMAIL — только для Админа/Разработчика
+    var editEmailWrap = document.getElementById('editEmailWrap');
+    var editEmailInput = document.getElementById('editEmail');
+    if(editEmailWrap && editEmailWrap.style.display !== 'none' && editEmailInput && !editEmailInput.disabled){
+      patch.email = editEmailInput.value.trim();
+    }
 
     if(RMRPAuth.canSelfPromote(u)){
       var newRank = getVal('editRank');
@@ -1061,8 +1097,21 @@
       setVal('euRank', u.rank || '');
       setVal('euPos', u.position || '');
       setVal('euRole', u.role || 'Пользователь');
-      setVal('euPass', '');
-      setVal('euEmail', u.email || ''); // EMAIL
+      setVal('euEmail', u.email || '');
+
+      // EMAIL — только для Админа/Разработчика
+      var emailInput = document.getElementById('euEmail');
+      var emailHint = document.getElementById('emailLockHint');
+      if(emailInput){
+        var canEmail = RMRPAuth.isAdmin(cur);
+        emailInput.disabled = !canEmail;
+        emailInput.title = canEmail
+          ? 'Email (скрыт от пользователя)'
+          : '🔒 Менять email может только Администратор или Разработчик';
+        if(emailHint){
+          emailHint.classList.toggle('show', !canEmail);
+        }
+      }
 
       var rankSel = document.getElementById('euRank');
       if(rankSel){
@@ -1125,9 +1174,15 @@
       displayName: getVal('euName'),
       discord: getVal('euDiscord'),
       rank: getVal('euRank'),
-      position: getVal('euPos'),
-      email: getVal('euEmail') // EMAIL
+      position: getVal('euPos')
     };
+
+    // EMAIL — только если поле активно (Админ/Разработчик)
+    var emailInput = document.getElementById('euEmail');
+    if(emailInput && !emailInput.disabled){
+      patch.email = emailInput.value.trim();
+    }
+
     if(RMRPAuth.isAdmin(cur) && cur.login !== login){
       patch.role = getVal('euRole');
     }
