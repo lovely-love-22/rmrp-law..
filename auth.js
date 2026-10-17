@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP — auth.js (v18: поддержка Email)
+   RMRP — auth.js (v19: поддержка Email + защита смены Email)
    ============================================================ */
 (function(){
   'use strict';
@@ -194,6 +194,12 @@
     if(!isAdmin(current)) return false;
     if(target && current.login === target.login) return false;
     return true;
+  }
+
+  /* Менять email может только Администратор или Разработчик */
+  function canChangeEmail(current){
+    if(!current) return false;
+    return isAdmin(current);
   }
 
   var GATE_CODE = 'RMRP2025';
@@ -500,7 +506,7 @@
         var user = {
           login: login,
           displayName: data.displayName || data.login,
-          email: data.email || '', // СОХРАНЕНИЕ EMAIL
+          email: data.email || '',
           password: hashPass(data.password),
           rank: regRank,
           position: regPos,
@@ -539,6 +545,10 @@
       });
     },
 
+    /* ============================================================
+       ОБНОВЛЕНИЕ СЕБЯ
+       Email может менять только Админ/Разработчик
+       ============================================================ */
     update: function(patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -549,6 +559,13 @@
       Object.keys(patch).forEach(function(k){
         if(k === 'password' && patch[k]){
           cleanPatch.password = hashPass(patch[k]);
+        } else if(k === 'email'){
+          // Email может менять только Администратор или Разработчик
+          if(!isAdmin(cur)){
+            blocked = blocked || 'Менять email может только Администратор или Разработчик';
+            return;
+          }
+          cleanPatch.email = String(patch.email || '').trim();
         } else if(k === 'rank' || k === 'position'){
           if(!canSelfPromote(cur)){
             blocked = blocked || ('Смена звания/должности доступна только от Майора и выше');
@@ -595,6 +612,10 @@
       });
     },
 
+    /* ============================================================
+       ОБНОВЛЕНИЕ ДРУГОГО ПОЛЬЗОВАТЕЛЯ
+       Email может менять только Админ/Разработчик
+       ============================================================ */
     updateOther: function(login, patch){
       var cur = Auth.getCurrent();
       if(!cur) return Promise.resolve({ ok:false, error:'Не авторизован' });
@@ -602,6 +623,11 @@
       return fbGet('users/' + login).then(function(target){
         if(!target) throw new Error('Пользователь не найден');
         if(!canEdit(cur, target)) throw new Error('Недостаточно прав: цель выше вас по званию или должности');
+
+        // Защита email — только админ/разработчик
+        if(patch.email !== undefined && !isAdmin(cur)){
+          throw new Error('Менять email может только Администратор или Разработчик');
+        }
 
         if(patch.role !== undefined){
           if(!canChangeRole(cur, target)){
@@ -628,8 +654,14 @@
 
         var cleanPatch = {};
         Object.keys(patch).forEach(function(k){
-          if(k === 'password' && patch[k]) cleanPatch.password = hashPass(patch[k]);
-          else if(k !== 'login') cleanPatch[k] = patch[k];
+          if(k === 'password' && patch[k]){
+            cleanPatch.password = hashPass(patch[k]);
+          } else if(k === 'email'){
+            // только админ/разработчик (проверка выше)
+            cleanPatch.email = String(patch.email || '').trim();
+          } else if(k !== 'login'){
+            cleanPatch[k] = patch[k];
+          }
         });
 
         return fbPatch('users/' + login, cleanPatch).then(function(){
@@ -745,6 +777,7 @@
     canEdit: canEdit,
     canGiveAccess: canGiveAccess,
     canChangeRole: canChangeRole,
+    canChangeEmail: canChangeEmail,
     canUseAudit: canUseAudit,
     canSelfPromote: canSelfPromote,
     canReadDocs: canReadDocs,
