@@ -256,7 +256,6 @@ body {
       <a href="uk.html" class="nav-link">УК РФ</a>
       <a href="koap.html" class="nav-link">КоАП РФ</a>
       
-      <!-- ВЫПАДАЮЩЕЕ МЕНЮ ИИ -->
       <div class="ai-dropdown-wrapper">
         <a href="#" class="nav-link btn-ai" id="aiBtn">🤖 ИИ-ЮРИСТ</a>
         <div class="ai-dropdown-menu" id="aiDropdown">
@@ -273,7 +272,6 @@ body {
           </div>
         </div>
       </div>
-
     </nav>
     <div class="header-actions" id="headerAuth">
       <button class="btn-add" style="background:var(--fsb-accent);color:#000;font-weight:bold" onclick="openLoginModal()">ВОЙТИ</button>
@@ -427,7 +425,6 @@ body {
 <div class="online-indicator"><span class="online-dot"></span><span id="onlineCount">0</span> онлайн</div>
 <div class="secret-badge" id="secretBadge">🎁 СЕКРЕТНЫЙ АГЕНТ</div>
 
-<!-- МОДАЛКА ЛОГИНА -->
 <div class="modal-overlay" id="loginModal" hidden>
   <div class="modal" style="max-width: 400px;">
     <div class="modal-head">
@@ -455,7 +452,6 @@ body {
   </div>
 </div>
 
-<!-- МОДАЛКА ПРОФИЛЯ -->
 <div class="modal-overlay" id="profileModal" hidden>
   <div class="modal" style="max-width: 450px;">
     <div class="modal-head">
@@ -499,7 +495,6 @@ body {
   'use strict';
   function $(id){ return document.getElementById(id); }
 
-  // --- ВЫПАДАЮЩЕЕ МЕНЮ ИИ ---
   const aiBtn = $('aiBtn');
   const aiDropdown = $('aiDropdown');
 
@@ -583,7 +578,6 @@ body {
     }, 600);
   };
 
-  // --- СКАНЕР БЕЗОПАСНОСТИ ---
   var isScanning = false;
   var scanStatus = $('scanStatus'), scanFill = $('scanFill'), scanLog = $('scanLog');
 
@@ -609,7 +603,6 @@ body {
     }, 150);
   };
 
-  // --- АВТОРИЗАЦИЯ И ПРОФИЛЬ ---
   function updateHeaderAuth() {
     const saved = localStorage.getItem('fsb_user');
     const container = $('headerAuth');
@@ -710,7 +703,6 @@ body {
     });
   };
 
-  // --- ПРОЧЕЕ ---
   window.addEventListener('scroll', function() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -726,7 +718,6 @@ body {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Онлайн-счётчик (эмуляция)
   var onlineCount = 0;
   function updateOnline(){
     onlineCount = 15 + Math.floor(Math.random() * 20);
@@ -736,7 +727,6 @@ body {
   updateOnline();
   setInterval(updateOnline, 5000);
 
-  // Секретный код RRR
   let rCount = 0;
   document.addEventListener('keydown', function(e) {
     if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey && !e.metaKey) {
@@ -750,7 +740,6 @@ body {
     }
   });
 
-  // --- АДМИН ПАНЕЛЬ ---
   window.AdminPanel = {
     toggle: function(){
       var p = document.getElementById('adminPanel');
@@ -777,7 +766,6 @@ body {
   };
   AdminPanel.renderBroadcast();
 
-  // Автопоказ админ-панели для админов
   (function(){
     if(!window.RMRPAuth) return;
     var u = RMRPAuth.getCurrent();
@@ -792,7 +780,6 @@ body {
 
   updateHeaderAuth();
 
-  // --- ТЕРМИНАЛ-ПОИСК ---
   var termInput = document.getElementById('termInput');
   var searchResults = document.getElementById('searchResults');
 
