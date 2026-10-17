@@ -1,446 +1,143 @@
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-col">
-      <div class="logo" style="color:#fff; font-family:var(--fsb-mono); font-size: 20px;"><span style="color:var(--fsb-accent)">FSB</span>LAW</div>
-      <p style="color:var(--fsb-text-dim); font-size:12px; margin-top:10px; line-height:1.5;">Официальный портал нормативных актов.<br>Несанкционированный доступ запрещён.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Документы</h4>
-      <a href="uk.html">УК РФ</a>
-      <a href="koap.html">КоАП РФ</a>
-      <a href="constitution.html">Конституция</a>
-      <a href="process.html">Процессуальный</a>
-    </div>
-    <div class="footer-col">
-      <h4>Служба</h4>
-      <a href="command.html" style="color:var(--fsb-accent);font-weight:700">🎯 Центр Управления</a>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMRP FSB | Законодательная база</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #05080a; --card: #0a0f12; --border: #1a242b; --accent: #2ecc71;
+  --text: #c9d1d9; --dim: #8b949e; --mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.5; }
+a { text-decoration: none; color: inherit; }
+.header { background: rgba(5,8,10,0.95); border-bottom: 1px solid var(--border); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 20px; font-weight: 900; font-family: var(--mono); color: #fff; display: flex; align-items: center; gap: 8px; }
+.logo span { color: var(--accent); }
+.nav { display: flex; gap: 15px; font-family: var(--mono); font-size: 13px; font-weight: bold; }
+.nav a { padding: 6px 12px; border-radius: 6px; transition: 0.2s; }
+.nav a:hover, .nav a.active { background: rgba(46,204,113,0.15); color: var(--accent); }
+.nav a.ct { background: linear-gradient(135deg, #2ecc71, #4aa8ff); color: #000; }
+.hero { padding: 80px 20px; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(rgba(5,8,10,0.85), rgba(5,8,10,0.95)), url('https://images.unsplash.com/photo-1555679486-e341a3e7b6de?q=80&w=2070') center/cover; }
+.hero h1 { font-size: clamp(32px, 5vw, 56px); font-family: var(--mono); color: #fff; margin-bottom: 10px; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--dim); font-family: var(--mono); margin-bottom: 30px; }
+.search-box { max-width: 600px; margin: 0 auto; background: #000; border: 1px solid var(--border); border-radius: 8px; padding: 15px; display: flex; gap: 10px; }
+.search-box span { color: var(--accent); font-family: var(--mono); font-weight: bold; }
+.search-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-family: var(--mono); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 40px 0; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; transition: 0.2s; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.card-icon { font-size: 30px; margin-bottom: 15px; }
+.card-title { font-family: var(--mono); font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 8px; }
+.card-desc { font-size: 13px; color: var(--dim); }
+.footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--dim); font-family: var(--mono); font-size: 12px; margin-top: 40px; }
+.btn-login { background: var(--accent); color: #000; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">🛡️ FSB<span>LAW</span></a>
+    <nav class="nav">
+      <a href="index.html" class="active">Главная</a>
+      <a href="command.html" class="ct">🎯 Центр</a>
       <a href="audit.html">Управление «А»</a>
-      <a href="fsb.html">ФЗ О ФСБ</a>
-      <a href="fsb-charter.html">Устав УФСБ</a>
-      <a href="fsb-manual.html">Метод. пособие</a>
-    </div>
-    <div class="footer-col">
-      <h4>Резерв</h4>
-      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px; background:#1a242b; border:1px solid #2a343b; color:#fff; padding:8px; border-radius:6px; cursor:pointer;" onclick="RMRP.export()">💾 Экспорт JSON</button>
-      <label class="btn btn-ghost" style="width:100%;display:block;text-align:center;cursor:pointer; background:#1a242b; border:1px solid #2a343b; color:#fff; padding:8px; border-radius:6px;">📥 Импорт JSON<input type="file" accept=".json" style="display:none;" onchange="RMRP.import(this.files[0])"></label>
-    </div>
+      <a href="uk.html">УК РФ</a>
+      <a href="koap.html">КоАП</a>
+    </nav>
+    <button class="btn-login" onclick="alert('Авторизация в разработке')">Войти</button>
   </div>
-  <div class="footer-bottom"><p>SYS_VER: 2.1.26 | SECURE_CONNECTION: TRUE | 🎯 ЦУ: ONLINE | © 2026 FSB LAW.</p></div>
+</header>
+
+<section class="hero">
+  <h1>ЗАКОНОДАТЕЛЬНАЯ БАЗА <span>ФСБ РФ</span></h1>
+  <p>СОВЕРШЕННО СЕКРЕТНО // УРОВЕНЬ ДОСТУПА: ОФИЦЕР</p>
+  <div class="search-box">
+    <span>root@fsb:~#</span>
+    <input type="text" placeholder="Введите статью (37, 8.7) или запрос (штраф, кража)..." id="searchInput">
+  </div>
+</section>
+
+<div class="container">
+  <div class="grid">
+    <a href="command.html" class="card" style="border-color: rgba(46,204,113,0.5); background: linear-gradient(135deg, rgba(46,204,113,0.1), transparent);">
+      <div class="card-icon">🎯</div>
+      <div class="card-title" style="color: var(--accent);">Центр Управления</div>
+      <div class="card-desc">Живая карта, юниты, камеры, оперативный журнал.</div>
+    </a>
+    <a href="constitution.html" class="card">
+      <div class="card-icon">🏛️</div>
+      <div class="card-title">Конституция РФ</div>
+      <div class="card-desc">Основной закон. 8 глав, 84 статьи.</div>
+    </a>
+    <a href="uk.html" class="card">
+      <div class="card-icon">⚔️</div>
+      <div class="card-title">Уголовный кодекс</div>
+      <div class="card-desc">Преступления и наказания. 99 статей.</div>
+    </a>
+    <a href="koap.html" class="card">
+      <div class="card-icon">📋</div>
+      <div class="card-title">КоАП РФ</div>
+      <div class="card-desc">Административные правонарушения.</div>
+    </a>
+    <a href="process.html" class="card">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">Процессуальный</div>
+      <div class="card-desc">Задержание · Обыск · Адвокат</div>
+    </a>
+    <a href="fsb.html" class="card">
+      <div class="card-icon">🕵️</div>
+      <div class="card-title">ФЗ О ФСБ</div>
+      <div class="card-desc">Структура, полномочия, задачи.</div>
+    </a>
+    <a href="fsb-charter.html" class="card">
+      <div class="card-icon">📕</div>
+      <div class="card-title">Устав УФСБ</div>
+      <div class="card-desc">Внутренний распорядок и субординация.</div>
+    </a>
+    <a href="weapons.html" class="card">
+      <div class="card-icon">🔫</div>
+      <div class="card-title">Об оружии</div>
+      <div class="card-desc">Лицензии · СИЗ · Правила.</div>
+    </a>
+    <a href="property.html" class="card">
+      <div class="card-icon">🏢</div>
+      <div class="card-title">Госсобственность</div>
+      <div class="card-desc">Закрытые территории.</div>
+    </a>
+    <a href="raids.html" class="card">
+      <div class="card-icon">🚚</div>
+      <div class="card-title">Ограбления</div>
+      <div class="card-desc">Поставки · Перекрытия.</div>
+    </a>
+    <a href="vzk.html" class="card">
+      <div class="card-icon">🪖</div>
+      <div class="card-title">Война за КрАЗ</div>
+      <div class="card-desc">21 правило события.</div>
+    </a>
+    <a href="audit.html" class="card">
+      <div class="card-icon">🎖️</div>
+      <div class="card-title">Управление «А»</div>
+      <div class="card-desc">Кадровый аудит, рапорты.</div>
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container" style="justify-content: center; flex-direction: column; gap: 10px;">
+    <div>© 2026 FSB LAW. СИСТЕМА ЗАЩИЩЕНА.</div>
+    <div style="font-size: 10px;">SYS_VER: 2.2.26 | 🎯 ЦУ: ONLINE</div>
+  </div>
 </footer>
 
-<button class="to-top" id="toTop">↑</button>
-<div class="online-indicator"><span class="online-dot"></span><span id="onlineCount">0</span> онлайн</div>
-<div class="secret-badge" id="secretBadge">🎁 СЕКРЕТНЫЙ АГЕНТ</div>
-
-<div class="modal-overlay" id="loginModal" hidden>
-  <div class="modal" style="max-width: 400px;">
-    <div class="modal-head">
-      <h3 class="modal-title">🔐 Вход в систему</h3>
-      <button class="modal-close" onclick="document.getElementById('loginModal').hidden = true">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="login-tabs">
-        <div class="login-tab active" onclick="switchLoginTab('login')">Вход</div>
-        <div class="login-tab" onclick="switchLoginTab('reg')">Регистрация</div>
-      </div>
-      
-      <div class="login-form active" id="formLogin">
-        <div class="form-group"><label>Email</label><input type="email" class="form-control" id="logEmail" placeholder="user@fsb.ru"></div>
-        <div class="form-group"><label>Пароль</label><input type="password" class="form-control" id="logPass" placeholder="••••••"></div>
-        <button class="fsb-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="doLogin()">Войти</button>
-      </div>
-
-      <div class="login-form" id="formReg">
-        <div class="form-group"><label>Email</label><input type="email" class="form-control" id="regEmail" placeholder="user@fsb.ru"></div>
-        <div class="form-group"><label>Пароль</label><input type="password" class="form-control" id="regPass" placeholder="••••••"></div>
-        <button class="fsb-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="doRegister()">Зарегистрироваться</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="profileModal" hidden>
-  <div class="modal" style="max-width: 450px;">
-    <div class="modal-head">
-      <h3 class="modal-title">👤 Личное дело</h3>
-      <button class="modal-close" onclick="document.getElementById('profileModal').hidden = true">✕</button>
-    </div>
-    <div class="modal-body profile-modal-content">
-      <div class="profile-avatar-large" id="pmAvatar">?</div>
-      <div class="profile-email-large" id="pmEmail">user@fsb.ru</div>
-      <div class="profile-rank-large">Звание: <span id="pmRank">Стажер</span></div>
-      
-      <div style="font-family: var(--fsb-mono); font-size: 12px; color: var(--fsb-text-dim); margin-bottom: 10px; text-transform: uppercase;">Награды</div>
-      <div class="medals-container">
-        <div class="medal-item unlocked" id="medalNewbie">
-          🥉
-          <span class="medal-tooltip">Новичок</span>
-        </div>
-        <div class="medal-item" id="medalDefender">
-          🛡️
-          <span class="medal-tooltip">Защитник</span>
-        </div>
-        <div class="medal-item" id="medalLaw">
-          ⚖️
-          <span class="medal-tooltip">Знаток законов</span>
-        </div>
-        <div class="medal-item" id="medalAI">
-          🤖
-          <span class="medal-tooltip">Друг ИИ</span>
-        </div>
-      </div>
-      
-      <button class="fsb-btn" style="width:100%; justify-content:center; background: rgba(231,76,60,0.1); color: var(--fsb-red); border-color: rgba(231,76,60,0.3);" onclick="logout()">Выйти из аккаунта</button>
-    </div>
-  </div>
-</div>
-
+<!-- Подключаем скрипты -->
 <script src="auth.js"></script>
 <script src="script.js"></script>
-<script>
-(function(){
-  'use strict';
-  function $(id){ return document.getElementById(id); }
-
-  const aiBtn = $('aiBtn');
-  const aiDropdown = $('aiDropdown');
-
-  if (aiBtn && aiDropdown) {
-    aiBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      aiDropdown.classList.toggle('active');
-      if (aiDropdown.classList.contains('active')) {
-        $('aiChatInput').focus();
-        unlockMedal('medalAI');
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!aiDropdown.contains(e.target) && !aiBtn.contains(e.target)) {
-        aiDropdown.classList.remove('active');
-      }
-    });
-  }
-
-  window.handleAIEnter = function(e) {
-    if (e.key === 'Enter') sendAIMessage();
-  };
-
-  window.sendAIMessage = function() {
-    const input = $('aiChatInput');
-    const body = $('aiChatBody');
-    const query = input.value.toLowerCase().trim();
-    
-    if (!query) return;
-
-    const userMsg = document.createElement('div');
-    userMsg.className = 'ai-msg user';
-    userMsg.textContent = input.value;
-    body.appendChild(userMsg);
-    input.value = '';
-    body.scrollTop = body.scrollHeight;
-
-    setTimeout(() => {
-      let bestMatch = null;
-      let maxScore = 0;
-
-      const AI_KNOWLEDGE = [
-        { keywords: ['убийство', 'за убийство'], title: 'Статья 37 УК РФ', answer: 'Убийство. Наказание: лишение свободы на срок 7 лет (СПРП ★★★★). Если двух и более лиц — до 8 лет.', url: 'uk.html#art-37' },
-        { keywords: ['тяжкий вред', 'вред здоровью'], title: 'Статья 38 УК РФ', answer: 'Причинение тяжкого вреда здоровью. Наказание: лишение свободы на срок 5 лет (СПРП ★★★).', url: 'uk.html#art-38' },
-        { keywords: ['похищение', 'похитил'], title: 'Статья 41 УК РФ', answer: 'Похищение человека. Наказание: лишение свободы на срок 6 лет (СПРП ★★★).', url: 'uk.html#art-41' },
-        { keywords: ['кража', 'украл'], title: 'Статья 44 УК РФ', answer: 'Кража (тайное хищение). Наказание: штраф 30.000 рублей или лишение свободы на срок 3 лет (СПРП ★★).', url: 'uk.html#art-44' },
-        { keywords: ['грабеж', 'ограбил'], title: 'Статья 46 УК РФ', answer: 'Грабеж (открытое хищение). Наказание: лишение свободы на срок 4 лет (СПРП ★★). Если с проникновением — 5 лет.', url: 'uk.html#art-46' },
-        { keywords: ['разбой', 'напал'], title: 'Статья 47 УК РФ', answer: 'Разбой. Наказание: лишение свободы на срок 5 лет (СПРП ★★★). С оружием — 6 лет.', url: 'uk.html#art-47' },
-        { keywords: ['терроризм', 'теракт'], title: 'Статья 53 УК РФ', answer: 'Террористический акт. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-53' },
-        { keywords: ['измена', 'госизмена'], title: 'Статья 69 УК РФ', answer: 'Государственная измена. Наказание: лишение свободы на срок 15 лет (СПРП ★★★★★★).', url: 'uk.html#art-69' },
-        { keywords: ['взятка', 'подкуп'], title: 'Статья 79 УК РФ', answer: 'Получение или дача взятки. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-79' },
-        { keywords: ['оружие', 'хранение оружия'], title: 'Статья 63 УК РФ', answer: 'Незаконный оборот оружия. Наказание: лишение свободы на срок 4 лет (СПРП ★★★).', url: 'uk.html#art-63' },
-        { keywords: ['наркотики', 'наркота'], title: 'Статья 64 УК РФ', answer: 'Незаконный оборот наркотиков (без сбыта). Наказание: лишение свободы на срок 5 лет (СПРП ★★★). Сбыт — 6 лет.', url: 'uk.html#art-64' },
-        { keywords: ['хулиганство'], title: 'Статья 8.1 КоАП', answer: 'Мелкое хулиганство. Наказание: штраф от 10.000 до 30.000 или арест на 7 суток (СПРП ★).', url: 'koap.html#art-8.1' },
-        { keywords: ['неповиновение', 'не подчинился'], title: 'Статья 8.7 КоАП', answer: 'Неповиновение законному распоряжению. Наказание: штраф от 15.000 до 30.000 или арест на 14 суток (СПРП ★★).', url: 'koap.html#art-8.7' }
-      ];
-
-      AI_KNOWLEDGE.forEach(item => {
-        let score = 0;
-        item.keywords.forEach(kw => {
-          if (query.includes(kw)) score += 1;
-        });
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = item;
-        }
-      });
-
-      const botMsg = document.createElement('div');
-      botMsg.className = 'ai-msg bot';
-
-      if (bestMatch) {
-        botMsg.innerHTML = `<strong>${bestMatch.title}</strong><br>${bestMatch.answer}<br><br><a href="${bestMatch.url}" target="_blank">🔗 Перейти к статье</a>`;
-      } else {
-        botMsg.innerHTML = 'Не нашел статью. Спросите иначе (напр: "срок за кражу").';
-      }
-
-      body.appendChild(botMsg);
-      body.scrollTop = body.scrollHeight;
-    }, 600);
-  };
-
-  var isScanning = false;
-  var scanStatus = $('scanStatus'), scanFill = $('scanFill'), scanLog = $('scanLog');
-
-  window.runScan = function() {
-    if (isScanning || !scanStatus) return;
-    isScanning = true;
-    scanStatus.textContent = 'СТАТУС: СКАНИРОВАНИЕ...';
-    scanStatus.style.color = '#f1c40f';
-    scanFill.style.width = '0%';
-    scanLog.innerHTML = '';
-    var logs = ['[>] Подключение к БД... OK','[>] Проверка целостности... OK','[>] Сверка хэш-сумм... OK','[>] Запрос к УК РФ... 99 статей.','[>] Запрос к КоАП... 60+ статей.','[>] Проверка прав... ОФИЦЕР','[!] Скрытые файлы.','[>] Расшифровка «А»... OK','[>] Связь с Центром Управления... OK','[✓] СКАНИРОВАНИЕ ЗАВЕРШЕНО.'];
-    var currentLog = 0, progress = 0;
-    var interval = setInterval(function() {
-      progress += 11; if (progress > 100) progress = 100;
-      scanFill.style.width = progress + '%';
-      if (currentLog < logs.length && progress > (currentLog * 10)) {
-        var p = document.createElement('div'); p.textContent = logs[currentLog];
-        if (logs[currentLog].includes('✓')) p.style.color = 'var(--fsb-accent)';
-        if (logs[currentLog].includes('!')) p.style.color = '#f1c40f';
-        scanLog.appendChild(p); scanLog.scrollTop = scanLog.scrollHeight; currentLog++;
-      }
-      if (progress >= 100) { clearInterval(interval); scanStatus.textContent = 'СТАТУС: ЗАЩИЩЕНО'; scanStatus.style.color = 'var(--fsb-accent)'; isScanning = false; }
-    }, 150);
-  };
-
-  function updateHeaderAuth() {
-    const saved = localStorage.getItem('fsb_user');
-    const container = $('headerAuth');
-
-    if (saved) {
-      const user = JSON.parse(saved);
-      const medals = JSON.parse(localStorage.getItem('fsb_medals') || '[]');
-      
-      let medalsHtml = '';
-      if (medals.includes('medalDefender')) medalsHtml += '🛡️';
-      if (medals.includes('medalLaw')) medalsHtml += '⚖️';
-      if (medals.includes('medalAI')) medalsHtml += '🤖';
-
-      container.innerHTML = `
-        <div class="user-badge" onclick="openProfileModal()">
-          <div class="user-badge-avatar">${user.email[0].toUpperCase()}</div>
-          <div class="user-badge-info">
-            <div class="user-badge-email">${user.email}</div>
-            <div class="user-badge-medals">${medalsHtml || 'Нет наград'}</div>
-          </div>
-        </div>
-      `;
-    } else {
-      container.innerHTML = `<button class="btn-add" style="background:var(--fsb-accent);color:#000;font-weight:bold" onclick="openLoginModal()">ВОЙТИ</button>`;
-    }
-  }
-
-  window.openLoginModal = function() { $('loginModal').hidden = false; };
-  
-  window.switchLoginTab = function(tab) {
-    document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
-    if (tab === 'login') {
-      document.querySelectorAll('.login-tab')[0].classList.add('active');
-      $('formLogin').classList.add('active');
-    } else {
-      document.querySelectorAll('.login-tab')[1].classList.add('active');
-      $('formReg').classList.add('active');
-    }
-  };
-
-  window.doRegister = function() {
-    const email = $('regEmail').value.trim();
-    const pass = $('regPass').value.trim();
-    if (!email || !pass) return alert('Заполните все поля!');
-    
-    localStorage.setItem('fsb_user', JSON.stringify({ email: email, pass: pass, rank: 'Стажер' }));
-    $('loginModal').hidden = true;
-    unlockMedal('medalLaw');
-    updateHeaderAuth();
-    alert('Регистрация успешна! Добро пожаловать в ФСБ.');
-  };
-
-  window.doLogin = function() {
-    const email = $('logEmail').value.trim();
-    const pass = $('logPass').value.trim();
-    const saved = JSON.parse(localStorage.getItem('fsb_user') || 'null');
-
-    if (saved && saved.email === email && saved.pass === pass) {
-      $('loginModal').hidden = true;
-      updateHeaderAuth();
-    } else {
-      alert('Неверный Email или пароль! (Попробуйте зарегистрироваться)');
-    }
-  };
-
-  window.logout = function() {
-    localStorage.removeItem('fsb_user');
-    $('profileModal').hidden = true;
-    updateHeaderAuth();
-  };
-
-  window.openProfileModal = function() {
-    const saved = JSON.parse(localStorage.getItem('fsb_user') || 'null');
-    if (!saved) return;
-    
-    $('pmEmail').textContent = saved.email;
-    $('pmAvatar').textContent = saved.email[0].toUpperCase();
-    $('profileModal').hidden = false;
-    checkMedals();
-  };
-
-  window.unlockMedal = function(id) {
-    const saved = JSON.parse(localStorage.getItem('fsb_medals') || '[]');
-    if (!saved.includes(id)) {
-      saved.push(id);
-      localStorage.setItem('fsb_medals', JSON.stringify(saved));
-      updateHeaderAuth();
-    }
-    checkMedals();
-  };
-
-  window.checkMedals = function() {
-    const saved = JSON.parse(localStorage.getItem('fsb_medals') || '[]');
-    saved.forEach(id => {
-      const el = $(id);
-      if (el) el.classList.add('unlocked');
-    });
-  };
-
-  window.addEventListener('scroll', function() {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    document.getElementById('reading-progress').style.width = scrolled + '%';
-
-    var toTop = document.getElementById('toTop');
-    if (winScroll > 500) toTop.classList.add('show');
-    else toTop.classList.remove('show');
-  });
-
-  document.getElementById('toTop').addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  var onlineCount = 0;
-  function updateOnline(){
-    onlineCount = 15 + Math.floor(Math.random() * 20);
-    var el = $('onlineCount');
-    if(el) el.textContent = onlineCount;
-  }
-  updateOnline();
-  setInterval(updateOnline, 5000);
-
-  let rCount = 0;
-  document.addEventListener('keydown', function(e) {
-    if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey && !e.metaKey) {
-      rCount++;
-      if (rCount === 3) {
-        const badge = document.getElementById('secretBadge');
-        badge.style.display = 'block';
-        setTimeout(() => { badge.style.display = 'none'; }, 3000);
-        rCount = 0;
-      }
-    }
-  });
-
-  window.AdminPanel = {
-    toggle: function(){
-      var p = document.getElementById('adminPanel');
-      if(p) p.classList.toggle('open');
-    },
-    broadcast: function(){
-      var text = prompt('Текст объявления для всех:', '');
-      if(!text) return;
-      localStorage.setItem('fsb_broadcast', text);
-      this.renderBroadcast();
-    },
-    clearBroadcast: function(){
-      if(!confirm('Убрать объявление?')) return;
-      localStorage.removeItem('fsb_broadcast');
-      this.renderBroadcast();
-    },
-    renderBroadcast: function(){
-      var wrap = document.getElementById('adminBroadcastWrap');
-      if(!wrap) return;
-      var text = localStorage.getItem('fsb_broadcast');
-      if(!text){ wrap.innerHTML = ''; return; }
-      wrap.innerHTML = '<div class="admin-broadcast">📢 <span>' + text + '</span><button class="admin-broadcast-close" onclick="AdminPanel.clearBroadcast()">✕</button></div>';
-    }
-  };
-  AdminPanel.renderBroadcast();
-
-  (function(){
-    if(!window.RMRPAuth) return;
-    var u = RMRPAuth.getCurrent();
-    if(!u) return;
-    if(RMRPAuth.isAdmin && RMRPAuth.isAdmin(u)){
-      var p = document.getElementById('adminPanel');
-      if(p) p.hidden = false;
-      var b = document.getElementById('adminRoleBadge');
-      if(b) b.textContent = u.role === 'Разработчик' ? 'DEV' : 'ADMIN';
-    }
-  })();
-
-  updateHeaderAuth();
-
-  var termInput = document.getElementById('termInput');
-  var searchResults = document.getElementById('searchResults');
-
-  var SEARCH_INDEX = [
-    { t:'Убийство (ст. 37 УК)', d:'7 лет лишения свободы', url:'uk.html#art-37' },
-    { t:'Кража (ст. 44 УК)', d:'Штраф 30 000 ₽ или 3 года', url:'uk.html#art-44' },
-    { t:'Грабёж (ст. 46 УК)', d:'4 года лишения свободы', url:'uk.html#art-46' },
-    { t:'Разбой (ст. 47 УК)', d:'5 лет лишения свободы', url:'uk.html#art-47' },
-    { t:'Теракт (ст. 53 УК)', d:'8 лет лишения свободы', url:'uk.html#art-53' },
-    { t:'Взятка (ст. 79 УК)', d:'8 лет лишения свободы', url:'uk.html#art-79' },
-    { t:'Хулиганство (ст. 8.1 КоАП)', d:'Штраф 10–30 тыс. ₽ / 7 суток', url:'koap.html#art-8.1' },
-    { t:'Неповиновение (ст. 8.7 КоАП)', d:'Штраф 15–30 тыс. ₽ / 14 суток', url:'koap.html#art-8.7' },
-    { t:'Задержание (ст. 6 ПК)', d:'Не более 60 минут', url:'process.html' },
-    { t:'Адвокат (ст. 9 ПК)', d:'Время ожидания — 5 минут', url:'process.html' },
-    { t:'Обыск (ст. 20 ПК)', d:'Только по ордеру', url:'process.html' },
-    { t:'Применение оружия (ст. 25 ПК)', d:'2 предупреждения', url:'process.html' },
-    { t:'Структура ФСБ (ст. 17)', d:'5 служб: М, К, А, О, АПС', url:'fsb.html' },
-    { t:'Рабочее время УФСБ', d:'Пн-Пт 10-22, Сб-Вс 10-20', url:'fsb-charter.html' },
-    { t:'Лицензия на оружие', d:'Экзамен + 3 месяца', url:'weapons.html' },
-    { t:'Кремль (закрытая зона)', d:'Доступ по пропуску', url:'property.html' },
-    { t:'Перекрытие (правила)', d:'Минимум 4 авто', url:'raids.html' },
-    { t:'ВЗК (правила)', d:'21 правило', url:'vzk.html' }
-  ];
-
-  if (termInput && searchResults) {
-    termInput.addEventListener('input', function(){
-      var q = this.value.trim().toLowerCase();
-      if(!q){ searchResults.classList.remove('active'); searchResults.innerHTML = ''; return; }
-
-      var found = SEARCH_INDEX.filter(function(item){
-        return item.t.toLowerCase().includes(q) || item.d.toLowerCase().includes(q);
-      }).slice(0, 6);
-
-      if(found.length === 0){
-        searchResults.innerHTML = '<div class="search-result-item" style="text-align:center;color:var(--fsb-text-dim)">Ничего не найдено</div>';
-      } else {
-        searchResults.innerHTML = found.map(function(item){
-          return '<div class="search-result-item" onclick="location.href=\'' + item.url + '\'">' +
-            '<div class="search-result-title">' + item.t + '</div>' +
-            '<div class="search-result-desc">' + item.d + '</div>' +
-          '</div>';
-        }).join('');
-      }
-      searchResults.classList.add('active');
-    });
-
-    document.addEventListener('click', function(e){
-      if(!termInput.contains(e.target) && !searchResults.contains(e.target)){
-        searchResults.classList.remove('active');
-      }
-    });
-  }
-
-})();
-</script>
 </body>
 </html>
