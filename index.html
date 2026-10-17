@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#05080a">
-<title>RMRP Law | Законодательная база</title>
+<title>RMRP FSB | Законодательная база</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -24,28 +24,45 @@ body {
 ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--fsb-bg); } ::-webkit-scrollbar-thumb { background: var(--fsb-border); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: var(--fsb-accent); }
 
 /* --- ШАПКА --- */
-.header { background: rgba(5, 8, 10, 0.95); border-bottom: 3px solid; border-image: linear-gradient(90deg, var(--rf-white) 33%, var(--rf-blue) 33%, var(--rf-blue) 66%, var(--rf-red) 66%) 1; backdrop-filter: blur(12px); position: relative; z-index: 10; }
+.header { background: rgba(5, 8, 10, 0.95); border-bottom: 3px solid; border-image: linear-gradient(90deg, var(--rf-white) 33%, var(--rf-blue) 33%, var(--rf-blue) 66%, var(--rf-red) 66%) 1; backdrop-filter: blur(12px); position: relative; z-index: 100; }
 .logo-icon { filter: drop-shadow(0 0 8px var(--fsb-accent-glow)); }
 .logo-text .accent { color: var(--fsb-accent); font-family: var(--fsb-mono); }
 .nav-link { font-family: var(--fsb-mono); text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 .nav-link.active { background: var(--fsb-accent) !important; color: #000 !important; font-weight: 900; }
 .nav-link:hover { background: rgba(46, 204, 113, 0.1); color: var(--fsb-accent); }
 
-/* Кнопка ИИ в шапке */
+/* Кнопка ИИ и выпадающее окно */
+.ai-dropdown-wrapper { position: relative; display: inline-block; }
 .btn-ai {
-  color: var(--fsb-accent) !important; 
-  font-weight: 900;
-  text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
-  transition: all 0.3s;
+  color: var(--fsb-accent) !important; font-weight: 900; text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+  transition: all 0.3s; cursor: pointer;
 }
 .btn-ai:hover { transform: translateY(-2px); text-shadow: 0 0 20px rgba(46, 204, 113, 0.8); }
 
-/* --- ГЕРОЙ-СЕКЦИЯ --- */
-.hero { 
-  position: relative; padding: 120px 0 100px; border-bottom: 1px solid var(--fsb-border); 
-  background: linear-gradient(rgba(5, 8, 10, 0.85), rgba(5, 8, 10, 0.95)), url('https://images.unsplash.com/photo-1555679486-e341a3e7b6de?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
-  overflow: hidden; 
+.ai-dropdown-menu {
+  position: absolute; top: calc(100% + 10px); right: 0; width: 350px;
+  background: var(--fsb-card); border: 1px solid var(--fsb-accent); border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(46,204,113,0.2);
+  display: none; flex-direction: column; z-index: 999; overflow: hidden;
 }
+.ai-dropdown-menu.active { display: flex; animation: dropIn 0.3s ease; }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.ai-chat-head { padding: 12px 16px; border-bottom: 1px solid var(--fsb-border); background: #0f1419; display: flex; justify-content: space-between; align-items: center; font-family: var(--fsb-mono); font-size: 13px; font-weight: bold; color: #fff; }
+.ai-chat-head .dot { width: 8px; height: 8px; background: var(--fsb-accent); border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px var(--fsb-accent); }
+
+.ai-chat-body { max-height: 300px; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: #05080a; }
+.ai-msg { max-width: 85%; padding: 8px 12px; border-radius: 10px; font-size: 12.5px; line-height: 1.4; word-wrap: break-word; }
+.ai-msg.bot { background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--fsb-text); align-self: flex-start; border-bottom-left-radius: 2px; }
+.ai-msg.user { background: var(--rf-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+.ai-msg a { color: var(--fsb-accent); font-weight: bold; text-decoration: none; }
+
+.ai-chat-input-wrap { padding: 10px; border-top: 1px solid var(--fsb-border); display: flex; gap: 8px; background: #0f1419; }
+.ai-chat-input { flex: 1; padding: 8px 12px; border-radius: 6px; background: #000; border: 1px solid var(--fsb-border); color: #fff; font-family: inherit; font-size: 12.5px; outline: none; }
+.ai-chat-send { padding: 0 12px; border-radius: 6px; background: var(--fsb-accent); color: #000; font-weight: bold; border: none; cursor: pointer; }
+
+/* --- ГЕРОЙ-СЕКЦИЯ --- */
+.hero { position: relative; padding: 120px 0 100px; border-bottom: 1px solid var(--fsb-border); background: linear-gradient(rgba(5, 8, 10, 0.85), rgba(5, 8, 10, 0.95)), url('https://images.unsplash.com/photo-1555679486-e341a3e7b6de?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; overflow: hidden; }
 .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(46, 204, 113, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(46, 204, 113, 0.05) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 80%); }
 .scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--fsb-accent), transparent); box-shadow: 0 0 20px var(--fsb-accent); opacity: 0.3; animation: scan 6s linear infinite; }
 @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
@@ -148,17 +165,6 @@ body {
 .form-control:focus, .editor-area:focus { border-color: var(--fsb-accent); }
 .editor-area { min-height: 150px; resize: vertical; }
 
-/* --- ИИ ЧАТ --- */
-.ai-chat-modal { max-width: 600px; width: 100%; height: 600px; display: flex; flex-direction: column; }
-.ai-chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #05080a; }
-.ai-msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; word-wrap: break-word; }
-.ai-msg.bot { background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.2); color: var(--fsb-text); align-self: flex-start; border-bottom-left-radius: 2px; }
-.ai-msg.user { background: var(--rf-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-.ai-msg a { color: var(--fsb-accent); font-weight: bold; text-decoration: none; }
-.ai-chat-input-wrap { padding: 12px; border-top: 1px solid var(--fsb-border); display: flex; gap: 8px; background: #0f1419; }
-.ai-chat-input { flex: 1; padding: 10px 12px; border-radius: 6px; background: #000; border: 1px solid var(--fsb-border); color: #fff; font-family: inherit; font-size: 13px; outline: none; }
-.ai-chat-send { padding: 0 15px; border-radius: 6px; background: var(--fsb-accent); color: #000; font-weight: bold; border: none; cursor: pointer; }
-
 /* --- ПРОФИЛЬ В ШАПКЕ --- */
 .user-badge {
   display: flex; align-items: center; gap: 10px;
@@ -233,8 +239,25 @@ body {
       <a href="audit.html" class="nav-link">🛡️ Управление «А»</a>
       <a href="uk.html" class="nav-link">УК РФ</a>
       <a href="koap.html" class="nav-link">КоАП РФ</a>
-      <!-- Кнопка ИИ после Аудита (как ты просил) -->
-      <a href="#" class="nav-link btn-ai" onclick="toggleAIModal(event)">🤖 ИИ-ЮРИСТ</a>
+      
+      <!-- ВЫПАДАЮЩЕЕ МЕНЮ ИИ -->
+      <div class="ai-dropdown-wrapper">
+        <a href="#" class="nav-link btn-ai" id="aiBtn">🤖 ИИ-ЮРИСТ</a>
+        <div class="ai-dropdown-menu" id="aiDropdown">
+          <div class="ai-chat-head">
+            <span><span class="dot"></span> Юрист ФСБ (ИИ)</span>
+            <span style="font-size:10px; color:var(--fsb-text-dim); font-weight:normal;">СПРАВОЧНАЯ СИСТЕМА</span>
+          </div>
+          <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-msg bot">Приветствую. Спроси меня о статье (напр: "срок за кражу").</div>
+          </div>
+          <div class="ai-chat-input-wrap">
+            <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Введите вопрос..." onkeypress="handleAIEnter(event)">
+            <button class="ai-chat-send" onclick="sendAIMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+
     </nav>
     <div class="header-actions" id="headerAuth">
       <button class="btn-add" style="background:var(--fsb-accent);color:#000;font-weight:bold" onclick="openLoginModal()">ВОЙТИ</button>
@@ -379,23 +402,6 @@ body {
 <div class="online-indicator"><span class="online-dot"></span><span id="onlineCount">0</span> онлайн</div>
 <div class="secret-badge" id="secretBadge">🎁 СЕКРЕТНЫЙ АГЕНТ</div>
 
-<!-- МОДАЛКА ИИ-ЮРИСТА -->
-<div class="modal-overlay" id="aiModal" hidden>
-  <div class="modal ai-chat-modal">
-    <div class="modal-head">
-      <h3 class="modal-title">🤖 Юрист ФСБ (ИИ)</h3>
-      <button class="modal-close" onclick="document.getElementById('aiModal').hidden = true">✕</button>
-    </div>
-    <div class="ai-chat-body" id="aiChatBody">
-      <div class="ai-msg bot">Приветствую, товарищ. Я — ИИ-помощник по законодательной базе. Спроси меня о любой статье (например: "срок за кражу", "штраф за хулиганство").</div>
-    </div>
-    <div class="ai-chat-input-wrap">
-      <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Задайте вопрос..." onkeypress="handleAIEnter(event)">
-      <button class="ai-chat-send" onclick="sendAIMessage()">➤</button>
-    </div>
-  </div>
-</div>
-
 <!-- МОДАЛКА ЛОГИНА -->
 <div class="modal-overlay" id="loginModal" hidden>
   <div class="modal" style="max-width: 400px;">
@@ -461,16 +467,123 @@ body {
   </div>
 </div>
 
-<!-- Скрытые модалки -->
-<div class="modal-overlay" id="editorModal" hidden><div class="modal"><div class="modal-head"><h3 class="modal-title">Закон</h3><button class="modal-close" id="closeEditor">✕</button></div><div class="modal-body"><p>Редактор</p></div></div></div>
-<div class="modal-overlay" id="bgModal" hidden><div class="modal"><div class="modal-head"><h3 class="modal-title">Фон</h3><button class="modal-close" id="closeBgPicker">✕</button></div><div class="modal-body"><p>Настройки</p></div></div></div>
-
 <script src="auth.js"></script>
 <script src="script.js"></script>
 <script>
 (function(){
   'use strict';
   function $(id){ return document.getElementById(id); }
+
+  // --- ВЫПАДАЮЩЕЕ МЕНЮ ИИ ---
+  const aiBtn = $('aiBtn');
+  const aiDropdown = $('aiDropdown');
+
+  if (aiBtn && aiDropdown) {
+    aiBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      aiDropdown.classList.toggle('active');
+      if (aiDropdown.classList.contains('active')) {
+        $('aiChatInput').focus();
+        unlockMedal('medalAI');
+      }
+    });
+
+    // Закрыть при клике вне меню
+    document.addEventListener('click', function(e) {
+      if (!aiDropdown.contains(e.target) && !aiBtn.contains(e.target)) {
+        aiDropdown.classList.remove('active');
+      }
+    });
+  }
+
+  window.handleAIEnter = function(e) {
+    if (e.key === 'Enter') sendAIMessage();
+  };
+
+  window.sendAIMessage = function() {
+    const input = $('aiChatInput');
+    const body = $('aiChatBody');
+    const query = input.value.toLowerCase().trim();
+    
+    if (!query) return;
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ai-msg user';
+    userMsg.textContent = input.value;
+    body.appendChild(userMsg);
+    input.value = '';
+    body.scrollTop = body.scrollHeight;
+
+    setTimeout(() => {
+      let bestMatch = null;
+      let maxScore = 0;
+
+      const AI_KNOWLEDGE = [
+        { keywords: ['убийство', 'за убийство'], title: 'Статья 37 УК РФ', answer: 'Убийство. Наказание: лишение свободы на срок 7 лет (СПРП ★★★★). Если двух и более лиц — до 8 лет.', url: 'uk.html#art-37' },
+        { keywords: ['тяжкий вред', 'вред здоровью'], title: 'Статья 38 УК РФ', answer: 'Причинение тяжкого вреда здоровью. Наказание: лишение свободы на срок 5 лет (СПРП ★★★).', url: 'uk.html#art-38' },
+        { keywords: ['похищение', 'похитил'], title: 'Статья 41 УК РФ', answer: 'Похищение человека. Наказание: лишение свободы на срок 6 лет (СПРП ★★★).', url: 'uk.html#art-41' },
+        { keywords: ['кража', 'украл'], title: 'Статья 44 УК РФ', answer: 'Кража (тайное хищение). Наказание: штраф 30.000 рублей или лишение свободы на срок 3 лет (СПРП ★★).', url: 'uk.html#art-44' },
+        { keywords: ['грабеж', 'ограбил'], title: 'Статья 46 УК РФ', answer: 'Грабеж (открытое хищение). Наказание: лишение свободы на срок 4 лет (СПРП ★★). Если с проникновением — 5 лет.', url: 'uk.html#art-46' },
+        { keywords: ['разбой', 'напал'], title: 'Статья 47 УК РФ', answer: 'Разбой. Наказание: лишение свободы на срок 5 лет (СПРП ★★★). С оружием — 6 лет.', url: 'uk.html#art-47' },
+        { keywords: ['терроризм', 'теракт'], title: 'Статья 53 УК РФ', answer: 'Террористический акт. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-53' },
+        { keywords: ['измена', 'госизмена'], title: 'Статья 69 УК РФ', answer: 'Государственная измена. Наказание: лишение свободы на срок 15 лет (СПРП ★★★★★★).', url: 'uk.html#art-69' },
+        { keywords: ['взятка', 'подкуп'], title: 'Статья 79 УК РФ', answer: 'Получение или дача взятки. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-79' },
+        { keywords: ['оружие', 'хранение оружия'], title: 'Статья 63 УК РФ', answer: 'Незаконный оборот оружия. Наказание: лишение свободы на срок 4 лет (СПРП ★★★).', url: 'uk.html#art-63' },
+        { keywords: ['наркотики', 'наркота'], title: 'Статья 64 УК РФ', answer: 'Незаконный оборот наркотиков (без сбыта). Наказание: лишение свободы на срок 5 лет (СПРП ★★★). Сбыт — 6 лет.', url: 'uk.html#art-64' },
+        { keywords: ['хулиганство'], title: 'Статья 8.1 КоАП', answer: 'Мелкое хулиганство. Наказание: штраф от 10.000 до 30.000 или арест на 7 суток (СПРП ★).', url: 'koap.html#art-8.1' },
+        { keywords: ['неповиновение', 'не подчинился'], title: 'Статья 8.7 КоАП', answer: 'Неповиновение законному распоряжению. Наказание: штраф от 15.000 до 30.000 или арест на 14 суток (СПРП ★★).', url: 'koap.html#art-8.7' }
+      ];
+
+      AI_KNOWLEDGE.forEach(item => {
+        let score = 0;
+        item.keywords.forEach(kw => {
+          if (query.includes(kw)) score += 1;
+        });
+        if (score > maxScore) {
+          maxScore = score;
+          bestMatch = item;
+        }
+      });
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'ai-msg bot';
+
+      if (bestMatch) {
+        botMsg.innerHTML = `<strong>${bestMatch.title}</strong><br>${bestMatch.answer}<br><br><a href="${bestMatch.url}" target="_blank">🔗 Перейти к статье</a>`;
+      } else {
+        botMsg.innerHTML = 'Не нашел статью. Спросите иначе (напр: "срок за кражу").';
+      }
+
+      body.appendChild(botMsg);
+      body.scrollTop = body.scrollHeight;
+    }, 600);
+  };
+
+  // --- СКАНЕР БЕЗОПАСНОСТИ ---
+  var isScanning = false;
+  var scanStatus = $('scanStatus'), scanFill = $('scanFill'), scanLog = $('scanLog');
+
+  window.runScan = function() {
+    if (isScanning || !scanStatus) return;
+    isScanning = true;
+    scanStatus.textContent = 'СТАТУС: СКАНИРОВАНИЕ...';
+    scanStatus.style.color = '#f1c40f';
+    scanFill.style.width = '0%';
+    scanLog.innerHTML = '';
+    var logs = ['[>] Подключение к БД... OK','[>] Проверка целостности... OK','[>] Сверка хэш-сумм... OK','[>] Запрос к УК РФ... 99 статей.','[>] Запрос к КоАП... 60+ статей.','[>] Проверка прав... ОФИЦЕР','[!] Скрытые файлы.','[>] Расшифровка «А»... OK','[✓] СКАНИРОВАНИЕ ЗАВЕРШЕНО.'];
+    var currentLog = 0, progress = 0;
+    var interval = setInterval(function() {
+      progress += 12; if (progress > 100) progress = 100;
+      scanFill.style.width = progress + '%';
+      if (currentLog < logs.length && progress > (currentLog * 11)) {
+        var p = document.createElement('div'); p.textContent = logs[currentLog];
+        if (logs[currentLog].includes('✓')) p.style.color = 'var(--fsb-accent)';
+        if (logs[currentLog].includes('!')) p.style.color = '#f1c40f';
+        scanLog.appendChild(p); scanLog.scrollTop = scanLog.scrollHeight; currentLog++;
+      }
+      if (progress >= 100) { clearInterval(interval); scanStatus.textContent = 'СТАТУС: ЗАЩИЩЕНО'; scanStatus.style.color = 'var(--fsb-accent)'; isScanning = false; }
+    }, 150);
+  };
 
   // --- АВТОРИЗАЦИЯ И ПРОФИЛЬ ---
   function updateHeaderAuth() {
@@ -573,103 +686,6 @@ body {
     });
   };
 
-  // --- ИИ-ЮРИСТ ---
-  const AI_KNOWLEDGE = [
-    { keywords: ['убийство', 'за убийство'], title: 'Статья 37 УК РФ', answer: 'Убийство. Наказание: лишение свободы на срок 7 лет (СПРП ★★★★). Если двух и более лиц — до 8 лет.', url: 'uk.html#art-37' },
-    { keywords: ['тяжкий вред', 'вред здоровью'], title: 'Статья 38 УК РФ', answer: 'Причинение тяжкого вреда здоровью. Наказание: лишение свободы на срок 5 лет (СПРП ★★★).', url: 'uk.html#art-38' },
-    { keywords: ['похищение', 'похитил'], title: 'Статья 41 УК РФ', answer: 'Похищение человека. Наказание: лишение свободы на срок 6 лет (СПРП ★★★).', url: 'uk.html#art-41' },
-    { keywords: ['кража', 'украл'], title: 'Статья 44 УК РФ', answer: 'Кража (тайное хищение). Наказание: штраф 30.000 рублей или лишение свободы на срок 3 лет (СПРП ★★).', url: 'uk.html#art-44' },
-    { keywords: ['грабеж', 'ограбил'], title: 'Статья 46 УК РФ', answer: 'Грабеж (открытое хищение). Наказание: лишение свободы на срок 4 лет (СПРП ★★). Если с проникновением — 5 лет.', url: 'uk.html#art-46' },
-    { keywords: ['разбой', 'напал'], title: 'Статья 47 УК РФ', answer: 'Разбой. Наказание: лишение свободы на срок 5 лет (СПРП ★★★). С оружием — 6 лет.', url: 'uk.html#art-47' },
-    { keywords: ['терроризм', 'теракт'], title: 'Статья 53 УК РФ', answer: 'Террористический акт. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-53' },
-    { keywords: ['измена', 'госизмена'], title: 'Статья 69 УК РФ', answer: 'Государственная измена. Наказание: лишение свободы на срок 15 лет (СПРП ★★★★★★).', url: 'uk.html#art-69' },
-    { keywords: ['взятка', 'подкуп'], title: 'Статья 79 УК РФ', answer: 'Получение или дача взятки. Наказание: лишение свободы на срок 8 лет (СПРП ★★★★★★).', url: 'uk.html#art-79' },
-    { keywords: ['оружие', 'хранение оружия'], title: 'Статья 63 УК РФ', answer: 'Незаконный оборот оружия. Наказание: лишение свободы на срок 4 лет (СПРП ★★★).', url: 'uk.html#art-63' },
-    { keywords: ['наркотики', 'наркота'], title: 'Статья 64 УК РФ', answer: 'Незаконный оборот наркотиков (без сбыта). Наказание: лишение свободы на срок 5 лет (СПРП ★★★). Сбыт — 6 лет.', url: 'uk.html#art-64' },
-    { keywords: ['хулиганство'], title: 'Статья 8.1 КоАП', answer: 'Мелкое хулиганство. Наказание: штраф от 10.000 до 30.000 или арест на 7 суток (СПРП ★).', url: 'koap.html#art-8.1' },
-    { keywords: ['неповиновение', 'не подчинился'], title: 'Статья 8.7 КоАП', answer: 'Неповиновение законному распоряжению. Наказание: штраф от 15.000 до 30.000 или арест на 14 суток (СПРП ★★).', url: 'koap.html#art-8.7' }
-  ];
-
-  window.toggleAIModal = function(e) {
-    if(e) e.preventDefault();
-    $('aiModal').hidden = false;
-    $('aiChatInput').focus();
-    unlockMedal('medalAI');
-  };
-
-  window.handleAIEnter = function(e) {
-    if (e.key === 'Enter') sendAIMessage();
-  };
-
-  window.sendAIMessage = function() {
-    const input = $('aiChatInput');
-    const body = $('aiChatBody');
-    const query = input.value.toLowerCase().trim();
-    
-    if (!query) return;
-
-    const userMsg = document.createElement('div');
-    userMsg.className = 'ai-msg user';
-    userMsg.textContent = input.value;
-    body.appendChild(userMsg);
-    input.value = '';
-    body.scrollTop = body.scrollHeight;
-
-    setTimeout(() => {
-      let bestMatch = null;
-      let maxScore = 0;
-
-      AI_KNOWLEDGE.forEach(item => {
-        let score = 0;
-        item.keywords.forEach(kw => {
-          if (query.includes(kw)) score += 1;
-        });
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = item;
-        }
-      });
-
-      const botMsg = document.createElement('div');
-      botMsg.className = 'ai-msg bot';
-
-      if (bestMatch) {
-        botMsg.innerHTML = `<strong>${bestMatch.title}</strong><br>${bestMatch.answer}<br><br><a href="${bestMatch.url}" target="_blank">🔗 Перейти к статье</a>`;
-      } else {
-        botMsg.innerHTML = 'Извините, я не нашел точного совпадения в базе. Попробуйте перефразировать (например: "срок за кражу", "штраф за хулиганство").';
-      }
-
-      body.appendChild(botMsg);
-      body.scrollTop = body.scrollHeight;
-    }, 600);
-  };
-
-  // --- СКАНЕР БЕЗОПАСНОСТИ ---
-  var isScanning = false;
-  var scanStatus = $('scanStatus'), scanFill = $('scanFill'), scanLog = $('scanLog');
-
-  window.runScan = function() {
-    if (isScanning || !scanStatus) return;
-    isScanning = true;
-    scanStatus.textContent = 'СТАТУС: СКАНИРОВАНИЕ...';
-    scanStatus.style.color = '#f1c40f';
-    scanFill.style.width = '0%';
-    scanLog.innerHTML = '';
-    var logs = ['[>] Подключение к БД... OK','[>] Проверка целостности... OK','[>] Сверка хэш-сумм... OK','[>] Запрос к УК РФ... 99 статей.','[>] Запрос к КоАП... 60+ статей.','[>] Проверка прав... ОФИЦЕР','[!] Скрытые файлы.','[>] Расшифровка «А»... OK','[✓] СКАНИРОВАНИЕ ЗАВЕРШЕНО.'];
-    var currentLog = 0, progress = 0;
-    var interval = setInterval(function() {
-      progress += 12; if (progress > 100) progress = 100;
-      scanFill.style.width = progress + '%';
-      if (currentLog < logs.length && progress > (currentLog * 11)) {
-        var p = document.createElement('div'); p.textContent = logs[currentLog];
-        if (logs[currentLog].includes('✓')) p.style.color = 'var(--fsb-accent)';
-        if (logs[currentLog].includes('!')) p.style.color = '#f1c40f';
-        scanLog.appendChild(p); scanLog.scrollTop = scanLog.scrollHeight; currentLog++;
-      }
-      if (progress >= 100) { clearInterval(interval); scanStatus.textContent = 'СТАТУС: ЗАЩИЩЕНО'; scanStatus.style.color = 'var(--fsb-accent)'; isScanning = false; }
-    }, 150);
-  };
-
   // --- ПРОЧЕЕ ---
   window.addEventListener('scroll', function() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -692,127 +708,4 @@ body {
       rCount++;
       if (rCount === 3) {
         document.getElementById('secretBadge').style.display = 'block';
-        setTimeout(() => { document.getElementById('secretBadge').style.display = 'none'; }, 5000);
-        rCount = 0;
-        unlockMedal('medalDefender');
-      }
-      setTimeout(() => { rCount = 0; }, 1000);
-    }
-  });
-
-  function checkBroadcast(){
-    var raw;
-    try{ raw = localStorage.getItem('rmrp_broadcast'); }catch(e){}
-    if(!raw) return;
-    var bc;
-    try{ bc = JSON.parse(raw); }catch(e){ return; }
-    if(!bc || !bc.text || bc.hidden) return;
-    if(bc.expires && Date.now() > bc.expires) return;
-    var wrap = document.getElementById('adminBroadcastWrap');
-    if(!wrap) return;
-    wrap.innerHTML = '<div class="admin-broadcast"><span class="bc-icon">📢</span><span>' + String(bc.text).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }) + '</span><button class="admin-broadcast-close" onclick="this.parentNode.remove()">✕</button></div>';
-  }
-
-  window.AdminPanel = {
-    toggle: function(){ var p = document.getElementById('adminPanel'); if(p) p.classList.toggle('open'); },
-    broadcast: function(){
-      var text = prompt('Введите текст объявления:', '');
-      if(!text) return;
-      var days = prompt('Сколько дней показывать? (1-7)', '1');
-      var d = parseInt(days) || 1;
-      var bc = { text: text, createdAt: Date.now(), expires: Date.now() + d * 24 * 60 * 60 * 1000, hidden: false,
-        author: (window.RMRPAuth && RMRPAuth.getCurrent()) ? RMRPAuth.getCurrent().login : '?' };
-      try{ localStorage.setItem('rmrp_broadcast', JSON.stringify(bc)); }catch(e){}
-      alert('✅ Объявление отправлено');
-      location.reload();
-    },
-    clearBroadcast: function(){
-      if(!confirm('Убрать объявление?')) return;
-      localStorage.removeItem('rmrp_broadcast');
-      var wrap = document.getElementById('adminBroadcastWrap');
-      if(wrap) wrap.innerHTML = '';
-    }
-  };
-
-  function initAdminPanel(){
-    var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
-    if(!user) return;
-    if(!RMRPAuth.isAdmin || !RMRPAuth.isAdmin(user)) return;
-    var panel = document.getElementById('adminPanel');
-    if(panel) panel.hidden = false;
-    var badge = document.getElementById('adminRoleBadge');
-    if(badge){
-      badge.textContent = user.role === 'Разработчик' ? 'DEV' : 'ADMIN';
-      if(user.role === 'Разработчик') badge.style.background = 'linear-gradient(135deg,#a855f7,#ec4899)';
-    }
-  }
-
-  var availableDocs = [
-    { keys: ['ук', 'uk', 'убийство', 'кража', '37', '44', '47'], url: 'uk.html', name: 'УК РФ', desc: 'Уголовный кодекс' },
-    { keys: ['коап', 'koap', 'штраф', '8.1', 'хулиганство'], url: 'koap.html', name: 'КоАП РФ', desc: 'Кодекс об адм. правонарушениях' },
-    { keys: ['конституция', 'конст'], url: 'constitution.html', name: 'Конституция', desc: 'Основной закон' },
-    { keys: ['фсб', 'fsb', 'закон о фсб'], url: 'fsb.html', name: 'ФЗ О ФСБ', desc: 'Федеральный закон о безопасности' },
-    { keys: ['устав', 'уфсб'], url: 'fsb-charter.html', name: 'Устав УФСБ', desc: 'Внутренний устав управления' },
-    { keys: ['аудит', 'баллы', 'рапорт', 'управление а'], url: 'audit.html', name: 'Управление «А»', desc: 'Кадровый аудит' },
-    { keys: ['методичка', 'пособие'], url: 'fsb-manual-1.html', name: 'Метод. пособие', desc: 'Для сотрудников Академии' }
-  ];
-
-  var termInput = document.getElementById('termInput');
-  var searchResults = document.getElementById('searchResults');
-
-  if (termInput && searchResults) {
-    termInput.addEventListener('input', function() {
-      var q = this.value.toLowerCase().trim();
-      if(!q) {
-        searchResults.classList.remove('active');
-        searchResults.innerHTML = '';
-        return;
-      }
-
-      var results = [];
-      availableDocs.forEach(function(doc) {
-        var matches = doc.keys.some(function(k) { return q.includes(k) || k.includes(q); });
-        if (matches || doc.name.toLowerCase().includes(q)) results.push(doc);
-      });
-
-      if (/^\d+(\.\d+)?$/.test(q)) {
-        var artNum = q;
-        if (parseFloat(artNum) >= 37 && parseFloat(artNum) <= 99) results.unshift({ name: 'УК РФ ст. ' + artNum, desc: 'Перейти к статье ' + artNum, url: 'uk.html#art-' + artNum });
-        else if (parseFloat(artNum) >= 1 && parseFloat(artNum) <= 60) results.unshift({ name: 'КоАП РФ ст. ' + artNum, desc: 'Перейти к статье ' + artNum, url: 'koap.html#art-' + artNum });
-      }
-
-      if (q.includes('убийство')) results.unshift({ name: 'УК РФ ст. 37', desc: 'Убийство', url: 'uk.html#art-37' });
-      if (q.includes('кража')) results.unshift({ name: 'УК РФ ст. 44', desc: 'Кража', url: 'uk.html#art-44' });
-      if (q.includes('разбой')) results.unshift({ name: 'УК РФ ст. 47', desc: 'Разбой', url: 'uk.html#art-47' });
-
-      if(results.length === 0) searchResults.innerHTML = '<div class="search-result-item" style="cursor:default; color:#e74c3c;">[!] Ничего не найдено</div>';
-      else {
-        searchResults.innerHTML = results.map(function(item) {
-          return '<div class="search-result-item" onclick="location.href=\'' + item.url + '\'"><div class="search-result-title">' + item.name + '</div><div class="search-result-desc">' + item.desc + '</div></div>';
-        }).join('');
-      }
-      searchResults.classList.add('active');
-    });
-
-    termInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        var q = this.value.toLowerCase().trim();
-        if (q === 'clear') { this.value = ''; searchResults.classList.remove('active'); }
-        else if (searchResults.innerHTML.indexOf('onclick') !== -1) {
-          var firstLink = searchResults.querySelector('.search-result-item');
-          if (firstLink) firstLink.click();
-        }
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if(!termInput.contains(e.target) && !searchResults.contains(e.target)) searchResults.classList.remove('active');
-    });
-  }
-
-  function init(){ updateHeaderAuth(); checkBroadcast(); initAdminPanel(); }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-})();
-</script>
-</body>
-</html>
+        setTimeout(() => { document.getElementById('secretBadge').style.display =
