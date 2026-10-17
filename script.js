@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v19: единая шапка + админ-панель + живой фон)
+   RMRP LAW — script.js (v20: + ИИ-помощник + защита Email)
    ============================================================ */
 
 (function () {
@@ -18,6 +18,33 @@
   function onReady(fn) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();
+  }
+
+  /* ============================================================
+     ПОДКЛЮЧЕНИЕ ИИ-ПОМОЩНИКА (глобально)
+     ============================================================ */
+  function loadAIAssistant() {
+    if (window.__RMRP_AI_LOADED__) return;
+    if (document.getElementById('ai-widget-styles')) return;
+
+    // Подключаем базу знаний (если ещё не подключена)
+    if (!window.RMRP_AI_KNOWLEDGE && !document.querySelector('script[data-ai-knowledge]')) {
+      var kb = document.createElement('script');
+      kb.src = 'ai-knowledge.js';
+      kb.setAttribute('data-ai-knowledge', '1');
+      kb.onerror = function(){ console.warn('[AI] ai-knowledge.js не найден'); };
+      document.head.appendChild(kb);
+    }
+
+    // Подключаем движок (если ещё не подключён)
+    if (!window.__RMRP_AI_ENGINE_LOADED__ && !document.querySelector('script[data-ai-engine]')) {
+      var engine = document.createElement('script');
+      engine.src = 'ai-assistant.js';
+      engine.setAttribute('data-ai-engine', '1');
+      engine.onload = function(){ window.__RMRP_AI_ENGINE_LOADED__ = true; };
+      engine.onerror = function(){ console.warn('[AI] ai-assistant.js не найден'); };
+      document.head.appendChild(engine);
+    }
   }
 
   onReady(function () {
@@ -39,11 +66,14 @@
     try { restoreLaws(); }        catch(e){ console.warn('restoreLaws', e); }
     try { restoreBg(); }          catch(e){ console.warn('restoreBg', e); }
 
+    // ИИ-помощник
+    try { loadAIAssistant(); }    catch(e){ console.warn('aiAssistant', e); }
+
     console.log('[RMRP] init done');
   });
 
   /* ============================================================
-     ЖИВОЙ ФОН НА ВСЕХ СТРАНИЦАХ
+     ЖИВОЙ ФОН
      ============================================================ */
   function initLiveBackground(){
     var BG_CONFIG = {
@@ -120,7 +150,7 @@
   }
 
   /* ============================================================
-     ЕДИНАЯ ШАПКА + ПАНЕЛЬ + КОМФОРТ-ЗОНА
+     ЕДИНАЯ ШАПКА
      ============================================================ */
   function initHeaderButtons() {
     var nav = document.querySelector('.nav');
@@ -132,7 +162,6 @@
 
     if (isGate) return;
 
-    /* NAV — 5 ссылок */
     if (nav) {
       var links = [
         { href: 'index.html',    icon: '🏠', label: 'Главная',   file: 'index.html' },
@@ -154,14 +183,12 @@
       }).join('');
     }
 
-    /* КНОПКИ СПРАВА */
     if (actions) {
       actions.querySelectorAll('.btn-profile, .btn-media, .btn-panel').forEach(function(el){ el.remove(); });
 
       var user = window.RMRPAuth ? RMRPAuth.getCurrent() : null;
       var isAdminUser = user && window.RMRPAuth.isAdmin && RMRPAuth.isAdmin(user);
 
-      /* 🛠️ ПАНЕЛЬ — только для Админа/Разработчика */
       if (isAdminUser) {
         var panelBtn = document.createElement('a');
         panelBtn.href = 'index.html#adminPanel';
@@ -188,7 +215,6 @@
         else actions.appendChild(panelBtn);
       }
 
-      /* 👤 ПРОФИЛЬ */
       var profileBtn = document.createElement('a');
       profileBtn.href = 'profile.html';
       profileBtn.className = 'btn-media btn-profile';
@@ -200,7 +226,6 @@
       if (addBtn) actions.insertBefore(profileBtn, addBtn);
       else actions.appendChild(profileBtn);
 
-      /* 🚪 ВЫЙТИ */
       if (user) {
         var logoutBtn = document.createElement('button');
         logoutBtn.className = 'btn-logout';
@@ -218,7 +243,6 @@
       }
     }
 
-    /* 🎧 КОМФОРТ-ЗОНА */
     if (!isComfort && !document.querySelector('.comfort-float-btn')) {
       var cBtn = document.createElement('a');
       cBtn.href = 'comfort.html';
@@ -249,7 +273,6 @@
       }
     }
 
-    /* Автооткрытие админ-панели если хэш #adminPanel */
     if (location.hash === '#adminPanel' && isAdminUser) {
       setTimeout(function(){
         var adminPanel = document.getElementById('adminPanel');
