@@ -222,6 +222,21 @@ body {
 .login-tab.active { background: rgba(46, 204, 113, 0.1); border-color: var(--fsb-accent); color: var(--fsb-accent); }
 .login-form { display: none; }
 .login-form.active { display: block; }
+
+/* Кнопка «Центр Управления» в навигации */
+.nav-link-ct {
+  background: linear-gradient(135deg, #2ecc71, #4aa8ff);
+  color: #000 !important;
+  font-weight: 900;
+  box-shadow: 0 0 15px rgba(46,204,113,.3);
+  transition: all 0.3s;
+}
+.nav-link-ct:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(46,204,113,.6);
+  background: linear-gradient(135deg, #4aa8ff, #2ecc71) !important;
+  color: #000 !important;
+}
 </style>
 </head>
 <body>
@@ -236,6 +251,7 @@ body {
     </a>
     <nav class="nav" id="nav">
       <a href="index.html" class="nav-link active">Главная</a>
+      <a href="command.html" class="nav-link nav-link-ct">🎯 Центр</a>
       <a href="audit.html" class="nav-link">🛡️ Управление «А»</a>
       <a href="uk.html" class="nav-link">УК РФ</a>
       <a href="koap.html" class="nav-link">КоАП РФ</a>
@@ -266,7 +282,7 @@ body {
 </header>
 
 <div class="ticker-wrap">
-  <div class="ticker">⚠️ ВНИМАНИЕ: НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП К БАЗЕ ДАННЫХ ФСБ ЗАПРЕЩЁН • ОБНОВЛЕНИЕ ЗАКОНОДАТЕЛЬСТВА ОТ 2026 ГОДА • ПРОВЕРКА ЗНАНИЙ УСТАВОВ ОБЯЗАТЕЛЬНА ДЛЯ ВСЕХ СОТРУДНИКОВ • СИСТЕМА ЗАЩИЩЕНА</div>
+  <div class="ticker">⚠️ ВНИМАНИЕ: НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП К БАЗЕ ДАННЫХ ФСБ ЗАПРЕЩЁН • ОБНОВЛЕНИЕ ЗАКОНОДАТЕЛЬСТВА ОТ 2026 ГОДА • ПРОВЕРКА ЗНАНИЙ УСТАВОВ ОБЯЗАТЕЛЬНА ДЛЯ ВСЕХ СОТРУДНИКОВ • СИСТЕМА ЗАЩИЩЕНА • 🎯 НОВИНКА: ЦЕНТР УПРАВЛЕНИЯ — ОТКРЫТ ДЛЯ ВСЕХ СОТРУДНИКОВ</div>
 </div>
 
 <section class="hero">
@@ -301,6 +317,7 @@ body {
     </div>
 
     <div class="quick-actions">
+      <a href="command.html" class="fsb-btn" style="border-color:var(--fsb-accent);color:var(--fsb-accent)">🎯 Центр Управления</a>
       <a href="uk.html" class="fsb-btn">⚔️ УК РФ</a>
       <a href="fsb-charter.html" class="fsb-btn">📕 Устав УФСБ</a>
       <a href="fsb-manual-1.html" class="fsb-btn">🎓 Академия</a>
@@ -339,6 +356,7 @@ body {
         <div class="admin-grid">
           <a href="profile.html" class="admin-card"><div class="admin-card-title">👥 Юзеры</div><div class="admin-card-desc">Управление пользователями</div></a>
           <a href="audit.html" class="admin-card"><div class="admin-card-title">🛡️ Управление «А»</div><div class="admin-card-desc">Баллы, рапорты, состав</div></a>
+          <a href="command.html" class="admin-card"><div class="admin-card-title">🎯 Центр Управления</div><div class="admin-card-desc">Карта, юниты, камеры</div></a>
           <a href="#" onclick="AdminPanel.broadcast();return false;" class="admin-card"><div class="admin-card-title">📢 Объявление</div><div class="admin-card-desc">Отправить на главную</div></a>
           <a href="#" onclick="AdminPanel.clearBroadcast();return false;" class="admin-card"><div class="admin-card-title">🗑️ Убрать</div><div class="admin-card-desc">Удалить объявление</div></a>
         </div>
@@ -351,6 +369,12 @@ body {
   <div class="container">
     <h2 class="section-title">База данных // Разделы</h2>
     <div class="quick-grid">
+      <a href="command.html" class="fsb-card" style="background: linear-gradient(135deg, rgba(46,204,113,0.12), rgba(74,168,255,0.08)); border-color: rgba(46,204,113,0.5);">
+        <div class="fsb-card-icon">🎯</div>
+        <div class="fsb-card-title" style="color:var(--fsb-accent)">Центр Управления</div>
+        <div class="fsb-card-desc">Живая карта, юниты, камеры, оперативный журнал.</div>
+        <div style="margin-top:15px;"><span class="badge badge-secure" style="background:rgba(46,204,113,0.2);color:#2ecc71;border-color:#2ecc71">NEW</span></div>
+      </a>
       <a href="constitution.html" class="fsb-card"><div class="fsb-card-icon">🏛️</div><div class="fsb-card-title">Конституция РФ</div><div class="fsb-card-desc">Основной закон. 8 глав, 84 статьи.</div><div style="margin-top:15px;"><span class="badge badge-secure">Public</span></div></a>
       <a href="uk.html" class="fsb-card"><div class="fsb-card-icon">⚔️</div><div class="fsb-card-title">Уголовный кодекс</div><div class="fsb-card-desc">Преступления и наказания. 99 статей.</div><div style="margin-top:15px;"><span class="badge badge-secure">Public</span></div></a>
       <a href="koap.html" class="fsb-card"><div class="fsb-card-icon">📋</div><div class="fsb-card-title">КоАП РФ</div><div class="fsb-card-desc">Административные правонарушения. 60+ статей.</div><div style="margin-top:15px;"><span class="badge badge-secure">Public</span></div></a>
@@ -384,6 +408,7 @@ body {
     </div>
     <div class="footer-col">
       <h4>Служба</h4>
+      <a href="command.html" style="color:var(--fsb-accent);font-weight:700">🎯 Центр Управления</a>
       <a href="audit.html">Управление «А»</a>
       <a href="fsb.html">ФЗ О ФСБ</a>
       <a href="fsb-charter.html">Устав УФСБ</a>
@@ -395,7 +420,7 @@ body {
       <label class="btn btn-ghost" style="width:100%;display:block;text-align:center;cursor:pointer; background:#1a242b; border:1px solid #2a343b; color:#fff; padding:8px; border-radius:6px;">📥 Импорт JSON<input type="file" accept=".json" style="display:none;" onchange="RMRP.import(this.files[0])"></label>
     </div>
   </div>
-  <div class="footer-bottom"><p>SYS_VER: 2.0.26 | SECURE_CONNECTION: TRUE | © 2026 FSB LAW.</p></div>
+  <div class="footer-bottom"><p>SYS_VER: 2.1.26 | SECURE_CONNECTION: TRUE | 🎯 ЦУ: ONLINE | © 2026 FSB LAW.</p></div>
 </footer>
 
 <button class="to-top" id="toTop">↑</button>
@@ -488,7 +513,6 @@ body {
       }
     });
 
-    // Закрыть при клике вне меню
     document.addEventListener('click', function(e) {
       if (!aiDropdown.contains(e.target) && !aiBtn.contains(e.target)) {
         aiDropdown.classList.remove('active');
@@ -570,12 +594,12 @@ body {
     scanStatus.style.color = '#f1c40f';
     scanFill.style.width = '0%';
     scanLog.innerHTML = '';
-    var logs = ['[>] Подключение к БД... OK','[>] Проверка целостности... OK','[>] Сверка хэш-сумм... OK','[>] Запрос к УК РФ... 99 статей.','[>] Запрос к КоАП... 60+ статей.','[>] Проверка прав... ОФИЦЕР','[!] Скрытые файлы.','[>] Расшифровка «А»... OK','[✓] СКАНИРОВАНИЕ ЗАВЕРШЕНО.'];
+    var logs = ['[>] Подключение к БД... OK','[>] Проверка целостности... OK','[>] Сверка хэш-сумм... OK','[>] Запрос к УК РФ... 99 статей.','[>] Запрос к КоАП... 60+ статей.','[>] Проверка прав... ОФИЦЕР','[!] Скрытые файлы.','[>] Расшифровка «А»... OK','[>] Связь с Центром Управления... OK','[✓] СКАНИРОВАНИЕ ЗАВЕРШЕНО.'];
     var currentLog = 0, progress = 0;
     var interval = setInterval(function() {
-      progress += 12; if (progress > 100) progress = 100;
+      progress += 11; if (progress > 100) progress = 100;
       scanFill.style.width = progress + '%';
-      if (currentLog < logs.length && progress > (currentLog * 11)) {
+      if (currentLog < logs.length && progress > (currentLog * 10)) {
         var p = document.createElement('div'); p.textContent = logs[currentLog];
         if (logs[currentLog].includes('✓')) p.style.color = 'var(--fsb-accent)';
         if (logs[currentLog].includes('!')) p.style.color = '#f1c40f';
@@ -702,10 +726,127 @@ body {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  // Онлайн-счётчик (эмуляция)
+  var onlineCount = 0;
+  function updateOnline(){
+    onlineCount = 15 + Math.floor(Math.random() * 20);
+    var el = $('onlineCount');
+    if(el) el.textContent = onlineCount;
+  }
+  updateOnline();
+  setInterval(updateOnline, 5000);
+
+  // Секретный код RRR
   let rCount = 0;
   document.addEventListener('keydown', function(e) {
     if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey && !e.metaKey) {
       rCount++;
       if (rCount === 3) {
-        document.getElementById('secretBadge').style.display = 'block';
-        setTimeout(() => { document.getElementById('secretBadge').style.display =
+        const badge = document.getElementById('secretBadge');
+        badge.style.display = 'block';
+        setTimeout(() => { badge.style.display = 'none'; }, 3000);
+        rCount = 0;
+      }
+    }
+  });
+
+  // --- АДМИН ПАНЕЛЬ ---
+  window.AdminPanel = {
+    toggle: function(){
+      var p = document.getElementById('adminPanel');
+      if(p) p.classList.toggle('open');
+    },
+    broadcast: function(){
+      var text = prompt('Текст объявления для всех:', '');
+      if(!text) return;
+      localStorage.setItem('fsb_broadcast', text);
+      this.renderBroadcast();
+    },
+    clearBroadcast: function(){
+      if(!confirm('Убрать объявление?')) return;
+      localStorage.removeItem('fsb_broadcast');
+      this.renderBroadcast();
+    },
+    renderBroadcast: function(){
+      var wrap = document.getElementById('adminBroadcastWrap');
+      if(!wrap) return;
+      var text = localStorage.getItem('fsb_broadcast');
+      if(!text){ wrap.innerHTML = ''; return; }
+      wrap.innerHTML = '<div class="admin-broadcast">📢 <span>' + text + '</span><button class="admin-broadcast-close" onclick="AdminPanel.clearBroadcast()">✕</button></div>';
+    }
+  };
+  AdminPanel.renderBroadcast();
+
+  // Автопоказ админ-панели для админов
+  (function(){
+    if(!window.RMRPAuth) return;
+    var u = RMRPAuth.getCurrent();
+    if(!u) return;
+    if(RMRPAuth.isAdmin && RMRPAuth.isAdmin(u)){
+      var p = document.getElementById('adminPanel');
+      if(p) p.hidden = false;
+      var b = document.getElementById('adminRoleBadge');
+      if(b) b.textContent = u.role === 'Разработчик' ? 'DEV' : 'ADMIN';
+    }
+  })();
+
+  updateHeaderAuth();
+
+  // --- ТЕРМИНАЛ-ПОИСК ---
+  var termInput = document.getElementById('termInput');
+  var searchResults = document.getElementById('searchResults');
+
+  var SEARCH_INDEX = [
+    { t:'Убийство (ст. 37 УК)', d:'7 лет лишения свободы', url:'uk.html#art-37' },
+    { t:'Кража (ст. 44 УК)', d:'Штраф 30 000 ₽ или 3 года', url:'uk.html#art-44' },
+    { t:'Грабёж (ст. 46 УК)', d:'4 года лишения свободы', url:'uk.html#art-46' },
+    { t:'Разбой (ст. 47 УК)', d:'5 лет лишения свободы', url:'uk.html#art-47' },
+    { t:'Теракт (ст. 53 УК)', d:'8 лет лишения свободы', url:'uk.html#art-53' },
+    { t:'Взятка (ст. 79 УК)', d:'8 лет лишения свободы', url:'uk.html#art-79' },
+    { t:'Хулиганство (ст. 8.1 КоАП)', d:'Штраф 10–30 тыс. ₽ / 7 суток', url:'koap.html#art-8.1' },
+    { t:'Неповиновение (ст. 8.7 КоАП)', d:'Штраф 15–30 тыс. ₽ / 14 суток', url:'koap.html#art-8.7' },
+    { t:'Задержание (ст. 6 ПК)', d:'Не более 60 минут', url:'process.html' },
+    { t:'Адвокат (ст. 9 ПК)', d:'Время ожидания — 5 минут', url:'process.html' },
+    { t:'Обыск (ст. 20 ПК)', d:'Только по ордеру', url:'process.html' },
+    { t:'Применение оружия (ст. 25 ПК)', d:'2 предупреждения', url:'process.html' },
+    { t:'Структура ФСБ (ст. 17)', d:'5 служб: М, К, А, О, АПС', url:'fsb.html' },
+    { t:'Рабочее время УФСБ', d:'Пн-Пт 10-22, Сб-Вс 10-20', url:'fsb-charter.html' },
+    { t:'Лицензия на оружие', d:'Экзамен + 3 месяца', url:'weapons.html' },
+    { t:'Кремль (закрытая зона)', d:'Доступ по пропуску', url:'property.html' },
+    { t:'Перекрытие (правила)', d:'Минимум 4 авто', url:'raids.html' },
+    { t:'ВЗК (правила)', d:'21 правило', url:'vzk.html' }
+  ];
+
+  if (termInput && searchResults) {
+    termInput.addEventListener('input', function(){
+      var q = this.value.trim().toLowerCase();
+      if(!q){ searchResults.classList.remove('active'); searchResults.innerHTML = ''; return; }
+
+      var found = SEARCH_INDEX.filter(function(item){
+        return item.t.toLowerCase().includes(q) || item.d.toLowerCase().includes(q);
+      }).slice(0, 6);
+
+      if(found.length === 0){
+        searchResults.innerHTML = '<div class="search-result-item" style="text-align:center;color:var(--fsb-text-dim)">Ничего не найдено</div>';
+      } else {
+        searchResults.innerHTML = found.map(function(item){
+          return '<div class="search-result-item" onclick="location.href=\'' + item.url + '\'">' +
+            '<div class="search-result-title">' + item.t + '</div>' +
+            '<div class="search-result-desc">' + item.d + '</div>' +
+          '</div>';
+        }).join('');
+      }
+      searchResults.classList.add('active');
+    });
+
+    document.addEventListener('click', function(e){
+      if(!termInput.contains(e.target) && !searchResults.contains(e.target)){
+        searchResults.classList.remove('active');
+      }
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
