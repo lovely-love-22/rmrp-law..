@@ -39,7 +39,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 .btn:hover { opacity: 0.8; }
 .btn-purple { background: #a855f7; color: #fff; }
 .btn-blue { background: #4aa8ff; color: #fff; }
-.btn-ghost { background: #1a1e24; color: var(--dim); border: 1px solid var(--border); }
+.btn-orange { background: #f39c12; color: #fff; }
 
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 5px; }
@@ -67,7 +67,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
   
   <div class="tabs">
     <div class="tab active" onclick="switchTab('calc')">🧮 Калькулятор</div>
-    <div class="tab" onclick="switchTab('report')">📝 Рапорт</div>
+    <div class="tab" onclick="switchTab('report')">📝 Отчет / Рапорт</div>
   </div>
 
   <!-- КАЛЬКУЛЯТОР -->
@@ -90,11 +90,24 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     </div>
   </div>
 
-  <!-- РАПОРТ -->
+  <!-- ОТЧЕТ / РАПОРТ -->
   <div class="panel" id="panel-report">
     <div class="card">
-      <h3>✍️ Данные рапорта</h3>
-      <button class="btn btn-purple" style="margin-bottom: 20px;" onclick="autofill()">🪄 Заполнить из калькулятора</button>
+      <h3>✍️ Данные</h3>
+      
+      <div class="form-group">
+        <label>Ваше ФИО / Позывной</label>
+        <input type="text" id="rpName" value="Кирилл Макалистер" oninput="generateReport()">
+      </div>
+      <div class="form-group">
+        <label>Static ID</label>
+        <input type="text" id="rpStatic" value="104-844" oninput="generateReport()">
+      </div>
+
+      <hr style="border-color: var(--border); margin: 20px 0;">
+      
+      <!-- Блок для рапорта на повышение -->
+      <h3>🪄 Рапорт на повышение</h3>
       
       <div class="form-group">
         <label>Текущее звание</label>
@@ -103,54 +116,70 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
           <option value="Старшина">Старшина</option>
           <option value="Прапорщик">Прапорщик</option>
           <option value="Старший прапорщик">Старший прапорщик</option>
-          <option value="Младший Лейтенант">Младший Лейтенант</option>
+          <option value="Младший лейтенант">Младший лейтенант</option>
           <option value="Лейтенант">Лейтенант</option>
-          <option value="Старший Лейтенант">Старший Лейтенант</option>
+          <option value="Старший лейтенант">Старший лейтенант</option>
+          <option value="Капитан">Капитан</option>
+          <option value="Майор">Майор</option>
+          <option value="Подполковник">Подполковник</option>
+          <option value="Полковник">Полковник</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Желаемое звание (с ролью)</label>
         <select id="rpNext" onchange="generateReport()">
           <option value="Старшина <@&958783018573660190>">Старшина</option>
           <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
           <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
-          <option value="Младший Лейтенант <@&883437994537791518>">Младший Лейтенант</option>
+          <option value="Младший лейтенант <@&883437994537791518>">Младший лейтенант</option>
           <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
-          <option value="Старший Лейтенант <@&883437620842070026>">Старший Лейтенант</option>
+          <option value="Старший лейтенант <@&883437620842070026>">Старший лейтенант</option>
           <option value="Капитан <@&883437514419998721>">Капитан</option>
+          <option value="Майор <@&883437452365860864>">Майор</option>
+          <option value="Подполковник <@&883437321965350912>">Подполковник</option>
+          <option value="Полковник <@&883437208526491678>">Полковник</option>
         </select>
       </div>
+      <button class="btn btn-purple" onclick="autofillPromotion()">Сгенерировать рапорт</button>
 
-      <div class="form-group"><label>Ваше ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер" oninput="generateReport()"></div>
-      <div class="form-group"><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844" oninput="generateReport()"></div>
+      <hr style="border-color: var(--border); margin: 20px 0;">
       
-      <button class="btn" onclick="generateReport()">🔄 Обновить рапорт</button>
+      <!-- Блок для еженедельного отчета -->
+      <h3>📅 Еженедельный отчет</h3>
+      <button class="btn btn-orange" onclick="autofillWeekly()">Сгенерировать еженедельный отчет</button>
+
     </div>
     
     <div class="card">
       <h3>📄 Результат</h3>
-      <div class="output" id="rpOutput">Здесь будет рапорт...</div>
-      <button class="btn btn-blue" style="margin-top: 10px;" onclick="copyReport()">📋 Скопировать рапорт</button>
+      <div class="output" id="rpOutput">Выберите тип отчета и нажмите кнопку генерации...</div>
+      <button class="btn btn-blue" style="margin-top: 10px;" onclick="copyReport()">📋 Скопировать результат</button>
     </div>
   </div>
 </div>
 
 <script>
-  // Добавили эмодзи в массив задач
+  // ID канала для отчетов (ЗАМЕНИ НА СВОЙ РЕАЛЬНЫЙ ID)
+  const REPORT_CHANNEL_ID = "1474455673382244475"; 
+  const CHANNEL_TAG = `<#${REPORT_CHANNEL_ID}>`;
+
+  // Роли для упоминания в конце отчета
+  const ROLE_HEAD = "<@&883131648202391562>"; // Начальник управления А (замени на свой ID)
+  const ROLE_DEPUTY = "<@&883135508870471731>"; // Заместитель начальника (замени на свой ID)
+
   const TASKS = [
-    { id:'arest', icon:'🚔', label:'Арест', pts:30, rep:'Аресты' },
-    { id:'shtraf', icon:'📝', label:'Выписать штраф', pts:10, rep:'Штрафы' },
-    { id:'pohishenie', icon:'🚨', label:'Реагирование на похищение', pts:35, rep:'Реагирование на похищения' },
-    { id:'kraz_win', icon:'🏆', label:'Победа в ВзК (КрАЗ)', pts:60, rep:'Победы в ВзК' },
-    { id:'kraz_part', icon:'🪖', label:'Участие в отбитии КРАЗ', pts:30, rep:'Участие в отбитии КРАЗ' },
-    { id:'post_win', icon:'🚚', label:'Поставка (успешная)', pts:60, rep:'Поставки' },
-    { id:'post_part', icon:'📦', label:'Участие в поставке', pts:30, rep:'Поставки' },
-    { id:'terror', icon:'💥', label:'Предотвращение теракта', pts:35, rep:'Предотвращение терактов' },
-    { id:'raid', icon:'🎯', label:'Участие в рейде', pts:45, rep:'Рейды' },
-    { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, rep:'Ограбления' },
-    { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, rep:'Отбитие тюрьмы' },
-    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, rep:'Ограбления' }
+    { id:'arest', icon:'🚔', label:'Арест', pts:30, cat:'Аресты' },
+    { id:'shtraf', icon:'📝', label:'Выписать штраф', pts:10, cat:'Штрафы' },
+    { id:'pohishenie', icon:'🚨', label:'Реагирование на похищение', pts:35, cat:'Похищения' },
+    { id:'kraz_win', icon:'🏆', label:'Победа в ВзК (КрАЗ)', pts:60, cat:'КрАЗ' },
+    { id:'kraz_part', icon:'🪖', label:'Участие в отбитии КРАЗ', pts:30, cat:'КрАЗ' },
+    { id:'post_win', icon:'🚚', label:'Поставка (успешная)', pts:60, cat:'Поставки' },
+    { id:'post_part', icon:'📦', label:'Участие в поставке', pts:30, cat:'Поставки' },
+    { id:'terror', icon:'💥', label:'Предотвращение теракта', pts:35, cat:'Теракты' },
+    { id:'raid', icon:'🎯', label:'Участие в рейде', pts:45, cat:'Рейды' },
+    { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, cat:'Ограбления' },
+    { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, cat:'Тюрьма' },
+    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, cat:'Ограбления' }
   ];
 
   let selected = {};
@@ -206,7 +235,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
         let task = TASKS.find(t => t.id === id);
         let pts = task.pts * selected[id].qty;
         total += pts;
-        details.push({ rep: task.rep, pts: pts, link: selected[id].link, qty: selected[id].qty });
+        details.push({ cat: task.cat, pts: pts, link: selected[id].link, qty: selected[id].qty });
       }
     }
     return { total, details };
@@ -230,7 +259,6 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     }
   }
 
-  // Кнопка скопировать баллы в калькуляторе
   function copyPoints() {
     let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
@@ -240,48 +268,30 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     alert('Баллы скопированы!');
   }
 
-  // Заполнение рапорта из калькулятора
-  function autofill() {
+  // ГЕНЕРАЦИЯ РАПОРТА НА ПОВЫШЕНИЕ
+  function autofillPromotion() {
     let res = getSum();
     let grouped = {};
     
     res.details.forEach(d => {
-      if (!grouped[d.rep]) grouped[d.rep] = { pts: 0, links: [] };
-      grouped[d.rep].pts += d.pts;
-      if (d.link) grouped[d.rep].links.push(d.link);
+      if (!grouped[d.cat]) grouped[d.cat] = { pts: 0, links: [] };
+      grouped[d.cat].pts += d.pts;
+      if (d.link) grouped[d.cat].links.push(d.link);
     });
     
     let workLines = [];
     for (let key in grouped) {
       workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
-      // Добавляем ссылки, если они есть
       grouped[key].links.forEach(link => {
         workLines.push(`  🔗 ${link}`);
       });
     }
     
-    let text = workLines.length ? workLines.join('\n') : 'Нет выполненных заданий';
-    generateReport(text);
-    switchTab('report'); // Автоматически переключаем на вкладку рапорта
-  }
-
-  // Генерация финального текста
-  function generateReport(customWork) {
     let rank = document.getElementById('rpRank').value;
     let nextRole = document.getElementById('rpNext').value;
     let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
     let sId = document.getElementById('rpStatic').value || '104-844';
-    
-    let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
-    
-    // Если текст передан (из автозаполнения), используем его, иначе берем то, что было в поле
-    let work = customWork;
-    if (!work) {
-       // Если вызвано вручную, пытаемся вытащить работы заново
-       autofill();
-       return;
-    }
     
     let lines = [
       'Рапорт на повышение',
@@ -289,18 +299,53 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
       `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${nextRole}.`,
       'В связи с проделанной работой:',
-      work,
+      workLines.join('\n'),
       '',
       `Сумма: ${res.total} баллов`,
       `Остаток: ${prev} баллов`
     ];
     
     document.getElementById('rpOutput').textContent = lines.join('\n');
+    switchTab('report');
+  }
+
+  // ГЕНЕРАЦИЯ ЕЖЕНЕДЕЛЬНОГО ОТЧЕТА
+  function autofillWeekly() {
+    let res = getSum();
+    
+    let grouped = {};
+    res.details.forEach(d => {
+      if (!grouped[d.cat]) grouped[d.cat] = [];
+      for(let i=0; i<d.qty; i++) {
+         grouped[d.cat].push(d.link);
+      }
+    });
+
+    let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
+    let sId = document.getElementById('rpStatic').value || '104-844';
+
+    let lines = [
+      `Я ${name} ${sId} предоставляю отчёт о проделанной работе:`
+    ];
+
+    for (let cat in grouped) {
+      lines.push(`**${cat}:**`);
+      grouped[cat].forEach(link => {
+         let l = link ? link : '[ссылка не указана]';
+         lines.push(`${CHANNEL_TAG} > ${cat} > ${l}`);
+      });
+      lines.push(''); 
+    }
+
+    lines.push(`${ROLE_HEAD} Начальник управления А ${ROLE_DEPUTY} Заместитель начальника управления А`);
+
+    document.getElementById('rpOutput').textContent = lines.join('\n');
+    switchTab('report');
   }
 
   function copyReport() {
     navigator.clipboard.writeText(document.getElementById('rpOutput').textContent);
-    alert('Рапорт с упоминаниями ролей скопирован!');
+    alert('Результат скопирован!');
   }
 
   // Инициализация
