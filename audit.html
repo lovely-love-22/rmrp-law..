@@ -93,6 +93,9 @@ h3 {
 .task input[type="number"] { width: 60px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace; }
 .task-body { margin-top: 12px; display: none; padding-top: 12px; border-top: 1px dashed var(--border); }
 .task.active .task-body { display: block; }
+
+/* ПОЛЯ ССЫЛОК */
+.links-container { display: flex; flex-direction: column; gap: 8px; }
 .task-link { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #4aa8ff; border-radius: 6px; font-size: 13px; outline: none; box-sizing: border-box; transition: 0.2s; }
 .task-link:focus { border-color: #4aa8ff; box-shadow: 0 0 10px rgba(74, 168, 255, 0.2); }
 
@@ -157,7 +160,7 @@ h3 {
           <span>Всего:</span>
           <span id="totalDisplay" style="color:var(--accent)">0</span>
         </div>
-        <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы</button>
+        <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы и задания</button>
       </div>
     </div>
   </div>
@@ -278,7 +281,15 @@ h3 {
     document.getElementById('tasksList').innerHTML = TASKS.map(t => {
       let isChecked = selected[t.id] ? selected[t.id].checked : false;
       let qty = selected[t.id] ? selected[t.id].qty : 1;
-      let link = selected[t.id] ? selected[t.id].link : '';
+      // Массив ссылок для каждого задания
+      let links = selected[t.id] && selected[t.id].links ? selected[t.id].links : [''];
+      
+      // Создаем нужное количество полей для ссылок в зависимости от qty
+      let linksHtml = '';
+      for (let i = 0; i < qty; i++) {
+        let val = links[i] || '';
+        linksHtml += `<input type="text" class="task-link" placeholder="🔗 Ссылка на скрин #${i+1}..." value="${val}" oninput="setLink('${t.id}', ${i}, this.value)">`;
+      }
       
       return `
         <div class="task ${isChecked ? 'active' : ''}">
@@ -291,10 +302,12 @@ h3 {
                 <span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>
               </span>
             </div>
-            ${isChecked ? `<input type="number" value="${qty}" min="1" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
+            ${isChecked ? `<input type="number" value="${qty}" min="1" max="10" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
           </div>
           <div class="task-body">
-             <input type="text" class="task-link" placeholder="🔗 Вставьте ссылку на скрин из Discord..." value="${link}" oninput="setLink('${t.id}', this.value)">
+             <div class="links-container">
+               ${linksHtml}
+             </div>
           </div>
         </div>
       `;
@@ -303,18 +316,30 @@ h3 {
   }
 
   function toggle(id) {
-    if (!selected[id]) selected[id] = { checked: false, qty: 1, link: '' };
+    if (!selected[id]) selected[id] = { checked: false, qty: 1, links: [''] };
     selected[id].checked = !selected[id].checked;
     render();
   }
 
   function setQty(id, val) {
-    if (selected[id]) selected[id].qty = parseInt(val) || 1;
-    calcTotal();
+    let q = parseInt(val) || 1;
+    if (q > 10) q = 10; // Защита от 100500 полей
+    if (selected[id]) {
+      selected[id].qty = q;
+      // Расширяем массив ссылок, если нужно
+      if (!selected[id].links) selected[id].links = [];
+      while (selected[id].links.length < q) {
+        selected[id].links.push('');
+      }
+    }
+    render();
   }
 
-  function setLink(id, val) {
-    if (selected[id]) selected[id].link = val.trim();
+  function setLink(id, index, val) {
+    if (selected[id]) {
+      if (!selected[id].links) selected[id].links = [];
+      selected[id].links[index] = val.trim();
+    }
   }
 
   function getSum() {
@@ -325,7 +350,17 @@ h3 {
         let task = TASKS.find(t => t.id === id);
         let pts = task.pts * selected[id].qty;
         total += pts;
-        details.push({ cat: task.cat, pts: pts, link: selected[id].link, qty: selected[id].qty });
+        
+        // Собираем только заполненные ссылки
+        let validLinks = (selected[id].links || []).filter(l => l && l.trim() !== '');
+        
+        details.push({ 
+          cat: task.cat, 
+          pts: pts, 
+          qty: selected[id].qty, 
+          name: task.label,
+          links: validLinks
+        });
       }
     }
     return { total, details };
@@ -347,11 +382,11 @@ h3 {
     } else if (tab === 'promo') {
       document.querySelectorAll('.tab')[1].classList.add('active');
       document.getElementById('panel-promo').classList.add('active');
-      generatePromo(); // Автогенерация при переходе
+      generatePromo();
     } else if (tab === 'weekly') {
       document.querySelectorAll('.tab')[2].classList.add('active');
       document.getElementById('panel-weekly').classList.add('active');
-      generateWeekly(); // Автогенерация при переходе
+      generateWeekly();
     }
   }
 
@@ -359,9 +394,21 @@ h3 {
     let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
     let total = prev + res.total;
-    let text = `Выполнено заданий на ${res.total} б.\nОстаток с прошлого: ${prev} б.\nИТОГО: ${total} б.`;
+    
+    let text = `=== ПОДСЧЕТ БАЛЛОВ ===\n`;
+    text += `Остаток: ${prev} б.\n\n`;
+    
+    res.details.forEach(d => {
+      text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
+      d.links.forEach(link => {
+        text += `  🔗 ${link}\n`;
+      });
+    });
+    
+    text += `\nИТОГО: ${total} баллов`;
+    
     navigator.clipboard.writeText(text);
-    alert('Баллы скопированы!');
+    alert('Баллы и задания скопированы!');
   }
 
   function copyOutput(id) {
@@ -378,7 +425,7 @@ h3 {
     res.details.forEach(d => {
       if (!grouped[d.cat]) grouped[d.cat] = { pts: 0, links: [] };
       grouped[d.cat].pts += d.pts;
-      if (d.link) grouped[d.cat].links.push(d.link);
+      d.links.forEach(l => grouped[d.cat].links.push(l));
     });
     
     let workLines = [];
@@ -417,8 +464,14 @@ h3 {
     let grouped = {};
     res.details.forEach(d => {
       if (!grouped[d.cat]) grouped[d.cat] = [];
-      for(let i=0; i<d.qty; i++) {
-         grouped[d.cat].push(d.link);
+      d.links.forEach(link => {
+        grouped[d.cat].push(link);
+      });
+      // Если ссылок нет, но задание отмечено, добавим заглушку
+      if (d.links.length === 0) {
+        for(let i=0; i<d.qty; i++) {
+          grouped[d.cat].push('[ссылка не указана]');
+        }
       }
     });
 
@@ -434,9 +487,7 @@ h3 {
       hasWork = true;
       lines.push(`**${cat}:**`);
       grouped[cat].forEach(link => {
-         let l = link ? link : '[ссылка не указана]';
-         // В твоем примере формат был: тег > категория > ссылка (или название)
-         lines.push(`${CHANNEL_TAG} > ${cat} > ${l}`);
+         lines.push(`${CHANNEL_TAG} > ${cat} > ${link}`);
       });
       lines.push(''); 
     }
