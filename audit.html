@@ -21,12 +21,13 @@ h1 span { color: var(--accent); }
 .panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media(max-width: 768px) { .panel.active { grid-template-columns: 1fr; } }
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 
 .task { padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; user-select: none; }
 .task.active { background: rgba(46, 204, 113, 0.1); border-color: var(--accent); }
 .task-head { display: flex; justify-content: space-between; cursor: pointer; align-items: center; }
-.task input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent); }
+.task-head input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent); }
+.task-head span { flex: 1; }
 .task input[type="number"] { width: 50px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 4px; padding: 4px; outline: none; }
 .task-body { margin-top: 10px; display: none; padding-top: 10px; border-top: 1px dashed var(--border); }
 .task.active .task-body { display: block; }
@@ -36,6 +37,10 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 .total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
 .btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-family: 'Inter', sans-serif; transition: 0.2s; }
 .btn:hover { opacity: 0.8; }
+.btn-purple { background: #a855f7; color: #fff; }
+.btn-blue { background: #4aa8ff; color: #fff; }
+.btn-ghost { background: #1a1e24; color: var(--dim); border: 1px solid var(--border); }
+
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 5px; }
 .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
@@ -45,7 +50,6 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 </head>
 <body>
 
-<!-- Убрали лишние кнопки (Добавить, Фон, Бургер), оставили только логотип и навигацию -->
 <header class="header">
   <div class="container header-inner" style="display:flex; justify-content:space-between; align-items:center;">
     <a href="index.html" class="logo" style="font-size:20px; font-weight:900; font-family:var(--mono); color:#fff; text-decoration:none;">
@@ -82,6 +86,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
         <span>Всего:</span>
         <span id="totalDisplay" style="color:var(--accent)">0</span>
       </div>
+      <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы</button>
     </div>
   </div>
 
@@ -89,11 +94,11 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
   <div class="panel" id="panel-report">
     <div class="card">
       <h3>✍️ Данные рапорта</h3>
-      <button class="btn" style="background: #a855f7; margin-bottom: 20px;" onclick="autofill()">🪄 Заполнить из калькулятора</button>
+      <button class="btn btn-purple" style="margin-bottom: 20px;" onclick="autofill()">🪄 Заполнить из калькулятора</button>
       
       <div class="form-group">
         <label>Текущее звание</label>
-        <select id="rpRank">
+        <select id="rpRank" onchange="generateReport()">
           <option value="Старший сержант">Старший сержант</option>
           <option value="Старшина">Старшина</option>
           <option value="Прапорщик">Прапорщик</option>
@@ -106,7 +111,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 
       <div class="form-group">
         <label>Желаемое звание (с ролью)</label>
-        <select id="rpNext">
+        <select id="rpNext" onchange="generateReport()">
           <option value="Старшина <@&958783018573660190>">Старшина</option>
           <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
           <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
@@ -117,33 +122,35 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
         </select>
       </div>
 
-      <div class="form-group"><label>Ваше ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер"></div>
-      <div class="form-group"><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844"></div>
+      <div class="form-group"><label>Ваше ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер" oninput="generateReport()"></div>
+      <div class="form-group"><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844" oninput="generateReport()"></div>
       
-      <button class="btn" onclick="generateReport()">Сгенерировать</button>
+      <button class="btn" onclick="generateReport()">🔄 Обновить рапорт</button>
     </div>
+    
     <div class="card">
       <h3>📄 Результат</h3>
       <div class="output" id="rpOutput">Здесь будет рапорт...</div>
-      <button class="btn" style="background: #4aa8ff; color: #fff; margin-top: 10px;" onclick="copyReport()">📋 Скопировать</button>
+      <button class="btn btn-blue" style="margin-top: 10px;" onclick="copyReport()">📋 Скопировать рапорт</button>
     </div>
   </div>
 </div>
 
 <script>
+  // Добавили эмодзи в массив задач
   const TASKS = [
-    { id:'arest', label:'Арест', pts:30, rep:'Аресты' },
-    { id:'shtraf', label:'Выписать штраф', pts:10, rep:'Штрафы' },
-    { id:'pohishenie', label:'Реагирование на похищение', pts:35, rep:'Реагирование на похищения' },
-    { id:'kraz_win', label:'Победа в ВзК (КрАЗ)', pts:60, rep:'Победы в ВзК' },
-    { id:'kraz_part', label:'Участие в отбитии КРАЗ', pts:30, rep:'Участие в отбитии КРАЗ' },
-    { id:'post_win', label:'Поставка (успешная)', pts:60, rep:'Поставки' },
-    { id:'post_part', label:'Участие в поставке', pts:30, rep:'Поставки' },
-    { id:'terror', label:'Предотвращение теракта', pts:35, rep:'Предотвращение терактов' },
-    { id:'raid', label:'Участие в рейде', pts:45, rep:'Рейды' },
-    { id:'nalet_win', label:'Успешное отбитие налета', pts:60, rep:'Ограбления' },
-    { id:'tyrma', label:'Отбитие Федеральной Тюрьмы', pts:45, rep:'Отбитие тюрьмы' },
-    { id:'nalet_part', label:'Участие в отбитии налета', pts:30, rep:'Ограбления' }
+    { id:'arest', icon:'🚔', label:'Арест', pts:30, rep:'Аресты' },
+    { id:'shtraf', icon:'📝', label:'Выписать штраф', pts:10, rep:'Штрафы' },
+    { id:'pohishenie', icon:'🚨', label:'Реагирование на похищение', pts:35, rep:'Реагирование на похищения' },
+    { id:'kraz_win', icon:'🏆', label:'Победа в ВзК (КрАЗ)', pts:60, rep:'Победы в ВзК' },
+    { id:'kraz_part', icon:'🪖', label:'Участие в отбитии КРАЗ', pts:30, rep:'Участие в отбитии КРАЗ' },
+    { id:'post_win', icon:'🚚', label:'Поставка (успешная)', pts:60, rep:'Поставки' },
+    { id:'post_part', icon:'📦', label:'Участие в поставке', pts:30, rep:'Поставки' },
+    { id:'terror', icon:'💥', label:'Предотвращение теракта', pts:35, rep:'Предотвращение терактов' },
+    { id:'raid', icon:'🎯', label:'Участие в рейде', pts:45, rep:'Рейды' },
+    { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, rep:'Ограбления' },
+    { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, rep:'Отбитие тюрьмы' },
+    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, rep:'Ограбления' }
   ];
 
   let selected = {};
@@ -157,9 +164,13 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       return `
         <div class="task ${isChecked ? 'active' : ''}">
           <div class="task-head" onclick="toggle('${t.id}')">
-            <div style="display:flex; align-items:center;">
+            <div style="display:flex; align-items:center; width:100%;">
               <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggle('${t.id}')">
-              <span>${t.label} <span style="color:#586069">(${t.pts} б.)</span></span>
+              <span style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:16px;">${t.icon}</span> 
+                ${t.label} 
+                <span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>
+              </span>
             </div>
             ${isChecked ? `<input type="number" value="${qty}" min="1" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
           </div>
@@ -195,7 +206,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
         let task = TASKS.find(t => t.id === id);
         let pts = task.pts * selected[id].qty;
         total += pts;
-        details.push({ rep: task.rep, pts: pts, link: selected[id].link });
+        details.push({ rep: task.rep, pts: pts, link: selected[id].link, qty: selected[id].qty });
       }
     }
     return { total, details };
@@ -219,6 +230,17 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     }
   }
 
+  // Кнопка скопировать баллы в калькуляторе
+  function copyPoints() {
+    let res = getSum();
+    let prev = parseInt(document.getElementById('prevPoints').value) || 0;
+    let total = prev + res.total;
+    let text = `Выполнено заданий на ${res.total} б.\nОстаток с прошлого: ${prev} б.\nИТОГО: ${total} б.`;
+    navigator.clipboard.writeText(text);
+    alert('Баллы скопированы!');
+  }
+
+  // Заполнение рапорта из калькулятора
   function autofill() {
     let res = getSum();
     let grouped = {};
@@ -232,17 +254,18 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     let workLines = [];
     for (let key in grouped) {
       workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
+      // Добавляем ссылки, если они есть
       grouped[key].links.forEach(link => {
-        workLines.push(link);
+        workLines.push(`  🔗 ${link}`);
       });
-      workLines.push(''); 
     }
     
-    let text = workLines.length ? workLines.join('\n').trim() : 'Нет выполненных заданий';
-    document.getElementById('rpOutput').textContent = text;
+    let text = workLines.length ? workLines.join('\n') : 'Нет выполненных заданий';
     generateReport(text);
+    switchTab('report'); // Автоматически переключаем на вкладку рапорта
   }
 
+  // Генерация финального текста
   function generateReport(customWork) {
     let rank = document.getElementById('rpRank').value;
     let nextRole = document.getElementById('rpNext').value;
@@ -252,7 +275,13 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
     
-    let work = customWork || document.getElementById('rpOutput').textContent;
+    // Если текст передан (из автозаполнения), используем его, иначе берем то, что было в поле
+    let work = customWork;
+    if (!work) {
+       // Если вызвано вручную, пытаемся вытащить работы заново
+       autofill();
+       return;
+    }
     
     let lines = [
       'Рапорт на повышение',
@@ -276,8 +305,6 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 
   // Инициализация
   render();
-  document.getElementById('rpRank').addEventListener('change', generateReport);
-  document.getElementById('rpNext').addEventListener('change', generateReport);
 </script>
 </body>
 </html>
