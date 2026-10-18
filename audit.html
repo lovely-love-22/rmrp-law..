@@ -36,8 +36,8 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 .btn:hover { opacity: 0.8; }
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 5px; }
-.form-group input, .form-group textarea { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
-.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
 .output { background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 8px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; white-space: pre-wrap; margin-top: 20px; max-height: 400px; overflow-y: auto; }
 </style>
 </head>
@@ -75,10 +75,36 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     <div class="card">
       <h3>✍️ Данные рапорта</h3>
       <button class="btn" style="background: #a855f7; margin-bottom: 20px;" onclick="autofill()">🪄 Заполнить из калькулятора</button>
-      <div class="form-group"><label>Звание</label><input type="text" id="rpRank" placeholder="Старший сержант"></div>
-      <div class="form-group"><label>ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер"></div>
+      
+      <div class="form-group">
+        <label>Текущее звание</label>
+        <select id="rpRank">
+          <option value="Старший сержант">Старший сержант</option>
+          <option value="Старшина">Старшина</option>
+          <option value="Прапорщик">Прапорщик</option>
+          <option value="Старший прапорщик">Старший прапорщик</option>
+          <option value="Младший Лейтенант">Младший Лейтенант</option>
+          <option value="Лейтенант">Лейтенант</option>
+          <option value="Старший Лейтенант">Старший Лейтенант</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Желаемое звание (с ролью)</label>
+        <select id="rpNext">
+          <option value="Старшина <@&958783018573660190>">Старшина</option>
+          <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
+          <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
+          <option value="Младший Лейтенант <@&883437994537791518>">Младший Лейтенант</option>
+          <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
+          <option value="Старший Лейтенант <@&883437620842070026>">Старший Лейтенант</option>
+          <option value="Капитан <@&883437514419998721>">Капитан</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Ваше ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер"></div>
       <div class="form-group"><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844"></div>
-      <div class="form-group"><label>На какое звание</label><input type="text" id="rpNext" placeholder="Старшина"></div>
+      
       <button class="btn" onclick="generateReport()">Сгенерировать</button>
     </div>
     <div class="card">
@@ -194,7 +220,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       grouped[key].links.forEach(link => {
         workLines.push(link);
       });
-      workLines.push(''); // Пустая строка для отступа
+      workLines.push(''); 
     }
     
     let text = workLines.length ? workLines.join('\n').trim() : 'Нет выполненных заданий';
@@ -202,10 +228,10 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
   }
 
   function generateReport(customWork) {
-    let rank = document.getElementById('rpRank').value || 'Старший сержант';
+    let rank = document.getElementById('rpRank').value;
+    let nextRole = document.getElementById('rpNext').value;
     let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
     let sId = document.getElementById('rpStatic').value || '104-844';
-    let next = document.getElementById('rpNext').value || 'Старшина';
     
     let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
@@ -216,7 +242,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       'Рапорт на повышение',
       `От: ${name} | ${sId}`,
       'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
-      `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${next}.`,
+      `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${nextRole}.`,
       'В связи с проделанной работой:',
       work,
       '',
@@ -229,7 +255,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 
   function copyReport() {
     navigator.clipboard.writeText(document.getElementById('rpOutput').textContent);
-    alert('Рапорт с ссылками скопирован!');
+    alert('Рапорт с упоминаниями ролей скопирован!');
   }
 
   render();
