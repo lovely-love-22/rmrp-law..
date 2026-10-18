@@ -3,407 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0b0f">
 <title>RMRP | Управление «А»</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --fsb-bg: #080a0c; --fsb-card: #0f1216; --fsb-border: #1e2329; --fsb-accent: #2ecc71;
-  --fsb-accent-glow: rgba(46, 204, 113, 0.3); --fsb-red: #e74c3c; --fsb-blue: #3498db;
-  --fsb-text: #c9d1d9; --fsb-text-dim: #8b949e; --fsb-mono: 'JetBrains Mono', monospace;
-}
-body {
-  background-color: var(--fsb-bg);
-  background-image: radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05), transparent 40%), radial-gradient(circle at 90% 80%, rgba(52, 152, 219, 0.05), transparent 40%), linear-gradient(rgba(18, 22, 28, 0.95), rgba(8, 10, 12, 0.98));
-  background-attachment: fixed;
-}
-.header { background: rgba(8, 10, 12, 0.9); border-bottom: 1px solid var(--fsb-border); backdrop-filter: blur(12px); }
-.logo-text .accent { color: var(--fsb-accent); }
-.nav-link.active { background: var(--fsb-accent) !important; color: #000 !important; font-weight: 700; }
+:root { --bg: #080a0c; --card: #0f1216; --border: #1e2329; --accent: #2ecc71; --text: #c9d1d9; --dim: #8b949e; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding: 40px 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 20px; }
+h1 span { color: var(--accent); }
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab { padding: 10px 20px; background: var(--card); border: 1px solid var(--border); color: var(--dim); border-radius: 8px; cursor: pointer; font-weight: bold; }
+.tab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.panel { display: none; }
+.panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media(max-width: 768px) { .panel.active { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 
-.audit-hero { padding: 60px 0 40px; border-bottom: 1px solid var(--fsb-border); background: linear-gradient(135deg, rgba(46, 204, 113, 0.05), rgba(52, 152, 219, 0.03)); position: relative; overflow: hidden; }
-.audit-hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 900; color: #fff; letter-spacing: -1.5px; font-family: var(--fsb-mono); }
-.audit-hero h1 .accent { background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.audit-hero p { color: var(--fsb-text-dim); margin-top: 10px; font-size: 14.5px; font-family: var(--fsb-mono); }
+.task { padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; user-select: none; }
+.task.active { background: rgba(46, 204, 113, 0.1); border-color: var(--accent); }
+.task-head { display: flex; justify-content: space-between; cursor: pointer; align-items: center; }
+.task input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent); }
+.task input[type="number"] { width: 50px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 4px; padding: 4px; outline: none; }
+.task-body { margin-top: 10px; display: none; padding-top: 10px; border-top: 1px dashed var(--border); }
+.task.active .task-body { display: block; }
+.task-link { width: 100%; padding: 8px; background: #000; border: 1px solid var(--border); color: #4aa8ff; border-radius: 4px; font-size: 12px; outline: none; box-sizing: border-box; }
+.task-link:focus { border-color: #4aa8ff; }
 
-.vk-tabs { display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap; padding: 6px; background: var(--fsb-card); border: 1px solid var(--fsb-border); border-radius: 10px; }
-.vk-tab { padding: 10px 18px; border-radius: 8px; background: transparent; color: var(--fsb-text-dim); font-size: 12.5px; font-weight: 700; transition: all 0.25s; cursor: pointer; border: 0; font-family: var(--fsb-mono); text-transform: uppercase; }
-.vk-tab:hover { background: #1a1e24; color: var(--fsb-text); }
-.vk-tab.active { background: linear-gradient(135deg, var(--fsb-accent), var(--fsb-blue)); color: #000; }
-.vk-panel { display: none; }
-.vk-panel.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-.vk-calc-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: start; }
-@media(max-width: 1000px) { .vk-calc-grid { grid-template-columns: 1fr; } }
-.vk-calc-card { background: var(--fsb-card); border: 1px solid var(--fsb-border); border-radius: 12px; padding: 24px; transition: border-color 0.3s; }
-.vk-calc-card h3 { color: #fff; font-size: 16px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--fsb-border); display: flex; align-items: center; gap: 8px; font-family: var(--fsb-mono); text-transform: uppercase; }
-.vk-calc-card h3::before { content: "▸"; color: var(--fsb-accent); }
-
-.vk-task { background: #0a0c0f; border: 1px solid var(--fsb-border); border-radius: 8px; margin-bottom: 8px; transition: all 0.25s; overflow: hidden; }
-.vk-task:hover { border-color: rgba(46, 204, 113, 0.3); }
-.vk-task.active { border-color: var(--fsb-accent); background: rgba(46, 204, 113, 0.03); }
-.vk-task-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; user-select: none; }
-.vk-task-head input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--fsb-accent); cursor: pointer; flex-shrink: 0; }
-.vk-task-icon { font-size: 18px; flex-shrink: 0; }
-.vk-task-label { flex: 1; font-size: 13.5px; color: var(--fsb-text); font-weight: 500; }
-.vk-task-points { font-size: 12px; color: var(--fsb-accent); font-weight: 700; white-space: nowrap; font-family: var(--fsb-mono); }
-.vk-task-body { display: none; padding: 0 14px 14px; border-top: 1px dashed var(--fsb-border); }
-.vk-task.active .vk-task-body { display: block; }
-.vk-time-row { display: grid; grid-template-columns: 1fr 80px; gap: 8px; align-items: center; padding: 8px 0; }
-.vk-time-row + .vk-time-row { border-top: 1px solid var(--fsb-border); }
-.vk-time-label { font-size: 12px; color: var(--fsb-text-dim); }
-.vk-time-row input[type="number"] { width: 100%; padding: 6px 8px; border-radius: 6px; background: #0a0c0f; border: 1px solid var(--fsb-border); color: #fff; font-size: 13px; text-align: center; outline: none; font-family: var(--fsb-mono); }
-.vk-time-row input[type="number"]:focus { border-color: var(--fsb-accent); }
-
-.vk-calc-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.08)); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 10px; margin-top: 16px; }
-.vk-calc-total-label { font-size: 14px; font-weight: 600; color: var(--fsb-text); font-family: var(--fsb-mono); }
-.vk-calc-total-value { font-size: 26px; font-weight: 900; color: var(--fsb-accent); font-family: var(--fsb-mono); }
-.vk-result-list { max-height: 340px; overflow-y: auto; padding-right: 4px; margin: 0 -4px; }
-.vk-result-item { padding: 10px 0; border-bottom: 1px solid var(--fsb-border); font-size: 12.5px; }
-.vk-result-item:last-child { border-bottom: 0; }
-.vk-result-row { display: flex; justify-content: space-between; gap: 10px; color: var(--fsb-text-dim); }
-.vk-result-name { flex: 1; min-width: 0; word-break: break-word; }
-.vk-result-points { color: var(--fsb-accent); font-weight: 700; white-space: nowrap; font-family: var(--fsb-mono); }
-.vk-result-sum { display: flex; justify-content: space-between; padding: 12px 0 0; font-size: 13px; color: var(--fsb-text-dim); border-top: 1px solid var(--fsb-border); margin-top: 6px; font-family: var(--fsb-mono); }
-
-.vk-report-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media(max-width: 700px) { .vk-report-form { grid-template-columns: 1fr; } }
-.vk-report-form .full { grid-column: 1/-1; }
-.vk-report-form label { display: block; font-size: 12px; font-weight: 600; color: var(--fsb-text-dim); margin-bottom: 6px; text-transform: uppercase; }
-.vk-report-form input, .vk-report-form textarea { width: 100%; padding: 10px 13px; border-radius: 8px; background: #0a0c0f; border: 1px solid var(--fsb-border); color: #fff; font-size: 13.5px; outline: none; transition: all 0.25s; font-family: inherit; box-sizing: border-box; }
-.vk-report-form input:focus, .vk-report-form textarea:focus { border-color: var(--fsb-accent); box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15); }
-.vk-report-output { margin-top: 18px; padding: 18px; background: #0a0c0f; border: 1px solid var(--fsb-border); border-radius: 10px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; color: var(--fsb-text); max-height: 400px; overflow-y: auto; font-family: var(--fsb-mono); }
-.vk-report-copy { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
-
-.vk-copy-btn, .btn-primary { background: linear-gradient(135deg, var(--fsb-accent), #27ae60); color: #000; font-weight: 800; font-family: var(--fsb-mono); text-transform: uppercase; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
-.vk-copy-btn:hover, .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--fsb-accent-glow); }
-.btn-ghost { background: #1a1e24; color: var(--fsb-text); border: 1px solid var(--fsb-border); font-family: var(--fsb-mono); text-transform: uppercase; font-size: 12px; padding: 10px 18px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-.btn-ghost:hover { background: #252a32; border-color: var(--fsb-accent); }
-
-.editor-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-.editor-actions .btn { padding: 10px 18px; font-size: 12px; font-family: var(--fsb-mono); border-radius: 6px; cursor: pointer; border: none; }
-.editor-actions .btn-primary { background: linear-gradient(135deg, var(--fsb-accent), #27ae60); color: #000; font-weight: 700; }
+.total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
+.btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-family: 'Inter', sans-serif; transition: 0.2s; }
+.btn:hover { opacity: 0.8; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 5px; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+.output { background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 8px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; white-space: pre-wrap; margin-top: 20px; max-height: 400px; overflow-y: auto; }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="container header-inner">
-    <a href="index.html" class="logo">
-      <span class="logo-icon">🛡️</span>
-      <span class="logo-text">RMRP <span class="accent">FSB</span></span>
-    </a>
-    <nav class="nav" id="nav">
-      <a href="index.html" class="nav-link">🏠 Главная</a>
-      <a href="audit.html" class="nav-link active">🛡️ Управление «А»</a>
-    </nav>
-  </div>
-</header>
-
-<section class="audit-hero">
-  <div class="container">
-    <h1>🛡️ Управление <span class="accent">«А»</span></h1>
-    <p>Спецподразделение ФСБ. Калькулятор баллов и генератор рапортов.</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-
-    <div class="vk-tabs">
-      <button class="vk-tab active" data-vk-tab="calc">🧮 Калькулятор</button>
-      <button class="vk-tab" data-vk-tab="report">📝 Рапорт</button>
-    </div>
-
-    <!-- КАЛЬКУЛЯТОР -->
-    <div class="vk-panel active" data-vk-panel="calc">
-      <div class="vk-calc-grid">
-        <div class="vk-calc-card">
-          <h3>📋 Выберите выполненные задания</h3>
-          <div id="calcTasks"></div>
-          <div class="editor-actions">
-            <button class="btn btn-ghost" onclick="VKCalc.reset()">🔄 Сбросить</button>
-          </div>
-        </div>
-        <div class="vk-calc-card">
-          <h3>💰 Итоговый подсчёт</h3>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0a0c0f;border:1px solid var(--fsb-border);border-radius:8px;margin-bottom:16px">
-            <span style="font-size:18px">🎯</span>
-            <label for="currentPoints" style="flex:1;font-size:13px;color:var(--fsb-text)">Остаток баллов (с прошлого отчёта)</label>
-            <input type="number" id="currentPoints" value="0" min="0" style="width:90px;padding:6px 8px;border-radius:6px;background:#0a0c0f;border:1px solid var(--fsb-border);color:#fff;font-size:14px;text-align:center;outline:none;font-family:var(--fsb-mono)" oninput="VKCalc.update()">
-          </div>
-          <div class="vk-result-list" id="calcResult"></div>
-          <div class="vk-calc-total">
-            <span class="vk-calc-total-label">Всего баллов:</span>
-            <span class="vk-calc-total-value" id="totalPoints">0</span>
-          </div>
-          <div class="editor-actions" style="margin-top:16px">
-            <button class="btn btn-primary" onclick="VKCalc.copyResult()">📋 Скопировать</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- РАПОРТ -->
-    <div class="vk-panel" data-vk-panel="report">
-      <div class="vk-calc-card">
-        <button onclick="VKReport.autofillFromCalc()" style="padding:11px 20px;border-radius:8px;background:linear-gradient(135deg,var(--fsb-accent),#27ae60);color:#000;font-weight:700;font-size:13.5px;border:0;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:16px;font-family:var(--fsb-mono);text-transform:uppercase">
-          🪄 Заполнить из калькулятора
-        </button>
-        <h3>✍️ Данные рапорта</h3>
-        <div class="vk-report-form">
-          <div><label>Ваше звание</label><input type="text" id="rpRank" placeholder="Старший сержант"></div>
-          <div><label>Ваше ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер"></div>
-          <div><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844"></div>
-          <div><label>Звание, на которое повышаетесь</label><input type="text" id="rpNextRank" placeholder="Старшина"></div>
-          <div class="full"><label>Проделанная работа</label><textarea id="rpWork" style="min-height:200px" placeholder="Нажми «Заполнить из калькулятора»"></textarea></div>
-        </div>
-        <div class="vk-report-output" id="rpOutput"></div>
-        <div class="vk-report-copy">
-          <button class="vk-copy-btn" id="rpCopyBtn" onclick="VKReport.copy()">📋 Скопировать рапорт</button>
-          <button class="btn btn-ghost" onclick="VKReport.clear()">🗑️ Очистить</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<script src="auth.js"></script>
-<script src="script.js"></script>
-<script>
-(function(){
-  'use strict';
-
-  function $(id){ return document.getElementById(id); }
-  function setVal(id,v){ var el = $(id); if(el) el.value = v; }
-  function getVal(id){ var el = $(id); return el ? el.value : ''; }
+<div class="container">
+  <h1>🛡️ Управление <span>«А»</span></h1>
   
-  function copyToClipboard(text){
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
-    } else fallbackCopy(text);
-  }
-  function fallbackCopy(text){
-    var ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
-    document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch(e){}
-    document.body.removeChild(ta);
-  }
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('calc')">🧮 Калькулятор</div>
+    <div class="tab" onclick="switchTab('report')">📝 Рапорт</div>
+  </div>
 
-  /* ====== ТАБЫ ====== */
-  document.querySelectorAll('.vk-tab').forEach(function(tab){
-    tab.addEventListener('click', function(){
-      var name = tab.getAttribute('data-vk-tab');
-      document.querySelectorAll('.vk-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
-      document.querySelectorAll('.vk-panel').forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-vk-panel') === name); });
-    });
-  });
+  <!-- КАЛЬКУЛЯТОР -->
+  <div class="panel active" id="panel-calc">
+    <div class="card">
+      <h3>📋 Выберите задания</h3>
+      <div id="tasksList"></div>
+    </div>
+    <div class="card">
+      <h3>💰 Итог</h3>
+      <div class="form-group">
+        <label>Остаток с прошлого раза</label>
+        <input type="number" id="prevPoints" value="0" oninput="calcTotal()">
+      </div>
+      <div class="total-box">
+        <span>Всего:</span>
+        <span id="totalDisplay" style="color:var(--accent)">0</span>
+      </div>
+    </div>
+  </div>
 
-  /* ====== ЗАДАЧИ (БАЛЛЫ ИЗ DISCORD) ====== */
-  var TASKS = [
-    { id:'arest', icon:'🚔', label:'Арест', points:30, repName:'Аресты' },
-    { id:'shtraf', icon:'📝', label:'Выписать штраф', points:10, repName:'Штрафы' },
-    { id:'pohishenie', icon:'🚨', label:'Отреагировать на похищение', points:35, repName:'Реагирование на похищения' },
-    { id:'kraz_win', icon:'🏆', label:'Победа в ВзК (КрАЗ)', points:60, repName:'Победы в ВзК' },
-    { id:'kraz_part', icon:'🪖', label:'Участие в отбитии КрАЗ', points:30, repName:'Участие в отбитии КрАЗ' },
-    { id:'post_win', icon:'🚚', label:'Поставка (успешная)', points:60, repName:'Поставки' },
-    { id:'post_part', icon:'📦', label:'Участие в поставке', points:30, repName:'Поставки' },
-    { id:'terror', icon:'💥', label:'Предотвращение теракта', points:35, repName:'Предотвращение терактов' },
-    { id:'raid', icon:'🎯', label:'Участие в рейде', points:45, repName:'Рейды' },
-    { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета / ограбления', points:60, repName:'Ограбления' },
-    { id:'tyrma', icon:'⛓️', label:'Успешное отбитие Федеральной Тюрьмы', points:45, repName:'Отбитие тюрьмы' },
-    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета / ограбления', points:30, repName:'Ограбления' }
+  <!-- РАПОРТ -->
+  <div class="panel" id="panel-report">
+    <div class="card">
+      <h3>✍️ Данные рапорта</h3>
+      <button class="btn" style="background: #a855f7; margin-bottom: 20px;" onclick="autofill()">🪄 Заполнить из калькулятора</button>
+      <div class="form-group"><label>Звание</label><input type="text" id="rpRank" placeholder="Старший сержант"></div>
+      <div class="form-group"><label>ФИО</label><input type="text" id="rpName" placeholder="Кирилл Макалистер"></div>
+      <div class="form-group"><label>Static ID</label><input type="text" id="rpStatic" placeholder="104-844"></div>
+      <div class="form-group"><label>На какое звание</label><input type="text" id="rpNext" placeholder="Старшина"></div>
+      <button class="btn" onclick="generateReport()">Сгенерировать</button>
+    </div>
+    <div class="card">
+      <h3>📄 Результат</h3>
+      <div class="output" id="rpOutput">Здесь будет рапорт...</div>
+      <button class="btn" style="background: #4aa8ff; color: #fff; margin-top: 10px;" onclick="copyReport()">📋 Скопировать</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const TASKS = [
+    { id:'arest', label:'Арест', pts:30, rep:'Аресты' },
+    { id:'shtraf', label:'Выписать штраф', pts:10, rep:'Штрафы' },
+    { id:'pohishenie', label:'Реагирование на похищение', pts:35, rep:'Реагирование на похищения' },
+    { id:'kraz_win', label:'Победа в ВзК (КрАЗ)', pts:60, rep:'Победы в ВзК' },
+    { id:'kraz_part', label:'Участие в отбитии КРАЗ', pts:30, rep:'Участие в отбитии КРАЗ' },
+    { id:'post_win', label:'Поставка (успешная)', pts:60, rep:'Поставки' },
+    { id:'post_part', label:'Участие в поставке', pts:30, rep:'Поставки' },
+    { id:'terror', label:'Предотвращение теракта', pts:35, rep:'Предотвращение терактов' },
+    { id:'raid', label:'Участие в рейде', pts:45, rep:'Рейды' },
+    { id:'nalet_win', label:'Успешное отбитие налета', pts:60, rep:'Ограбления' },
+    { id:'tyrma', label:'Отбитие Федеральной Тюрьмы', pts:45, rep:'Отбитие тюрьмы' },
+    { id:'nalet_part', label:'Участие в отбитии налета', pts:30, rep:'Ограбления' }
   ];
 
-  var state = { selected: {}, currentPoints: 0 };
+  let selected = {};
 
-  function getSel(id){
-    if(!state.selected[id]) state.selected[id] = { checked:false, qty: 0 };
-    return state.selected[id];
-  }
-
-  function renderTasks(){
-    var container = $('calcTasks');
-    if(!container) return;
-    container.innerHTML = TASKS.map(function(t){
-      var sel = getSel(t.id);
-      return '<div class="vk-task' + (sel.checked ? ' active' : '') + '">' +
-        '<div class="vk-task-head" onclick="VKCalc.toggleTask(event, \'' + t.id + '\')">' +
-          '<input type="checkbox" ' + (sel.checked ? 'checked' : '') + ' onclick="event.stopPropagation(); VKCalc.toggleTask(event, \'' + t.id + '\')">' +
-          '<span class="vk-task-icon">' + t.icon + '</span>' +
-          '<span class="vk-task-label">' + t.label + '</span>' +
-          '<span class="vk-task-points">' + t.points + ' б.</span>' +
-        '</div>' +
-        '<div class="vk-task-body">' +
-          '<div class="vk-time-row">' +
-            '<label class="vk-time-label">Количество:</label>' +
-            '<input type="number" min="0" max="99" value="' + sel.qty + '" ' + (sel.checked ? '' : 'disabled') +
-              ' onchange="VKCalc.setQty(\'' + t.id + '\', this.value)">' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+  function render() {
+    document.getElementById('tasksList').innerHTML = TASKS.map(t => {
+      let isChecked = selected[t.id] ? selected[t.id].checked : false;
+      let qty = selected[t.id] ? selected[t.id].qty : 1;
+      let link = selected[t.id] ? selected[t.id].link : '';
+      
+      return `
+        <div class="task ${isChecked ? 'active' : ''}">
+          <div class="task-head" onclick="toggle('${t.id}')">
+            <div style="display:flex; align-items:center;">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggle('${t.id}')">
+              <span>${t.label} <span style="color:#586069">(${t.pts} б.)</span></span>
+            </div>
+            ${isChecked ? `<input type="number" value="${qty}" min="1" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
+          </div>
+          <div class="task-body">
+             <input type="text" class="task-link" placeholder="🔗 Вставьте ссылку из Discord..." value="${link}" oninput="setLink('${t.id}', this.value)">
+          </div>
+        </div>
+      `;
     }).join('');
+    calcTotal();
   }
 
-  function calcSum(){
-    var total = 0, details = [];
-    TASKS.forEach(function(t){
-      var sel = state.selected[t.id];
-      if(!sel || !sel.checked || !sel.qty) return;
-      var pts = t.points * sel.qty;
-      total += pts;
-      details.push({ id: t.id, name: t.label, qty: sel.qty, points: pts });
-    });
-    return { total: total, details: details };
+  function toggle(id) {
+    if (!selected[id]) selected[id] = { checked: false, qty: 1, link: '' };
+    selected[id].checked = !selected[id].checked;
+    render();
   }
 
-  function renderResult(){
-    var res = calcSum();
-    var resultEl = $('calcResult');
-    var totalEl = $('totalPoints');
-    if(!resultEl) return;
+  function setQty(id, val) {
+    if (selected[id]) selected[id].qty = parseInt(val) || 1;
+    calcTotal();
+  }
 
-    if(res.details.length === 0){
-      resultEl.innerHTML = '<div style="padding:20px;text-align:center;color:#586069;font-size:13px;font-family:var(--fsb-mono)">Отметь задания слева</div>';
+  function setLink(id, val) {
+    if (selected[id]) selected[id].link = val.trim();
+  }
+
+  function getSum() {
+    let total = 0;
+    let details = [];
+    for (let id in selected) {
+      if (selected[id].checked) {
+        let task = TASKS.find(t => t.id === id);
+        let pts = task.pts * selected[id].qty;
+        total += pts;
+        details.push({ rep: task.rep, pts: pts, link: selected[id].link });
+      }
+    }
+    return { total, details };
+  }
+
+  function calcTotal() {
+    let res = getSum();
+    let prev = parseInt(document.getElementById('prevPoints').value) || 0;
+    document.getElementById('totalDisplay').textContent = prev + res.total;
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    if (tab === 'calc') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('panel-calc').classList.add('active');
     } else {
-      resultEl.innerHTML = res.details.map(function(d){
-        return '<div class="vk-result-item">' +
-          '<div class="vk-result-row">' +
-            '<span class="vk-result-name">' + d.name + ' <span style="color:#586069">× ' + d.qty + '</span></span>' +
-            '<span class="vk-result-points">+' + d.points + '</span>' +
-          '</div>' +
-        '</div>';
-      }).join('');
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('panel-report').classList.add('active');
     }
-
-    var current = parseInt($('currentPoints').value) || 0;
-    state.currentPoints = current;
-    if(totalEl) totalEl.textContent = current + res.total;
   }
 
-  window.VKCalc = {
-    toggleTask: function(ev, id){
-      if(ev && ev.target && ev.target.tagName === 'INPUT') ev.stopPropagation();
-      var sel = getSel(id);
-      sel.checked = !sel.checked;
-      if(sel.checked && sel.qty === 0) sel.qty = 1;
-      renderTasks(); renderResult();
-    },
-    setQty: function(id, v){ getSel(id).qty = Math.max(0, parseInt(v) || 0); renderResult(); },
-    update: function(){ renderResult(); },
-    reset: function(){
-      state.selected = {}; state.currentPoints = 0;
-      if($('currentPoints')) $('currentPoints').value = 0;
-      renderTasks(); renderResult();
-    },
-    getData: function(){
-      var res = calcSum();
-      return { details: res.details, sum: res.total, currentPoints: state.currentPoints, total: state.currentPoints + res.total };
-    },
-    copyResult: function(){
-      var data = VKCalc.getData();
-      var lines = ['=== Подсчёт баллов Управление «А» ===', ''];
-      if(data.details.length){
-        data.details.forEach(function(d){ lines.push('  • ' + d.name + ' ×' + d.qty + ' = +' + d.points); });
-        lines.push('Сумма: +' + data.sum);
-      } else lines.push('Задания не отмечены');
-      lines.push('Остаток: ' + data.currentPoints);
-      lines.push('ИТОГО: ' + data.total);
-      copyToClipboard(lines.join('\n'));
-      alert('Результат скопирован!');
+  function autofill() {
+    let res = getSum();
+    let grouped = {};
+    
+    res.details.forEach(d => {
+      if (!grouped[d.rep]) grouped[d.rep] = { pts: 0, links: [] };
+      grouped[d.rep].pts += d.pts;
+      if (d.link) grouped[d.rep].links.push(d.link);
+    });
+    
+    let workLines = [];
+    for (let key in grouped) {
+      workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
+      grouped[key].links.forEach(link => {
+        workLines.push(link);
+      });
+      workLines.push(''); // Пустая строка для отступа
     }
-  };
+    
+    let text = workLines.length ? workLines.join('\n').trim() : 'Нет выполненных заданий';
+    generateReport(text);
+  }
 
-  /* ====== РАПОРТ ====== */
-  window.VKReport = {
-    autofillFromCalc: function(){
-      var data = VKCalc.getData();
-      if(data.details.length === 0){
-        if(!confirm('Задания не отмечены. Заполнить пустой рапорт?')) return;
-      }
-      
-      // Группируем по названию отчёта
-      var grouped = {};
-      data.details.forEach(function(d){
-        var task = TASKS.find(function(t){ return t.id === d.id; });
-        var repName = task ? task.repName : task.label;
-        
-        if(!grouped[repName]) grouped[repName] = { qty: 0, points: 0 };
-        grouped[repName].qty += d.qty;
-        grouped[repName].points += d.points;
-      });
+  function generateReport(customWork) {
+    let rank = document.getElementById('rpRank').value || 'Старший сержант';
+    let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
+    let sId = document.getElementById('rpStatic').value || '104-844';
+    let next = document.getElementById('rpNext').value || 'Старшина';
+    
+    let res = getSum();
+    let prev = parseInt(document.getElementById('prevPoints').value) || 0;
+    
+    let work = customWork || document.getElementById('rpOutput').textContent;
+    
+    let lines = [
+      'Рапорт на повышение',
+      `От: ${name} | ${sId}`,
+      'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
+      `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${next}.`,
+      'В связи с проделанной работой:',
+      work,
+      '',
+      `Сумма: ${res.total} баллов`,
+      `Остаток: ${prev} баллов`
+    ];
+    
+    document.getElementById('rpOutput').textContent = lines.join('\n');
+  }
 
-      var workLines = [];
-      Object.keys(grouped).forEach(function(repName){
-        var g = grouped[repName];
-        workLines.push('• ' + repName + ' - ' + g.points + ' баллов');
-      });
-      
-      setVal('rpWork', workLines.join('\n'));
-      VKReport.generate();
-      
-      var btn = event.target;
-      var old = btn.innerHTML;
-      btn.innerHTML = '✅ Заполнено!';
-      setTimeout(function(){ btn.innerHTML = old; }, 2500);
-    },
-    generate: function(){
-      var data = VKCalc.getData();
-      var rank = getVal('rpRank') || 'Старший сержант';
-      var name = getVal('rpName') || 'Кирилл Макалистер';
-      var staticId = getVal('rpStatic') || '104-844';
-      var nextRank = getVal('rpNextRank') || 'Старшина';
-      
-      var lines = [
-        'Рапорт на повышение',
-        'От: ' + name + ' | ' + staticId,
-        'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
-        'Я, ' + rank + ' ' + name + ', прошу рассмотреть мой рапорт и присвоить мне специальное звание ' + nextRank + '.',
-        'В связи с проделанной работой:',
-        getVal('rpWork') || '',
-        '',
-        'Сумма: ' + data.sum + ' баллов',
-        'Остаток: ' + data.currentPoints + ' баллов'
-      ];
-      
-      var out = $('rpOutput');
-      if(out) out.textContent = lines.join('\n');
-      return lines.join('\n');
-    },
-    copy: function(){
-      copyToClipboard(VKReport.generate());
-      var btn = $('rpCopyBtn');
-      if(btn){
-        btn.innerHTML = '✅ Скопировано!';
-        setTimeout(function(){ btn.innerHTML = '📋 Скопировать рапорт'; }, 2000);
-      }
-    },
-    clear: function(){
-      ['rpRank','rpName','rpStatic','rpNextRank','rpWork'].forEach(function(id){
-        if($(id)) $(id).value = '';
-      });
-      VKReport.generate();
-    }
-  };
+  function copyReport() {
+    navigator.clipboard.writeText(document.getElementById('rpOutput').textContent);
+    alert('Рапорт с ссылками скопирован!');
+  }
 
-  ['rpRank','rpName','rpStatic','rpNextRank','rpWork'].forEach(function(id){
-    var el = $(id);
-    if(el) el.addEventListener('input', VKReport.generate);
-  });
-
-  renderTasks();
-  renderResult();
-  VKReport.generate();
-
-  var cpInput = $('currentPoints');
-  if(cpInput) cpInput.addEventListener('input', renderResult);
-
-})();
+  render();
 </script>
 </body>
 </html>
