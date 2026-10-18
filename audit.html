@@ -3,169 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0b0f">
+<meta name="theme-color" content="#05080a">
 <title>RMRP | Управление «А»</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
-<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root { --bg: #080a0c; --card: #0f1216; --border: #1e2329; --accent: #2ecc71; --text: #c9d1d9; --dim: #8b949e; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding: 40px 20px; }
+:root { 
+  --bg: #05080a; 
+  --card: #0f1216; 
+  --border: #1e2329; 
+  --accent: #2ecc71; 
+  --text: #c9d1d9; 
+  --dim: #8b949e; 
+}
+body { 
+  background-color: var(--bg); 
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05), transparent 40%),
+    linear-gradient(rgba(5, 8, 10, 0.95), rgba(5, 8, 10, 0.98));
+  background-attachment: fixed;
+  color: var(--text); 
+  font-family: 'Inter', sans-serif; 
+  padding: 40px 20px; 
+  margin: 0;
+  min-height: 100vh;
+}
+
 .container { max-width: 1100px; margin: 0 auto; }
-h1 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 20px; }
+h1 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 20px; font-size: 24px; display: flex; align-items: center; gap: 10px; }
 h1 span { color: var(--accent); }
-.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-.tab { padding: 10px 20px; background: var(--card); border: 1px solid var(--border); color: var(--dim); border-radius: 8px; cursor: pointer; font-weight: bold; }
-.tab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+/* ВКЛАДКИ */
+.tabs { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.tab { 
+  padding: 12px 24px; 
+  background: var(--card); 
+  border: 1px solid var(--border); 
+  color: var(--dim); 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: 700; 
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  font-size: 13px;
+  transition: 0.2s;
+}
+.tab:hover { background: #1a1e24; color: var(--text); }
+.tab.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+
+/* ПАНЕЛИ */
 .panel { display: none; }
-.panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-@media(max-width: 768px) { .panel.active { grid-template-columns: 1fr; } }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.panel.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 
-.task { padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; user-select: none; }
-.task.active { background: rgba(46, 204, 113, 0.1); border-color: var(--accent); }
+/* СЕТКА КАЛЬКУЛЯТОРА */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media(max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* КАРТОЧКИ */
+.card { 
+  background: var(--card); 
+  border: 1px solid var(--border); 
+  border-radius: 12px; 
+  padding: 24px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+h3 { 
+  font-family: 'JetBrains Mono', monospace; 
+  color: #fff; 
+  margin-bottom: 20px; 
+  border-bottom: 1px solid var(--border); 
+  padding-bottom: 15px; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ЗАДАЧИ */
+.task { padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; user-select: none; background: rgba(0,0,0,0.2); transition: 0.2s;}
+.task:hover { border-color: rgba(46, 204, 113, 0.4); }
+.task.active { background: rgba(46, 204, 113, 0.08); border-color: var(--accent); }
 .task-head { display: flex; justify-content: space-between; cursor: pointer; align-items: center; }
-.task-head input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent); }
-.task-head span { flex: 1; }
-.task input[type="number"] { width: 50px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 4px; padding: 4px; outline: none; }
-.task-body { margin-top: 10px; display: none; padding-top: 10px; border-top: 1px dashed var(--border); }
+.task-head input[type="checkbox"] { margin-right: 12px; accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
+.task-head span { flex: 1; font-size: 14.5px; }
+.task input[type="number"] { width: 60px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace; }
+.task-body { margin-top: 12px; display: none; padding-top: 12px; border-top: 1px dashed var(--border); }
 .task.active .task-body { display: block; }
-.task-link { width: 100%; padding: 8px; background: #000; border: 1px solid var(--border); color: #4aa8ff; border-radius: 4px; font-size: 12px; outline: none; box-sizing: border-box; }
-.task-link:focus { border-color: #4aa8ff; }
+.task-link { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #4aa8ff; border-radius: 6px; font-size: 13px; outline: none; box-sizing: border-box; transition: 0.2s; }
+.task-link:focus { border-color: #4aa8ff; box-shadow: 0 0 10px rgba(74, 168, 255, 0.2); }
 
-.total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-.btn { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-family: 'Inter', sans-serif; transition: 0.2s; }
-.btn:hover { opacity: 0.8; }
-.btn-purple { background: #a855f7; color: #fff; }
-.btn-blue { background: #4aa8ff; color: #fff; }
-.btn-orange { background: #f39c12; color: #fff; }
+/* ИТОГИ И КНОПКИ */
+.total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 20px; border-radius: 8px; margin-top: 24px; font-weight: bold; font-family: 'JetBrains Mono', monospace; font-size: 18px; }
+.btn { background: var(--accent); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 16px; font-family: 'Inter', sans-serif; transition: 0.2s; text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
+.btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2); }
+.btn-purple { background: #a855f7; color: #fff; box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2); }
+.btn-blue { background: #4aa8ff; color: #fff; box-shadow: 0 5px 15px rgba(74, 168, 255, 0.2); }
+.btn-orange { background: #f39c12; color: #fff; box-shadow: 0 5px 15px rgba(243, 156, 18, 0.2); }
 
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 5px; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
-.output { background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 8px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; white-space: pre-wrap; margin-top: 20px; max-height: 400px; overflow-y: auto; }
+/* ФОРМЫ */
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; color: var(--dim); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; transition: 0.2s; font-size: 14px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1); }
+
+/* РЕЗУЛЬТАТ (ПРЕДПРОСМОТР) */
+.result-card { margin-top: 20px; border-color: rgba(46, 204, 113, 0.4); }
+.output { background: #000; border: 1px solid var(--border); padding: 20px; border-radius: 8px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13.5px; white-space: pre-wrap; margin-top: 20px; max-height: 500px; overflow-y: auto; line-height: 1.6; }
+.output::-webkit-scrollbar { width: 8px; }
+.output::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="container header-inner" style="display:flex; justify-content:space-between; align-items:center;">
-    <a href="index.html" class="logo" style="font-size:20px; font-weight:900; font-family:var(--mono); color:#fff; text-decoration:none;">
+<header style="border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">
+  <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+    <a href="index.html" style="font-size:20px; font-weight:900; font-family:'JetBrains Mono', monospace; color:#fff; text-decoration:none;">
       <span>🛡️</span> FSB<span style="color:var(--accent)">LAW</span>
     </a>
-    <nav class="nav" id="nav" style="display:flex; gap:15px; font-family:var(--mono); font-size:13px;">
-      <a href="index.html" style="color:var(--dim); text-decoration:none; padding:6px 12px;">🏠 Главная</a>
-      <a href="audit.html" style="color:#000; background:var(--accent); text-decoration:none; padding:6px 12px; border-radius:6px; font-weight:bold;">🛡️ Аудит</a>
+    <nav style="display:flex; gap:15px; font-family:'JetBrains Mono', monospace; font-size:13px;">
+      <a href="index.html" style="color:var(--dim); text-decoration:none; padding:6px 12px; transition: 0.2s;">🏠 Главная</a>
+      <a href="audit.html" style="color:#000; background:var(--accent); text-decoration:none; padding:6px 12px; border-radius:6px; font-weight:bold; box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);">🛡️ Аудит</a>
     </nav>
   </div>
 </header>
 
-<div class="container" style="margin-top: 40px;">
+<div class="container">
   <h1>🛡️ Управление <span>«А»</span></h1>
   
   <div class="tabs">
     <div class="tab active" onclick="switchTab('calc')">🧮 Калькулятор</div>
-    <div class="tab" onclick="switchTab('report')">📝 Отчет / Рапорт</div>
+    <div class="tab" onclick="switchTab('promo')">📝 Рапорт на повышение</div>
+    <div class="tab" onclick="switchTab('weekly')">📅 Еженедельный отчет</div>
   </div>
 
-  <!-- КАЛЬКУЛЯТОР -->
+  <!-- ВКЛАДКА 1: КАЛЬКУЛЯТОР -->
   <div class="panel active" id="panel-calc">
-    <div class="card">
-      <h3>📋 Выберите задания</h3>
-      <div id="tasksList"></div>
-    </div>
-    <div class="card">
-      <h3>💰 Итог</h3>
-      <div class="form-group">
-        <label>Остаток с прошлого раза</label>
-        <input type="number" id="prevPoints" value="0" oninput="calcTotal()">
+    <div class="grid-2">
+      <div class="card">
+        <h3>📋 Выберите задания</h3>
+        <div id="tasksList"></div>
       </div>
-      <div class="total-box">
-        <span>Всего:</span>
-        <span id="totalDisplay" style="color:var(--accent)">0</span>
+      <div class="card">
+        <h3>💰 Итог</h3>
+        <div class="form-group">
+          <label>Остаток с прошлого раза</label>
+          <input type="number" id="prevPoints" value="0" oninput="calcTotal()">
+        </div>
+        <div class="total-box">
+          <span>Всего:</span>
+          <span id="totalDisplay" style="color:var(--accent)">0</span>
+        </div>
+        <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы</button>
       </div>
-      <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы</button>
     </div>
   </div>
 
-  <!-- ОТЧЕТ / РАПОРТ -->
-  <div class="panel" id="panel-report">
-    <div class="card">
-      <h3>✍️ Данные</h3>
-      
-      <div class="form-group">
-        <label>Ваше ФИО / Позывной</label>
-        <input type="text" id="rpName" value="Кирилл Макалистер" oninput="generateReport()">
+  <!-- ВКЛАДКА 2: РАПОРТ НА ПОВЫШЕНИЕ -->
+  <div class="panel" id="panel-promo">
+    <div class="grid-2">
+      <div class="card">
+        <h3>✍️ Данные рапорта</h3>
+        <div class="form-group">
+          <label>Ваше ФИО / Позывной</label>
+          <input type="text" id="rpName" value="Кирилл Макалистер" oninput="generatePromo()">
+        </div>
+        <div class="form-group">
+          <label>Static ID</label>
+          <input type="text" id="rpStatic" value="104-844" oninput="generatePromo()">
+        </div>
+        <div class="form-group">
+          <label>Текущее звание</label>
+          <select id="rpRank" onchange="generatePromo()">
+            <option value="Старший сержант">Старший сержант</option>
+            <option value="Старшина">Старшина</option>
+            <option value="Прапорщик">Прапорщик</option>
+            <option value="Старший прапорщик">Старший прапорщик</option>
+            <option value="Младший лейтенант">Младший лейтенант</option>
+            <option value="Лейтенант">Лейтенант</option>
+            <option value="Старший лейтенант">Старший лейтенант</option>
+            <option value="Капитан">Капитан</option>
+            <option value="Майор">Майор</option>
+            <option value="Подполковник">Подполковник</option>
+            <option value="Полковник">Полковник</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Желаемое звание (с ролью)</label>
+          <select id="rpNext" onchange="generatePromo()">
+            <option value="Старшина <@&958783018573660190>">Старшина</option>
+            <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
+            <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
+            <option value="Младший лейтенант <@&883437994537791518>">Младший лейтенант</option>
+            <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
+            <option value="Старший лейтенант <@&883437620842070026>">Старший лейтенант</option>
+            <option value="Капитан <@&883437514419998721>">Капитан</option>
+            <option value="Майор <@&883437452365860864>">Майор</option>
+            <option value="Подполковник <@&883437321965350912>">Подполковник</option>
+            <option value="Полковник <@&883437208526491678>">Полковник</option>
+          </select>
+        </div>
+        <button class="btn btn-purple" onclick="generatePromo()">🪄 Сгенерировать рапорт</button>
       </div>
-      <div class="form-group">
-        <label>Static ID</label>
-        <input type="text" id="rpStatic" value="104-844" oninput="generateReport()">
-      </div>
-
-      <hr style="border-color: var(--border); margin: 20px 0;">
       
-      <!-- Блок для рапорта на повышение -->
-      <h3>🪄 Рапорт на повышение</h3>
-      
-      <div class="form-group">
-        <label>Текущее звание</label>
-        <select id="rpRank" onchange="generateReport()">
-          <option value="Старший сержант">Старший сержант</option>
-          <option value="Старшина">Старшина</option>
-          <option value="Прапорщик">Прапорщик</option>
-          <option value="Старший прапорщик">Старший прапорщик</option>
-          <option value="Младший лейтенант">Младший лейтенант</option>
-          <option value="Лейтенант">Лейтенант</option>
-          <option value="Старший лейтенант">Старший лейтенант</option>
-          <option value="Капитан">Капитан</option>
-          <option value="Майор">Майор</option>
-          <option value="Подполковник">Подполковник</option>
-          <option value="Полковник">Полковник</option>
-        </select>
+      <div class="card result-card">
+        <h3>📄 Предпросмотр рапорта</h3>
+        <div class="output" id="promoOutput">Нажмите "Сгенерировать рапорт"...</div>
+        <button class="btn btn-blue" style="margin-top: 15px;" onclick="copyOutput('promoOutput')">📋 Скопировать рапорт</button>
       </div>
-      <div class="form-group">
-        <label>Желаемое звание (с ролью)</label>
-        <select id="rpNext" onchange="generateReport()">
-          <option value="Старшина <@&958783018573660190>">Старшина</option>
-          <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
-          <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
-          <option value="Младший лейтенант <@&883437994537791518>">Младший лейтенант</option>
-          <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
-          <option value="Старший лейтенант <@&883437620842070026>">Старший лейтенант</option>
-          <option value="Капитан <@&883437514419998721>">Капитан</option>
-          <option value="Майор <@&883437452365860864>">Майор</option>
-          <option value="Подполковник <@&883437321965350912>">Подполковник</option>
-          <option value="Полковник <@&883437208526491678>">Полковник</option>
-        </select>
-      </div>
-      <button class="btn btn-purple" onclick="autofillPromotion()">Сгенерировать рапорт</button>
-
-      <hr style="border-color: var(--border); margin: 20px 0;">
-      
-      <!-- Блок для еженедельного отчета -->
-      <h3>📅 Еженедельный отчет</h3>
-      <button class="btn btn-orange" onclick="autofillWeekly()">Сгенерировать еженедельный отчет</button>
-
     </div>
-    
-    <div class="card">
-      <h3>📄 Результат</h3>
-      <div class="output" id="rpOutput">Выберите тип отчета и нажмите кнопку генерации...</div>
-      <button class="btn btn-blue" style="margin-top: 10px;" onclick="copyReport()">📋 Скопировать результат</button>
+  </div>
+
+  <!-- ВКЛАДКА 3: ЕЖЕНЕДЕЛЬНЫЙ ОТЧЕТ -->
+  <div class="panel" id="panel-weekly">
+    <div class="grid-2">
+      <div class="card">
+        <h3>📅 Данные отчета</h3>
+        <div class="form-group">
+          <label>Ваше ФИО / Позывной</label>
+          <input type="text" id="weeklyName" value="Кирилл Макалистер" oninput="generateWeekly()">
+        </div>
+        <div class="form-group">
+          <label>Static ID</label>
+          <input type="text" id="weeklyStatic" value="104-844" oninput="generateWeekly()">
+        </div>
+        
+        <div style="margin-top: 20px; padding: 15px; background: rgba(46,204,113,0.05); border: 1px dashed var(--border); border-radius: 8px; font-size: 13px; color: var(--dim);">
+          <b style="color: var(--text);">Примечание:</b> Отчет собирается автоматически на основе выбранных заданий и вставленных ссылок из вкладки <b>«Калькулятор»</b>. Убедитесь, что вы отметили задания и вставили ссылки на скрины!
+        </div>
+        
+        <button class="btn btn-orange" style="margin-top: 20px;" onclick="generateWeekly()">🪄 Сгенерировать еженедельный отчет</button>
+      </div>
+      
+      <div class="card result-card">
+        <h3>📄 Предпросмотр отчета</h3>
+        <div class="output" id="weeklyOutput">Нажмите "Сгенерировать еженедельный отчет"...</div>
+        <button class="btn btn-blue" style="margin-top: 15px;" onclick="copyOutput('weeklyOutput')">📋 Скопировать отчет</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-  // ID канала для отчетов (ЗАМЕНИ НА СВОЙ РЕАЛЬНЫЙ ID)
-  const REPORT_CHANNEL_ID = "1474455673382244475"; 
+  // ID канала для отчетов (ЗАМЕНИ НА СВОЙ РЕАЛЬНЫЙ ID КАНАЛА #ЕЖЕНЕДЕЛЬНЫЙ-ОТЧЕТ)
+  const REPORT_CHANNEL_ID = "123456789012345678"; 
   const CHANNEL_TAG = `<#${REPORT_CHANNEL_ID}>`;
 
-  // Роли для упоминания в конце отчета
-  const ROLE_HEAD = "<@&883131648202391562>"; // Начальник управления А (замени на свой ID)
-  const ROLE_DEPUTY = "<@&883135508870471731>"; // Заместитель начальника (замени на свой ID)
+  // Роли для упоминания в конце отчета (ЗАМЕНИ НА СВОИ ID)
+  const ROLE_HEAD = "<@&883437514419998721>"; // Начальник управления А
+  const ROLE_DEPUTY = "<@&1279194726775652445>"; // Заместитель начальника
 
   const TASKS = [
     { id:'arest', icon:'🚔', label:'Арест', pts:30, cat:'Аресты' },
@@ -184,6 +273,7 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
 
   let selected = {};
 
+  // Отрисовка списка задач
   function render() {
     document.getElementById('tasksList').innerHTML = TASKS.map(t => {
       let isChecked = selected[t.id] ? selected[t.id].checked : false;
@@ -197,14 +287,14 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
               <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggle('${t.id}')">
               <span style="display:flex; align-items:center; gap:8px;">
                 <span style="font-size:16px;">${t.icon}</span> 
-                ${t.label} 
+                <span style="font-weight: 600;">${t.label}</span>
                 <span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>
               </span>
             </div>
             ${isChecked ? `<input type="number" value="${qty}" min="1" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
           </div>
           <div class="task-body">
-             <input type="text" class="task-link" placeholder="🔗 Вставьте ссылку из Discord..." value="${link}" oninput="setLink('${t.id}', this.value)">
+             <input type="text" class="task-link" placeholder="🔗 Вставьте ссылку на скрин из Discord..." value="${link}" oninput="setLink('${t.id}', this.value)">
           </div>
         </div>
       `;
@@ -250,12 +340,18 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
   function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    
     if (tab === 'calc') {
       document.querySelectorAll('.tab')[0].classList.add('active');
       document.getElementById('panel-calc').classList.add('active');
-    } else {
+    } else if (tab === 'promo') {
       document.querySelectorAll('.tab')[1].classList.add('active');
-      document.getElementById('panel-report').classList.add('active');
+      document.getElementById('panel-promo').classList.add('active');
+      generatePromo(); // Автогенерация при переходе
+    } else if (tab === 'weekly') {
+      document.querySelectorAll('.tab')[2].classList.add('active');
+      document.getElementById('panel-weekly').classList.add('active');
+      generateWeekly(); // Автогенерация при переходе
     }
   }
 
@@ -268,8 +364,14 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
     alert('Баллы скопированы!');
   }
 
+  function copyOutput(id) {
+    let text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text);
+    alert('Скопировано в буфер обмена!');
+  }
+
   // ГЕНЕРАЦИЯ РАПОРТА НА ПОВЫШЕНИЕ
-  function autofillPromotion() {
+  function generatePromo() {
     let res = getSum();
     let grouped = {};
     
@@ -299,18 +401,17 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
       `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${nextRole}.`,
       'В связи с проделанной работой:',
-      workLines.join('\n'),
+      workLines.length ? workLines.join('\n') : 'Нет выполненных заданий',
       '',
       `Сумма: ${res.total} баллов`,
       `Остаток: ${prev} баллов`
     ];
     
-    document.getElementById('rpOutput').textContent = lines.join('\n');
-    switchTab('report');
+    document.getElementById('promoOutput').textContent = lines.join('\n');
   }
 
   // ГЕНЕРАЦИЯ ЕЖЕНЕДЕЛЬНОГО ОТЧЕТА
-  function autofillWeekly() {
+  function generateWeekly() {
     let res = getSum();
     
     let grouped = {};
@@ -321,31 +422,32 @@ h3 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 15px;
       }
     });
 
-    let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
-    let sId = document.getElementById('rpStatic').value || '104-844';
+    let name = document.getElementById('weeklyName').value || 'Кирилл Макалистер';
+    let sId = document.getElementById('weeklyStatic').value || '104-844';
 
     let lines = [
       `Я ${name} ${sId} предоставляю отчёт о проделанной работе:`
     ];
 
+    let hasWork = false;
     for (let cat in grouped) {
+      hasWork = true;
       lines.push(`**${cat}:**`);
       grouped[cat].forEach(link => {
          let l = link ? link : '[ссылка не указана]';
+         // В твоем примере формат был: тег > категория > ссылка (или название)
          lines.push(`${CHANNEL_TAG} > ${cat} > ${l}`);
       });
       lines.push(''); 
     }
 
-    lines.push(`${ROLE_HEAD} Начальник управления А ${ROLE_DEPUTY} Заместитель начальника управления А`);
+    if (!hasWork) {
+      lines.push('Задания не выбраны. Отметьте их в калькуляторе.');
+    } else {
+      lines.push(`${ROLE_HEAD} Начальник управления А ${ROLE_DEPUTY} Заместитель начальника управления А`);
+    }
 
-    document.getElementById('rpOutput').textContent = lines.join('\n');
-    switchTab('report');
-  }
-
-  function copyReport() {
-    navigator.clipboard.writeText(document.getElementById('rpOutput').textContent);
-    alert('Результат скопирован!');
+    document.getElementById('weeklyOutput').textContent = lines.join('\n');
   }
 
   // Инициализация
