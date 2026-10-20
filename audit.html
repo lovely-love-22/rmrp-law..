@@ -96,7 +96,6 @@ h3 {
 .task-body { margin-top: 12px; display: none; padding-top: 12px; border-top: 1px dashed var(--border); max-height: 300px; overflow-y: auto; }
 .task.active .task-body { display: block; }
 
-/* Спец. поля для ручного ввода баллов */
 .manual-pts-input {
   width: 80px; background: #000; border: 1px solid var(--border); color: var(--accent); 
   text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace;
@@ -128,7 +127,6 @@ h3 {
 .history-load-btn:hover { background: var(--accent); color: #000; }
 .history-empty { color: var(--dim); font-size: 13px; text-align: center; padding: 10px; font-style: italic; }
 
-/* Кнопка очистки в заголовке */
 .btn-clear-history {
   background: rgba(231, 76, 60, 0.1); color: var(--red); border: 1px solid var(--red);
   padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;
@@ -255,19 +253,20 @@ h3 {
           <input type="text" id="rpStatic" value="104-844" oninput="generatePromo()">
         </div>
         <div class="form-group">
-          <label>Текущее звание</label>
+          <label>Текущее звание (с ролью)</label>
           <select id="rpRank" onchange="generatePromo()">
-            <option value="Старший сержант">Старший сержант</option>
-            <option value="Старшина">Старшина</option>
-            <option value="Прапорщик">Прапорщик</option>
-            <option value="Старший прапорщик">Старший прапорщик</option>
-            <option value="Младший лейтенант">Младший лейтенант</option>
-            <option value="Лейтенант">Лейтенант</option>
-            <option value="Старший лейтенант">Старший лейтенант</option>
-            <option value="Капитан">Капитан</option>
-            <option value="Майор">Майор</option>
-            <option value="Подполковник">Подполковник</option>
-            <option value="Полковник">Полковник</option>
+            <!-- ДОБАВЛЕНЫ ID РОЛЕЙ ДЛЯ ТЕКУЩЕГО ЗВАНИЯ -->
+            <option value="Старший сержант <@&958783018573660190>">Старший сержант</option>
+            <option value="Старшина <@&958783018573660190>">Старшина</option>
+            <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
+            <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
+            <option value="Младший лейтенант <@&883437994537791518>">Младший лейтенант</option>
+            <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
+            <option value="Старший лейтенант <@&883437620842070026>">Старший лейтенант</option>
+            <option value="Капитан <@&883437514419998721>">Капитан</option>
+            <option value="Майор <@&883437452365860864>">Майор</option>
+            <option value="Подполковник <@&883437321965350912>">Подполковник</option>
+            <option value="Полковник <@&883437208526491678>">Полковник</option>
           </select>
         </div>
         <div class="form-group">
@@ -339,7 +338,6 @@ h3 {
     "Младший лейтенант": 850, "Лейтенант": 1000, "Старший лейтенант": 1200, "Капитан": 1400
   };
 
-  // added: isManual - если true, то баллы вводятся вручную
   const TASKS = [
     { id:'arest', icon:'🚔', label:'Арест', pts:30, cat:'Аресты' },
     { id:'shtraf', icon:'📝', label:'Выписать штраф', pts:10, cat:'Штрафы' },
@@ -353,7 +351,7 @@ h3 {
     { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, cat:'Ограбления' },
     { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, cat:'Тюрьма' },
     { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, cat:'Ограбления' },
-    { id:'thanks', icon:'🎖️', label:'Благодарность', pts:0, cat:'Благодарности', isManual:true } // Ручной ввод
+    { id:'thanks', icon:'🎖️', label:'Благодарность', pts:0, cat:'Благодарности', isManual:true }
   ];
 
   let selected = {};
@@ -402,10 +400,8 @@ h3 {
       
       let ptsHtml = '';
       if (t.isManual) {
-        // Если ручной ввод, показываем поле для баллов
         ptsHtml = `<input type="number" class="manual-pts-input" placeholder="Баллы" value="${manualPts}" onclick="event.stopPropagation()" onchange="setManualPts('${t.id}', this.value)">`;
       } else {
-        // Иначе просто пишем стоимость
         ptsHtml = `<span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>`;
       }
 
@@ -456,7 +452,6 @@ h3 {
     }
   }
 
-  // Установка ручных баллов
   function setManualPts(id, val) {
     if (selected[id]) {
       selected[id].manualPts = parseInt(val) || 0;
@@ -471,7 +466,6 @@ h3 {
       if (selected[id].checked) {
         let task = TASKS.find(t => t.id === id);
         
-        // Логика подсчета баллов
         let ptsPerOne = 0;
         if (task.isManual) {
           ptsPerOne = selected[id].manualPts || 0;
@@ -617,7 +611,6 @@ h3 {
     let total = prev + res.total;
     let text = `=== ПОДСЧЕТ БАЛЛОВ ===\nОстаток: ${prev} б.\n\n`;
     res.details.forEach(d => {
-      // Если баллов больше 0, пишем их
       if (d.hasPts) {
         text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
       } else {
@@ -646,7 +639,6 @@ h3 {
     
     let workLines = [];
     for (let key in grouped) {
-      // Пишем "баллов" только если они есть (для благодарностей без баллов пишем "шт")
       if (grouped[key].pts > 0) {
         workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
       } else {
@@ -655,8 +647,8 @@ h3 {
       grouped[key].links.forEach(link => { workLines.push(`  🔗 ${link}`); });
     }
     
-    let rank = document.getElementById('rpRank').value;
-    let nextRole = document.getElementById('rpNext').value;
+    let rank = document.getElementById('rpRank').value; // Теперь с тегом роли
+    let nextRole = document.getElementById('rpNext').value; // Теперь с тегом роли
     let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
     let sId = document.getElementById('rpStatic').value || '104-844';
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
