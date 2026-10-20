@@ -89,12 +89,19 @@ h3 {
 .task { padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; user-select: none; background: rgba(0,0,0,0.2); transition: 0.2s;}
 .task:hover { border-color: rgba(46, 204, 113, 0.4); }
 .task.active { background: rgba(46, 204, 113, 0.08); border-color: var(--accent); }
-.task-head { display: flex; justify-content: space-between; cursor: pointer; align-items: center; }
+.task-head { display: flex; justify-content: space-between; cursor: pointer; align-items: center; gap: 10px; }
 .task-head input[type="checkbox"] { margin-right: 12px; accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
-.task-head span { flex: 1; font-size: 14.5px; }
-.task input[type="number"] { width: 70px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace; }
+.task-head span { flex: 1; font-size: 14.5px; display:flex; align-items:center; gap:8px;}
+.task input[type="number"] { width: 60px; background: #000; border: 1px solid var(--border); color: #fff; text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace; }
 .task-body { margin-top: 12px; display: none; padding-top: 12px; border-top: 1px dashed var(--border); max-height: 300px; overflow-y: auto; }
 .task.active .task-body { display: block; }
+
+/* Спец. поля для ручного ввода баллов */
+.manual-pts-input {
+  width: 80px; background: #000; border: 1px solid var(--border); color: var(--accent); 
+  text-align: center; border-radius: 6px; padding: 6px; outline: none; font-family: 'JetBrains Mono', monospace;
+  font-weight: bold;
+}
 
 /* ПОЛЯ ССЫЛОК */
 .links-container { display: flex; flex-direction: column; gap: 8px; }
@@ -305,7 +312,7 @@ h3 {
         </div>
         
         <div style="margin-top: 20px; padding: 15px; background: rgba(46,204,113,0.05); border: 1px dashed var(--border); border-radius: 8px; font-size: 13px; color: var(--dim);">
-          <b style="color: var(--text);">Примечание:</b> Отчет собирается автоматически на основе выбранных заданий и вставленных ссылок из вкладки <b>«Калькулятор»</b>. Убедитесь, что вы отметили задания и вставили ссылки на скрины!
+          <b style="color: var(--text);">Примечание:</b> Отчет собирается автоматически на основе выбранных заданий и вставленных ссылок из вкладки <b>«Калькулятор»</b>.
         </div>
         
         <button class="btn btn-orange" style="margin-top: 20px;" onclick="generateWeekly()">🪄 Сгенерировать еженедельный отчет</button>
@@ -332,6 +339,7 @@ h3 {
     "Младший лейтенант": 850, "Лейтенант": 1000, "Старший лейтенант": 1200, "Капитан": 1400
   };
 
+  // added: isManual - если true, то баллы вводятся вручную
   const TASKS = [
     { id:'arest', icon:'🚔', label:'Арест', pts:30, cat:'Аресты' },
     { id:'shtraf', icon:'📝', label:'Выписать штраф', pts:10, cat:'Штрафы' },
@@ -345,8 +353,7 @@ h3 {
     { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, cat:'Ограбления' },
     { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, cat:'Тюрьма' },
     { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, cat:'Ограбления' },
-    // НОВОЕ ЗАДАНИЕ
-    { id:'thanks', icon:'🎖️', label:'Благодарность', pts:0, cat:'Благодарности' }
+    { id:'thanks', icon:'🎖️', label:'Благодарность', pts:0, cat:'Благодарности', isManual:true } // Ручной ввод
   ];
 
   let selected = {};
@@ -385,6 +392,7 @@ h3 {
       let isChecked = selected[t.id] ? selected[t.id].checked : false;
       let qty = selected[t.id] ? selected[t.id].qty : 1;
       let links = selected[t.id] && selected[t.id].links ? selected[t.id].links : [''];
+      let manualPts = selected[t.id] && selected[t.id].manualPts ? selected[t.id].manualPts : '';
       
       let linksHtml = '';
       for (let i = 0; i < qty; i++) {
@@ -392,8 +400,14 @@ h3 {
         linksHtml += `<input type="text" class="task-link" placeholder="🔗 Ссылка #${i+1}..." value="${val}" oninput="setLink('${t.id}', ${i}, this.value)">`;
       }
       
-      // Для благодарности убираем отображение баллов, так как их нет
-      let ptsHtml = t.pts > 0 ? `<span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>` : '';
+      let ptsHtml = '';
+      if (t.isManual) {
+        // Если ручной ввод, показываем поле для баллов
+        ptsHtml = `<input type="number" class="manual-pts-input" placeholder="Баллы" value="${manualPts}" onclick="event.stopPropagation()" onchange="setManualPts('${t.id}', this.value)">`;
+      } else {
+        // Иначе просто пишем стоимость
+        ptsHtml = `<span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>`;
+      }
 
       return `
         <div class="task ${isChecked ? 'active' : ''}">
@@ -418,7 +432,7 @@ h3 {
   }
 
   function toggle(id) {
-    if (!selected[id]) selected[id] = { checked: false, qty: 1, links: [''] };
+    if (!selected[id]) selected[id] = { checked: false, qty: 1, links: [''], manualPts: '' };
     selected[id].checked = !selected[id].checked;
     render(); saveToStorage();
   }
@@ -442,15 +456,41 @@ h3 {
     }
   }
 
+  // Установка ручных баллов
+  function setManualPts(id, val) {
+    if (selected[id]) {
+      selected[id].manualPts = parseInt(val) || 0;
+      calcTotal();
+      saveToStorage();
+    }
+  }
+
   function getSum() {
     let total = 0, details = [];
     for (let id in selected) {
       if (selected[id].checked) {
         let task = TASKS.find(t => t.id === id);
-        let pts = task.pts * selected[id].qty;
+        
+        // Логика подсчета баллов
+        let ptsPerOne = 0;
+        if (task.isManual) {
+          ptsPerOne = selected[id].manualPts || 0;
+        } else {
+          ptsPerOne = task.pts;
+        }
+        
+        let pts = ptsPerOne * selected[id].qty;
         total += pts;
+        
         let validLinks = (selected[id].links || []).filter(l => l && l.trim() !== '');
-        details.push({ cat: task.cat, pts: pts, qty: selected[id].qty, name: task.label, links: validLinks, hasPts: task.pts > 0 });
+        details.push({ 
+          cat: task.cat, 
+          pts: pts, 
+          qty: selected[id].qty, 
+          name: task.label, 
+          links: validLinks, 
+          hasPts: ptsPerOne > 0 
+        });
       }
     }
     return { total, details };
@@ -577,6 +617,7 @@ h3 {
     let total = prev + res.total;
     let text = `=== ПОДСЧЕТ БАЛЛОВ ===\nОстаток: ${prev} б.\n\n`;
     res.details.forEach(d => {
+      // Если баллов больше 0, пишем их
       if (d.hasPts) {
         text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
       } else {
@@ -605,11 +646,11 @@ h3 {
     
     let workLines = [];
     for (let key in grouped) {
-      // Если категория "Благодарности", не пишем баллы
-      if (key === 'Благодарности') {
-        workLines.push(`• ${key} - ${grouped[key].links.length} шт.`);
-      } else {
+      // Пишем "баллов" только если они есть (для благодарностей без баллов пишем "шт")
+      if (grouped[key].pts > 0) {
         workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
+      } else {
+        workLines.push(`• ${key} - ${grouped[key].links.length} шт.`);
       }
       grouped[key].links.forEach(link => { workLines.push(`  🔗 ${link}`); });
     }
