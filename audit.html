@@ -344,7 +344,9 @@ h3 {
     { id:'raid', icon:'🎯', label:'Участие в рейде', pts:45, cat:'Рейды' },
     { id:'nalet_win', icon:'🛡️', label:'Успешное отбитие налета', pts:60, cat:'Ограбления' },
     { id:'tyrma', icon:'⛓️', label:'Отбитие Федеральной Тюрьмы', pts:45, cat:'Тюрьма' },
-    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, cat:'Ограбления' }
+    { id:'nalet_part', icon:'⚔️', label:'Участие в отбитии налета', pts:30, cat:'Ограбления' },
+    // НОВОЕ ЗАДАНИЕ
+    { id:'thanks', icon:'🎖️', label:'Благодарность', pts:0, cat:'Благодарности' }
   ];
 
   let selected = {};
@@ -390,6 +392,9 @@ h3 {
         linksHtml += `<input type="text" class="task-link" placeholder="🔗 Ссылка #${i+1}..." value="${val}" oninput="setLink('${t.id}', ${i}, this.value)">`;
       }
       
+      // Для благодарности убираем отображение баллов, так как их нет
+      let ptsHtml = t.pts > 0 ? `<span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>` : '';
+
       return `
         <div class="task ${isChecked ? 'active' : ''}">
           <div class="task-head" onclick="toggle('${t.id}')">
@@ -398,7 +403,7 @@ h3 {
               <span style="display:flex; align-items:center; gap:8px;">
                 <span style="font-size:16px;">${t.icon}</span> 
                 <span style="font-weight: 600;">${t.label}</span>
-                <span style="color:#586069; font-size:12px;">(${t.pts} б.)</span>
+                ${ptsHtml}
               </span>
             </div>
             ${isChecked ? `<input type="number" value="${qty}" min="1" max="100" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
@@ -445,7 +450,7 @@ h3 {
         let pts = task.pts * selected[id].qty;
         total += pts;
         let validLinks = (selected[id].links || []).filter(l => l && l.trim() !== '');
-        details.push({ cat: task.cat, pts: pts, qty: selected[id].qty, name: task.label, links: validLinks });
+        details.push({ cat: task.cat, pts: pts, qty: selected[id].qty, name: task.label, links: validLinks, hasPts: task.pts > 0 });
       }
     }
     return { total, details };
@@ -541,7 +546,6 @@ h3 {
     alert('Расчет загружен!');
   }
 
-  // ФУНКЦИЯ ОЧИСТКИ ИСТОРИИ
   function clearHistory() {
     if (!confirm('Вы уверены, что хотите удалить ВСЮ историю сохранений? Это действие нельзя отменить.')) return;
     localStorage.removeItem('rmrp_calc_history');
@@ -573,7 +577,11 @@ h3 {
     let total = prev + res.total;
     let text = `=== ПОДСЧЕТ БАЛЛОВ ===\nОстаток: ${prev} б.\n\n`;
     res.details.forEach(d => {
-      text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
+      if (d.hasPts) {
+        text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
+      } else {
+        text += `• ${d.name} (x${d.qty})\n`;
+      }
       d.links.forEach(link => { text += `  🔗 ${link}\n`; });
     });
     text += `\nИТОГО: ${total} баллов`;
@@ -597,7 +605,12 @@ h3 {
     
     let workLines = [];
     for (let key in grouped) {
-      workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
+      // Если категория "Благодарности", не пишем баллы
+      if (key === 'Благодарности') {
+        workLines.push(`• ${key} - ${grouped[key].links.length} шт.`);
+      } else {
+        workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
+      }
       grouped[key].links.forEach(link => { workLines.push(`  🔗 ${link}`); });
     }
     
