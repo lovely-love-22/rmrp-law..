@@ -108,6 +108,18 @@ h3 {
 .promo-status.ok { background: rgba(46, 204, 113, 0.1); border-color: var(--accent); color: var(--accent); }
 .promo-status.fail { background: rgba(231, 76, 60, 0.1); border-color: var(--red); color: var(--red); }
 
+/* ИСТОРИЯ (РАНЕЕ СОХРАНЕННОЕ) */
+.history-box { margin-top: 24px; background: rgba(0,0,0,0.2); border: 1px dashed var(--border); border-radius: 8px; padding: 16px; }
+.history-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+.history-item { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; transition: 0.2s; }
+.history-item:hover { border-color: var(--accent); }
+.history-item-info { display: flex; flex-direction: column; gap: 4px; }
+.history-item-date { font-size: 11px; color: var(--dim); }
+.history-item-total { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: bold; }
+.history-load-btn { background: rgba(46, 204, 113, 0.1); color: var(--accent); border: 1px solid var(--accent); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
+.history-load-btn:hover { background: var(--accent); color: #000; }
+.history-empty { color: var(--dim); font-size: 13px; text-align: center; padding: 10px; font-style: italic; }
+
 /* ИТОГИ И КНОПКИ */
 .total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 20px; border-radius: 8px; margin-top: 24px; font-weight: bold; font-family: 'JetBrains Mono', monospace; font-size: 18px; }
 .btn { background: var(--accent); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 16px; font-family: 'Inter', sans-serif; transition: 0.2s; text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
@@ -115,6 +127,8 @@ h3 {
 .btn-purple { background: #a855f7; color: #fff; box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2); }
 .btn-blue { background: #4aa8ff; color: #fff; box-shadow: 0 5px 15px rgba(74, 168, 255, 0.2); }
 .btn-orange { background: #f39c12; color: #fff; box-shadow: 0 5px 15px rgba(243, 156, 18, 0.2); }
+.btn-save { background: rgba(46, 204, 113, 0.2); color: var(--accent); border: 1px solid var(--accent); }
+.btn-save:hover { background: var(--accent); color: #000; }
 
 /* ФОРМЫ */
 .form-group { margin-bottom: 18px; }
@@ -195,7 +209,19 @@ h3 {
           <span>Всего:</span>
           <span id="totalDisplay" style="color:var(--accent)">0</span>
         </div>
+        
+        <button class="btn btn-save" onclick="saveCalcSession()">💾 Сохранить расчет</button>
         <button class="btn btn-blue" onclick="copyPoints()">📋 Скопировать баллы и задания</button>
+      </div>
+    </div>
+
+    <!-- БЛОК РАНЕЕ СОХРАНЕННОГО -->
+    <div class="card" style="margin-top: 20px;">
+      <h3>📁 Ранее сохраненное</h3>
+      <div class="history-box">
+        <div class="history-list" id="historyList">
+          <!-- Сюда будут загружаться сохранения -->
+        </div>
       </div>
     </div>
   </div>
@@ -250,6 +276,7 @@ h3 {
       <div class="card result-card">
         <h3>📄 Предпросмотр рапорта</h3>
         <div class="output" id="promoOutput">Нажмите "Сгенерировать рапорт"...</div>
+        <button class="btn btn-save" style="margin-top: 15px;" onclick="saveTextReport('promo')">💾 Сохранить рапорт</button>
         <button class="btn btn-blue" style="margin-top: 15px;" onclick="copyOutput('promoOutput')">📋 Скопировать рапорт</button>
       </div>
     </div>
@@ -279,6 +306,7 @@ h3 {
       <div class="card result-card">
         <h3>📄 Предпросмотр отчета</h3>
         <div class="output" id="weeklyOutput">Нажмите "Сгенерировать еженедельный отчет"...</div>
+        <button class="btn btn-save" style="margin-top: 15px;" onclick="saveTextReport('weekly')">💾 Сохранить отчет</button>
         <button class="btn btn-blue" style="margin-top: 15px;" onclick="copyOutput('weeklyOutput')">📋 Скопировать отчет</button>
       </div>
     </div>
@@ -291,15 +319,9 @@ h3 {
   const ROLE_HEAD = "<@&883437514419998721>"; 
   const ROLE_DEPUTY = "<@&1279194726775652445>"; 
 
-  // Стоимость повышений
   const RANK_COSTS = {
-    "Старшина": 400,
-    "Прапорщик": 550,
-    "Старший прапорщик": 700,
-    "Младший лейтенант": 850,
-    "Лейтенант": 1000,
-    "Старший лейтенант": 1200,
-    "Капитан": 1400
+    "Старшина": 400, "Прапорщик": 550, "Старший прапорщик": 700,
+    "Младший лейтенант": 850, "Лейтенант": 1000, "Старший лейтенант": 1200, "Капитан": 1400
   };
 
   const TASKS = [
@@ -319,6 +341,36 @@ h3 {
 
   let selected = {};
 
+  // ИНИЦИАЛИЗАЦИЯ И ЗАГРУЗКА
+  window.onload = function() {
+    loadFromStorage();
+    render();
+    renderHistory();
+  };
+
+  function saveToStorage() {
+    let data = {
+      selected: selected,
+      prev: document.getElementById('prevPoints').value,
+      currRank: document.getElementById('currentRank').value,
+      nextRank: document.getElementById('nextRank').value
+    };
+    localStorage.setItem('rmrp_calc_autosave', JSON.stringify(data));
+  }
+
+  function loadFromStorage() {
+    let raw = localStorage.getItem('rmrp_calc_autosave');
+    if (raw) {
+      try {
+        let data = JSON.parse(raw);
+        if (data.selected) selected = data.selected;
+        if (data.prev) document.getElementById('prevPoints').value = data.prev;
+        if (data.currRank) document.getElementById('currentRank').value = data.currRank;
+        if (data.nextRank) document.getElementById('nextRank').value = data.nextRank;
+      } catch(e) {}
+    }
+  }
+
   function render() {
     document.getElementById('tasksList').innerHTML = TASKS.map(t => {
       let isChecked = selected[t.id] ? selected[t.id].checked : false;
@@ -328,7 +380,7 @@ h3 {
       let linksHtml = '';
       for (let i = 0; i < qty; i++) {
         let val = links[i] || '';
-        linksHtml += `<input type="text" class="task-link" placeholder="🔗 Ссылка на скрин #${i+1}..." value="${val}" oninput="setLink('${t.id}', ${i}, this.value)">`;
+        linksHtml += `<input type="text" class="task-link" placeholder="🔗 Ссылка #${i+1}..." value="${val}" oninput="setLink('${t.id}', ${i}, this.value)">`;
       }
       
       return `
@@ -345,9 +397,7 @@ h3 {
             ${isChecked ? `<input type="number" value="${qty}" min="1" max="10" onclick="event.stopPropagation()" onchange="setQty('${t.id}', this.value)">` : ''}
           </div>
           <div class="task-body">
-             <div class="links-container">
-               ${linksHtml}
-             </div>
+             <div class="links-container">${linksHtml}</div>
           </div>
         </div>
       `;
@@ -358,7 +408,7 @@ h3 {
   function toggle(id) {
     if (!selected[id]) selected[id] = { checked: false, qty: 1, links: [''] };
     selected[id].checked = !selected[id].checked;
-    render();
+    render(); saveToStorage();
   }
 
   function setQty(id, val) {
@@ -367,38 +417,28 @@ h3 {
     if (selected[id]) {
       selected[id].qty = q;
       if (!selected[id].links) selected[id].links = [];
-      while (selected[id].links.length < q) {
-        selected[id].links.push('');
-      }
+      while (selected[id].links.length < q) selected[id].links.push('');
     }
-    render();
+    render(); saveToStorage();
   }
 
   function setLink(id, index, val) {
     if (selected[id]) {
       if (!selected[id].links) selected[id].links = [];
       selected[id].links[index] = val.trim();
+      saveToStorage();
     }
   }
 
   function getSum() {
-    let total = 0;
-    let details = [];
+    let total = 0, details = [];
     for (let id in selected) {
       if (selected[id].checked) {
         let task = TASKS.find(t => t.id === id);
         let pts = task.pts * selected[id].qty;
         total += pts;
-        
         let validLinks = (selected[id].links || []).filter(l => l && l.trim() !== '');
-        
-        details.push({ 
-          cat: task.cat, 
-          pts: pts, 
-          qty: selected[id].qty, 
-          name: task.label,
-          links: validLinks
-        });
+        details.push({ cat: task.cat, pts: pts, qty: selected[id].qty, name: task.label, links: validLinks });
       }
     }
     return { total, details };
@@ -409,19 +449,14 @@ h3 {
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
     let total = prev + res.total;
     document.getElementById('totalDisplay').textContent = total;
-    updatePromoStatus(total); // Обновляем статус повышения при каждом изменении
+    updatePromoStatus(total);
+    saveToStorage();
   }
 
-  // ЛОГИКА СИСТЕМЫ ПОВЫШЕНИЯ
   function updatePromoStatus(currentTotal) {
     let targetRank = document.getElementById('nextRank').value;
     let required = RANK_COSTS[targetRank] || 0;
-    
-    // Если передали сумму, используем её, иначе берем из DOM
-    if (typeof currentTotal !== 'number') {
-      currentTotal = parseInt(document.getElementById('totalDisplay').textContent) || 0;
-    }
-
+    if (typeof currentTotal !== 'number') currentTotal = parseInt(document.getElementById('totalDisplay').textContent) || 0;
     let el = document.getElementById('promoStatus');
 
     if (currentTotal >= required) {
@@ -433,6 +468,74 @@ h3 {
       el.className = 'promo-status fail';
       el.innerHTML = `❌ <b>Недостаточно баллов!</b><br>Нужно: ${required} б. | У вас: ${currentTotal} б.<br><span style="font-size:12px;">Не хватает ${need} баллов!</span>`;
     }
+  }
+
+  // СОХРАНЕНИЕ СЕССИЙ В ИСТОРИЮ
+  function saveCalcSession() {
+    let res = getSum();
+    if (res.details.length === 0) {
+      alert('Нет отмеченных заданий для сохранения!');
+      return;
+    }
+    
+    let prev = parseInt(document.getElementById('prevPoints').value) || 0;
+    let total = prev + res.total;
+    
+    let history = JSON.parse(localStorage.getItem('rmrp_calc_history') || '[]');
+    let session = {
+      id: Date.now(),
+      date: new Date().toLocaleString('ru-RU'),
+      total: total,
+      data: {
+        selected: JSON.parse(JSON.stringify(selected)),
+        prev: prev,
+        currRank: document.getElementById('currentRank').value,
+        nextRank: document.getElementById('nextRank').value
+      }
+    };
+    history.unshift(session);
+    if (history.length > 10) history = history.slice(0, 10);
+    localStorage.setItem('rmrp_calc_history', JSON.stringify(history));
+    
+    renderHistory();
+    alert('Расчет успешно сохранен в историю!');
+  }
+
+  function renderHistory() {
+    let history = JSON.parse(localStorage.getItem('rmrp_calc_history') || '[]');
+    let list = document.getElementById('historyList');
+    
+    if (history.length === 0) {
+      list.innerHTML = '<div class="history-empty">История пуста. Сделайте расчет и нажмите "Сохранить расчет".</div>';
+      return;
+    }
+    
+    list.innerHTML = history.map(item => `
+      <div class="history-item">
+        <div class="history-item-info">
+          <div class="history-item-total">${item.total} баллов</div>
+          <div class="history-item-date">${item.date}</div>
+        </div>
+        <button class="history-load-btn" onclick="loadHistoryItem(${item.id})">📥 Загрузить</button>
+      </div>
+    `).join('');
+  }
+
+  function loadHistoryItem(id) {
+    let history = JSON.parse(localStorage.getItem('rmrp_calc_history') || '[]');
+    let item = history.find(h => h.id === id);
+    if (!item) return;
+    
+    if (!confirm('Загрузить этот расчет? Несохраненные текущие данные будут заменены.')) return;
+    
+    selected = item.data.selected;
+    document.getElementById('prevPoints').value = item.data.prev;
+    document.getElementById('currentRank').value = item.data.currRank;
+    document.getElementById('nextRank').value = item.data.nextRank;
+    
+    render();
+    saveToStorage();
+    alert('Расчет загружен!');
   }
 
   function switchTab(tab) {
@@ -457,33 +560,24 @@ h3 {
     let res = getSum();
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
     let total = prev + res.total;
-    
-    let text = `=== ПОДСЧЕТ БАЛЛОВ ===\n`;
-    text += `Остаток: ${prev} б.\n\n`;
-    
+    let text = `=== ПОДСЧЕТ БАЛЛОВ ===\nОстаток: ${prev} б.\n\n`;
     res.details.forEach(d => {
       text += `• ${d.name} (x${d.qty}) = ${d.pts} б.\n`;
-      d.links.forEach(link => {
-        text += `  🔗 ${link}\n`;
-      });
+      d.links.forEach(link => { text += `  🔗 ${link}\n`; });
     });
-    
     text += `\nИТОГО: ${total} баллов`;
-    
     navigator.clipboard.writeText(text);
     alert('Баллы и задания скопированы!');
   }
 
   function copyOutput(id) {
-    let text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(document.getElementById(id).textContent);
     alert('Скопировано в буфер обмена!');
   }
 
   function generatePromo() {
     let res = getSum();
     let grouped = {};
-    
     res.details.forEach(d => {
       if (!grouped[d.cat]) grouped[d.cat] = { pts: 0, links: [] };
       grouped[d.cat].pts += d.pts;
@@ -493,9 +587,7 @@ h3 {
     let workLines = [];
     for (let key in grouped) {
       workLines.push(`• ${key} - ${grouped[key].pts} баллов`);
-      grouped[key].links.forEach(link => {
-        workLines.push(`  🔗 ${link}`);
-      });
+      grouped[key].links.forEach(link => { workLines.push(`  🔗 ${link}`); });
     }
     
     let rank = document.getElementById('rpRank').value;
@@ -515,40 +607,27 @@ h3 {
       `Сумма: ${res.total} баллов`,
       `Остаток: ${prev} баллов`
     ];
-    
     document.getElementById('promoOutput').textContent = lines.join('\n');
   }
 
   function generateWeekly() {
     let res = getSum();
-    
     let grouped = {};
     res.details.forEach(d => {
       if (!grouped[d.cat]) grouped[d.cat] = [];
-      d.links.forEach(link => {
-        grouped[d.cat].push(link);
-      });
-      if (d.links.length === 0) {
-        for(let i=0; i<d.qty; i++) {
-          grouped[d.cat].push('[ссылка не указана]');
-        }
-      }
+      d.links.forEach(link => { grouped[d.cat].push(link); });
+      if (d.links.length === 0) { for(let i=0; i<d.qty; i++) grouped[d.cat].push('[ссылка не указана]'); }
     });
 
     let name = document.getElementById('weeklyName').value || 'Кирилл Макалистер';
     let sId = document.getElementById('weeklyStatic').value || '104-844';
 
-    let lines = [
-      `Я ${name} ${sId} предоставляю отчёт о проделанной работе:`
-    ];
-
+    let lines = [`Я ${name} ${sId} предоставляю отчёт о проделанной работе:`];
     let hasWork = false;
     for (let cat in grouped) {
       hasWork = true;
       lines.push(`**${cat}:**`);
-      grouped[cat].forEach(link => {
-         lines.push(`${CHANNEL_TAG} > ${cat} > ${link}`);
-      });
+      grouped[cat].forEach(link => { lines.push(`${CHANNEL_TAG} > ${cat} > ${link}`); });
       lines.push(''); 
     }
 
@@ -557,12 +636,28 @@ h3 {
     } else {
       lines.push(`${ROLE_HEAD} Начальник управления А ${ROLE_DEPUTY} Заместитель начальника управления А`);
     }
-
     document.getElementById('weeklyOutput').textContent = lines.join('\n');
   }
 
-  // Инициализация
-  render();
+  function saveTextReport(type) {
+    let text = document.getElementById(type + 'Output').textContent;
+    if (!text || text.includes('Нажмите')) {
+      alert('Сначала сгенерируйте отчет!');
+      return;
+    }
+    
+    let history = JSON.parse(localStorage.getItem('rmrp_text_history') || '[]');
+    history.unshift({
+      id: Date.now(),
+      type: type === 'promo' ? 'Рапорт на повышение' : 'Еженедельный отчет',
+      date: new Date().toLocaleString('ru-RU'),
+      text: text
+    });
+    if (history.length > 20) history = history.slice(0, 20);
+    localStorage.setItem('rmrp_text_history', JSON.stringify(history));
+    alert('Текст сохранен в историю!');
+  }
+
 </script>
 </body>
 </html>
