@@ -253,20 +253,20 @@ h3 {
           <input type="text" id="rpStatic" value="104-844" oninput="generatePromo()">
         </div>
         <div class="form-group">
-          <label>Текущее звание (с ролью)</label>
+          <label>Текущее звание (Пинг роли)</label>
+          <!-- Оставили только теги ролей для поля "Текущее звание" -->
           <select id="rpRank" onchange="generatePromo()">
-            <!-- ДОБАВЛЕНЫ ID РОЛЕЙ ДЛЯ ТЕКУЩЕГО ЗВАНИЯ -->
-            <option value="Старший сержант <@&958783018573660190>">Старший сержант</option>
-            <option value="Старшина <@&958783018573660190>">Старшина</option>
-            <option value="Прапорщик <@&1279194354182783139>">Прапорщик</option>
-            <option value="Старший прапорщик <@&1279194726775652445>">Старший прапорщик</option>
-            <option value="Младший лейтенант <@&883437994537791518>">Младший лейтенант</option>
-            <option value="Лейтенант <@&883437825503133736>">Лейтенант</option>
-            <option value="Старший лейтенант <@&883437620842070026>">Старший лейтенант</option>
-            <option value="Капитан <@&883437514419998721>">Капитан</option>
-            <option value="Майор <@&883437452365860864>">Майор</option>
-            <option value="Подполковник <@&883437321965350912>">Подполковник</option>
-            <option value="Полковник <@&883437208526491678>">Полковник</option>
+            <option value="<@&958783018573660190>">Старший сержант</option>
+            <option value="<@&958783018573660190>">Старшина</option>
+            <option value="<@&1279194354182783139>">Прапорщик</option>
+            <option value="<@&1279194726775652445>">Старший прапорщик</option>
+            <option value="<@&883437994537791518>">Младший лейтенант</option>
+            <option value="<@&883437825503133736>">Лейтенант</option>
+            <option value="<@&883437620842070026>">Старший лейтенант</option>
+            <option value="<@&883437514419998721>">Капитан</option>
+            <option value="<@&883437452365860864>">Майор</option>
+            <option value="<@&883437321965350912>">Подполковник</option>
+            <option value="<@&883437208526491678>">Полковник</option>
           </select>
         </div>
         <div class="form-group">
@@ -647,8 +647,8 @@ h3 {
       grouped[key].links.forEach(link => { workLines.push(`  🔗 ${link}`); });
     }
     
-    let rank = document.getElementById('rpRank').value; // Теперь с тегом роли
-    let nextRole = document.getElementById('rpNext').value; // Теперь с тегом роли
+    let rank = document.getElementById('rpRank').value; // Это уже тег <@&...>
+    let nextRole = document.getElementById('rpNext').value;
     let name = document.getElementById('rpName').value || 'Кирилл Макалистер';
     let sId = document.getElementById('rpStatic').value || '104-844';
     let prev = parseInt(document.getElementById('prevPoints').value) || 0;
@@ -657,6 +657,7 @@ h3 {
       'Рапорт на повышение',
       `От: ${name} | ${sId}`,
       'Кому: @Ком. ЦСН «В» | Вениамин Монте @Нач. Упр. "А" | Монтеки А. @Зам. Нач. Упр. "А" | Аверин Е. @Зам. Нач. Упр. "А" | Акуленко А.',
+      // Здесь вставляется только тег роли, без текста
       `Я, ${rank} ${name}, прошу рассмотреть мой рапорт и присвоить мне специальное звание ${nextRole}.`,
       'В связи с проделанной работой:',
       workLines.length ? workLines.join('\n') : 'Нет выполненных заданий',
