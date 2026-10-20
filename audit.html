@@ -78,6 +78,7 @@ h3 {
   padding-bottom: 15px; 
   display: flex; 
   align-items: center; 
+  justify-content: space-between;
   gap: 10px; 
   font-size: 16px;
   text-transform: uppercase;
@@ -119,6 +120,14 @@ h3 {
 .history-load-btn { background: rgba(46, 204, 113, 0.1); color: var(--accent); border: 1px solid var(--accent); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
 .history-load-btn:hover { background: var(--accent); color: #000; }
 .history-empty { color: var(--dim); font-size: 13px; text-align: center; padding: 10px; font-style: italic; }
+
+/* Кнопка очистки в заголовке */
+.btn-clear-history {
+  background: rgba(231, 76, 60, 0.1); color: var(--red); border: 1px solid var(--red);
+  padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;
+  transition: 0.2s; font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: 0;
+}
+.btn-clear-history:hover { background: var(--red); color: #fff; }
 
 /* ИТОГИ И КНОПКИ */
 .total-box { display: flex; justify-content: space-between; background: rgba(46, 204, 113, 0.1); border: 1px solid var(--accent); padding: 20px; border-radius: 8px; margin-top: 24px; font-weight: bold; font-family: 'JetBrains Mono', monospace; font-size: 18px; }
@@ -215,7 +224,10 @@ h3 {
     </div>
 
     <div class="card" style="margin-top: 20px;">
-      <h3>📁 Ранее сохраненное</h3>
+      <h3>
+        📁 Ранее сохраненное
+        <button class="btn-clear-history" onclick="clearHistory()">🗑 Очистить</button>
+      </h3>
       <div class="history-box">
         <div class="history-list" id="historyList"></div>
       </div>
@@ -408,7 +420,7 @@ h3 {
 
   function setQty(id, val) {
     let q = parseInt(val) || 1;
-    if (q > 100) q = 100; // Увеличено до 100
+    if (q > 100) q = 100;
     if (selected[id]) {
       selected[id].qty = q;
       if (!selected[id].links) selected[id].links = [];
@@ -527,6 +539,14 @@ h3 {
     render();
     saveToStorage();
     alert('Расчет загружен!');
+  }
+
+  // ФУНКЦИЯ ОЧИСТКИ ИСТОРИИ
+  function clearHistory() {
+    if (!confirm('Вы уверены, что хотите удалить ВСЮ историю сохранений? Это действие нельзя отменить.')) return;
+    localStorage.removeItem('rmrp_calc_history');
+    renderHistory();
+    alert('История очищена!');
   }
 
   function switchTab(tab) {
