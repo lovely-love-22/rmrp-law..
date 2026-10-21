@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMRP | Правила Discord</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root { 
+  --bg: #05080a; --card: #0f1216; --border: #1e2329; --accent: #2ecc71; 
+  --text: #c9d1d9; --dim: #8b949e; --red: #e74c3c; --blue: #4aa8ff;
+}
+body { background-color: var(--bg); background-image: radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05), transparent 40%), linear-gradient(rgba(5, 8, 10, 0.95), rgba(5, 8, 10, 0.98)); background-attachment: fixed; color: var(--text); font-family: 'Inter', sans-serif; padding: 40px 20px; margin: 0; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 20px; font-size: 28px; text-transform: uppercase; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
+h1 span { color: var(--blue); }
+.rules-search { width: 100%; padding: 14px 20px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 15px; margin-bottom: 30px; outline: none; transition: 0.2s; font-family: 'Inter', sans-serif; box-sizing: border-box; }
+.rules-search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(74, 168, 255, 0.1); }
+
+.rule-category { font-size: 18px; font-weight: 800; color: #fff; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 10px; }
+.rule-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 12px; line-height: 1.6; transition: 0.2s; }
+.rule-item:hover { border-color: var(--blue); background: rgba(74, 168, 255, 0.03); }
+.rule-title { font-weight: 700; color: var(--blue); margin-bottom: 8px; font-size: 15.5px; }
+.rule-text { font-size: 14.5px; color: var(--text); }
+.rule-note { display: block; margin-top: 8px; font-size: 13px; color: var(--dim); font-style: italic; border-left: 2px solid var(--dim); padding-left: 10px; }
+.rule-punish { display: inline-block; margin-top: 12px; padding: 5px 12px; background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.3); color: var(--red); border-radius: 6px; font-size: 12.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.back-btn { display: inline-block; margin-bottom: 20px; padding: 8px 16px; background: #1a1e24; border: 1px solid var(--border); color: var(--dim); border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.2s; }
+.back-btn:hover { background: #252a32; color: #fff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-btn">← На главную</a>
+  <h1>💬 Правила <span>Discord</span></h1>
+  
+  <input type="text" class="rules-search" placeholder="🔍 Поиск по правилам Discord..." oninput="searchRules(this)">
+
+  <div id="discordRules">
+    <div class="rule-category">👥 ОБЩИЕ</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">O.1: Запрещён любой обход наказаний, выданных за нарушения</div>
+      <div class="rule-text">Создание твинков, использование аккаунтов других пользователей, чтобы использовать Discord сервер, не смотря на действующее на Вас наказание и тому подобные случаи.</div>
+      <div class="rule-punish">Наказание: ban твинк аккаунта</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.2: Запрещено размещение вредоносных ссылок и иного контента</div>
+      <div class="rule-text">...который присваивает, использует конфиденциальную информацию пользователей без их согласия, путём обмана и злоупотреблением доверия последних, способен нанести вред здоровью пользователям (например, яркие вспышки, людям больных эпилепсией, какие-либо скримеры и тому подобные случаи), вмешивание в функционирование Discord сервера, благодаря использованию вредоносного программного обеспечения, перегрузка Discord сервера интернет-трафиком и использование иных методов, создающих помеху нормальной работе Discord сервера.</div>
+      <div class="rule-punish">Наказание: ban</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.3: Запрещено общее неадекватное или провокационное поведение</div>
+      <div class="rule-text">Под запретом сообщения, итоговым результатом которого является выведение человека на негативные эмоции и унижение чести и достоинства индивида, не прибегая к оскорблениям, деструктивная критика действий Discord модерации/администрации/сервера RMRP.</div>
+      <div class="rule-punish">Наказание: warn/timeout 60 - 360 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.4: Запрещено любое злоупотребление правами</div>
+      <div class="rule-text">Воспрещается снятие каких-либо наказаний, выданных Discord модерацией, пользователям сервера, не имея должность Discord Admin и выше, беспричинная выдача мутов/банов/варнов, отключений микрофона/звука на сервере, и воспроизведение тому подобных административных действий, не руководствуясь причинами, предусмотренными настоящими правилами сервера.</div>
+      <div class="rule-punish">Наказание: ограничение прав</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.5: Профиль</div>
+      <div class="rule-text">O.5.1: Запрещены некликабельные, оскорбительные, провокационные никнеймы/аватары/баннеры/описания/раздел "Обо мне" профилей пользователей на сервере.</div>
+      <div class="rule-punish">Наказание: принудительная смена</div>
+      <div class="rule-text" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);">O.5.2: Запрещён прямой плагиат профилей никнеймов/аватаров/баннеров/описаний/разделов "Обо мне" профилей пользователей на сервере.</div>
+      <div class="rule-punish">Наказание: kick/принудительная смена</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.6: Запрещено злоупотреблять неточностями и недочётами формулировок правил</div>
+      <div class="rule-text">Также при нахождении не регулируемой или не достаточно контролируемой правилами ситуации, которая может нанести какой-либо вред пользователям, запрещено намерено не сообщать об этом Discord модерации и пользоваться данным недочётом в свою пользу.</div>
+      <div class="rule-punish">Наказание: warn/timeout 60 - 360 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.7: Запрещено использование каналов не по назначению</div>
+      <div class="rule-text">Воспрещается в каналах, где имеется шаблон/форма подачи сообщения, писать в нарушение её обязательных частей.</div>
+      <div class="rule-punish">Наказание: warn/timeout 120-600 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.8: Флуд, спам и капс</div>
+      <div class="rule-text">Запрещены в любом виде флуд, спам, заполнение чата/голосового чата бесполезными и бессмысленными сообщениями, злоупотребление капсом.</div>
+      <div class="rule-punish">Наказание: warn/timeout 30 - 180 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">О.9: Запрещены любые оскорбления</div>
+      <div class="rule-text">О.9.1: Оскорбления участников канала и сторонних лиц.</div>
+      <div class="rule-punish">Наказание: warn/timeout 120 - 720 минут</div>
+      <div class="rule-text" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);">О.9.2: Оскорбления чьих-либо родных и близких.</div>
+      <div class="rule-punish">Наказание: ban</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">О.10: Запрещено злоупотребление ненормативной лексикой</div>
+      <div class="rule-punish">Наказание: warn/timeout 20 - 60 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.11: Запрещено размещение пропаганды нацизма, фашизма, шовинизма...</div>
+      <div class="rule-text">...и тому подобных движений в любой форме, розжиг межнациональной розни, половая/ориентационная дискриминация, разведение холиваров и срачей по политическим темам.</div>
+      <div class="rule-punish">Наказание: warn/kick/timeout 180 - 360 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.12: Запрещено размещение призывов к суициду в любой форме</div>
+      <div class="rule-punish">Наказание: warn/kick/timeout 1 - 3 дня</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.13: Запрещено размещение рекламного контента, не относящегося к RMRP</div>
+      <div class="rule-text">В любой форме (ссылки, изображения, видео).</div>
+      <div class="rule-punish">Наказание: ban</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">O.14: Получение третьего Warn</div>
+      <div class="rule-punish">Наказание: timeout 1 - 3 дня</div>
+    </div>
+
+    <div class="rule-category">🗣 ТЕКСТОВЫЕ/ГОЛОСОВЫЕ КАНАЛЫ</div>
+
+    <div class="rule-item">
+      <div class="rule-title">T.1: Порнографический и шок-контент</div>
+      <div class="rule-text">Запрещено размещение порнографического (иск. NSFW-категория), эротического (иск. NSFW-категория), детской сексуализации и шок-контента в любой форме (ссылки, изображения, видео).</div>
+      <div class="rule-punish">Наказание: warn/kick/timeout 360 - 720 минут/ban</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">T.2: Использование ботов</div>
+      <div class="rule-text">Запрещено использование ботов вне специальных текстовых каналов.</div>
+      <div class="rule-punish">Наказание: warn/timeout 20 - 60 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">T.3: Злоупотребление медиа</div>
+      <div class="rule-text">Запрещено злоупотребление ссылками, "GIF", изображениями, видеороликами в чате.</div>
+      <div class="rule-punish">Наказание: warn/timeout 30 - 120 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">T.4: Упоминания (@)</div>
+      <div class="rule-text">Запрещено использование упоминаний (@) не по назначению.</div>
+      <div class="rule-punish">Наказание: warn/timeout 20 - 60 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">В.2: Приватность</div>
+      <div class="rule-text">Запрещено нарушение приватности разговоров в Приватных комнатах.</div>
+      <div class="rule-punish">Наказание: timeout 60 - 180 минут</div>
+    </div>
+
+    <div class="rule-category">🌀 ДОПОЛНИТЕЛЬНО</div>
+    
+    <div class="rule-item">
+      <div class="rule-text">При возникновении проблем или вопросов по работе сервера или правилам Discord можно обратиться к Discord Admin. Указания на недочёты в правилах приветствуются.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-text">Незнание правил не освобождает от ответственности.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-text">Правила могут быть изменены в любой момент. Изменённые правила обратной силы не имеют.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-text">Правила не действуют на состав администрации Discord Admin и выше.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-text">Высокий ранг - не оправдание и не освобождение от ответственности за нарушения.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function searchRules(input) {
+    var q = input.value.toLowerCase().trim();
+    var items = document.querySelectorAll('.rule-item');
+    
+    items.forEach(function(item) {
+      var text = item.textContent.toLowerCase();
+      if (text.includes(q)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>
