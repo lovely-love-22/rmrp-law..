@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMRP | Правила Гос. Структур</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root { 
+  --bg: #05080a; --card: #0f1216; --border: #1e2329; --accent: #2ecc71; 
+  --text: #c9d1d9; --dim: #8b949e; --red: #e74c3c; --purple: #a855f7;
+}
+body { background-color: var(--bg); background-image: radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.05), transparent 40%), linear-gradient(rgba(5, 8, 10, 0.95), rgba(5, 8, 10, 0.98)); background-attachment: fixed; color: var(--text); font-family: 'Inter', sans-serif; padding: 40px 20px; margin: 0; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { font-family: 'JetBrains Mono', monospace; color: #fff; margin-bottom: 20px; font-size: 28px; text-transform: uppercase; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
+h1 span { color: var(--purple); }
+.rules-search { width: 100%; padding: 14px 20px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 15px; margin-bottom: 30px; outline: none; transition: 0.2s; font-family: 'Inter', sans-serif; box-sizing: border-box; }
+.rules-search:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
+
+.rule-category { font-size: 18px; font-weight: 800; color: #fff; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 10px; }
+.rule-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 12px; line-height: 1.6; transition: 0.2s; }
+.rule-item:hover { border-color: var(--purple); background: rgba(168, 85, 247, 0.03); }
+.rule-title { font-weight: 700; color: var(--purple); margin-bottom: 8px; font-size: 15.5px; }
+.rule-text { font-size: 14.5px; color: var(--text); }
+.rule-note { display: block; margin-top: 8px; font-size: 13px; color: var(--dim); font-style: italic; border-left: 2px solid var(--dim); padding-left: 10px; }
+.rule-punish { display: inline-block; margin-top: 12px; padding: 5px 12px; background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.3); color: var(--red); border-radius: 6px; font-size: 12.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.back-btn { display: inline-block; margin-bottom: 20px; padding: 8px 16px; background: #1a1e24; border: 1px solid var(--border); color: var(--dim); border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.2s; }
+.back-btn:hover { background: #252a32; color: #fff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-btn">← На главную</a>
+  <h1>🏛️ Правила <span>Гос. Структур</span></h1>
+  
+  <input type="text" class="rules-search" placeholder="🔍 Поиск по правилам Гос. Структур..." oninput="searchRules(this)">
+
+  <div id="govRules">
+    <div class="rule-category">📌 Глава 1. Общие положения</div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.1. Сотрудниками государственных организаций являются, члены фракций:</div>
+      <div class="rule-text">Правительство, УВД, ГИБДД, Росгвардия, ФСБ, CК, Прокуратура, Вооруженные Силы, ФСИН, ЦГБ №3, ЦГБ №7, Москва Лайв, ФСО, ЦОДД, Судебная власть.</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.2. Сотрудниками силовых (правоохранительных) организаций являются, члены фракций:</div>
+      <div class="rule-text">УВД, ГИБДД, Росгвардия, ФСБ, CК, Прокуратура, Вооруженные Силы, ФСИН, ФСО.</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.3. Запрещено превышение должностных полномочий</div>
+      <div class="rule-text">Сотрудникам государственных организаций запрещено превышение своих должностных полномочий (применение грубой физической силы, угрозы, злоупотребление наручниками и электрошокером).</div>
+      <div class="rule-note">Исключение: ФСИН в RP ситуациях, ФСБ при проведении допроса в допросной. Запрещается использовать электрошокер при проведении допроса.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.4. Запрещено совершение криминальных действий</div>
+      <div class="rule-text">Сотрудникам государственных организаций запрещено совершение каких либо криминальных действий.</div>
+      <div class="rule-note">При совершении грубых криминальных действий наказание выдаётся вне зависимости от нахождения игрока в форме государственных структур.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.5. Взятки</div>
+      <div class="rule-text">Сотрудникам государственных структур разрешено брать взятки (минимум: 25.000; максимум: 500.000).</div>
+      <div class="rule-note">Исключение: Сотрудники СК, Прокуратуры и ФСБ управления М при получении взятки могут задержать нарушителя.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут / Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.5.1. Вознаграждение за задержание</div>
+      <div class="rule-text">Сотрудникам государственных структур разрешено брать вознаграждение за задержание игроков криминальных организаций путём публикации ориентировки сотрудниками ФСБ / СК / Прокуратуры.</div>
+      <div class="rule-note">Вознаграждение обязуется проходить с публикацией награды в раздел актов правительства. Игрок проводящий все процессуальные действия обязуется хранить полную видеофиксацию в течении 72-х часов.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут / Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.6. Оскорбления и провокации</div>
+      <div class="rule-text">Запрещено первым оскорблять, провоцировать, использовать унизительные анимации, а также грубо выражаться в присутствии / на задержанного или посторонних граждан.</div>
+      <div class="rule-note">Исключение: Сотрудники ФСИН могут оскорблять, провоцировать и грубо обращаться при общении с заключенными первыми. Сотрудники ФСБ при допросе могут первыми грубо общаться, а также провоцировать и угрожать.</div>
+      <div class="rule-punish">Наказание: Demorgan 120 минут / warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.7. Штрафы и конфискация</div>
+      <div class="rule-text">Сотрудникам государственных (правоохранительных) организаций запрещено выписывать штраф, проводить обыск или конфискацию, в обход функционала сервера. Все конфискации предметов или выписывание штрафа - проводятся исключительно соответствующей игровой механикой.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.8. Причина задержания и права</div>
+      <div class="rule-text">При проведении сотрудниками государственных организаций задержаний, сотрудники обязаны называть причину задержания, а так-же разъяснить права игрока согласно процессуальному кодексу. Оглашение причины и разъяснение прав должно быть четким и внятным.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.9. Вызов адвоката</div>
+      <div class="rule-text">Сотрудник государственных организаций проводящий задержание обязан сделать запрос на вызов адвоката через «Гос.Структуры», в случае если игрок требует адвоката.</div>
+      <div class="rule-note">Сотрудник может вызвать адвоката исключительно через рацию гос. структур “ВСЕ фракции” или раздел “Правительство”.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут / warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.10. Сдача краденных авто</div>
+      <div class="rule-text">Сотрудникам государственных организаций запрещено находиться на сдаче краденных авто, NPC связанных с криминальными действиями.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.11. Территории спавна</div>
+      <div class="rule-text">Запрещено проводить процессуальные действия, оперативно-розыскное мероприятие на территориях спавна (аукцион, ЦГБ (здание больницы и территория до забора) и вокзал, а также на территории ка***но, арена и Blueberries).</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.12. Рация и OOC</div>
+      <div class="rule-text">Запрещено использование рации «Гос.Структуры» для передачи OOC-информации. Разрешается передача OOC-информации в следующей форме: ((текст)).</div>
+      <div class="rule-punish">Наказание: Предупреждение / Mute 120 минут / Demorgan 120 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.13. Документы</div>
+      <div class="rule-text">Запрещено выдавать, аннулировать или продлевать документы без веской IC причины.</div>
+      <div class="rule-punish">Наказание: Ban 31 день / Permaban</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.14. Обыск и конфискация</div>
+      <div class="rule-text">Запрещено проводить обыск и конфискацию каких либо предметов без веской IC причины, или в момент когда преступник у которого проводится конфискация находится без сознания (в ноке).</div>
+      <div class="rule-note">Исключение: Сотрудники ФСИН имеют право проводить обыск и конфискацию каких либо предметов внутри исправительной колонии в любой момент.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.15. Личный транспорт</div>
+      <div class="rule-text">Сотрудникам государственных организаций запрещено использовать личные транспортные средства находясь в рабочей форме даже на пассажирском сидении. Запрещено использовать личный транспорт для участия в ограблениях / поставках.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.16. Хранение доказательств</div>
+      <div class="rule-text">Сотрудникам государственных организаций в случае применения наказания в отношении какого-либо лица, обязаны хранить доказательства полных процессуальных действий с момента нарушения в течении 72-х часов с момента вынесения.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.17. Огнестрельное оружие</div>
+      <div class="rule-text">Запрещается применение огнестрельного оружия против невооруженного преступника. Если преступник не имеет оружия и пытается скрыться, открывать огонь на поражение разрешается только после исчерпания всех возможных средств остановки и задержания преступника.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.18. Прерывание RP</div>
+      <div class="rule-text">Запрещено после обыска ТС прерывать RP-процесс и отпускать человека. Все процессуальные действия должны быть продолжены и завершены.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.19. Отражение налетов</div>
+      <div class="rule-text">Принимать участие в отражении налетов разрешается сотрудникам УВД, Росгвардии, ФСБ.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.20. Lawyer Abuse</div>
+      <div class="rule-text">Запрещено злоупотреблять функциями адвоката.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.21-1.23. Склад и полномочия</div>
+      <div class="rule-text">Запрещено брать обмундирование (как предмет) со склада. Запрещено устраивать чистку склада без ведома Главного куратора государственных организаций. Запрещено злоупотребление полномочиями, выполняя обязанности различных отделов/подотделов.</div>
+      <div class="rule-punish">Наказание: Слив склада / Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.24-1.26. Розыск и изъятие</div>
+      <div class="rule-text">Оформить розыск можно исключительно при наличии IC причины. Запрещено изымать предметы и т.п у игрока (из транспортного средства, рюкзаков, инвентаря и т.п.) не имея причин. Запрещено намеренное злоупотребление функционалом государственных структур с нарушением RP логики.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.27-1.29. Кадровые правила</div>
+      <div class="rule-text">Запрещено принимать во фракцию игроков с NRP-Никнеймом. Запрещено хранить в личном транспорте / складе предметы, взятые со склада государственной организации. Запрещается принимать человека с непогашенной судимостью в государственные организации.</div>
+      <div class="rule-punish">Наказание: Понижение / Слив склада / Предупреждение лидеру</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.30-1.32. Затягивание и задержание</div>
+      <div class="rule-text">Запрещается намеренно затягивать процессуальные действия. Категорически запрещается добивать игроков при любых обстоятельствах. При задержании сотрудник обязан предложить вызвать адвоката для проведения процессуальных действий в КПЗ.</div>
+      <div class="rule-punish">Наказание: Warn / Demorgan 60-120 минут</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.33-1.36. Титулы и мегафон</div>
+      <div class="rule-text">Запрещено бесцельно находиться на титульной территории криминальной организации. Запрещено начинать процедуру эвакуации без продолжения РП процесса. Запрещено нецелевое использование функционального мегафона.</div>
+      <div class="rule-punish">Наказание: Demorgan 90-240 минут / Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">1.37-1.39. Режимы и публикации</div>
+      <div class="rule-text">Лицо вводящее особый правовой режим уведомляет Главного куратора за 24 часа. Сотрудники обязаны публиковать ордера и решения на форуме. Постановления не могут иметь срок исполнения менее 24 часов.</div>
+      <div class="rule-punish">Наказание: Demorgan NonRP / Предупреждение лидеру</div>
+    </div>
+
+    <div class="rule-category">🤝 Глава 2. Взаимоотношение между фракциями</div>
+
+    <div class="rule-item">
+      <div class="rule-title">2.1. Задержание сотрудников гос. организаций</div>
+      <div class="rule-text">Запрещено задерживать сотрудников других государственных организаций при исполнении служебных обязанностей без решения суда, сотрудника СК, Прокуратуры.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут / Warn</div>
+    </div>
+    
+    <div class="rule-item">
+      <div class="rule-title">2.2. Проверки</div>
+      <div class="rule-text">Правительство, прокуратура и ФСБ имеют право на проведение проверок в отношении других государственных организаций. Запрещено проводить плановые проверки чаще чем 2 раза в месяц.</div>
+      <div class="rule-punish">Наказание: Предупреждение лидеру фракции</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">2.4-2.5. Черный список</div>
+      <div class="rule-text">Игрок может быть занесен в черный список государственной фракции лидером фракции (одобряется куратором). Вынесение из ЧС происходит по решению Главного куратора, лидера Правительства или лидера, вносившего в ЧС.</div>
+    </div>
+
+    <div class="rule-category">🏛️ Глава 3. Правительство</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">3.1. Бюджет</div>
+      <div class="rule-text">Правительство распределяет государственный бюджет. Обязано выплачивать еженедельные премии для государственных организаций.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-title">3.2-3.3. Участие в событиях</div>
+      <div class="rule-text">Сотрудникам государственной думы, судебной системы, СК и прокуратуры запрещается принимать участие в поставках / ограблениях. Депутатам разрешено участвовать в событиях, если они находятся в форме своей криминальной/гос фракции.</div>
+      <div class="rule-punish">Наказание: Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-category">🏥 Глава 4. ЦГБ / МоскваLIVE</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">4.2-4.4. Правила ЦГБ</div>
+      <div class="rule-text">Запрещено реанимировать игроков криминальных организаций раньше, чем сотрудников гос. организаций. Запрещено игнорировать людей, которым нужна помощь. Запрещается присваивать себе материальные средства, полученные в процессе исполнения обязанностей.</div>
+      <div class="rule-punish">Наказание: Demorgan NonRP / Warn</div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-title">4.5-4.7. Правила МоскваLIVE</div>
+      <div class="rule-text">Сотрудники обязаны проводить эфиры не реже чем 2 раза в 24 часа. Запрещена продажа нелегальных веществ в объявлениях. Объявления должны проходить грамотную модерацию.</div>
+      <div class="rule-punish">Наказание: Предупреждение лидеру / Warn</div>
+    </div>
+
+    <div class="rule-category">🛡️ Глава 5. ФСБ</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">5.2-5.3. Скрытая форма</div>
+      <div class="rule-text">При допросах разрешено уничтожать средства фиксации. В гражданской (скрытой) форме запрещено отбивать налеты, захваты, ограбления, участвовать в поставках, битвах за КрАЗ и Air Drop.</div>
+      <div class="rule-punish">Наказание: Warn</div>
+    </div>
+
+    <div class="rule-category">⛓️ Глава 6. ФСИН</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">6.2. Обязанности ФСИН</div>
+      <div class="rule-text">Запрещается игнорировать функциональные сообщения о побеге. Запрещается помещать осужденных в "Изолятор" без причин. Оказывать помощь при нападении на тюрьму имеют право ФСБ, Росгвардия, УВД.</div>
+      <div class="rule-punish">Наказание: Warn / Demorgan 120 минут</div>
+    </div>
+
+    <div class="rule-category">🚓 Глава 7. Полиция / Росгвардия / ГИБДД</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">7.2. Обязанности</div>
+      <div class="rule-text">Запрещено игнорировать функциональные вызовы полиции. Полиция обязана организовывать патрули ГИБДД. Запрещено прерывать РП-процесс после использования жезла.</div>
+      <div class="rule-punish">Наказание: Предупреждение лидеру / Demorgan 240 минут</div>
+    </div>
+
+    <div class="rule-category">🪖 Глава 8. Вооруженные Силы</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">8.2.1. Бронетехника</div>
+      <div class="rule-text">Имеют право на применение тяжелой бронетехники только в случае объявления «Военного положения» или в рамках тренировок на территории части.</div>
+    </div>
+
+    <div class="rule-category">🚦 Глава 9. Министерство транспорта (ЦОДД)</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">9.3-9.5. Обязанности ЦОДД</div>
+      <div class="rule-text">Реагировать на обращения граждан. Поддерживать связь с ГИБДД. Запрещено использовать служебный транспорт в личных целях. Имеют право вызывать эвакуатор.</div>
+      <div class="rule-punish">Наказание: Выговор / Деморган 120 минут</div>
+    </div>
+
+    <div class="rule-category">🔄 Глава 10. Регламент переводов</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">10.1-10.6. Правила переводов</div>
+      <div class="rule-text">Перевод происходит с одобрения 2-х сторон лидеров. Лидер вправе отказать, если есть активное взыскание. В день блата и 7 дней после запрещены переводы. Перевод возможен только при нахождении на одном звании не менее 3 дней.</div>
+      <div class="rule-punish">Наказание: Warn / Предупреждение лидеру</div>
+    </div>
+
+    <div class="rule-category">🚪 Глава 11-12. Увольнения и отстранения</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">11.1-11.8. Увольнения</div>
+      <div class="rule-text">Увольнять могут лидеры Правительства, СК, Прокуратуры, ФСБ, судьи. Обязаны указывать RP причину и публиковать акт в канале Моссеть. Судья не имеет права увольнять лидеров без согласования с Главным куратором.</div>
+      <div class="rule-punish">Наказание: Предупреждение / Выговор лидеру</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-title">12.1-12.13. Отстранения</div>
+      <div class="rule-text">Отстранять могут лидер Правительства, сотрудники СК, Прокуратуры, лидер и зам ФСБ, судьи. Максимальный срок отстранения 3 дня (для судей 15 дней). Продление по согласованию с Главным куратором.</div>
+      <div class="rule-punish">Наказание: Предупреждение лидеру / Warn</div>
+    </div>
+
+    <div class="rule-category">💰 Глава 13. Бюджет Законодательного Собрания</div>
+    
+    <div class="rule-item">
+      <div class="rule-title">13.1-13.8. Правила бюджета</div>
+      <div class="rule-text">Заксобрание переводит средства только на склад правительства. Правительство обязано использовать 80% бюджета по назначению. Бюджет принимается через 14 дней. Средства на премии не могут быть украдены. Чрезвычайные расходы ограничены 20%.</div>
+      <div class="rule-punish">Наказание: Ban 3-14 дней / Demorgan 120 минут</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function searchRules(input) {
+    var q = input.value.toLowerCase().trim();
+    var items = document.querySelectorAll('.rule-item');
+    
+    items.forEach(function(item) {
+      var text = item.textContent.toLowerCase();
+      if (text.includes(q)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>
