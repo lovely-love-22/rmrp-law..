@@ -1,5 +1,5 @@
 /* ============================================================
-   RMRP LAW — script.js (v20: рабочая шапка + умный поиск + ИИ)
+   RMRP LAW — script.js (v21: полный код с картой и ИИ)
    ============================================================ */
 
 (function () {
@@ -65,7 +65,8 @@
       'profile.html':     { c1: '#0a1a2a', c2: '#101030', c3: '#0a0b0f', accent: '74,168,255',  accent2: '168,85,247' },
       'media.html':       { c1: '#1a0a2a', c2: '#200820', c3: '#0a0b0f', accent: '236,72,153',  accent2: '168,85,247' },
       'audit.html':       { c1: '#180a28', c2: '#100820', c3: '#0a0b0f', accent: '168,85,247',  accent2: '74,168,255' },
-      'user.html':        { c1: '#0a2028', c2: '#081820', c3: '#0a0b0f', accent: '61,220,132',  accent2: '74,168,255' }
+      'user.html':        { c1: '#0a2028', c2: '#081820', c3: '#0a0b0f', accent: '61,220,132',  accent2: '74,168,255' },
+      'map.html':         { c1: '#0a1a1a', c2: '#081212', c3: '#0a0b0f', accent: '46,204,113',  accent2: '74,168,255' }
     };
 
     var page = location.pathname.split('/').pop() || 'index.html';
@@ -130,7 +131,30 @@
     var isComfort = /comfort\.html?$/i.test(path);
     var isAudit = /audit\.html?$/i.test(path);
 
-    if (isGate || isAudit) return; // На гейте и аудите шапку не трогаем
+    if (isGate || isAudit) return;
+
+    // Обновляем навигацию
+    if (nav) {
+      var links = [
+        { href: 'index.html',    icon: '🏠', label: 'Главная',   file: 'index.html' },
+        { href: 'military.html', icon: '🎓', label: 'Военкомат', file: 'military.html', green: true },
+        { href: 'map.html',      icon: '🗺️', label: 'Карта',     file: 'map.html' },
+        { href: 'media.html',    icon: '🎬', label: 'Медиа',     file: 'media.html' },
+        { href: 'profile.html',  icon: '👤', label: 'Профиль',   file: 'profile.html' },
+        { href: 'audit.html',    icon: '📋', label: 'Аудит',     file: 'audit.html' }
+      ];
+
+      nav.innerHTML = links.map(function(l){
+        var isActive = (l.file === path);
+        var style = '';
+        if (isActive) style = 'background:var(--accent);color:#fff;';
+        else if (l.green) style = 'background:linear-gradient(135deg,#2a5f3f,#3d7a52);color:#fff;';
+        return '<a href="' + l.href + '" class="nav-link' + (isActive ? ' active' : '') + '"' +
+          (style ? ' style="' + style + '"' : '') + '>' +
+          l.icon + ' ' + l.label +
+        '</a>';
+      }).join('');
+    }
 
     // Добавляем кнопку ИИ в меню
     if (nav && !document.getElementById('aiNavBtn')) {
@@ -174,31 +198,6 @@
   }
 
   /* ============================================================
-     АККОРДЕОН (ОТКРЫТИЕ СТАТЕЙ)
-     ============================================================ */
-  function initAccordion() {
-    $$('.acc-header').forEach(function (btn) {
-      // Удаляем старые обработчики, чтобы не было дублей
-      var newBtn = btn.cloneNode(true);
-      btn.parentNode.replaceChild(newBtn, btn);
-      
-      newBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        var item = newBtn.closest('.acc-item');
-        if (!item) return;
-        var acc = item.closest('.accordion');
-        var isOpen = item.classList.contains('open');
-        
-        if (acc) {
-          // Закрываем остальные (если нужно, чтобы открывался только один)
-          $$('.acc-item.open', acc).forEach(function (i) { i.classList.remove('open'); });
-        }
-        if (!isOpen) item.classList.add('open');
-      });
-    });
-  }
-
-  /* ============================================================
      УМНЫЙ ПОИСК (ИЩЕТ ПО НОМЕРУ СТАТЬИ И ТЕКСТУ)
      ============================================================ */
   function initSmartSearch() {
@@ -220,15 +219,12 @@
         }
 
         items.forEach(function (item) {
-          var text = item.textContent.toLowerCase();
           var hasMatch = false;
-
-          // Ищем совпадения в параграфах, чтобы подсветить
           var ps = item.querySelectorAll('.acc-text p');
+          
           ps.forEach(function(p) {
             if (p.textContent.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)) {
               hasMatch = true;
-              // Подсветка найденного абзаца
               p.style.background = 'rgba(46, 204, 113, 0.15)';
               p.style.borderLeft = '3px solid #2ecc71';
               p.style.paddingLeft = '8px';
@@ -238,12 +234,35 @@
 
           if (hasMatch) {
             item.style.display = '';
-            item.classList.add('open'); // Автоматически раскрываем раздел
+            item.classList.add('open');
           } else {
             item.style.display = 'none';
             item.classList.remove('open');
           }
         });
+      });
+    });
+  }
+
+  /* ============================================================
+     АККОРДЕОН (ОТКРЫТИЕ СТАТЕЙ)
+     ============================================================ */
+  function initAccordion() {
+    $$('.acc-header').forEach(function (btn) {
+      var newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      
+      newBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var item = newBtn.closest('.acc-item');
+        if (!item) return;
+        var acc = item.closest('.accordion');
+        var isOpen = item.classList.contains('open');
+        
+        if (acc) {
+          $$('.acc-item.open', acc).forEach(function (i) { i.classList.remove('open'); });
+        }
+        if (!isOpen) item.classList.add('open');
       });
     });
   }
@@ -255,7 +274,6 @@
     var aiBtn = document.getElementById('aiNavBtn');
     if (!aiBtn) return;
 
-    // Создаём окно ИИ
     var dropdown = document.createElement('div');
     dropdown.className = 'ai-dropdown';
     dropdown.id = 'aiDropdown';
@@ -274,7 +292,6 @@
     `;
     document.body.appendChild(dropdown);
 
-    // Добавляем стили для окна ИИ
     var st = document.createElement('style');
     st.textContent = `
       .ai-dropdown { position: absolute; top: 60px; right: 22px; width: 350px; background: #0a0f12; border: 1px solid #a855f7; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; flex-direction: column; z-index: 999; overflow: hidden; }
@@ -356,7 +373,7 @@
      ============================================================ */
   function initDocAccess(){
     var LOCKED_PAGES = ['military.html'];
-    var SKIP_PAGES = ['index.html','gate.html','profile.html','user.html','media.html','comfort.html','audit.html'];
+    var SKIP_PAGES = ['index.html','gate.html','profile.html','user.html','media.html','comfort.html','audit.html','map.html'];
     var path = location.pathname.split('/').pop() || 'index.html';
     if(SKIP_PAGES.indexOf(path) !== -1) return;
     if(LOCKED_PAGES.indexOf(path) === -1) return;
@@ -364,7 +381,6 @@
     var user = RMRPAuth.getCurrent();
     if(user && RMRPAuth.canReadDocs && RMRPAuth.canReadDocs(user)) return;
     
-    // Если нет прав - прячем всё и показываем заглушку
     document.querySelectorAll('.section, .vk-hero, .section-dark').forEach(function(el){ el.style.display = 'none'; });
     var container = document.querySelector('.container');
     if(container) {
@@ -446,7 +462,6 @@
     container.innerHTML = list.map(function (l) {
       return '<div class="acc-item open"><button class="acc-header"><span class="acc-emoji">📌</span><span class="acc-num">' + (l.tag || 'Закон') + '</span><span class="acc-title">' + l.title + '</span><span class="acc-arrow">▾</span></button><div class="acc-body"><div class="acc-text">' + l.text + '</div></div></div>';
     }).join('');
-    // Переинициализируем аккордеон для новых элементов
     initAccordion();
   }
 
