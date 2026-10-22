@@ -16,7 +16,7 @@
   --text: #c9d1d9; 
   --dim: #8b949e; 
   --red: #e74c3c;
-  --green: #2ecc71; /* Зеленый для поставок */
+  --green: #2ecc71;
   --yellow: #f39c12;
 }
 body { 
@@ -73,9 +73,7 @@ h1 span { color: var(--accent); }
   gap: 8px;
 }
 
-.panel-box h3 span {
-  font-size: 18px;
-}
+.panel-box h3 span { font-size: 18px; }
 
 .panel-box.postavki h3 { color: var(--green); }
 .panel-box.nalety h3 { color: var(--red); }
@@ -112,7 +110,6 @@ h1 span { color: var(--accent); }
 .nalety .num { color: var(--red); }
 .territories .num { color: var(--yellow); }
 
-
 /* КАРТА */
 .map-container {
   position: relative;
@@ -136,7 +133,7 @@ h1 span { color: var(--accent); }
   filter: brightness(1);
 }
 
-/* МАЛЕНЬКИЕ ТОЧКИ НА КАРТЕ (только для наведения) */
+/* ТОЧКИ НА КАРТЕ */
 .map-dot {
   position: absolute;
   width: 10px;
@@ -146,7 +143,7 @@ h1 span { color: var(--accent); }
   transition: all 0.2s;
   pointer-events: none;
   opacity: 0;
-  border: 2px solid #000; /* Черная обводка, чтобы выделялось на карте */
+  border: 2px solid #000;
 }
 
 .map-dot.green { background: var(--green); box-shadow: 0 0 10px var(--green); }
@@ -161,7 +158,6 @@ h1 span { color: var(--accent); }
   z-index: 10;
 }
 
-/* Адаптив */
 @media(max-width: 900px) {
   .top-panels { grid-template-columns: 1fr; }
 }
@@ -186,7 +182,7 @@ h1 span { color: var(--accent); }
   <h1>🗺️ Карта событий</h1>
   
   <div class="top-panels">
-    <!-- ПОСТАВКИ -->
+    <!-- ПОСТАВКИ (Зеленые) -->
     <div class="panel-box postavki">
       <h3><span>📦</span> Гос. поставки</h3>
       <div class="grid-list">
@@ -200,7 +196,7 @@ h1 span { color: var(--accent); }
       </div>
     </div>
 
-    <!-- НАЛЕТЫ -->
+    <!-- НАЛЕТЫ (Красные) -->
     <div class="panel-box nalety">
       <h3><span>🚨</span> Налеты</h3>
       <div class="grid-list">
@@ -224,7 +220,7 @@ h1 span { color: var(--accent); }
       </div>
     </div>
 
-    <!-- ТЕРРИТОРИИ -->
+    <!-- ТЕРРИТОРИИ (Желтые) -->
     <div class="panel-box territories">
       <h3><span>🚩</span> Захват территорий</h3>
       <div class="grid-list">
@@ -241,43 +237,43 @@ h1 span { color: var(--accent); }
   <div class="map-container" style="margin-top: 20px;">
     <img src="map.jpg" class="map-image" alt="Карта RMRP">
     
-    <!-- ТОЧКИ (выровнены по твоей карте) -->
+    <!-- КООРДИНАТЫ СТРОГО ПО ТВОИМ ЦИФРАМ -->
     
-    <!-- Поставки (Зеленые) -->
-    <div class="map-dot green" id="dot-post-1" style="left: 17.3%; top: 30.5%;"></div>
-    <div class="map-dot green" id="dot-post-2" style="left: 20.5%; top: 31.2%;"></div>
-    <div class="map-dot green" id="dot-post-3" style="left: 20.8%; top: 34%;"></div>
-    <div class="map-dot green" id="dot-post-4" style="left: 20.1%; top: 35.5%;"></div>
-    <div class="map-dot green" id="dot-post-5" style="left: 22.5%; top: 38.2%;"></div>
-    <div class="map-dot green" id="dot-post-6" style="left: 24.2%; top: 41%;"></div>
-    <div class="map-dot green" id="dot-post-7" style="left: 30%; top: 40.2%;"></div>
+    <!-- ПОСТАВКИ (Зеленые цифры) -->
+    <div class="map-dot green" id="dot-post-1" style="left: 22.5%; top: 20%;"></div>
+    <div class="map-dot green" id="dot-post-2" style="left: 86.5%; top: 45.5%;"></div>
+    <div class="map-dot green" id="dot-post-3" style="left: 87.5%; top: 9.5%;"></div>
+    <div class="map-dot green" id="dot-post-4" style="left: 59.5%; top: 43%;"></div>
+    <div class="map-dot green" id="dot-post-5" style="left: 68.5%; top: 54%;"></div>
+    <div class="map-dot green" id="dot-post-6" style="left: 69%; top: 95%;"></div>
+    <div class="map-dot green" id="dot-post-7" style="left: 54%; top: 75%;"></div>
 
-    <!-- Налеты (Красные) -->
-    <div class="map-dot red" id="dot-nal-1" style="left: 33%; top: 28.5%;"></div>
-    <div class="map-dot red" id="dot-nal-2" style="left: 34.8%; top: 30.2%;"></div>
-    <div class="map-dot red" id="dot-nal-3" style="left: 41.2%; top: 38.2%;"></div>
-    <div class="map-dot red" id="dot-nal-4" style="left: 27.5%; top: 44%;"></div>
-    <div class="map-dot red" id="dot-nal-5" style="left: 24.8%; top: 46%;"></div>
-    <div class="map-dot red" id="dot-nal-6" style="left: 30.5%; top: 48%;"></div>
-    <div class="map-dot red" id="dot-nal-7" style="left: 28.2%; top: 56.8%;"></div>
-    <div class="map-dot red" id="dot-nal-8" style="left: 46.2%; top: 57.2%;"></div>
-    <div class="map-dot red" id="dot-nal-9" style="left: 49.8%; top: 55.8%;"></div>
-    <div class="map-dot red" id="dot-nal-10" style="left: 47.5%; top: 60.5%;"></div>
-    <div class="map-dot red" id="dot-nal-11" style="left: 68.8%; top: 59.2%;"></div>
-    <div class="map-dot red" id="dot-nal-12" style="left: 72.2%; top: 63.8%;"></div>
-    <div class="map-dot red" id="dot-nal-13" style="left: 31.8%; top: 77.8%;"></div>
-    <div class="map-dot red" id="dot-nal-14" style="left: 20.2%; top: 80.8%;"></div>
-    <div class="map-dot red" id="dot-nal-15" style="left: 23.8%; top: 82.2%;"></div>
-    <div class="map-dot red" id="dot-nal-16" style="left: 27.2%; top: 83.2%;"></div>
-    <div class="map-dot red" id="dot-nal-17" style="left: 31.2%; top: 84.8%;"></div>
+    <!-- НАЛЕТЫ (Красные цифры) -->
+    <div class="map-dot red" id="dot-nal-1" style="left: 22.5%; top: 18%;"></div>
+    <div class="map-dot red" id="dot-nal-2" style="left: 8.5%; top: 10%;"></div>
+    <div class="map-dot red" id="dot-nal-3" style="left: 91%; top: 20%;"></div>
+    <div class="map-dot red" id="dot-nal-4" style="left: 4.5%; top: 72%;"></div>
+    <div class="map-dot red" id="dot-nal-5" style="left: 68.5%; top: 51.5%;"></div>
+    <div class="map-dot red" id="dot-nal-6" style="left: 78.5%; top: 52.5%;"></div>
+    <div class="map-dot red" id="dot-nal-7" style="left: 89%; top: 45.5%;"></div>
+    <div class="map-dot red" id="dot-nal-8" style="left: 56%; top: 41%;"></div>
+    <div class="map-dot red" id="dot-nal-9" style="left: 50%; top: 55%;"></div>
+    <div class="map-dot red" id="dot-nal-10" style="left: 59%; top: 90%;"></div>
+    <div class="map-dot red" id="dot-nal-11" style="left: 12%; top: 78%;"></div>
+    <div class="map-dot red" id="dot-nal-12" style="left: 21%; top: 78%;"></div>
+    <div class="map-dot red" id="dot-nal-13" style="left: 9%; top: 85%;"></div>
+    <div class="map-dot red" id="dot-nal-14" style="left: 88%; top: 71%;"></div>
+    <div class="map-dot red" id="dot-nal-15" style="left: 92%; top: 71%;"></div>
+    <div class="map-dot red" id="dot-nal-16" style="left: 94.5%; top: 71%;"></div>
+    <div class="map-dot red" id="dot-nal-17" style="left: 97%; top: 71%;"></div>
 
-    <!-- Территории (Желтые) -->
-    <div class="map-dot yellow" id="dot-ter-1" style="left: 29.5%; top: 25.2%;"></div>
-    <div class="map-dot yellow" id="dot-ter-2" style="left: 42.2%; top: 25.2%;"></div>
-    <div class="map-dot yellow" id="dot-ter-3" style="left: 57.8%; top: 28.2%;"></div>
-    <div class="map-dot yellow" id="dot-ter-4" style="left: 58.2%; top: 34.2%;"></div>
-    <div class="map-dot yellow" id="dot-ter-5" style="left: 53.2%; top: 38.2%;"></div>
-    <div class="map-dot yellow" id="dot-ter-6" style="left: 65.2%; top: 25.2%;"></div>
+    <!-- ТЕРРИТОРИИ (Желтые цифры) -->
+    <div class="map-dot yellow" id="dot-ter-1" style="left: 1%; top: 32%;"></div>
+    <div class="map-dot yellow" id="dot-ter-2" style="left: 58%; top: 27%;"></div>
+    <div class="map-dot yellow" id="dot-ter-3" style="left: 75%; top: 23%;"></div>
+    <div class="map-dot yellow" id="dot-ter-4" style="left: 68%; top: 15%;"></div>
+    <div class="map-dot yellow" id="dot-ter-5" style="left: 53%; top: 46%;"></div>
+    <div class="map-dot yellow" id="dot-ter-6" style="left: 68%; top: 20%;"></div>
   </div>
 </div>
 
