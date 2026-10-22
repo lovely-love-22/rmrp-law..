@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05080a">
+<title>RMRP | Карта поставок и налетов</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root { 
+  --bg: #05080a; 
+  --card: #0f1216; 
+  --border: #1e2329; 
+  --accent: #2ecc71; 
+  --text: #c9d1d9; 
+  --dim: #8b949e; 
+}
+body { 
+  background-color: var(--bg); 
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05), transparent 40%),
+    linear-gradient(rgba(5, 8, 10, 0.95), rgba(5, 8, 10, 0.98));
+  background-attachment: fixed;
+  color: var(--text); 
+  font-family: 'Inter', sans-serif; 
+  padding: 40px 20px; 
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container { max-width: 1300px; margin: 0 auto; }
+
+h1 { 
+  font-family: 'JetBrains Mono', monospace; 
+  color: #fff; 
+  margin-bottom: 20px; 
+  font-size: 24px; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+h1 span { color: var(--accent); }
+
+/* КОНТЕЙНЕР КАРТЫ */
+.map-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  background: #000;
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Немного притемняем карту, чтобы белые точки выделялись */
+  filter: brightness(0.9);
+  transition: filter 0.3s;
+}
+
+.map-image:hover {
+  filter: brightness(1);
+}
+
+/* МАРКЕРЫ (Точки на карте) */
+.marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  border: 3px solid #000;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  box-shadow: 0 0 15px var(--accent);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+}
+
+.marker:hover {
+  transform: translate(-50%, -50%) scale(1.4);
+  box-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent);
+  z-index: 20;
+}
+
+/* Всплывающая подсказка */
+.marker-tooltip {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--card);
+  border: 1px solid var(--accent);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  z-index: 30;
+}
+
+.marker:hover .marker-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Разные цвета для разных типов точек */
+.marker.postavka { background: #4aa8ff; box-shadow: 0 0 15px #4aa8ff; }
+.marker.postavka .marker-tooltip { border-color: #4aa8ff; }
+
+.marker.nalet { background: #e74c3c; box-shadow: 0 0 15px #e74c3c; }
+.marker.nalet .marker-tooltip { border-color: #e74c3c; }
+
+.marker.territory { background: #f39c12; box-shadow: 0 0 15px #f39c12; }
+.marker.territory .marker-tooltip { border-color: #f39c12; }
+
+/* Легенда */
+.legend {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 16px 24px;
+  border-radius: 12px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+.legend-dot.blue { background: #4aa8ff; box-shadow: 0 0 10px #4aa8ff; }
+.legend-dot.red { background: #e74c3c; box-shadow: 0 0 10px #e74c3c; }
+.legend-dot.yellow { background: #f39c12; box-shadow: 0 0 10px #f39c12; }
+</style>
+</head>
+<body>
+
+<header style="border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">
+  <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+    <a href="index.html" style="font-size:20px; font-weight:900; font-family:'JetBrains Mono', monospace; color:#fff; text-decoration:none;">
+      <span>🗺️</span> FSB<span style="color:var(--accent)">LAW</span>
+    </a>
+    <nav style="display:flex; gap:15px; font-family:'JetBrains Mono', monospace; font-size:13px;">
+      <a href="index.html" style="color:var(--dim); text-decoration:none; padding:6px 12px; transition: 0.2s;">🏠 Главная</a>
+      <a href="map.html" style="color:#000; background:var(--accent); text-decoration:none; padding:6px 12px; border-radius:6px; font-weight:bold; box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);">🗺️ Карта</a>
+      <a href="audit.html" style="color:var(--dim); text-decoration:none; padding:6px 12px; transition: 0.2s;">🛡️ Аудит</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <h1>🗺️ Интерактивная карта событий</h1>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot blue"></div> Гос. поставки</div>
+    <div class="legend-item"><div class="legend-dot red"></div> Налеты</div>
+    <div class="legend-item"><div class="legend-dot yellow"></div> Захват территорий</div>
+  </div>
+
+  <div class="map-container">
+    <!-- ВАЖНО: Файл map.jpg должен лежать в той же папке, что и этот html -->
+    <img src="map.jpg" class="map-image" alt="Карта RMRP">
+    
+    <!-- МАРКЕРЫ ПОСТАВОК (Синие) -->
+    <!-- Значения left и top в процентах, чтобы карта масштабировалась -->
+    <div class="marker postavka" style="left: 17.5%; top: 29%;">
+      <div class="marker-tooltip">1. РЛС Орбита</div>
+    </div>
+    <div class="marker postavka" style="left: 19.5%; top: 30.5%;">
+      <div class="marker-tooltip">2. Центр.Мед.Склады (ЦМС)</div>
+    </div>
+    <div class="marker postavka" style="left: 21.5%; top: 33%;">
+      <div class="marker-tooltip">3. Мед.Склады (МС)</div>
+    </div>
+    <div class="marker postavka" style="left: 21%; top: 35.5%;">
+      <div class="marker-tooltip">4. Зар.Мед.Хранилище (ЗМХ)</div>
+    </div>
+    <div class="marker postavka" style="left: 21%; top: 38%;">
+      <div class="marker-tooltip">5. Объект №7</div>
+    </div>
+    <div class="marker postavka" style="left: 24%; top: 40.5%;">
+      <div class="marker-tooltip">6. ВС + ГСМО</div>
+    </div>
+    <div class="marker postavka" style="left: 30%; top: 39.5%;">
+      <div class="marker-tooltip">7. Фин. Поставка (Финки)</div>
+    </div>
+
+    <!-- МАРКЕРЫ НАЛЕТОВ (Красные) -->
+    <div class="marker nalet" style="left: 32.5%; top: 29%;">
+      <div class="marker-tooltip">1. Склад Шереметьево</div>
+    </div>
+    <div class="marker nalet" style="left: 34.5%; top: 30.5%;">
+      <div class="marker-tooltip">2. Терминал Шереметьево</div>
+    </div>
+    <div class="marker nalet" style="left: 42%; top: 38.5%;">
+      <div class="marker-tooltip">3. ГК Солнышко</div>
+    </div>
+    <div class="marker nalet" style="left: 27%; top: 44.5%;">
+      <div class="marker-tooltip">4. Фармацевтический Склад</div>
+    </div>
+    <div class="marker nalet" style="left: 24%; top: 46.5%;">
+      <div class="marker-tooltip">5. Строй.Площадка Лавир</div>
+    </div>
+    <div class="marker nalet" style="left: 30%; top: 48%;">
+      <div class="marker-tooltip">6. Склад Меруапперлен</div>
+    </div>
+    <div class="marker nalet" style="left: 28%; top: 57%;">
+      <div class="marker-tooltip">7. Трубопровод МосЭнерго</div>
+    </div>
+    <div class="marker nalet" style="left: 46%; top: 57%;">
+      <div class="marker-tooltip">8. Склад НИИ ХимЗа</div>
+    </div>
+    <div class="marker nalet" style="left: 49.5%; top: 56%;">
+      <div class="marker-tooltip">9. Склад Коммерсов</div>
+    </div>
+    <div class="marker nalet" style="left: 48%; top: 61%;">
+      <div class="marker-tooltip">10. Заброшенная Мастерская</div>
+    </div>
+    <div class="marker nalet" style="left: 69%; top: 59.5%;">
+      <div class="marker-tooltip">11. Гараж СОБРа</div>
+    </div>
+    <div class="marker nalet" style="left: 72%; top: 64%;">
+      <div class="marker-tooltip">12. Рублевская Веб-Кам Студия</div>
+    </div>
+    <div class="marker nalet" style="left: 32%; top: 78%;">
+      <div class="marker-tooltip">13. Хим.Лаборатория у реки</div>
+    </div>
+    <div class="marker nalet" style="left: 20%; top: 81%;">
+      <div class="marker-tooltip">14. Шахта №3</div>
+    </div>
+    <div class="marker nalet" style="left: 24%; top: 82.5%;">
+      <div class="marker-tooltip">15. Заброшенная заправка</div>
+    </div>
+    <div class="marker nalet" style="left: 27.5%; top: 83.5%;">
+      <div class="marker-tooltip">16. Северный схрон</div>
+    </div>
+    <div class="marker nalet" style="left: 31%; top: 84.5%;">
+      <div class="marker-tooltip">17. Хаб.сотовой связи</div>
+    </div>
+
+    <!-- МАРКЕРЫ ЗАХВАТА ТЕРРИТОРИЙ (Желтые) -->
+    <div class="marker territory" style="left: 29%; top: 25.5%;">
+      <div class="marker-tooltip">1. Захват Зарайска</div>
+    </div>
+    <div class="marker territory" style="left: 42%; top: 25.5%;">
+      <div class="marker-tooltip">2. Сухогруз Морской Ёж</div>
+    </div>
+    <div class="marker territory" style="left: 57.5%; top: 28%;">
+      <div class="marker-tooltip">3. Нефтебаза Москвы</div>
+    </div>
+    <div class="marker territory" style="left: 58%; top: 34%;">
+      <div class="marker-tooltip">4. НПЗ Лукеол</div>
+    </div>
+    <div class="marker territory" style="left: 53%; top: 38%;">
+      <div class="marker-tooltip">5. МХФП Семашко</div>
+    </div>
+    <div class="marker territory" style="left: 65%; top: 25.5%;">
+      <div class="marker-tooltip">6. Строящийся Мост</div>
+    </div>
+
+    <!-- ТЕРРИТОРИИ (Точки в правом нижнем углу, если нужно) -->
+    <!--
+    <div class="marker territory" style="left: 82%; top: 45%;"><div class="marker-tooltip">1. Сталинский Дворик</div></div>
+    <div class="marker territory" style="left: 85%; top: 48%;"><div class="marker-tooltip">2. Речной Порт</div></div>
+    <div class="marker territory" style="left: 82%; top: 51%;"><div class="marker-tooltip">3. Портовый</div></div>
+    <div class="marker territory" style="left: 85%; top: 54%;"><div class="marker-tooltip">4. Западный</div></div>
+    <div class="marker territory" style="left: 82%; top: 57%;"><div class="marker-tooltip">5. Бизнес-Академ</div></div>
+    <div class="marker territory" style="left: 85%; top: 60%;"><div class="marker-tooltip">6. Академический</div></div>
+    <div class="marker territory" style="left: 82%; top: 63%;"><div class="marker-tooltip">7. Индустриальный</div></div>
+    <div class="marker territory" style="left: 85%; top: 66%;"><div class="marker-tooltip">8. Трасса Москва-Зарайск</div></div>
+    <div class="marker territory" style="left: 82%; top: 69%;"><div class="marker-tooltip">9. Захват-Зарайска</div></div>
+    -->
+  </div>
+</div>
+
+</body>
+</html>
